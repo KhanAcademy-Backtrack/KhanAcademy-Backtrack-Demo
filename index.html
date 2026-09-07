@@ -70,14 +70,20 @@
       <div class="hero-route-wrap">
         <div id="hero-route" class="routeview summary-hidden on-surface"></div>
       </div>
+      <!-- A real question, not a self-report. Answering it changes the route
+           above, which is the entire product in one interaction. -->
       <div class="hero-ask">
-        <p class="hero-ask-q">Can you expand a bracket like <span class="eq eq-md" role="math" aria-label="3 times, open bracket, x minus 2, close bracket">3(x − 2)</span>?</p>
-        <div class="hero-ask-row">
-          <button class="ask-btn" data-hero="known" aria-pressed="false">I know this</button>
-          <button class="ask-btn" data-hero="unsure" aria-pressed="false">I’m not sure</button>
-          <button class="btn-quiet ask-reset" data-hero="base">Reset</button>
+        <p class="hero-ask-q">Which is a valid first step?</p>
+        <div class="hero-choices">
+          <button class="hero-choice" data-hero="known">
+            <span class="eq" role="math" aria-label="3 x minus 6 equals 15">3x − 6 = 15</span>
+          </button>
+          <button class="hero-choice" data-hero="unsure">
+            <span class="eq" role="math" aria-label="3 x minus 2 equals 15">3x − 2 = 15</span>
+          </button>
         </div>
-        <p class="hero-say" id="hero-say">BACKTRACK has not checked anything yet, so the route still carries the review steps this destination might need.</p>
+        <p class="hero-say" id="hero-say">Answer it, and watch the route change. Nothing has been checked yet, so it still carries every review step this destination might need.</p>
+        <p class="hero-reset" id="hero-reset" hidden><button class="btn-quiet" data-hero="base">Reset the route</button></p>
       </div>
     </div>
   </div>

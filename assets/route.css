@@ -161,6 +161,40 @@
 /* Vertical (compact) route keeps the same vocabulary, re-composed. */
 .routeview.is-vertical .routeview-svg{margin-left:-6px}
 
+/* ==========================================================================
+   RIBBON — the full-width route across the top of the workspace.
+   Bigger marks, readable labels, and nodes you can actually select. The
+   status text list is redundant here because each node carries its own
+   label and reason, so it is removed rather than repeated.
+   ========================================================================== */
+
+.routeview.is-ribbon .routeview-summary{display:none}
+
+.routeview.is-ribbon .rv-label{font-size:14.5px;font-weight:600}
+.routeview.is-ribbon .rv-sub{font-size:13px}
+.routeview.is-ribbon .rv-spine{stroke-width:3}
+.routeview.is-ribbon .rv-trace{stroke-width:3}
+
+.rv-hit{fill:transparent;stroke:none}
+.rv-node.is-selectable{cursor:pointer}
+.rv-node.is-selectable .rv-mark,
+.rv-node.is-selectable .rv-label{pointer-events:none}
+
+.rv-node.is-selectable:hover .rv-disc{stroke-width:3}
+.rv-node.is-selectable:hover .rv-label{fill:var(--ink)}
+
+/* Focus and selection both read as a ring around the mark, so keyboard and
+   pointer users see the same thing. */
+.rv-node:focus{outline:none}
+.rv-node:focus-visible .rv-halo,
+.rv-node.is-selected .rv-halo{
+  stroke:var(--route);
+  stroke-width:2.4;
+  opacity:1;
+}
+.rv-node:focus-visible .rv-halo{stroke-dasharray:3 3}
+.rv-node.is-selected .rv-label{fill:var(--ink);font-weight:700}
+
 @media (prefers-reduced-motion:reduce){
   .rv-note{animation:none}
   .rv-node.is-new .rv-mark{animation:none}

@@ -71,9 +71,9 @@
   };
 
   var HERO_SAY = {
-    base: 'BACKTRACK has not checked anything yet, so the route still carries the review steps this destination might need.',
-    known: 'Two review steps left the route because you showed you did not need them. The destination did not move.',
-    unsure: 'The route bends to one earlier step and reconnects. Nothing was added anywhere else, and the destination did not move.'
+    base: 'Answer it, and watch the route change. Nothing has been checked yet, so it still carries every review step this destination might need.',
+    known: 'Correct — both terms multiplied by 3. Two review steps just left the route, because you showed you did not need them. The destination did not move.',
+    unsure: 'The 3 reached the x but not the 2. That is the step BACKTRACK would repair: the route bends to it and reconnects, and nothing else is added.'
   };
 
   function initHeroRoute() {
@@ -84,6 +84,7 @@
     view.setModel(HERO.base(), false);
 
     var say = document.getElementById('hero-say');
+    var reset = document.getElementById('hero-reset');
     var group = document.querySelector('.hero-ask');
     if (!group) return;
 
@@ -92,8 +93,25 @@
       if (!b) return;
       var key = b.getAttribute('data-hero');
 
-      group.querySelectorAll('[data-hero]').forEach(function (x) {
-        x.setAttribute('aria-pressed', x === b && key !== 'base' ? 'true' : 'false');
+      /* Mark the answer with a glyph and a word, never colour alone. */
+      group.querySelectorAll('.hero-choice').forEach(function (x) {
+        if (key === 'base') {
+          x.removeAttribute('data-state');
+          x.removeAttribute('disabled');
+          var m = x.querySelector('.hero-mark');
+          if (m) m.remove();
+        } else if (!x.hasAttribute('data-state')) {
+          var isPicked = x === b;
+          var ok = x.getAttribute('data-hero') === 'known';
+          x.setAttribute('data-state', isPicked ? (ok ? 'correct' : 'wrong') : 'dim');
+          x.setAttribute('disabled', '');
+          if (isPicked) {
+            var tag = document.createElement('span');
+            tag.className = 'hero-mark';
+            tag.textContent = ok ? '✓ Correct' : '✗ Not this one';
+            x.appendChild(tag);
+          }
+        }
       });
 
       if (key === 'known') {
@@ -103,6 +121,7 @@
         view.setModel(HERO[key](), true);
       }
       if (say) say.textContent = HERO_SAY[key];
+      if (reset) reset.hidden = key === 'base';
     });
   }
 

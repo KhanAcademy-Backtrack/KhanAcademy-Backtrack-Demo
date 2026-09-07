@@ -19,17 +19,26 @@
     ? global.matchMedia('(prefers-reduced-motion: reduce)')
     : { matches: false };
 
-  /* Status vocabulary. Every status carries a glyph and a word, so the route
-     is never readable by colour alone. */
+  /* Status vocabulary. Every status carries a glyph, a short word and a plain
+     reason, so the route is never readable by colour alone — and never uses
+     the language of grading ("mastered", "failed", "weak"). */
   var STATUS = {
-    unknown:             { cls: 'is-unknown',   glyph: '',  word: 'Not checked yet' },
-    checked:             { cls: 'is-checked',   glyph: '✓', word: 'Known' },
-    uncertain:           { cls: 'is-uncertain', glyph: '?', word: 'Uncertain' },
-    practice_suggested:  { cls: 'is-practice',  glyph: '',  word: 'Practice suggested' },
-    capability_unlocked: { cls: 'is-unlocked',  glyph: '✓', word: 'New capability' },
-    reached:             { cls: 'is-reached',   glyph: '✓', word: 'Reached' },
-    ready_to_try:        { cls: 'is-ready',     glyph: '',  word: 'Ready to try' },
-    active:              { cls: 'is-active',    glyph: '',  word: 'Working here now' }
+    unknown:             { cls: 'is-unknown',   glyph: '',  word: 'Next',
+                           reason: 'Not looked at yet.' },
+    checked:             { cls: 'is-checked',   glyph: '✓', word: 'Kept',
+                           reason: 'Already demonstrated.' },
+    uncertain:           { cls: 'is-uncertain', glyph: '?', word: 'Checking',
+                           reason: 'We need one more look at this.' },
+    practice_suggested:  { cls: 'is-practice',  glyph: '',  word: 'Practice',
+                           reason: 'This step may be blocking you.' },
+    capability_unlocked: { cls: 'is-unlocked',  glyph: '✓', word: 'Ready',
+                           reason: 'Fresh work passed.' },
+    reached:             { cls: 'is-reached',   glyph: '✓', word: 'Reached',
+                           reason: 'You got back here.' },
+    ready_to_try:        { cls: 'is-ready',     glyph: '',  word: 'Open',
+                           reason: 'Nothing is blocking this now.' },
+    active:              { cls: 'is-active',    glyph: '',  word: 'Here',
+                           reason: 'Working here now.' }
   };
 
   /* Hidden svg used only for path measurement. */
@@ -115,13 +124,30 @@
     this.host = host;
     this.compactAt = opts.compactAt || 720;   // below this, route goes vertical
     this.labelMax = opts.labelMax || 15;
+    /* 'ribbon' is the full-width route across the top of the workspace: bigger
+       marks, readable labels, selectable nodes. 'rail' is the small inline
+       illustration used inside marketing sections. */
+    this.variant = opts.variant || 'rail';
+    this.onSelect = opts.onSelect || null;
+    this.selected = null;
     this.model = { nodes: [] };
     this.currentD = null;
     this.raf = 0;
 
     host.classList.add('routeview');
+    if (this.variant === 'ribbon') host.classList.add('is-ribbon');
 
-    this.svg = el('svg', {
+    /* When the nodes are interactive they become the accessible route, so the
+       drawing is exposed and the text list is demoted to a visual fallback.
+       Otherwise the drawing is decorative and the text list carries the state. */
+    var interactive = this.variant === 'ribbon' && !!this.onSelect;
+    this.interactive = interactive;
+    this.svg = el('svg', interactive ? {
+      'class': 'routeview-svg',
+      preserveAspectRatio: 'xMidYMid meet',
+      role: 'group',
+      'aria-label': 'Your route — select a step to see why it is on the route'
+    } : {
       'class': 'routeview-svg',
       preserveAspectRatio: 'xMidYMid meet',
       focusable: 'false',
@@ -136,6 +162,7 @@
        fully available to screen readers and when motion is disabled. */
     this.summary = document.createElement('ol');
     this.summary.className = 'routeview-summary';
+    if (interactive) this.summary.setAttribute('aria-hidden', 'true');
     host.appendChild(this.summary);
 
     var self = this;
@@ -144,7 +171,36 @@
       self._rt = setTimeout(function () { self.render(false); }, 120);
     };
     global.addEventListener('resize', this.onResize);
+
+    /* Nodes are tactile: click or keyboard-select one to see why the route
+       says what it says about that step. */
+    if (this.onSelect) {
+      var pick = function (ev) {
+        var node = ev.target.closest ? ev.target.closest('[data-node]') : null;
+        if (!node) return;
+        var id = node.getAttribute('data-node');
+        self.select(self.selected === id ? null : id);
+      };
+      this.svg.addEventListener('click', pick);
+      this.svg.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar') {
+          ev.preventDefault();
+          pick(ev);
+        }
+      });
+    }
   }
+
+  RouteView.prototype.select = function (id) {
+    this.selected = id;
+    this.render(false);
+    if (this.onSelect) {
+      var found = null;
+      (this.model.nodes || []).forEach(function (n) { if (n.id === id) found = n; });
+      var meta = found ? (STATUS[found.status] || STATUS.unknown) : null;
+      this.onSelect(found, meta);
+    }
+  };
 
   RouteView.prototype.setModel = function (model, animate) {
     this.model = model || { nodes: [] };
@@ -176,15 +232,19 @@
     var horizontal = w >= this.compactAt;
     var pts = [], i;
 
+    var ribbon = this.variant === 'ribbon';
+
     if (horizontal) {
-      var padX = 40, spineY = 64, dip = 62;
+      var padX = ribbon ? 48 : 40;
+      var spineY = ribbon ? 44 : 64;
+      var dip = ribbon ? 58 : 62;
       var innerW = Math.max(w - padX * 2, 120);
       var step = nodes.length > 1 ? innerW / (nodes.length - 1) : 0;
       for (i = 0; i < nodes.length; i++) {
         pts.push([padX + step * i, nodes[i].branch ? spineY + dip : spineY]);
       }
       this.viewW = w;
-      this.viewH = 205;
+      this.viewH = ribbon ? 172 : 205;
     } else {
       var padY = 34, spineX = 30, jog = 26;
       /* Room for a two-line label, a sub-note and an annotation under each
@@ -279,27 +339,41 @@
     var meta = STATUS[n.status] || STATUS.unknown;
     var isDest = n.kind === 'destination';
     var isNew = this.seen && this.seen.indexOf(n.id) === -1;
-    var g = el('g', {
+    var ribbon = this.variant === 'ribbon';
+    var selectable = ribbon && !!this.onSelect;
+
+    var attrs = {
       'class': 'rv-node ' + meta.cls + (isDest ? ' is-destination' : '') +
-               (n.active ? ' is-current' : '') + (isNew ? ' is-new' : ''),
+               (n.active ? ' is-current' : '') + (isNew ? ' is-new' : '') +
+               (this.selected === n.id ? ' is-selected' : '') +
+               (selectable ? ' is-selectable' : ''),
       transform: 'translate(' + pt[0] + ',' + pt[1] + ')',
       'data-node': n.id
-    }, this.gNodes);
+    };
+    if (selectable) {
+      attrs.role = 'button';
+      attrs.tabindex = '0';
+      attrs['aria-label'] = n.label + ' — ' + meta.word + '. ' + meta.reason;
+      attrs['aria-pressed'] = this.selected === n.id ? 'true' : 'false';
+    }
+    var g = el('g', attrs, this.gNodes);
 
     /* Marks live in their own group so they can scale about their own centre
        without disturbing the node's placement transform. */
     var mark = el('g', { 'class': 'rv-mark' }, g);
+    var R = ribbon ? 11 : 9;
 
     if (isDest) {
       /* The destination is a different object from a step: an anchored target
          that stays put while everything around it recalculates. */
-      el('circle', { 'class': 'rv-dest-ring', r: 14 }, mark);
-      el('rect', { 'class': 'rv-dest-core', x: -5.5, y: -5.5, width: 11, height: 11, rx: 2 }, mark);
+      el('circle', { 'class': 'rv-dest-ring', r: R + 5 }, mark);
+      var s = ribbon ? 7 : 5.5;
+      el('rect', { 'class': 'rv-dest-core', x: -s, y: -s, width: s * 2, height: s * 2, rx: 2 }, mark);
     } else {
-      el('circle', { 'class': 'rv-halo', r: 15 }, mark);
-      el('circle', { 'class': 'rv-disc', r: 9 }, mark);
+      el('circle', { 'class': 'rv-halo', r: R + 6 }, mark);
+      el('circle', { 'class': 'rv-disc', r: R }, mark);
       if (n.status === 'practice_suggested') {
-        el('circle', { 'class': 'rv-pip', r: 3.4 }, mark);
+        el('circle', { 'class': 'rv-pip', r: ribbon ? 4.2 : 3.4 }, mark);
       } else if (meta.glyph) {
         var t = el('text', { 'class': 'rv-glyph', x: 0, y: 0,
           'text-anchor': 'middle', 'dominant-baseline': 'central' }, mark);
@@ -307,12 +381,15 @@
       }
     }
 
+    /* A generous invisible hit area, so a node is a real 44px target. */
+    if (selectable) el('circle', { 'class': 'rv-hit', r: 24 }, g);
+
     /* Label, then an optional sub-note stacked clear of it. Horizontal routes
        caption below the node; vertical routes caption to the right. */
     var lines = wrapLabel(n.label, this.labelMax);
-    var lead = this.horizontal ? 15 : 16;
+    var lead = this.horizontal ? (ribbon ? 16 : 15) : 16;
     var labelX = this.horizontal ? 0 : 22;
-    var labelY = this.horizontal ? 30 : 2;
+    var labelY = this.horizontal ? (ribbon ? 35 : 30) : 2;
 
     var lg = el('text', {
       'class': 'rv-label',
@@ -325,7 +402,10 @@
       ts.textContent = ln;
     });
 
-    if (n.note) {
+    /* An annotation on this node supersedes its standing note — otherwise the
+       two say nearly the same thing in the same place. */
+    var annotated = this.model.annotation && this.model.annotation.nodeId === n.id;
+    if (n.note && !annotated) {
       var sub = el('text', {
         'class': 'rv-sub',
         'text-anchor': this.horizontal ? 'middle' : 'start',

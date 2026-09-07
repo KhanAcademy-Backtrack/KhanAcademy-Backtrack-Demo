@@ -56,24 +56,40 @@
 .hero-ask{
   margin-top:18px;padding-top:20px;border-top:1px solid var(--line);
 }
-.hero-ask-q{font-size:17px;font-weight:600;margin:0 0 12px}
-.hero-ask-row{display:flex;gap:10px;flex-wrap:wrap}
-.ask-btn{
-  min-height:46px;padding:0 18px;
-  font-family:inherit;font-size:16px;font-weight:600;color:var(--ink);
-  background:var(--page);border:1px solid var(--line);border-radius:var(--radius);
-  cursor:pointer;
-  transition:border-color var(--t-control) var(--ease),background var(--t-control) var(--ease);
+.hero-ask-q{font-size:18px;font-weight:600;margin:0 0 14px}
+
+/* Two real answers. The equation is the control. */
+.hero-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hero-choice{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  min-height:66px;padding:14px 12px;
+  background:var(--page);border:1.5px solid var(--line);border-radius:var(--radius);
+  cursor:pointer;font-family:inherit;color:inherit;
+  transition:border-color var(--t-control) var(--ease),background var(--t-control) var(--ease),
+             transform var(--t-control) var(--ease);
 }
-.ask-btn:hover{border-color:var(--route);background:var(--route-wash)}
-.ask-btn[aria-pressed="true"]{
-  border-color:var(--route);background:var(--route-wash);color:var(--route-text);
+.hero-choice .eq{font-size:20px}
+.hero-choice:hover:not([disabled]){
+  border-color:var(--route);background:var(--route-wash);transform:translateY(-2px);
 }
-.ask-reset{margin-left:auto;align-self:center}
+.hero-choice[data-state]{cursor:default;transform:none}
+.hero-choice[data-state="correct"]{border-color:var(--success);background:var(--success-wash)}
+.hero-choice[data-state="wrong"]{border-color:var(--caution);background:var(--caution-wash)}
+.hero-choice[data-state="dim"]{opacity:.42}
+.hero-mark{
+  position:absolute;top:6px;right:9px;
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+}
+.hero-choice[data-state="correct"] .hero-mark{color:var(--success)}
+.hero-choice[data-state="wrong"] .hero-mark{color:var(--caution-text)}
+
 .hero-say{
   margin:16px 0 0;font-size:15.5px;line-height:1.5;color:var(--muted);
-  min-height:3em;
+  min-height:4.5em;
 }
+.hero-reset{margin:4px 0 0;font-size:15px}
+.hero-reset[hidden]{display:none}
 
 /* ==========================================================================
    2 · THE COMPOUNDING GAP — full-width value flip
