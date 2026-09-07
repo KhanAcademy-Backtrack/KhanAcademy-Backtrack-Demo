@@ -1,0 +1,167 @@
+/* ==========================================================================
+   BACKTRACK — route visual system
+   One continuous stroke. Small nodes. The stroke carries the meaning, the
+   nodes carry the state. Deliberately not a flowchart, mind map, subway map
+   or dependency graph: there is a single live path and one fixed destination.
+   ========================================================================== */
+
+.routeview{position:relative;width:100%}
+.routeview-svg{width:100%;height:auto;overflow:visible}
+
+/* ---- the stroke ----
+   The trace is where the route is going; the spine is where it is. During a
+   recalculation the spine visibly travels to meet the trace. */
+.rv-trace{
+  stroke:var(--line);
+  stroke-width:2;
+  stroke-linecap:round;
+}
+.rv-spine{
+  stroke:var(--route);
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* ---- nodes ---- */
+
+.rv-node{transition:opacity var(--t-route) var(--ease)}
+
+.rv-mark{
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:transform 260ms var(--ease),opacity 260ms var(--ease);
+}
+
+/* The halo punches the page colour out from under a node so the stroke does
+   not run through the mark. */
+.rv-halo{fill:var(--page);stroke:none}
+.routeview.on-surface .rv-halo{fill:var(--surface)}
+
+.rv-disc{
+  fill:var(--surface);
+  stroke:var(--line);
+  stroke-width:1.6;
+  transition:fill var(--t-route) var(--ease),stroke var(--t-route) var(--ease);
+}
+.rv-glyph{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:700;
+  fill:var(--muted);
+}
+.rv-pip{fill:var(--caution)}
+
+/* Known — the route keeps what the learner has already demonstrated. */
+.is-checked .rv-disc{fill:var(--route);stroke:var(--route)}
+.is-checked .rv-glyph{fill:#fff}
+
+/* Uncertain — an amber step is a question about the route, never a verdict
+   about the learner. */
+.is-uncertain .rv-disc{fill:var(--caution-wash);stroke:var(--caution);stroke-width:2}
+.is-uncertain .rv-glyph{fill:var(--caution-text)}
+
+.is-practice .rv-disc{fill:var(--caution-wash);stroke:var(--caution);stroke-width:2}
+
+.is-unlocked .rv-disc,.is-reached .rv-disc{fill:var(--success);stroke:var(--success)}
+.is-unlocked .rv-glyph,.is-reached .rv-glyph{fill:#fff}
+
+.is-ready .rv-disc{fill:var(--surface);stroke:var(--route);stroke-width:2.4}
+
+/* Current position — a static ring, not a pulsing beacon. */
+.rv-node.is-current .rv-disc{stroke-width:2.6}
+.rv-node.is-current .rv-halo{
+  fill:var(--page);
+  stroke:var(--route);
+  stroke-width:1.4;
+  opacity:.32;
+}
+.routeview.on-surface .rv-node.is-current .rv-halo{fill:var(--surface)}
+
+/* Destination — anchored, and visibly a different kind of object. */
+.rv-dest-ring{fill:var(--page);stroke:var(--ink);stroke-width:1.6}
+.routeview.on-surface .rv-dest-ring{fill:var(--surface)}
+.rv-dest-core{fill:var(--ink)}
+.is-destination.is-unlocked .rv-dest-core,
+.is-destination.is-reached .rv-dest-core{fill:var(--success)}
+.is-destination.is-unlocked .rv-dest-ring,
+.is-destination.is-reached .rv-dest-ring{stroke:var(--success)}
+
+/* ---- labels ---- */
+
+.rv-label{
+  font-family:var(--sans);
+  font-size:13.5px;
+  font-weight:500;
+  fill:var(--muted);
+  transition:fill var(--t-route) var(--ease);
+}
+.rv-node.is-current .rv-label{fill:var(--ink);font-weight:600}
+.is-checked .rv-label,.is-unlocked .rv-label,.is-reached .rv-label{fill:var(--ink)}
+.is-destination .rv-label{fill:var(--ink);font-weight:600}
+
+.rv-sub{
+  font-family:var(--sans);
+  font-size:12.5px;
+  font-weight:500;
+  fill:var(--muted);
+}
+
+/* ---- annotation: a short leader line to the step that just changed ---- */
+
+.rv-leader{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
+.rv-note-text{
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.02em;
+  fill:var(--route-text);
+}
+.rv-note.tone-caution .rv-note-text{fill:var(--caution-text)}
+.rv-note.tone-success .rv-note-text{fill:var(--success)}
+.rv-note{animation:rv-note-in 320ms var(--ease) both}
+
+@keyframes rv-note-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---- shortcut: work physically leaving the route ---- */
+
+.rv-node.is-removing .rv-mark{transform:scale(.35);opacity:0}
+.rv-node.is-removing .rv-label,
+.rv-node.is-removing .rv-sub{opacity:0;transition:opacity 200ms var(--ease)}
+
+.rv-node.is-new .rv-mark{animation:rv-pop 340ms var(--ease) both}
+@keyframes rv-pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ---- text equivalent ----
+   Same state as the drawing. Shown as real content on the demo's state
+   panel, visually hidden where the drawing is already captioned. */
+
+/* A compact instrument readout: step on the left, its state on the right. */
+.routeview-summary{
+  list-style:none;margin:14px 0 0;padding:12px 0 0;
+  border-top:1px solid var(--line);
+  font-size:13.5px;line-height:1.4;
+}
+.routeview-summary li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:5px 0;
+}
+.rs-kind{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+.rs-name{font-weight:600;color:var(--ink);min-width:0}
+.rs-state{color:var(--muted);flex:none;font-size:13px;text-align:right}
+
+.routeview.summary-hidden .routeview-summary{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* Vertical (compact) route keeps the same vocabulary, re-composed. */
+.routeview.is-vertical .routeview-svg{margin-left:-6px}
+
+@media (prefers-reduced-motion:reduce){
+  .rv-note{animation:none}
+  .rv-node.is-new .rv-mark{animation:none}
+}
