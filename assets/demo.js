@@ -180,10 +180,13 @@
   }
 
   var state = initialState();
-  var stack = [];
+  /* Screens the visitor has passed through, indexed by browser history depth,
+     so the in-page Back button and the browser's own Back agree with each
+     other — and Forward still goes forward. */
+  var timeline = [];
+  var pos = 0;
   var route = null;
   var stage, sidePanel, liveRegion, backBtn;
-  var suppressPush = false;
 
   /* ======================================================================
      ROUTE MODEL
@@ -924,31 +927,44 @@
 
   function snapshot() { return JSON.parse(JSON.stringify(state)); }
 
+  function anchorTimeline() {
+    timeline = [snapshot()];
+    pos = 0;
+    try { history.replaceState({ bt: 0 }, ''); } catch (e) {}
+  }
+
   function go(screen) {
-    stack.push(snapshot());
     state.screen = screen;
     state.retry = null;
     if (screen !== 'destination_task') state.showMethods = false;
-    push();
+
+    timeline = timeline.slice(0, pos + 1);
+    timeline.push(snapshot());
+    pos = timeline.length - 1;
+    try { history.pushState({ bt: pos }, ''); } catch (e) {}
+
     render();
     focusStage();
   }
 
-  function push() {
-    if (suppressPush) return;
-    try { history.pushState({ bt: stack.length }, ''); } catch (e) {}
+  /* Restoring by index means Back and Forward are the same operation. */
+  function restoreTo(i) {
+    if (i < 0 || i >= timeline.length) return;
+    pos = i;
+    state = JSON.parse(JSON.stringify(timeline[i]));
+    render();
+    focusStage();
   }
 
   function back() {
-    if (!stack.length) return;
-    state = stack.pop();
-    render();
-    focusStage();
+    if (pos <= 0) return;
+    /* Let the browser drive, so its history stays in step with ours. */
+    try { history.back(); } catch (e) { restoreTo(pos - 1); }
   }
 
   function restart() {
-    stack = [];
     state = initialState();
+    anchorTimeline();
     clearSaved();
     render();
     focusStage();
@@ -972,7 +988,7 @@
      ====================================================================== */
 
   function save() {
-    try { localStorage.setItem(STORE, JSON.stringify({ s: state, k: stack.slice(-12) })); } catch (e) {}
+    try { localStorage.setItem(STORE, JSON.stringify({ s: state })); } catch (e) {}
   }
   function load() {
     try {
@@ -980,7 +996,7 @@
       if (!raw) return false;
       var d = JSON.parse(raw);
       if (!d || !d.s || !d.s.screen) return false;
-      state = d.s; stack = d.k || [];
+      state = d.s;
       return true;
     } catch (e) { return false; }
   }
@@ -1001,7 +1017,7 @@
     var destBar = document.getElementById('dest-bar');
     if (destBar) destBar.hidden = (state.screen === 'mode');
 
-    if (backBtn) backBtn.disabled = stack.length === 0;
+    if (backBtn) backBtn.disabled = pos === 0;
 
     if (route) route.setModel(routeFor(state), true);
     renderSide();
@@ -1216,15 +1232,14 @@
     document.addEventListener('click', onClick);
     document.addEventListener('submit', onSubmit);
 
-    window.addEventListener('popstate', function () {
-      if (stack.length) {
-        suppressPush = true;
-        back();
-        suppressPush = false;
-      }
+    window.addEventListener('popstate', function (e) {
+      var idx = (e.state && typeof e.state.bt === 'number') ? e.state.bt : 0;
+      if (idx >= timeline.length) idx = timeline.length - 1;
+      restoreTo(idx);
     });
 
     if (!load()) state = initialState();
+    anchorTimeline();
     render();
   }
 
