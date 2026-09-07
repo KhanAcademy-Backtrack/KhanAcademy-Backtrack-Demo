@@ -8,6 +8,11 @@ Challenge (KEIC) 2026.
 learner has used it, and no learning outcome has been measured. Nothing on the
 site claims otherwise.
 
+> **Picking this project up? Read [HANDOFF.md](HANDOFF.md) first.** It covers
+> deployment state, the two invariants in the demo logic, the honesty
+> constraints deliberately encoded in the build, what is still unfinished, and
+> the open questions for the team.
+
 ---
 
 ## Running it
