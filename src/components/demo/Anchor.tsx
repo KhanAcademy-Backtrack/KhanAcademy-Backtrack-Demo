@@ -132,13 +132,17 @@ export function Anchor({
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             {/* 3. can I do the goal yet */}
-            <AnimatePresence mode="popLayout" initial={false}>
+            {/* `wait`, not `popLayout`: popLayout takes the outgoing pill out
+                of flow, so "Goal unlocked" and "Solved" sat on top of each
+                other for the length of the crossfade. The state changing is
+                the thing worth showing; two states at once is not. */}
+            <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={destState}
                 initial={reduced ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 className={`t-label hidden items-center gap-1.5 border px-2.5 py-1.5 sm:inline-flex ${
                   destState === 'solved'
                     ? 'border-now bg-now text-base'
