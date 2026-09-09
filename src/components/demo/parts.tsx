@@ -13,7 +13,6 @@
    ========================================================================== */
 
 import type { ReactNode } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { MathText } from '@/components/math/Math';
 import type { Choice, Question } from '@/lib/curriculum';
 
@@ -57,24 +56,21 @@ export function Choices({
   onAnswer: (id: string) => void;
   exampleId?: string | null;
 }) {
-  const reduced = useReducedMotion();
   return (
     <div className="mt-9 grid gap-2.5 sm:grid-cols-2" role="group" aria-label={q.prompt}>
       {q.choices.map((c, i) => {
         const isAnswer = answered === c.id;
         const state = !answered ? 'idle' : isAnswer ? (c.correct ? 'right' : c.unsure ? 'own' : 'wrong') : 'dim';
         return (
-          <motion.button
+          <button
             key={c.id}
             type="button"
             disabled={Boolean(answered)}
             onClick={() => onAnswer(c.id)}
-            initial={reduced ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: state === 'dim' ? 0.34 : 1, y: 0 }}
-            transition={{ delay: reduced ? 0 : 0.05 * i, duration: 0.3 }}
-            className={`group relative flex min-h-[74px] items-center justify-between gap-4 border px-5 py-4 text-left transition-colors ${
-              c.unsure ? 'sm:col-span-2' : ''
-            } ${
+            style={{ animationDelay: `${i * 60}ms` }}
+            className={`rise group relative flex min-h-[74px] items-center justify-between gap-4 border px-5 py-4 text-left transition-[background-color,border-color,opacity] duration-300 ${
+              state === 'dim' ? 'opacity-35' : 'opacity-100'
+            } ${c.unsure ? 'sm:col-span-2' : ''} ${
               state === 'right'
                 ? 'border-route-deep bg-route-deep/12'
                 : state === 'wrong'
@@ -105,7 +101,7 @@ export function Choices({
             {!answered && exampleId === c.id && (
               <span className="t-label shrink-0 text-recalc-deep">Example learner</span>
             )}
-          </motion.button>
+          </button>
         );
       })}
     </div>
@@ -143,7 +139,15 @@ export function Verdict({
   );
 }
 
-/** A named beat in the route's story. Lives on the map, not on paper. */
+/**
+ * A named beat in the route's story: Shortcut found, Recalculating, New
+ * capability, Back on track. It lives on the map rather than on paper,
+ * because it is a statement about the route and not a piece of mathematics.
+ *
+ * The reveal is sequenced in CSS so the beat still lands if scripting is slow
+ * — an empty screen at the moment the product is supposed to be impressive is
+ * a worse outcome than a slightly plainer entrance.
+ */
 export function Moment({
   kind,
   label,
@@ -157,56 +161,28 @@ export function Moment({
   sub?: ReactNode;
   children?: ReactNode;
 }) {
-  const reduced = useReducedMotion();
   const accent =
     kind === 'gap' ? 'text-recalc' : kind === 'capability' || kind === 'reached' ? 'text-now' : 'text-route';
   const border =
     kind === 'gap' ? 'border-recalc' : kind === 'capability' || kind === 'reached' ? 'border-now' : 'border-route';
 
   return (
-    <motion.div
-      initial={reduced ? false : { opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className={`border-l-2 pl-5 sm:pl-8 ${border}`}
-    >
-      <motion.p
-        initial={reduced ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        className={`t-label ${accent}`}
-      >
-        {label}
-      </motion.p>
-      <motion.h2
-        initial={reduced ? false : { opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.18, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="t-display mt-3 max-w-[20ch] text-[2rem] leading-[1.03] sm:text-[2.9rem]"
-      >
+    <div className={`relative border-l-2 pl-5 sm:pl-8 ${border}`}>
+      <span
+        aria-hidden="true"
+        className={`absolute -left-px top-0 h-28 w-px ${
+          kind === 'gap' ? 'bg-recalc' : kind === 'shortcut' ? 'bg-route' : 'bg-now'
+        } opacity-60 blur-[2px]`}
+      />
+      <p className={`rise t-label ${accent}`}>{label}</p>
+      <h2 className="rise d1 t-display mt-3 max-w-[20ch] text-[2rem] leading-[1.03] sm:text-[2.9rem]">
         {line}
-      </motion.h2>
+      </h2>
       {sub && (
-        <motion.p
-          initial={reduced ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.45 }}
-          className="mt-5 max-w-[58ch] text-[1.02rem] leading-relaxed text-chalk-muted"
-        >
-          {sub}
-        </motion.p>
+        <p className="rise d2 mt-5 max-w-[58ch] text-[1.02rem] leading-relaxed text-chalk-muted">{sub}</p>
       )}
-      {children && (
-        <motion.div
-          initial={reduced ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.42, duration: 0.45 }}
-          className="mt-7"
-        >
-          {children}
-        </motion.div>
-      )}
-    </motion.div>
+      {children && <div className="rise d3 mt-7">{children}</div>}
+    </div>
   );
 }
 
@@ -234,34 +210,29 @@ export function Actions({
 
 /** Work leaving the route, struck through as it goes. */
 export function RemovedList({ items }: { items: string[] }) {
-  const reduced = useReducedMotion();
   return (
     <div>
       <ul className="space-y-2">
-        <AnimatePresence>
-          {items.map((t, i) => (
-            <motion.li
-              key={t}
-              initial={reduced ? false : { opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + i * 0.14 }}
-              className="relative inline-flex items-center gap-3 text-[1rem] text-chalk-faint"
-            >
-              <span aria-hidden="true">−</span>
-              <span className="relative">
-                {t}
-                <span
-                  className="strike-line absolute left-0 top-1/2 h-px w-full bg-chalk-faint"
-                  style={{ animationDelay: `${0.22 + i * 0.14}s` }}
-                  aria-hidden="true"
-                />
-              </span>
-              <span className="sr-only">removed from your route</span>
-            </motion.li>
-          ))}
-        </AnimatePresence>
+        {items.map((t, i) => (
+          <li
+            key={t}
+            className="rise relative flex items-center gap-3 text-[1rem] text-chalk-faint"
+            style={{ animationDelay: `${120 + i * 140}ms` }}
+          >
+            <span aria-hidden="true">−</span>
+            <span className="relative">
+              {t}
+              <span
+                className="strike-line absolute left-0 top-1/2 h-px w-full bg-chalk-faint"
+                style={{ animationDelay: `${320 + i * 140}ms` }}
+                aria-hidden="true"
+              />
+            </span>
+            <span className="sr-only">removed from your route</span>
+          </li>
+        ))}
       </ul>
-      <p className="t-label mt-4 text-route">
+      <p className="t-label rise d3 mt-4 text-route">
         {items.length} {items.length === 1 ? 'review removed' : 'reviews removed'}
       </p>
     </div>

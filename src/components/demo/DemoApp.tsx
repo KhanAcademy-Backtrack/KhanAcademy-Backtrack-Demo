@@ -12,7 +12,7 @@
    ========================================================================== */
 
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
 import { Anchor } from './Anchor';
 import { Stage } from './Stage';
 import {
@@ -169,14 +169,9 @@ export function DemoApp() {
           empty screen in front of a judge is not worth the extra 200ms of
           polish. */}
       <div ref={stageRef} className="mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16">
-        <motion.div
-          key={state.screen}
-          initial={reduced ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <div key={state.screen} className="rise">
           <Stage state={state} send={send} />
-        </motion.div>
+        </div>
       </div>
 
       {/* --- controls -------------------------------------------------- */}

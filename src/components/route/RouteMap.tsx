@@ -44,8 +44,8 @@ type Props = {
 };
 
 const GEOM = {
-  ribbon: { spine: 50, dip: 74, padStart: 42, padEnd: 46, bottom: 74, nodeR: 7 },
-  inline: { spine: 34, dip: 52, padStart: 28, padEnd: 30, bottom: 54, nodeR: 5.5 },
+  ribbon: { spine: 56, dip: 88, padStart: 46, padEnd: 52, bottom: 84, nodeR: 7.5 },
+  inline: { spine: 36, dip: 58, padStart: 28, padEnd: 32, bottom: 58, nodeR: 5.5 },
 } as const;
 
 const VGEOM = {
@@ -347,10 +347,10 @@ export function RouteMap({
             <path
               ref={aheadRef}
               className="route-stroke"
-              stroke="var(--color-chalk-faint)"
-              strokeWidth={big ? 2.5 : 2}
+              stroke="var(--color-chalk-muted)"
+              strokeWidth={big ? 2.75 : 2}
               strokeDasharray="4 9"
-              opacity={0.9}
+              opacity={0.7}
             />
 
             {/* plotted ticks along the whole route, like survey marks */}
@@ -368,15 +368,15 @@ export function RouteMap({
               ref={haloRef}
               className="route-stroke"
               stroke="var(--color-route)"
-              strokeWidth={big ? 12 : 8}
-              opacity={0.22}
+              strokeWidth={big ? 15 : 9}
+              opacity={0.28}
               filter="url(#rm-glow)"
             />
             <path
               ref={doneRef}
               className="route-stroke"
               stroke="url(#rm-done)"
-              strokeWidth={big ? 3.6 : 2.75}
+              strokeWidth={big ? 4.2 : 3}
             />
 
             {/* a signal that keeps travelling toward the destination */}
@@ -493,7 +493,10 @@ function Node({
     <motion.g
       initial={reduced ? { x, y, opacity: 1, scale: 1 } : { x, y, opacity: 0, scale: 0.4 }}
       animate={{ x, y, opacity: 1, scale: 1 }}
-      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.3 }}
+      /* A fixed tween, not a spring: a stop that is leaving the route has to
+         actually finish leaving, and a spring can be interrupted mid-flight and
+         strand a mark on the map. */
+      exit={{ opacity: 0, scale: reduced ? 1 : 0.3, transition: { duration: 0.26, ease: 'easeIn' } }}
       transition={{ type: 'spring', stiffness: 190, damping: 24, opacity: { duration: 0.28 } }}
       className={interactive ? 'route-hit' : undefined}
       tabIndex={interactive ? 0 : undefined}

@@ -50,6 +50,7 @@ function model(phase: Phase): RouteModel {
     depth: 0,
     minutes: 2,
     note: phase === 'draw' ? 'one question' : undefined,
+    active: phase === 'draw' || phase === 'checking',
     why: 'One question at today’s level. It is the only thing that says where to look.',
   };
 
@@ -60,6 +61,7 @@ function model(phase: Phase): RouteModel {
     depth: 1,
     minutes: 6,
     note: 'the missing turn',
+    active: phase === 'inserted',
     why: 'Today’s lesson factors the equation before it solves it. This is the step it stands on.',
   };
 
@@ -70,6 +72,7 @@ function model(phase: Phase): RouteModel {
     depth: 2,
     minutes: 5,
     note: 'found underneath',
+    active: true,
     why: 'Factoring is this run backwards. It turned out to be the thing actually in the way.',
   };
 

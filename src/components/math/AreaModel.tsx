@@ -74,10 +74,10 @@ export function AreaModel({ onComplete }: { onComplete: (done: boolean) => void 
         including the two that usually get skipped.
       </p>
 
-      <div className="mt-7 flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:gap-12">
+      <div className="mt-8 flex flex-col items-start gap-10 lg:flex-row lg:items-center lg:gap-14">
         {/* the rectangle */}
         <div className="shrink-0">
-          <div className="grid grid-cols-[auto_repeat(2,minmax(64px,86px))] gap-x-1">
+          <div className="grid grid-cols-[auto_repeat(2,minmax(84px,108px))] gap-x-1.5">
             <div />
             {COLS.map((c) => (
               <div key={c} className="pb-2 text-center">
@@ -104,7 +104,7 @@ export function AreaModel({ onComplete }: { onComplete: (done: boolean) => void 
                       onClick={() => toggle(cell.id)}
                       aria-pressed={isOpen}
                       disabled={combined}
-                      className={`relative flex h-[68px] items-center justify-center border transition-colors sm:h-[82px] ${
+                      className={`relative flex h-[84px] items-center justify-center border transition-colors sm:h-[104px] ${
                         isOpen
                           ? 'border-route-deep bg-route-deep/12 text-ink'
                           : 'border-dashed border-paper-line bg-transparent text-ink-muted hover:border-ink hover:bg-ink/5'
