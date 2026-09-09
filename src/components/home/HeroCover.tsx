@@ -148,7 +148,7 @@ export function HeroCover() {
           abandoned branches, plotted points and fragments of the mathematics */}
       <Atmosphere variant="cover" />
 
-      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 flex-col px-5 pb-10 pt-8 sm:px-8 sm:pt-12">
+      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center gap-10 px-5 pb-12 pt-10 sm:px-8 sm:pt-14 lg:gap-14">
         {/* ---- the class, and where it is ------------------------------- */}
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div>
@@ -175,7 +175,7 @@ export function HeroCover() {
         </div>
 
         {/* ---- the route ------------------------------------------------ */}
-        <div className="rise d2 mt-8 sm:mt-6">
+        <div className="rise d2">
           <RouteMap
             model={current}
             variant="ribbon"
@@ -188,7 +188,7 @@ export function HeroCover() {
         </div>
 
         {/* ---- live readout --------------------------------------------- */}
-        <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-hairline-soft pt-3">
+        <div className="-mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-hairline-soft pt-3">
           <span className="flex items-center gap-2 text-[0.8rem] font-semibold tracking-wide">
             <span
               className={`h-1.5 w-1.5 rounded-full ${recalculating ? 'bg-recalc' : 'bg-route'}`}
@@ -227,7 +227,7 @@ export function HeroCover() {
         </AnimatePresence>
 
         {/* ---- the statement, and the handover -------------------------- */}
-        <div className="mt-auto grid gap-10 pt-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
           <div>
             <h1 className="t-display text-[2.6rem] leading-[0.98] sm:text-[3.6rem] lg:text-[4.4rem]">
               The shortest path back to

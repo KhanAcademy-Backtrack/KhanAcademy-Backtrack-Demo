@@ -338,15 +338,15 @@ body {
    Pure CSS, so it costs nothing and stops under reduced motion. */
 @keyframes route-travel {
   from {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 204;
   }
   to {
-    stroke-dashoffset: -520;
+    stroke-dashoffset: -14;
   }
 }
 
 .route-travel {
-  animation: route-travel 3.4s linear infinite;
+  animation: route-travel 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 .route-node-label {
@@ -496,23 +496,6 @@ body {
   animation: strike-through 420ms var(--ease-route) forwards;
 }
 
-@keyframes pulse-now {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0;
-    transform: scale(2.2);
-  }
-}
-
-.pulse-now {
-  animation: pulse-now 2200ms ease-out infinite;
-  transform-origin: center;
-}
-
 @keyframes drift {
   from {
     transform: translate3d(0, 0, 0);
@@ -527,8 +510,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pulse-now,
-  .strike-line,
+    .strike-line,
   .route-travel,
   .drift-slow {
     animation: none;
@@ -594,4 +576,44 @@ body {
   .settle {
     animation: none;
   }
+}
+
+/* --- fractions and radicals --------------------------------------------
+   Stacked over a rule and under a bar, the way they are set in a textbook.
+   Written inline as "a / b" they read as an instruction to divide; written
+   properly they read as one object, which is what they are.
+   ---------------------------------------------------------------------- */
+
+.math .frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: -0.52em;
+  margin-inline: 0.16em;
+  line-height: 1.12;
+}
+
+.math .frac-num {
+  padding: 0 0.34em 0.1em;
+}
+
+.math .frac-den {
+  padding: 0.12em 0.34em 0;
+  border-top: 0.055em solid currentColor;
+}
+
+.math .rad {
+  display: inline-flex;
+  align-items: flex-start;
+  margin-inline: 0.08em;
+}
+
+.math .rad-sign {
+  padding-inline-end: 0.02em;
+}
+
+.math .rad-body {
+  border-top: 0.055em solid currentColor;
+  margin-top: 0.16em;
+  padding: 0.1em 0.16em 0 0.06em;
 }

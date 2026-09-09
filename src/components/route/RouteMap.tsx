@@ -12,7 +12,7 @@
    ========================================================================== */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import type { RouteModel, RouteNode } from '@/lib/route-model';
 import { STATUS_META } from '@/lib/route-model';
 import {
@@ -44,13 +44,13 @@ type Props = {
 };
 
 const GEOM = {
-  ribbon: { spine: 56, dip: 88, padStart: 46, padEnd: 52, bottom: 84, nodeR: 7.5 },
-  inline: { spine: 36, dip: 58, padStart: 28, padEnd: 32, bottom: 58, nodeR: 5.5 },
+  ribbon: { spine: 74, dip: 88, padStart: 46, padEnd: 52, bottom: 86, nodeR: 7.5 },
+  inline: { spine: 56, dip: 58, padStart: 28, padEnd: 32, bottom: 62, nodeR: 5.5 },
 } as const;
 
 const VGEOM = {
-  ribbon: { spine: 26, dip: 44, padStart: 34, padEnd: 34, step: 78 },
-  inline: { spine: 20, dip: 34, padStart: 26, padEnd: 26, step: 62 },
+  ribbon: { spine: 26, dip: 44, padStart: 46, padEnd: 40, step: 82 },
+  inline: { spine: 20, dip: 34, padStart: 40, padEnd: 32, step: 66 },
 } as const;
 
 function toneColor(tone: string) {
@@ -100,6 +100,7 @@ export function RouteMap({
   const aheadRef = useRef<SVGPathElement>(null);
   const ticksRef = useRef<SVGPathElement>(null);
   const haloRef = useRef<SVGPathElement>(null);
+  const legRef = useRef<SVGPathElement>(null);
   const doneRef = useRef<SVGPathElement>(null);
   const travelRef = useRef<SVGPathElement>(null);
   const ghostRef = useRef<SVGPathElement>(null);
@@ -172,16 +173,52 @@ export function RouteMap({
   }, [placed, orientation]);
 
   /* Progress = how far along the route the learner has actually got. */
-  const progress = useMemo(() => {
+  /*
+    The stroke carries three states, and they mean different things:
+
+      covered  — up to the last stop the learner has actually demonstrated.
+                 Solid mint. This is the part that is theirs.
+      leg      — from there to the stop they are working on now. Solid, but in
+                 that stop's own colour, so a repair leg reads coral rather
+                 than as more completed route. Painting a stop marked REPAIR in
+                 "you have done this" green would be a lie about their progress.
+      ahead    — everything after. Faint and dashed, because it is not theirs.
+  */
+  const { covered, legEnd, legTone, pulseEnd, pulseTone } = useMemo(() => {
     let last = 0;
     placed.forEach((p, i) => {
       const s = p.node.status;
       if (s === 'origin' || s === 'checked' || s === 'repaired' || s === 'reached') last = i;
     });
-    const active = placed.findIndex((p) => p.node.active);
-    const idx = active > last ? active : last;
-    return target.fractions[Math.min(idx, target.fractions.length - 1)] ?? 0;
+    const activeIdx = placed.findIndex((p) => p.node.active);
+    const f = (i: number) => target.fractions[Math.min(Math.max(i, 0), target.fractions.length - 1)] ?? 0;
+    const coveredF = f(last);
+
+    /* The pulse always runs exactly one hop: from where the learner is to the
+       stop immediately in front of them. Never further. */
+    const nextIdx = activeIdx > last ? activeIdx : Math.min(last + 1, placed.length - 1);
+    const nextTone =
+      nextIdx > last ? toneColor(STATUS_META[placed[nextIdx].node.status].tone) : 'var(--color-route)';
+
+    if (activeIdx > last) {
+      return {
+        covered: coveredF,
+        legEnd: f(activeIdx),
+        legTone: nextTone,
+        pulseEnd: f(nextIdx),
+        pulseTone: nextTone,
+      };
+    }
+    return {
+      covered: coveredF,
+      legEnd: coveredF,
+      legTone: 'var(--color-route)',
+      pulseEnd: f(nextIdx),
+      pulseTone: nextTone,
+    };
   }, [placed, target.fractions]);
+
+  const progress = covered;
 
   /* --- morph ----------------------------------------------------------- */
 
@@ -192,10 +229,12 @@ export function RouteMap({
       aheadRef.current,
       ticksRef.current,
       haloRef.current,
+      legRef.current,
       doneRef.current,
-      travelRef.current,
     ];
     const done = doneRef.current;
+    const leg = legRef.current;
+    const travel = travelRef.current;
     const halo = haloRef.current;
     const ghost = ghostRef.current;
     if (!done || !halo) return;
@@ -216,6 +255,25 @@ export function RouteMap({
          part is painted solid over the top of it. */
       done.setAttribute('stroke-dasharray', `${len * p} ${len}`);
       halo.setAttribute('stroke-dasharray', `${len * p} ${len}`);
+      if (leg) {
+        leg.setAttribute('stroke-dasharray', `${Math.max(len * (legEnd - p), 0)} ${len}`);
+        leg.setAttribute('stroke-dashoffset', `${-len * p}`);
+        leg.setAttribute('stroke', legTone);
+      }
+      /* The travelling highlight is given only the leg between where the
+         learner is and the next stop, not the whole route. A pulse that runs
+         all the way to the destination implies progress nobody has made. */
+      if (travel) {
+        const a = Math.round(p * (pts.length - 1));
+        const b = Math.round(pulseEnd * (pts.length - 1));
+        if (b - a >= 2) {
+          travel.setAttribute('d', polylinePath(pts.slice(a, b + 1)));
+          travel.setAttribute('stroke', pulseTone);
+          travel.style.display = '';
+        } else {
+          travel.style.display = 'none';
+        }
+      }
     };
 
     const sameShape =
@@ -249,7 +307,7 @@ export function RouteMap({
     prevPtsRef.current = to;
     prevProgressRef.current = toP;
     return () => cancelAnimationFrame(rafRef.current);
-  }, [target.pts, progress, reduced]);
+  }, [target.pts, progress, legEnd, legTone, pulseEnd, pulseTone, reduced]);
 
   /* --- recalculation sweep --------------------------------------------- */
 
@@ -372,6 +430,8 @@ export function RouteMap({
               opacity={0.28}
               filter="url(#rm-glow)"
             />
+            {/* the leg you are on now, in that stop's own colour */}
+            <path ref={legRef} className="route-stroke" strokeWidth={big ? 3 : 2.4} opacity={0.85} />
             <path
               ref={doneRef}
               className="route-stroke"
@@ -384,9 +444,9 @@ export function RouteMap({
               ref={travelRef}
               className="route-stroke route-travel"
               stroke="var(--color-now)"
-              strokeWidth={big ? 2.2 : 1.6}
-              strokeDasharray="16 504"
-              opacity={0.55}
+              strokeWidth={big ? 2.6 : 2}
+              strokeDasharray="14 190"
+              opacity={0.9}
             />
 
             {sweeping && (
@@ -402,7 +462,7 @@ export function RouteMap({
               />
             )}
 
-            <AnimatePresence initial={false}>
+            <g>
               {placed.map((p) => (
                 <Node
                   key={p.node.id}
@@ -416,6 +476,7 @@ export function RouteMap({
                   flag={model.flag?.nodeId === p.node.id ? model.flag : null}
                   onSelect={onSelectNode}
                   reduced={Boolean(reduced)}
+                  viewW={viewW}
                   labelWidth={
                     vertical
                       ? viewW - (g.spine + maxDepth * g.dip) - 44
@@ -424,7 +485,7 @@ export function RouteMap({
                   }
                 />
               ))}
-            </AnimatePresence>
+            </g>
           </motion.g>
         </svg>
       )}
@@ -456,6 +517,7 @@ function Node({
   onSelect,
   reduced,
   labelWidth,
+  viewW,
 }: {
   node: RouteNode;
   x: number;
@@ -468,6 +530,7 @@ function Node({
   onSelect?: (n: RouteNode | null) => void;
   reduced: boolean;
   labelWidth: number;
+  viewW: number;
 }) {
   const meta = STATUS_META[node.status];
   const color = toneColor(meta.tone);
@@ -489,14 +552,23 @@ function Node({
 
   const interactive = Boolean(onSelect);
 
+  /* Flags are clamped inside the drawing. A flag on the destination sits at
+     the right-hand edge, and letting it overflow put it outside whatever panel
+     the route was drawn in. */
+  const fw = flag ? flagWidth(flag.text) : 0;
+  const flagBase = vertical ? lx - 4 : -fw / 2;
+  const flagX = Math.min(Math.max(flagBase, 6 - x), Math.max(viewW - 6 - fw - x, 6 - x));
+
   return (
     <motion.g
+      /* Stops that leave the route are unmounted immediately rather than
+         animated out. An exit animation on an SVG group can be interrupted by
+         the next recalculation and strand a mark floating on the map, which is
+         worse than a stop simply not being there any more. The route shortening
+         under it, and the struck-through list beside it, already carry the
+         moment. */
       initial={reduced ? { x, y, opacity: 1, scale: 1 } : { x, y, opacity: 0, scale: 0.4 }}
       animate={{ x, y, opacity: 1, scale: 1 }}
-      /* A fixed tween, not a spring: a stop that is leaving the route has to
-         actually finish leaving, and a spring can be interrupted mid-flight and
-         strand a mark on the map. */
-      exit={{ opacity: 0, scale: reduced ? 1 : 0.3, transition: { duration: 0.26, ease: 'easeIn' } }}
       transition={{ type: 'spring', stiffness: 190, damping: 24, opacity: { duration: 0.28 } }}
       className={interactive ? 'route-hit' : undefined}
       tabIndex={interactive ? 0 : undefined}
@@ -517,10 +589,7 @@ function Node({
       <circle className="route-focus-ring" r={r + 12} fill="none" stroke="var(--color-now)" strokeWidth={2} opacity={0} />
       {interactive && <circle r={r + 14} fill="transparent" />}
 
-      {node.active && !reduced && (
-        <circle className="pulse-now" r={r + 4} fill="none" stroke={color} strokeWidth={2} />
-      )}
-      {node.active && <circle r={r + 8} fill="none" stroke={color} strokeWidth={1.5} opacity={0.55} />}
+      {node.active && <circle r={r + 7} fill="none" stroke={color} strokeWidth={1.5} opacity={0.6} />}
       {selected && <circle r={r + 11} fill="none" stroke="var(--color-now)" strokeWidth={1.5} />}
 
       {/* every stop sits in its own pool of light */}
@@ -577,18 +646,10 @@ function Node({
       )}
       {isOrigin && <circle r={r - 3.2} fill="var(--color-base)" />}
 
-      <text
-        className="route-node-sub"
-        x={lx}
-        y={vertical ? ly - 12 : -r - 12}
-        textAnchor={labelAnchor}
-        fill={color}
-        opacity={node.status === 'unknown' ? 0.62 : 1}
-      >
-        {meta.glyph ? `${meta.glyph} ` : ''}
-        {meta.word}
-      </text>
-
+      {/* Label stack, all below the mark: label, then state, then qualifier.
+          Keeping it on one side leaves the space above the mark free for the
+          flag, so a transient "Recalculating" can never land on top of the
+          permanent state word. */}
       {labelLines.map((line, i) => (
         <text
           key={i}
@@ -602,11 +663,28 @@ function Node({
         </text>
       ))}
 
-      {node.note && variant === 'ribbon' && (
+      {/* The flag replaces the state word while it is up: showing
+          "Checking" twice, once in coral and once in a coral box, told the
+          reader nothing the first one had not. */}
+      {!flag && (
         <text
           className="route-node-sub"
           x={lx}
-          y={ly + labelLines.length * 13 + 2}
+          y={ly + labelLines.length * 13 + 1}
+          textAnchor={labelAnchor}
+          fill={color}
+          opacity={node.status === 'unknown' ? 0.7 : 1}
+        >
+          {meta.glyph ? `${meta.glyph} ` : ''}
+          {meta.word}
+        </text>
+      )}
+
+      {node.note && !flag && variant === 'ribbon' && (
+        <text
+          className="route-node-sub"
+          x={lx}
+          y={ly + labelLines.length * 13 + 15}
           textAnchor={labelAnchor}
           fill="var(--color-chalk-faint)"
         >
@@ -616,23 +694,22 @@ function Node({
 
       {flag && (
         <motion.g
-          initial={{ opacity: 0, y: 6 }}
+          initial={reduced ? false : { opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
           <rect
-            x={vertical ? lx - 4 : -flagWidth(flag.text) / 2}
-            y={vertical ? -r - 34 : -r - 46}
-            width={flagWidth(flag.text)}
+            x={flagX}
+            y={-r - 34}
+            width={fw}
             height={20}
             rx={2}
             fill={toneColor(flag.tone)}
           />
           <text
             className="route-node-sub"
-            x={vertical ? lx - 4 + flagWidth(flag.text) / 2 : 0}
-            y={vertical ? -r - 20 : -r - 32}
+            x={flagX + fw / 2}
+            y={-r - 20}
             textAnchor="middle"
             fill="var(--color-base)"
           >
@@ -645,5 +722,5 @@ function Node({
 }
 
 function flagWidth(text: string) {
-  return Math.max(56, text.length * 6.4 + 18);
+  return Math.max(56, text.length * 6.5 + 18);
 }

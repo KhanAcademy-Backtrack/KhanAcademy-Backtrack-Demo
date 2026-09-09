@@ -933,28 +933,28 @@ function DestinationScreen({ state, send }: { state: DemoState; send: Send }) {
               <div className="mt-6 grid gap-px border border-paper-line bg-paper-line sm:grid-cols-2">
                 <div className="bg-paper p-5">
                   <p className="t-label text-ink-muted">Method A · factor</p>
-                  <div className="mt-3 space-y-1.5">
-                    <MathText size="xs" className="block text-ink">
+                  <div className="mt-4 space-y-3">
+                    <MathText size="sm" className="block text-ink">
                       (x + 4)(x + 5) = 0
                     </MathText>
-                    <MathText size="xs" className="block text-ink">
+                    <MathText size="sm" className="block text-ink">
                       x + 4 = 0 or x + 5 = 0
                     </MathText>
-                    <MathText size="xs" className="block text-ink">
+                    <MathText size="sm" className="block text-ink">
                       x = −4 or x = −5
                     </MathText>
                   </div>
                 </div>
                 <div className="bg-paper p-5">
                   <p className="t-label text-ink-muted">Method B · quadratic formula</p>
-                  <div className="mt-3 space-y-1.5">
-                    <MathText size="xs" className="block text-ink">
-                      x = (−9 ± √(81 − 80)) / 2
+                  <div className="mt-4 space-y-3">
+                    <MathText size="sm" className="block text-ink">
+                      {'x = \\frac{−9 ± \\sqrt{81 − 80}}{2}'}
                     </MathText>
-                    <MathText size="xs" className="block text-ink">
-                      x = (−9 ± 1) / 2
+                    <MathText size="sm" className="block text-ink">
+                      {'x = \\frac{−9 ± 1}{2}'}
                     </MathText>
-                    <MathText size="xs" className="block text-ink">
+                    <MathText size="sm" className="block text-ink">
                       x = −4 or x = −5
                     </MathText>
                   </div>

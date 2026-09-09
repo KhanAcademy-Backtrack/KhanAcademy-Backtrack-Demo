@@ -38,11 +38,11 @@ const DEAD_ENDS = [
 ];
 
 const MARKS = [
-  { t: 'x² + bx + c', x: 86, y: 62, r: -4, s: 26 },
-  { t: '(x + 3)(x + 4)', x: 928, y: 58, r: 3, s: 23 },
-  { t: 'b² − 4ac', x: 150, y: 830, r: -2, s: 22 },
-  { t: 'ax + b = 0', x: 1084, y: 812, r: 4, s: 20 },
-  { t: '3x + 2x = 5x', x: 560, y: 862, r: -3, s: 20 },
+  { t: 'x² + bx + c', left: 8, top: 7, r: -4, size: '1.5rem' },
+  { t: '(x + 3)(x + 4)', left: 78, top: 6, r: 3, size: '1.35rem' },
+  { t: 'b² − 4ac', left: 13, top: 93, r: -2, size: '1.25rem' },
+  { t: 'ax + b = 0', left: 88, top: 91, r: 4, size: '1.15rem' },
+  { t: '3x + 2x = 5x', left: 46, top: 96, r: -3, size: '1.15rem' },
 ];
 
 const POINTS = [
@@ -92,7 +92,7 @@ export function Atmosphere({ variant = 'section', className = '' }: Props) {
         {/* contour lines: the terrain the route crosses */}
         <g opacity={quiet ? 0.14 : cover ? 0.3 : 0.2}>
           {CONTOURS.map((d, i) => (
-            <path key={i} d={d} stroke="url(#atm-fade)" strokeWidth={1} />
+            <path key={i} d={d} stroke="url(#atm-fade)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           ))}
         </g>
 
@@ -103,7 +103,7 @@ export function Atmosphere({ variant = 'section', className = '' }: Props) {
               key={i}
               d={d}
               stroke="var(--color-route)"
-              strokeWidth={1.4}
+              strokeWidth={1.4} vectorEffect="non-scaling-stroke"
               strokeDasharray="2 11"
               strokeLinecap="round"
             />
@@ -118,14 +118,14 @@ export function Atmosphere({ variant = 'section', className = '' }: Props) {
                 <path
                   d={b.d}
                   stroke="var(--color-recalc)"
-                  strokeWidth={1.2}
+                  strokeWidth={1.2} vectorEffect="non-scaling-stroke"
                   strokeDasharray="3 6"
                   strokeLinecap="round"
                 />
                 <path
                   d={`M${b.x - 4} ${b.y - 4} L${b.x + 4} ${b.y + 4} M${b.x + 4} ${b.y - 4} L${b.x - 4} ${b.y + 4}`}
                   stroke="var(--color-recalc)"
-                  strokeWidth={1.4}
+                  strokeWidth={1.4} vectorEffect="non-scaling-stroke"
                   strokeLinecap="round"
                 />
               </g>
@@ -141,7 +141,7 @@ export function Atmosphere({ variant = 'section', className = '' }: Props) {
                 key={i}
                 d={`M${x - 3} ${y} L${x + 3} ${y} M${x} ${y - 3} L${x} ${y + 3}`}
                 stroke="var(--color-chalk-faint)"
-                strokeWidth={1}
+                strokeWidth={1} vectorEffect="non-scaling-stroke"
               />
             ) : (
               <circle key={i} cx={x} cy={y} r={1.4} fill="var(--color-chalk-faint)" />
@@ -149,25 +149,31 @@ export function Atmosphere({ variant = 'section', className = '' }: Props) {
           )}
         </g>
 
-        {/* fragments of the mathematics this map is about */}
-        {!quiet && (
-          <g opacity={cover ? 0.16 : 0.11}>
-            {MARKS.map((m) => (
-              <text
-                key={m.t}
-                x={m.x}
-                y={m.y}
-                fontSize={m.s}
-                fill="var(--color-chalk)"
-                className="math"
-                transform={`rotate(${m.r} ${m.x} ${m.y})`}
-              >
-                {m.t}
-              </text>
-            ))}
-          </g>
-        )}
-      </svg>
+        </svg>
+
+      {/* Fragments of the mathematics this map is about. They live in HTML
+          rather than inside the SVG so they stay the same size on a laptop and
+          on a very large display, instead of being scaled up with the field. */}
+      {!quiet && (
+        <div className="absolute inset-0" aria-hidden="true">
+          {MARKS.map((m) => (
+            <span
+              key={m.t}
+              className={`math absolute whitespace-nowrap text-chalk ${
+                cover ? 'opacity-[0.13]' : 'opacity-[0.08]'
+              }`}
+              style={{
+                left: `${m.left}%`,
+                top: `${m.top}%`,
+                fontSize: m.size,
+                transform: `translate(-50%, -50%) rotate(${m.r}deg)`,
+              }}
+            >
+              {m.t}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* a soft vignette so the composition has a centre */}
       <div

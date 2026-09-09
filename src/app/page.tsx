@@ -3,6 +3,7 @@ import { HeroCover } from '@/components/home/HeroCover';
 import { CompoundingGap } from '@/components/home/CompoundingGap';
 import { LoopStepper } from '@/components/home/LoopStepper';
 import { ClassSpread } from '@/components/home/ClassSpread';
+import { MissedTurn } from '@/components/home/MissedTurn';
 import { HonestNote, Section, SectionHead, Statement } from '@/components/site/Section';
 import { MathText } from '@/components/math/Math';
 
@@ -77,6 +78,9 @@ export default function HomePage() {
                 the smallest repair that reconnects them to it?
               </strong>
             </p>
+            <div className="border-t border-hairline pt-6">
+              <MissedTurn />
+            </div>
             <dl className="grid gap-px overflow-hidden border border-hairline bg-hairline sm:grid-cols-2">
               <div className="bg-field p-5">
                 <dt className="t-label text-chalk-faint">Generic adaptive learning asks</dt>

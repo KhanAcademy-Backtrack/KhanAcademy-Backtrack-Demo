@@ -68,7 +68,7 @@ export function Choices({
             disabled={Boolean(answered)}
             onClick={() => onAnswer(c.id)}
             style={{ animationDelay: `${i * 60}ms` }}
-            className={`rise group relative flex min-h-[74px] items-center justify-between gap-4 border px-5 py-4 text-left transition-[background-color,border-color,opacity] duration-300 ${
+            className={`rise group relative flex min-h-[92px] items-center justify-between gap-4 border px-5 py-4 text-left transition-[background-color,border-color,opacity] duration-300 ${
               state === 'dim' ? 'opacity-35' : 'opacity-100'
             } ${c.unsure ? 'sm:col-span-2' : ''} ${
               state === 'right'
@@ -81,9 +81,9 @@ export function Choices({
             }`}
           >
             {c.unsure ? (
-              <span className="text-[1.05rem] text-ink">{c.text}</span>
+              <span className="text-[1.15rem] text-ink">{c.text}</span>
             ) : (
-              <MathText size="sm" className="text-ink">
+              <MathText size="md" className="text-ink">
                 {c.text}
               </MathText>
             )}

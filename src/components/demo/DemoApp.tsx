@@ -13,6 +13,7 @@
 
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
+import { Atmosphere } from '@/components/site/Atmosphere';
 import { Anchor } from './Anchor';
 import { Stage } from './Stage';
 import {
@@ -142,7 +143,11 @@ export function DemoApp() {
   const showAnchor = state.screen !== 'mode';
 
   return (
-    <div className="material-map min-h-[calc(100dvh-4rem)]">
+    <div
+      className="material-map relative flex min-h-[calc(100dvh-4rem)] flex-col overflow-hidden"
+      data-mood={destState === 'solved' ? 'clear' : recalculating ? 'recalc' : undefined}
+    >
+      <Atmosphere variant="quiet" />
       {state.mode === 'guided' && (
         <p className="border-b border-recalc/40 bg-recalc/10 px-5 py-2.5 text-center text-[0.82rem] text-recalc sm:px-8">
           <strong className="font-semibold">Example learner.</strong> A fictional recovery path, shown
@@ -168,14 +173,17 @@ export function DemoApp() {
           the stage blank if an exit animation ever failed to finish, and an
           empty screen in front of a judge is not worth the extra 200ms of
           polish. */}
-      <div ref={stageRef} className="mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16">
+      <div
+        ref={stageRef}
+        className="relative mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-5 py-12 sm:px-8 sm:py-16"
+      >
         <div key={state.screen} className="rise">
           <Stage state={state} send={send} />
         </div>
       </div>
 
       {/* --- controls -------------------------------------------------- */}
-      <div className="sticky bottom-0 border-t border-hairline bg-base/94 backdrop-blur-md">
+      <div className="sticky bottom-0 z-20 mt-auto border-t border-hairline bg-base/94 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-2.5 sm:px-8">
           <button
             type="button"

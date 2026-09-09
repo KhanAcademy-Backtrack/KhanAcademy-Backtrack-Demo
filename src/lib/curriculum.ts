@@ -230,7 +230,7 @@ export const BANK: Record<string, Question> = {
       },
       {
         id: 'formula',
-        text: 'x = (−7 ± √(49 − 48)) / 2',
+        text: 'x = \\frac{−7 ± \\sqrt{49 − 48}}{2}',
         correct: true,
         why: 'Also correct. The quadratic formula works on every quadratic, and it gives the same two answers here. BACKTRACK will not mark a valid method wrong because the lesson expected a different one.',
       },
