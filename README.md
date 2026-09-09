@@ -1,119 +1,54 @@
 # BACKTRACK
 
-**The shortest path back to where your class is now.**
+A new route to the lesson you need now.
 
-An adaptive learning-recovery navigator, built as a public website with a
-working, no-sign-in interactive demo. Prepared for the Khan Academy Education
-Impact Challenge (KEIC) 2026.
+Live product: https://backtrack-learning.vercel.app/
 
-**Live:** https://backtrack-five.vercel.app
+Earlier comparison site: https://backtrack-five.vercel.app/
 
-> **Status: concept / prototype.** No pilot has run, no school has committed,
-> no learner has used it, and no learning outcome has been measured. Nothing on
-> the site claims otherwise, and several pages say so explicitly.
+## The product
 
----
+A learner chooses a destination and a manageable study block. Their answers determine which earlier step to check, what can leave the route, and when to use a matched Khan resource. Two fresh unassisted checks support each route decision. Progress stays in the browser.
 
-## Running it
+Two destination families are available: equations with brackets and quadratics by factoring. The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Official Khan videos are embedded, with links to the original lessons and exercises. No live Khan-results API, learner account server, or generative-model call is assumed.
 
-```bash
-npm install
-npm run dev
-```
+## Run locally
 
-Then open <http://localhost:3000>.
+Use Node 24 or later for the built-in TypeScript test runner.
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Dev server with hot reload |
-| `npm run build` | Static export into `out/` |
-| `npm run typecheck` | `tsc --noEmit` |
+- npm install
+- npm run dev (development)
+- npm test (mathematics and routing checks)
+- npm run typecheck
+- npm run build (static export into out)
+- npm start (production preview at http://127.0.0.1:3047)
 
-## Stack
+## Where things live
 
-Next.js 15 (App Router, `output: 'export'`), React 19, TypeScript, Tailwind 4,
-Motion. No server, no database, no API, no model call. First load is roughly
-103–176 kB depending on the page.
+- src/lib/recovery.ts: deterministic routing and fresh question generation.
+- src/lib/khan-materials.ts and curriculum.ts: matched Khan resources.
+- src/lib/route-geometry.ts: preserved route interpolation utilities.
+- src/components/product: focused learning interface, route, Khan player, and topic entry.
+- src/app: public routes and optional supporting pages.
+- tests/recovery.test.mjs: fourteen tests including generated mathematics, evidence boundaries, deeper checks, session blocks, comeback, and local-storage validation.
+- docs/SUBMISSION_CHECKLIST.md: the submission package entry point.
+- output/pdf: the 15-page deck, seven individual answer PDFs, and supporting documents.
+- output/BACKTRACK_KEIC_2026.pptx: editable deck.
 
-Static export is deliberate. The product is meant to make sense in schools with
-shared devices and scheduled connectivity, so the whole site can be served from
-a CDN or a local cache.
+## Evidence boundaries
 
-## Layout
+The interactive build demonstrates software behavior. The school implementation, learning outcomes, costs, and continuation model are proposals to test. Resource opens, self-reported practice, and BACKTRACK answers are separate records. The optional evidence pages and documents explain the evaluation design.
 
-```
-src/
-  app/                     one directory per route, all statically exported
-    page.tsx               the cover and the argument
-    demo/                  the interactive demo
-    how-it-works/  classrooms/  evidence/  about/  start/quadratics/
-  components/
-    route/RouteMap.tsx     the signature object: a morphing SVG route
-    math/                  math typesetting, and the two hands-on repairs
-    demo/                  demo shell, anchor, screens, Khan checkpoint
-    home/                  cover, compounding gap, loop, class spread
-    site/                  header, footer, section primitives, atmosphere
-  lib/
-    curriculum.ts          destination, skills, question bank, Khan resources
-    demo-machine.ts        pure reducer, plus the route derived from state
-    route-model.ts         route types and the status vocabulary
-    route-geometry.ts      layout, cubics, arc-length resampling
-```
+The public interface stores device-local progress, not a school record. Initial page loading and Khan material require connectivity. Shared-device controls clear a destination's saved route. The video player includes an original-Khan fallback for networks or embedded browsers that block playback.
 
-## The two rules the demo exists to protect
+## Deployment
 
-**1. Correctness is decided by mathematics alone.** Both valid first steps for
-`x² + 7x + 12 = 0` are accepted: factoring to `(x + 3)(x + 4) = 0` *and* the
-quadratic formula. Marking the second wrong because the lesson expected the
-first would be false mathematics, and not doing that to learners is the whole
-product.
+The separate Vercel project is backtrack-learning. Its GitHub integration is connected to this repository. The original backtrack project was verified to have no Git connection and remains a comparison deployment.
 
-**2. Self-reported confidence changes what gets checked next, never whether an
-answer was right.** The full mapping is in `applyConfidence` in
-`src/lib/demo-machine.ts`.
+The overhaul was developed on HarryDaks. Matthew later explicitly authorized pushing it to main as well. No force push or paid upgrade is required.
 
-Nothing a visitor types is evaluated. The one free-text answer is normalised
-and compared against expected values. There is no `eval`, no `new Function`,
-and no expression parser anywhere in the codebase.
+## Artifact rebuilding
 
-## What the route stroke means
+scripts/build-submission.mjs validates the seven word counts and writes the combined copy. The presentation and PDF builders use the bundled Codex artifact runtime, with fonts prepared from the website build. Final deck links come from docs/deployment.json. They are not intended to run as part of the website build.
 
-Three states, and they are not interchangeable:
-
-- **covered** — solid mint, up to the last stop actually demonstrated
-- **the leg you are on** — solid, in that stop's own colour
-- **ahead** — faint and dashed, because it is not the learner's yet
-
-A stop marked *Repair* is never painted in the colour of completed route.
-
-## Honesty constraints encoded in the build
-
-These are easy to break by accident and damaging if a judge notices.
-
-- **Khan Academy links are real.** Every URL in `curriculum.ts` was opened on
-  khanacademy.org and its page title checked. There is still no API
-  relationship, no partnership and no endorsement, and the checkpoint says so.
-- **Opening a Khan resource never counts as learning.** A stop is only marked
-  repaired when a fresh question is answered inside BACKTRACK.
-- **Pilot reach is written as proposed:** approximately 80–120 evaluated
-  learners across 2–3 cohorts, subject to agreements.
-- **No institutional price is published**, because none has been validated. The
-  ₱100,000 allocation on `/evidence` is labelled a planning allocation.
-- **The illustrative classroom is labelled synthetic on its face.**
-- **Guided mode is visibly fictional** via a persistent banner.
-- **No fabricated team.** `/about` says which members are unconfirmed.
-- No streaks, no XP, no badges, no confetti, no countdowns, no autoplay. The
-  retention hypothesis is that visible route compression can do that work
-  honestly, and that hypothesis is the thing being tested.
-
-## Deploying
-
-The Vercel project is linked and deploys with:
-
-```bash
-npx vercel deploy --prod --yes
-```
-
-Auto-deploy from GitHub is **not** connected: Vercel's Hobby plan does not
-support linking a private repository owned by an organisation. The options are
-to make the repository public, mirror it to a personal account, or upgrade.
+Khan materials and logo attribution: docs/THIRD_PARTY_MATERIALS.md.

@@ -1,0 +1,119 @@
+# BACKTRACK: ready-to-paste submission copy
+
+Project title: BACKTRACK: Your GPS for Learning
+
+Subtitle: Find the missing step. Practice with Khan Academy. Return to today’s lesson.
+
+Institution: University of the Philippines Manila
+
+Coach: Justin Mesias
+
+Students: Matthew Labrador, Paul Recio, Harry Gomez
+
+Copy only the paragraphs under each field heading. Counts use whitespace-separated words; the live portal remains authoritative. All narratives stay below 300 words. No interview, school commitment, or pilot outcome is invented.
+
+## Executive Summary
+
+Word count: 217
+
+When a learner misses a turn, school keeps moving. The instruction is often to review, but the learner may not know what to review. BACKTRACK gives them a new route to the lesson they need now.
+
+A learner or teacher selects a destination. Short mathematics checks investigate relevant prerequisites. Demonstrated knowledge removes review from the route; difficulty can introduce an earlier step. Official Khan Academy videos support learning inside the experience, with matched exercises on Khan. Fresh BACKTRACK checks then test whether the learner can return to the destination. Progress stays saved when life interrupts.
+
+The current public product supports equations with brackets and quadratic equations. Our broader ambition is a reusable recovery navigator across curriculum destinations, for schools and self-study.
+
+For November 2026 through March 2027, we propose 80–120 learners across two or three school cohorts, subject to agreements, permissions, and access. Teachers will confirm destinations, assign relevant Khan practice, and supervise separate return assessments. Our signature outcome is retained reentry: initially blocked learners who pass a fresh destination task and still pass a parallel task 7–14 days later.
+
+The University of the Philippines Manila team will measure learning, repeated relevant Khan use, teacher effort, and actual costs. The pilot will leave another educator with a practical kit for running and measuring the same recovery routine.
+
+## Needs Assessment
+
+Word count: 213
+
+A learner can have access to excellent lessons and still not know which earlier skill is blocking the topic in front of them. In algebra, an error while solving a quadratic might involve factoring, multiplication, or the zero-product rule. Sending everyone through the same review can miss that distinction.
+
+BACKTRACK addresses this navigation barrier among secondary mathematics learners returning to a current classroom or self-study goal. It does not claim that prerequisite gaps explain the entire Philippine education crisis. Teaching quality, language, attendance, household conditions, and access also matter.
+
+The proposed school work starts with teacher-confirmed destinations and recurring access to devices and Khan Academy. We will record learners excluded or delayed by connectivity rather than assuming universal access. Learners needing support beyond the route will be referred to an educator.
+
+Local validation remains a priority before implementation. We plan permitted walkthroughs with 10–15 learners and interviews with 3–5 teachers to examine recent experiences, existing workarounds, incorrect prerequisite assumptions, acceptable teacher effort, and realistic schedules. The findings will guide the first school cycle.
+
+The central need to validate is specific: whether learners and educators would benefit from a clearer route between current difficulty, relevant Khan practice, and successful return to today’s task. Findings will determine which destinations and school routines enter the pilot.
+
+## Business Principles & Financials
+
+Word count: 203
+
+BACKTRACK creates value by helping learners choose useful review and helping schools organize repeated Khan practice around current needs. Core learner access will remain free. Funding decisions will follow measured costs and conversations with institutional budget owners.
+
+A PHP 100,000 implementation scenario allocates PHP 24,000 to learning design and mathematics review; PHP 18,000 to access support; PHP 16,000 to school deployment; PHP 18,000 to evaluation; PHP 8,000 to product operations; PHP 8,000 to teacher onboarding and replication; PHP 3,000 to recruitment content; and PHP 5,000 to contingency. The team will confirm quotes and approved grant expenses before committing funds. The separate team award is excluded.
+
+We will record actual cash expenditure, in-kind hours, support time per school, and the cost of adding a reviewed destination. Unit economics will distinguish cost per enrollee, active learner, and documented retained reentry. Registrations will not substitute for learning outcomes in the denominator.
+
+Continuation options include university extension, school networks, education nonprofits, LGUs, and CSR sponsors supporting access and implementation. We will interview actual budget owners about their decision process and evidence requirements before proposing a price. By March, continuation requires an institutional owner, a maintainable destination kit, feasible access, and evidence that the routine justifies its cost.
+
+## Innovation
+
+Word count: 202
+
+BACKTRACK’s organizing question is: what is blocking the thing this learner needs now, and which useful step could get them back? The destination remains visible while the route changes with their answers.
+
+Adaptive learning, prerequisite graphs, and goal-based tutoring already exist. ALEKS and modern AI learning tools overlap with this idea. We do not claim to have invented personalization. Our proposed contribution is the complete recovery workflow around Khan: a teacher-confirmed destination, an inspectable route, relevant practice, fresh evidence of return, and a reusable school kit.
+
+The reward is concrete. When a learner demonstrates a step, its review leaves the route. When a learner needs help, a deeper step can appear. Confidence changes support and follow-up checks, not mathematical correctness. The current product requires two distinct unassisted checks for a route-specific decision with later checks to see what stays with the learner.
+
+Learners choose a manageable block, can stop without losing progress, and may take one optional next turn. A comeback check preserves history while reassessing what is useful now. We will measure voluntary continuation, frustration, and return visits.
+
+The working website lets judges experience those decisions. The pilot will test whether this combination adds value beyond an equal-time teacher-selected Khan routine.
+
+## Meaningful Khan Academy Integration
+
+Word count: 231
+
+BACKTRACK gives learners a specific reason to use Khan Academy: a step that stands between them and today’s lesson. Each reviewed destination kit maps prerequisites to Khan explanations and exercises. Official Khan videos play inside the learning step; practice opens on Khan, while the BACKTRACK route stays saved.
+
+In the proposed school pilot, teachers confirm the current destination and assign the mapped exercises in their existing Khan classes. Learners investigate their route, complete relevant practice, and return for fresh checks. The routine repeats across teaching weeks rather than ending at registration or a single lesson open.
+
+We will distinguish three evidence sources: BACKTRACK activity, authorized Khan assignment or teacher-report evidence, and separate supervised destination assessments. A video open, a learner’s practice report, and a correct return task are different events. None will be silently counted as another.
+
+Khan’s published teacher reporting tools provide a practical starting point, including assignment-score CSV exports. We will confirm available fields and authorized access with each partner and during capacity building. The workflow can use existing teacher-authorized reports while the team explores further supported integrations.
+
+Meaningful-use measures will include repeated completion of relevant Khan exercise assignments across offered weeks, supported by available reports, alongside learning outcomes and teacher effort. Khan supplies a coherent learning and practice environment; BACKTRACK tests whether a clear destination and return loop can make that environment more useful and more consistently used.
+
+## Potential to Scale
+
+Word count: 221
+
+The unit of replication is a destination kit: a current learning goal, reviewed prerequisite map, discriminating checks, matched Khan materials, parallel return assessments, facilitator guide, and reporting definitions. A new educator should be able to use a kit without the student team designing individual rescue plans.
+
+The initial mathematics destinations demonstrate the structure. Additional grades, courses, and self-study goals can enter through new reviewed kits. The five-month proof stays bounded while the product vision remains broad.
+
+School adoption begins with one confirmed class destination and a recurring access window. We will test a second educator’s use of a kit and record preparation, questions, and continuing support. Expansion depends on curriculum fit, usable evidence, access, and manageable teacher effort, not merely the ability to publish another webpage.
+
+A separate public channel can bring learners through short mathematics videos, shared links, and QR codes directly to the relevant destination. We will measure the route into meaningful practice and return, not treat views as recovered learners. Public activity stays separate from the evaluated school cohort.
+
+The current interface uses local state and requires no generative-model call. It still needs connectivity for initial loading and Khan material. Long-term scale will require accountable content review, maintenance, local implementation partners, and a tested continuation model. Educator review and a clear maintenance owner will accompany each new kit.
+
+## Potential Positive Impact
+
+Word count: 217
+
+By March 31, 2027, we want evidence of a specific change: learners who initially could not complete a current mathematics goal can complete a fresh version after targeted practice, and can still do so later.
+
+Our signature outcome is retained reentry. The numerator is eligible baseline-blocked learners who meet a prespecified criterion on both immediate and 7–14-day delayed destination assessments. The denominator is all enrolled eligible baseline-blocked learners. Missing follow-up will be reported explicitly and will not disappear from the primary summary.
+
+Teachers will review parallel forms and supervise formal checks. The public product’s two-answer rule is useful practice evidence, not a substitute for that evaluation. Where practical and approved, a randomized delayed-start comparison will contrast the BACKTRACK-supported workflow with equal-time teacher-selected Khan practice. If a credible comparison cannot be executed, we will report feasibility and associations rather than causal gains.
+
+Secondary measures include active time to reentry, repeated relevant Khan use, learner frustration and voluntary continuation, teacher minutes, and actual cost per documented outcome. Time analyses will include learners who have not reentered, rather than reporting only fast finishers.
+
+The proposed 80–120 learner target depends on school access and permissions. A successful implementation should leave both credible evidence and a kit another educator can reproduce, including an honest account of who the model did not reach.
+
+## Executive Summary: character-limit fallback
+
+The live field configuration has max_length 300 despite saying 300 words. Use the full summary if the portal permits it or the organizer fixes it. Otherwise this concise fallback is 216 characters and 34 words:
+
+BACKTRACK helps learners find a missing step, practice with Khan Academy, and return to today’s lesson. Our school pilot will track fresh-task success, repeat Khan use, and whether the recovery holds 7–14 days later.
+
+## Required fields still for the team
+
+Confirm faculty-adviser eligibility, position and department; all students’ degree programs, year levels and email addresses; required telephone fields; campus naming and exclusivity; institutional authorization and consent to submit. Confirm the exact deadline time with the organizer. These cannot be inferred from a working product.

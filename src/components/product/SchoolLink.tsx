@@ -1,0 +1,5 @@
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+import { TOPICS, type Topic } from '@/lib/recovery';
+export function SchoolLink(){const [topic,setTopic]=useState<Topic>('quadratics'),[copied,setCopied]=useState(false);return <div className="school-tool"><label htmlFor="school-goal">Choose the current class destination</label><select id="school-goal" value={topic} onChange={e=>{setTopic(e.target.value as Topic);setCopied(false);}}>{Object.entries(TOPICS).map(([id,t])=><option key={id} value={id}>{t.label}</option>)}</select><button className="button-secondary" onClick={async()=>{try{await navigator.clipboard.writeText(`${location.origin}/start/${topic}`);setCopied(true);}catch{setCopied(false);}}}>{copied?'Class link copied ✓':'Copy class link'}</button><Link className="button-text" href={`/start/${topic}`}>Open the learner route ↗</Link><p className="share-url" role="status">{copied?'Share the link with your class. No roster is uploaded.':`Topic link: /start/${topic}`}</p></div>}

@@ -1,0 +1,34 @@
+{
+  "method": "Whitespace-delimited words",
+  "sections": [
+    {
+      "section": "Executive Summary",
+      "words": 217
+    },
+    {
+      "section": "Needs Assessment",
+      "words": 213
+    },
+    {
+      "section": "Business Principles & Financials",
+      "words": 203
+    },
+    {
+      "section": "Innovation",
+      "words": 202
+    },
+    {
+      "section": "Meaningful Khan Academy Integration",
+      "words": 231
+    },
+    {
+      "section": "Potential to Scale",
+      "words": 221
+    },
+    {
+      "section": "Potential Positive Impact",
+      "words": 217
+    }
+  ],
+  "executiveShortCharacters": 216
+}

@@ -34,3 +34,7 @@ tsconfig.tsbuildinfo
 
 .vercel
 .env*
+
+# Private execution notes
+docs/WORK_LOG.md
+output/BACKTRACK_SOURCE.zip

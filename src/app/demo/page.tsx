@@ -1,12 +1,3 @@
-import type { Metadata } from 'next';
-import { DemoApp } from '@/components/demo/DemoApp';
-
-export const metadata: Metadata = {
-  title: 'Interactive demo',
-  description:
-    'Walk one adaptive route: say how much time you have, answer one question about today’s lesson, and watch the route compress or bend. No sign-in, nothing recorded.',
-};
-
-export default function DemoPage() {
-  return <DemoApp />;
-}
+import { RecoveryApp } from '@/components/product/RecoveryApp';
+export const metadata={title:'Your route'};
+export default function ExistingLink(){return <RecoveryApp/>}

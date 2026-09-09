@@ -2,13 +2,14 @@
   "name": "backtrack",
   "version": "1.0.0",
   "private": true,
-  "description": "BACKTRACK — an adaptive learning-recovery navigator. KEIC 2026 prototype.",
+  "description": "BACKTRACK: a destination-aware learning recovery navigator.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "start": "node scripts/serve-static.mjs",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/recovery.test.mjs"
   },
   "dependencies": {
     "motion": "^12.23.12",

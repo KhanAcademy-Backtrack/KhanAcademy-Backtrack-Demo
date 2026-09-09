@@ -1,0 +1,24 @@
+BACKTRACK - KEIC 2026 PACKAGE
+
+Start with 01 Submit these / SUBMISSION_CHECKLIST.pdf.
+
+The application deck is BACKTRACK_KEIC_2026.pdf (15 pages).
+The seven ANSWER files each contain one ready-to-paste response with its word count.
+SUBMISSION_COPY.pdf contains all seven responses and the short executive-summary fallback.
+
+Live product:
+https://backtrack-learning.vercel.app/start/quadratics
+
+Homepage:
+https://backtrack-learning.vercel.app/
+
+02 Plans and evidence contains the pilot, measurement, budget, research, validation scripts, Q&A, and judge review.
+DECK_BUILD_NOTES.pdf is the writing/visual blueprint. It is not the deck to upload.
+
+03 Editable sources contains the PPTX, project source archive, and the matching font files.
+The PowerPoint contains embedded regular and bold Plus Jakarta Sans fonts for editing. Separate font files are also included. The PDF is ready to view.
+
+Main repository:
+https://github.com/KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo
+
+The application itself has not been submitted. An authorized team member should enter contact/academic details, review declarations, and retain the receipt.
