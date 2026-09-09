@@ -9,7 +9,7 @@
    physically inserted underneath. Three seconds, no scroll lock.
 
    Then it hands over. One question, two answers, and the route responds to
-   the visitor rather than to a timer — because a route that only ever plays a
+   the visitor rather than to a timer, because a route that only ever plays a
    canned animation is a video, not a product.
    ========================================================================== */
 
@@ -50,7 +50,7 @@ function model(phase: Phase): RouteModel {
     depth: 0,
     minutes: 2,
     note: phase === 'draw' ? 'one question' : undefined,
-    active: phase === 'draw' || phase === 'checking',
+    active: phase !== 'shortcut',
     why: 'One question at today’s level. It is the only thing that says where to look.',
   };
 
@@ -61,7 +61,6 @@ function model(phase: Phase): RouteModel {
     depth: 1,
     minutes: 6,
     note: 'the missing turn',
-    active: phase === 'inserted',
     why: 'Today’s lesson factors the equation before it solves it. This is the step it stands on.',
   };
 
@@ -72,7 +71,6 @@ function model(phase: Phase): RouteModel {
     depth: 2,
     minutes: 5,
     note: 'found underneath',
-    active: true,
     why: 'Factoring is this run backwards. It turned out to be the thing actually in the way.',
   };
 
@@ -114,8 +112,8 @@ export function HeroCover() {
       setPhase('inserted');
       return;
     }
-    timers.current.push(window.setTimeout(() => setPhase('checking'), 1250));
-    timers.current.push(window.setTimeout(() => setPhase('inserted'), 2150));
+    timers.current.push(window.setTimeout(() => setPhase('checking'), 2000));
+    timers.current.push(window.setTimeout(() => setPhase('inserted'), 3900));
     const t = timers.current;
     return () => t.forEach(clearTimeout);
   }, [reduced]);
@@ -135,8 +133,8 @@ export function HeroCover() {
     setAnswered(null);
     setSelected(null);
     setPhase('draw');
-    timers.current.push(window.setTimeout(() => setPhase('checking'), 900));
-    timers.current.push(window.setTimeout(() => setPhase('inserted'), 1800));
+    timers.current.push(window.setTimeout(() => setPhase('checking'), 1200));
+    timers.current.push(window.setTimeout(() => setPhase('inserted'), 3100));
   }
 
   return (
@@ -237,7 +235,7 @@ export function HeroCover() {
             <p className="mt-6 max-w-[46ch] text-[1.05rem] leading-relaxed text-chalk-muted">
               School keeps moving forward even when students don’t. BACKTRACK finds the one turn a
               learner missed, routes the repair through Khan Academy, and puts them back on today’s
-              lesson — without restarting the chapter.
+              lesson, without restarting the chapter.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/demo" className="btn btn-primary">
@@ -313,7 +311,7 @@ function HeroQuestion({
       <p className="mt-2 max-w-[38ch] text-[1.05rem] leading-snug text-chalk">
         {right
           ? 'You showed the step, so the review left your route. One stop fewer, before you spent a minute on it.'
-          : '6 × 2 = 12, but 6 + 2 = 8. The route just added the step underneath — and the destination did not move.'}
+          : '6 × 2 = 12, but 6 + 2 = 8. The route just added the step underneath, and the destination did not move.'}
       </p>
       <p className="mt-3 max-w-[40ch] text-[0.9rem] leading-relaxed text-chalk-muted">
         {right

@@ -1,7 +1,7 @@
 'use client';
 
 /* ==========================================================================
-   The area model — the repair for multiplying out brackets.
+   The area model. The repair for multiplying out brackets.
 
    The learner does the multiplication rather than watching it. Each region of
    the rectangle is a product they have to claim, and the two middle regions
@@ -70,7 +70,7 @@ export function AreaModel({ onComplete }: { onComplete: (done: boolean) => void 
     <div className="material-paper relative px-5 py-7 sm:px-10 sm:py-9">
       <p className="t-label text-ink-muted">Do the multiplication</p>
       <p className="mt-2 max-w-[52ch] text-[0.98rem] leading-relaxed text-ink-muted">
-        Every term on the left has to meet every term on top. Claim each region of the rectangle —
+        Every term on the left has to meet every term on top. Claim each region of the rectangle , 
         including the two that usually get skipped.
       </p>
 
@@ -201,7 +201,7 @@ export function AreaModel({ onComplete }: { onComplete: (done: boolean) => void 
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <p className="max-w-[42ch] text-[0.98rem] leading-relaxed text-ink">
                   <strong className="font-semibold">That is the whole mechanism.</strong> The last number
-                  is 3 × 4. The middle number is 3 + 4. Factoring is this run backwards — which is
+                  is 3 × 4. The middle number is 3 + 4. Factoring is this run backwards, which is
                   exactly the step your route says is in the way.
                 </p>
               </motion.div>

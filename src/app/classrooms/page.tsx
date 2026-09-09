@@ -7,14 +7,14 @@ import { Atmosphere } from '@/components/site/Atmosphere';
 export const metadata: Metadata = {
   title: 'Classrooms',
   description:
-    'One destination for the class, a route for each learner. What a teacher would actually open, and what a pilot would need — written as a proposal, because nothing has been agreed.',
+    'One destination for the class, a route for each learner. What a teacher would actually open, and what a pilot would need, written as a proposal, because nothing has been agreed.',
 };
 
 const STEPS = [
   {
     n: '01',
     title: 'The teacher confirms today’s goal',
-    body: 'Once, for the class. Usually the lesson they are already teaching this week — not a separate intervention curriculum to plan and maintain.',
+    body: 'Once, for the class. Usually the lesson they are already teaching this week, not a separate intervention curriculum to plan and maintain.',
   },
   {
     n: '02',
@@ -93,7 +93,7 @@ export default function ClassroomsPage() {
             <p className="t-label text-recalc">Needs a person</p>
             <p className="mt-2 text-[0.98rem] leading-relaxed text-chalk-muted">
               When repeated route repairs do not move a learner, the honest signal is “this is not a
-              prerequisite problem” — not another exercise.
+              prerequisite problem”, not another exercise.
             </p>
           </div>
         </div>
@@ -153,7 +153,7 @@ export default function ClassroomsPage() {
               ],
               [
                 'Paper activities',
-                'Useful for waiting periods when devices are shared — but they are not counted as Khan Academy usage and will not be reported as such.',
+                'Useful for waiting periods when devices are shared, but they are not counted as Khan Academy usage and will not be reported as such.',
               ],
               [
                 'Scheduling',

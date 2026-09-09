@@ -72,7 +72,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               </p>
               <p className="mt-4 text-[0.98rem] leading-relaxed text-chalk-muted">
                 BACKTRACK responds to your real answers. Right or wrong, the route follows the
-                evidence — including the evidence that you already knew it.
+                evidence, including the evidence that you already knew it.
               </p>
               <p className="t-label mt-6 text-chalk group-hover:text-now">Start →</p>
             </button>
@@ -108,16 +108,16 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
           <Why>
             Today’s goal is above, and it stays there.{' '}
             <strong className="font-semibold text-chalk">
-              BACKTRACK’s job is to work out what stands between you and that equation
-            </strong>{' '}
-            — then remove only that.
+              BACKTRACK’s job is to work out what stands between you and that equation, then remove
+              only that.
+            </strong>
           </Why>
           <h2 className="t-display mt-8 text-[2rem] leading-tight sm:text-[2.7rem]">
             How much do you have in you today?
           </h2>
           <p className="mt-4 max-w-[56ch] text-[1rem] leading-relaxed text-chalk-muted">
             Five minutes is a real answer, not a failure. BACKTRACK picks a route that finishes rather
-            than one that gets abandoned — and you will see the route change as you choose.
+            than one that gets abandoned, and you will see the route change as you choose.
           </p>
 
           <div className="mt-9 grid gap-px border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-4">
@@ -165,7 +165,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
           </PaperPlate>
           <HonestLine>
             Nothing here is graded and nothing is stored about you. A wrong answer is the most useful
-            thing you can give BACKTRACK — it is the only signal that says where to look.
+            thing you can give BACKTRACK. It is the only signal that says where to look.
           </HonestLine>
         </div>
       );
@@ -180,7 +180,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
         ? 'That works.'
         : c.unsure
           ? 'Useful answer.'
-          : 'Not quite — and the reason is specific.';
+          : 'Not quite, and the reason is specific.';
       return (
         <div className="mx-auto max-w-[1000px]">
           <PaperPlate>
@@ -195,7 +195,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
                 ) : c.id === 'formula' ? (
                   'Factoring would have worked too, and it is faster here. Both are real routes through this equation.'
                 ) : c.id === 'factor' ? (
-                  'The quadratic formula would also have been correct. BACKTRACK does not have a preferred method — it has a destination.'
+                  'The quadratic formula would also have been correct. BACKTRACK does not have a preferred method. It has a destination.'
                 ) : null
               }
             >
@@ -207,7 +207,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               <h3 className="mt-2 text-[1.4rem] font-medium text-ink">How did that feel?</h3>
               <p className="mt-2 max-w-[62ch] text-[0.95rem] leading-relaxed text-ink-muted">
                 This never changes whether your answer was right. It changes what BACKTRACK checks
-                next — the difference between a route built on evidence and a route built on a guess.{' '}
+                next. That is the difference between a route built on evidence and a route built on a guess.{' '}
                 <strong className="font-semibold text-ink">Honesty gives you a better route.</strong>
               </p>
               <div
@@ -244,7 +244,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
         <div className="mx-auto max-w-[1000px]">
           <Why>
             You answered the check correctly, so BACKTRACK has{' '}
-            <strong className="font-semibold text-chalk">evidence</strong> — and it spends that
+            <strong className="font-semibold text-chalk">evidence</strong>, and it spends that
             evidence by taking work off your route, not by giving you a badge.
           </Why>
           <div className="mt-10">
@@ -256,14 +256,14 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
                   ? 'You already know these steps.'
                   : n >= 1
                     ? 'Most of that review just left your route.'
-                    : 'Your answer was right — but you told us you were guessing.'
+                    : 'Your answer was right, but you told us you were guessing.'
               }
               sub={
                 n >= 3
                   ? 'Gone because of your answer, not on a timer. The destination has not moved a millimetre.'
                   : n >= 1
                     ? 'One kept, because you said you only half-remembered it. BACKTRACK would rather verify once than assume.'
-                    : 'Nothing removed yet. Every review stays until something confirms it. That is not a punishment for honesty — it is the route you actually asked for.'
+                    : 'Nothing removed yet. Every review stays until something confirms it. That is not a punishment for honesty. It is the route you actually asked for.'
               }
             >
               {n > 0 && (
@@ -302,7 +302,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
           <Why tone="recalc">
             You were confident, and the answer was wrong. That usually means{' '}
             <strong className="font-semibold text-chalk">the rule in your head is different</strong>{' '}
-            from the one on the page — which is worth separating from a careless slip before anything
+            from the one on the page, which is worth separating from a careless slip before anything
             is added to your route.
           </Why>
           <PaperPlate className="mt-8">
@@ -374,7 +374,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
             {never
               ? 'You said you had never been taught this one, so BACKTRACK is not going to spend ten questions proving it.'
               : deep
-                ? 'The check underneath came back wrong too, so the route just went a level deeper — in front of you, not silently.'
+                ? 'The check underneath came back wrong too, so the route just went a level deeper, in front of you and not silently.'
                 : 'Two answers now point at the same step, so BACKTRACK has stopped guessing and named it.'}
           </Why>
           <div className="mt-10">
@@ -386,7 +386,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
                 <>
                   {deep
                     ? 'A stop inserted itself underneath the one you were already working on. Look at the route: it bends lower and comes back to the same destination.'
-                    : 'That is what stands between you and today’s equation — one step, named precisely.'}{' '}
+                    : 'That is what stands between you and today’s equation: one step, named precisely.'}{' '}
                   Not a verdict about you, and not a reason to restart the subject.
                 </>
               }
@@ -426,7 +426,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
       return (
         <div className="mx-auto max-w-[1000px]">
           <Why>
-            A <strong className="font-semibold text-chalk">fresh</strong> question — different numbers
+            A <strong className="font-semibold text-chalk">fresh</strong> question, with different numbers
             from the one you practised on. Nothing is marked repaired until you answer one of these,
             and opening a Khan page never counts.
           </Why>
@@ -443,7 +443,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               <button type="button" className="btn-quiet" onClick={() => send({ type: 'assist' })}>
                 Work through it again
               </button>{' '}
-              — using help is fine, and it gets recorded honestly next to your answer.
+              . Using help is fine, and it gets recorded honestly next to your answer.
             </p>
           </PaperPlate>
         </div>
@@ -467,7 +467,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
             }
             sub={
               state.assisted
-                ? 'Recorded with the help you used — and you still answered a fresh question you could not answer a few minutes of route ago.'
+                ? 'Recorded with the help you used, and you still answered a fresh question you could not answer a few minutes of route ago.'
                 : 'You could not do that a few minutes of route ago. That is not a badge; it is a different set of things you can now attempt.'
             }
           >
@@ -492,7 +492,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               ) : (
                 <>
                   <strong className="font-semibold">That was the step blocking today’s equation.</strong>{' '}
-                  Look at the top of the screen — the destination just came back to life.
+                  Look at the top of the screen. The destination just came back to life.
                 </>
               )}
             </p>
@@ -557,7 +557,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
           <div className="mt-10">
             <Moment
               kind="shortcut"
-              label="Next turn — 3 min"
+              label="Next turn · 3 min"
               line="One quick check could remove the last review step."
               sub="No mystery box, no countdown, no streak to protect. The only reason to continue is that the next three minutes would visibly shorten your route."
             />
@@ -565,7 +565,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
           <Actions
             items={[
               { label: 'Take the next turn', onClick: () => go('next_turn_check'), primary: true },
-              { label: 'Stop here — save my route', onClick: () => go('stopped') },
+              { label: 'Stop here, save my route', onClick: () => go('stopped') },
             ]}
           />
         </div>
@@ -615,7 +615,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
           <Actions
             items={[
               { label: 'Preview coming back after a week', onClick: () => go('comeback_offer'), primary: true },
-              { label: 'Stop here — save my route', onClick: () => go('stopped') },
+              { label: 'Stop here, save my route', onClick: () => go('stopped') },
             ]}
           />
           <HonestLine>
@@ -631,7 +631,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
         <div className="mx-auto max-w-[1000px]">
           <SimBand>
             <strong className="font-semibold">Simulated.</strong> No time is about to pass. This shows
-            what BACKTRACK does when someone disappears for a week and comes back — the situation the
+            what BACKTRACK does when someone disappears for a week and comes back. The situation the
             product was built for.
           </SimBand>
           <Moment
@@ -648,7 +648,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
       return (
         <div className="mx-auto max-w-[1000px]">
           <SimBand>
-            <strong className="font-semibold">Simulated — one week later.</strong> No real time has
+            <strong className="font-semibold">Simulated: one week later.</strong> No real time has
             passed and nothing about you was stored anywhere.
           </SimBand>
           <h2 className="t-display text-[2.2rem] leading-tight sm:text-[3rem]">Welcome back.</h2>
@@ -696,7 +696,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
             <Moment
               kind="gap"
               label="Re-opening one stop"
-              line="That one did not hold — which is completely normal."
+              line="That one did not hold, which is completely normal."
               sub="The stop goes back on the route. No penalty, no lost progress, no message about your commitment. Forgetting is a routing problem, not a character flaw."
             />
           )}
@@ -832,7 +832,7 @@ function RepairScreen({ gap, state, send }: { gap: SkillId; state: DemoState; se
 
       <HonestLine>
         A link click is not learning. This screen exists so that the learner does the step once with
-        their hands before anything claims it is repaired — and the claim itself comes from the fresh
+        their hands before anything claims it is repaired, and the claim itself comes from the fresh
         question on the next screen, not from this one.{' '}
         {state.assisted && 'You asked to work through it again, and that is recorded next to your answer.'}
       </HonestLine>
@@ -852,7 +852,7 @@ function DestinationScreen({ state, send }: { state: DemoState; send: Send }) {
   return (
     <div className="mx-auto max-w-[1000px]">
       <Why>
-        This is the equation from the top of the screen —{' '}
+        This is the equation from the top of the screen , {' '}
         <strong className="font-semibold text-chalk">
           a fresh version of the thing that stopped you
         </strong>
@@ -869,7 +869,7 @@ function DestinationScreen({ state, send }: { state: DemoState; send: Send }) {
             Solve for x.
           </h2>
           <p className="mx-auto mt-3 max-w-[52ch] text-[0.95rem] leading-relaxed text-ink-muted">
-            There are two answers. Type them however you like — “−4, −5” or “x = −4 and x = −5” both
+            There are two answers. Type them however you like, “−4, −5” or “x = −4 and x = −5” both
             work.
           </p>
         </div>

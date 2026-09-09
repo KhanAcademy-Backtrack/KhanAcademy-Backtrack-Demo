@@ -1,7 +1,7 @@
 'use client';
 
 /* ==========================================================================
-   The pair machine — the repair for factoring x² + bx + c.
+   The pair machine. The repair for factoring x² + bx + c.
 
    Factoring is usually taught as a search, and learners usually search on one
    condition only: they find a pair that multiplies to c and stop. So this
@@ -9,7 +9,7 @@
    updates both of them at once, and the brackets refuse to lock until both
    are satisfied.
 
-   Wrong placements are not punished. They are the point — you can see exactly
+   Wrong placements are not punished. They are the point. You can see exactly
    which condition your guess broke.
    ========================================================================== */
 
@@ -138,7 +138,7 @@ export function FactorPairs({ onComplete }: { onComplete: (done: boolean) => voi
                 className="pt-1 text-[0.95rem] leading-relaxed text-recalc-deep"
               >
                 {productOk
-                  ? 'The product works. That is the condition most people check — but the middle term needs the sum to work as well.'
+                  ? 'The product works. That is the condition most people check, but the middle term needs the sum to work as well.'
                   : sumOk
                     ? 'The sum works, but the product does not. Both have to hold at once.'
                     : 'Neither condition holds yet. Try a different pair.'}

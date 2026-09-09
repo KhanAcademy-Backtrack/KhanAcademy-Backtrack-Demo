@@ -31,7 +31,7 @@ const STEPS: {
   {
     n: '01',
     title: 'Destination',
-    body: 'Start from what you need now — today’s lesson, an upcoming topic, a course objective, or whatever a short video just caught you out on. Not a placement level, and not the start of the subject.',
+    body: 'Start from what you need now, today’s lesson, an upcoming topic, a course objective, or whatever a short video just caught you out on. Not a placement level, and not the start of the subject.',
     who: 'backtrack',
     model: {
       nodes: [
@@ -44,7 +44,7 @@ const STEPS: {
   {
     n: '02',
     title: 'Check',
-    body: 'One short, honest check of what you can already do. Wrong answers are useful here — they are the only thing that says where to look. Nothing about it is graded.',
+    body: 'One short, honest check of what you can already do. Wrong answers are useful here. They are the only thing that says where to look. Nothing about it is graded.',
     who: 'backtrack',
     model: {
       nodes: [
@@ -58,7 +58,7 @@ const STEPS: {
   {
     n: '03',
     title: 'Route',
-    body: 'Everything you demonstrate is kept and comes off the route. What is left is the prerequisite work that is genuinely load-bearing for this destination — usually far less than “review the whole unit”.',
+    body: 'Everything you demonstrate is kept and comes off the route. What is left is the prerequisite work that is genuinely load-bearing for this destination, usually far less than “review the whole unit”.',
     who: 'backtrack',
     model: {
       nodes: [
@@ -103,7 +103,7 @@ const STEPS: {
   {
     n: '05',
     title: 'Prove',
-    body: 'A fresh question — different numbers — decides whether the step is repaired. Learn however you want: Khan Academy, a teacher, your notes, an AI tutor. The check is what counts.',
+    body: 'A fresh question, with different numbers, decides whether the step is repaired. Learn however you want: Khan Academy, a teacher, your notes, an AI tutor. The check is what counts.',
     who: 'backtrack',
     model: {
       nodes: [
@@ -118,7 +118,7 @@ const STEPS: {
   {
     n: '06',
     title: 'Recalculate',
-    body: 'Then it keeps recalculating — if you improve, if you struggle, if you forget, if you disappear for two weeks, or if you turn out to know more than the route assumed.',
+    body: 'Then it keeps recalculating, if you improve, if you struggle, if you forget, if you disappear for two weeks, or if you turn out to know more than the route assumed.',
     who: 'backtrack',
     model: {
       nodes: [

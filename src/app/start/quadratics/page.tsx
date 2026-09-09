@@ -8,7 +8,7 @@ import { SKILLS } from '@/lib/curriculum';
 export const metadata: Metadata = {
   title: 'Find my missing step · Quadratics',
   description:
-    'Where a short video lands. One question about quadratics, and a route back to it — not a homepage.',
+    'Where a short video lands. One question about quadratics, and a route back to it, not a homepage.',
 };
 
 const ENTRIES = [
@@ -31,7 +31,7 @@ export default function StartQuadraticsPage() {
             </h1>
             <p className="mt-6 max-w-[48ch] text-[1.1rem] leading-relaxed text-chalk-muted">
               You are probably missing one step. This page exists so that a short video about quadratics
-              lands on the thing it asked about, ready to check exactly that — instead of dumping you on
+              lands on the thing it asked about, ready to check exactly that, instead of dumping you on
               a homepage to go and find it yourself.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -56,7 +56,7 @@ export default function StartQuadraticsPage() {
             </MathText>
             <p className="mt-6 max-w-[40ch] text-[1rem] leading-relaxed text-ink-muted">
               Most people who miss this do not have a “quadratics problem”. They have one specific step
-              underneath it that never got repaired — and it is usually not the one they would have
+              underneath it that never got repaired, and it is usually not the one they would have
               guessed.
             </p>
             <div className="mt-7 border-t border-paper-line pt-5">

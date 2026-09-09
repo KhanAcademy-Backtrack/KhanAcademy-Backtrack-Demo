@@ -4,7 +4,7 @@
    The map is a place, so it carries the marks of one: contour lines, the
    ghosts of routes other learners took, abandoned branches that stop at a
    cross, plotted points, and fragments of the mathematics this whole map is
-   about. Everything here is deterministic and hand-placed — no randomness, no
+   about. Everything here is deterministic and hand-placed, no randomness, no
    hydration mismatch, no decorative junk that means nothing.
 
    It is one inline SVG plus CSS gradients, so it costs no requests and stays

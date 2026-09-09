@@ -9,7 +9,7 @@
 
    Reading order is deliberate: the class and its topics along the top, the
    learner falling away underneath, thin ties showing where each week sits,
-   and — underneath everything so they never tangle with the two lines — the
+   and, underneath everything so they never tangle with the two lines, the
    dependency arcs, all pointing back at the same missed step.
    ========================================================================== */
 

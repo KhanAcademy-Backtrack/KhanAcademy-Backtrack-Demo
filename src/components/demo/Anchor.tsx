@@ -68,7 +68,7 @@ export function Anchor({
   const done = Math.max(routeDone(model) - 1, 0); /* the origin is not a stop */
 
   return (
-    <div className="sticky top-16 z-30 border-b border-hairline bg-base/94 backdrop-blur-md">
+    <div className="sticky top-16 z-30 border-b border-hairline bg-base">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         {/* --- the destination ----------------------------------------- */}
         <div className="flex items-center justify-between gap-4 py-2.5">
@@ -106,7 +106,16 @@ export function Anchor({
                       : 'border-hairline text-chalk-faint'
                 }`}
               >
-                {destState === 'solved' ? 'Solved' : destState === 'open' ? 'In reach' : 'Blocked'}
+                <span className="hidden sm:inline">
+                  {destState === 'solved'
+                    ? 'You solved this'
+                    : destState === 'open'
+                      ? 'You can try this now'
+                      : 'You can’t do this yet'}
+                </span>
+                <span className="sm:hidden">
+                  {destState === 'solved' ? 'Solved' : destState === 'open' ? 'Ready' : 'Not yet'}
+                </span>
               </motion.span>
             </AnimatePresence>
 

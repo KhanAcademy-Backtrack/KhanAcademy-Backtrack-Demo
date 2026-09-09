@@ -2,7 +2,7 @@
    The demo state machine.
 
    A pure reducer. Everything the screen shows is derived from this state, and
-   the route drawing is derived from it too — which is why the route cannot
+   the route drawing is derived from it too, which is why the route cannot
    drift out of sync with what the learner actually did.
 
    Undo is a list of snapshots indexed by browser history depth, so the in-page
@@ -127,6 +127,7 @@ export function routeFor(s: DemoState): RouteModel {
     id: 'origin',
     kind: 'origin',
     label: 'You are here',
+    short: 'You',
     status: 'origin',
     depth: 0,
     why: 'Where today started: stuck on the equation your class is doing right now.',
@@ -138,6 +139,7 @@ export function routeFor(s: DemoState): RouteModel {
     nodes.push({
       id: 'check',
       label: 'Today’s check',
+      short: 'Check',
       status: !answered ? 'unknown' : correct || s.solvedDestination ? 'checked' : 'checking',
       depth: 0,
       minutes: 2,
@@ -174,6 +176,7 @@ export function routeFor(s: DemoState): RouteModel {
     nodes.push({
       id: 'consolidate',
       label: 'Consolidate',
+      short: 'Consolidate',
       status: 'unknown',
       note: 'time allows',
       depth: 1,
@@ -188,11 +191,12 @@ export function routeFor(s: DemoState): RouteModel {
     id: 'dest',
     kind: 'destination',
     label: 'Today’s equation',
+    short: 'Today’s equation',
     status: s.solvedDestination ? 'reached' : !outstanding && (checkCorrect || s.repaired.length) ? 'open' : 'unknown',
     depth: 0,
     minutes: 3,
     active: s.screen === 'destination',
-    why: `${DESTINATION.lesson} — the destination has not moved all session.`,
+    why: `${DESTINATION.lesson}. The destination has not moved all session.`,
   });
 
   return { nodes, flag: s.flag };
@@ -279,7 +283,7 @@ export function reduce(prev: DemoState, action: Action): DemoState {
       return {
         ...s,
         solveError: action.raw.trim()
-          ? `Not ${action.raw.trim()}. Two numbers multiply to 20 and add to 9 — then each bracket is set to zero.`
+          ? `Not ${action.raw.trim()}. Two numbers multiply to 20 and add to 9, then each bracket is set to zero.`
           : 'Enter both values for x.',
       };
     }
@@ -433,7 +437,7 @@ function openGap(
 
 /**
  * Confidence never decides whether an answer was right. It decides what gets
- * checked next — which is the difference between a route built on evidence and
+ * checked next, which is the difference between a route built on evidence and
  * a route built on a guess.
  */
 function confidence(s: DemoState, value: ConfidenceId): DemoState {

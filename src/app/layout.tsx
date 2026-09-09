@@ -32,7 +32,7 @@ const math = STIX_Two_Text({
 export const metadata: Metadata = {
   metadataBase: new URL('https://backtrack-keic.vercel.app'),
   title: {
-    default: 'BACKTRACK — the shortest path back to where your class is now',
+    default: 'BACKTRACK · the shortest path back to where your class is now',
     template: '%s · BACKTRACK',
   },
   description:
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   applicationName: 'BACKTRACK',
   authors: [{ name: 'BACKTRACK' }],
   openGraph: {
-    title: 'BACKTRACK — the shortest path back to where your class is now',
+    title: 'BACKTRACK · the shortest path back to where your class is now',
     description:
       'An adaptive learning-recovery navigator. Concept-stage prototype for KEIC 2026.',
     type: 'website',

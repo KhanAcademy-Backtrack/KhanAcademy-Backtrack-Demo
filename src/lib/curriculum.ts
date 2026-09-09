@@ -2,7 +2,7 @@
    The demo's vertical slice.
 
    One destination, four skills, one honest question bank. Everything the demo
-   knows about mathematics lives here, in readable data — there is no model
+   knows about mathematics lives here, in readable data. There is no model
    call, no expression parser and no eval anywhere in the product.
 
    The chain follows the order a learner actually meets these ideas in an
@@ -14,7 +14,7 @@
    Two rules this file exists to protect:
 
      1. Correctness is decided by mathematics alone. Where two answers are
-        genuinely valid, both are marked correct — including the ones the
+        genuinely valid, both are marked correct, including the ones the
         lesson was not "expecting".
      2. What a learner says about their own confidence changes what gets
         checked next. It never changes whether an answer was right.
@@ -27,7 +27,7 @@ export type SkillId = 'like_terms' | 'distribute' | 'factor' | 'quadratic';
  * khanacademy.org and the page title checked, so nothing on this site sends a
  * judge to a 404. BACKTRACK has no API relationship with Khan Academy, is not
  * affiliated with or endorsed by them, and cannot see whether anything here
- * was completed — which is exactly why a stop is only ever marked repaired by
+ * was completed, which is exactly why a stop is only ever marked repaired by
  * a fresh answer inside BACKTRACK.
  */
 export type KhanResource = {
@@ -255,9 +255,9 @@ export const BANK: Record<string, Question> = {
       {
         id: 'prod',
         text: '(x + 15)(x + 1)',
-        why: '15 × 1 = 15, so the product works — but 15 + 1 = 16, not 8. The same pattern as before, which means it is the rule rather than a slip.',
+        why: '15 × 1 = 15, so the product works, but 15 + 1 = 16, not 8. The same pattern as before, which means it is the rule rather than a slip.',
       },
-      { id: 'sum', text: '(x + 4)(x + 4)', why: '4 + 4 = 8, so the sum works — but 4 × 4 = 16, not 15.' },
+      { id: 'sum', text: '(x + 4)(x + 4)', why: '4 + 4 = 8, so the sum works, but 4 × 4 = 16, not 15.' },
       { id: 'unsure', text: 'I don’t know yet', unsure: true, why: 'Then it is worth repairing rather than testing again.' },
     ],
   },
@@ -411,7 +411,7 @@ export const EXAMPLE = {
 export function checkRoots(raw: string, roots: number[]): boolean {
   const cleaned = raw
     .toLowerCase()
-    .replace(/[−–—]/g, '-')
+    .replace(/[−–, ]/g, '-')
     .replace(/\s+/g, '')
     .replace(/x=/g, '')
     .replace(/and|or/g, ',');

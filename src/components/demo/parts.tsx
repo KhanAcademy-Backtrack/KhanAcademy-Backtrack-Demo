@@ -4,9 +4,9 @@
    The pieces every demo screen is built from.
 
    Three layers, on every screen, in the same places:
-     · the anchor  — destination and route, quiet, always above
-     · the work    — the current learning moment, loud, on paper
-     · the reason  — one line saying why you are here, never more
+     · the anchor: destination and route, quiet, always above
+     · the work: the current learning moment, loud, on paper
+     · the reason: one line saying why you are here, never more
 
    The mathematics is the interface, so the expression is always the largest
    thing on the screen and the chrome shrinks around it.
@@ -145,7 +145,7 @@ export function Verdict({
  * because it is a statement about the route and not a piece of mathematics.
  *
  * The reveal is sequenced in CSS so the beat still lands if scripting is slow
- * — an empty screen at the moment the product is supposed to be impressive is
+ * An empty screen at the moment the product is supposed to be impressive is
  * a worse outcome than a slightly plainer entrance.
  */
 export function Moment({

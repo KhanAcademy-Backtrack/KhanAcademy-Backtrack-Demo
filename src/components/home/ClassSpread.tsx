@@ -131,7 +131,7 @@ export function ClassSpread() {
         ))}
 
         <text x={40} y={height - 14} className="route-node-sub" fill="var(--color-route)">
-          {READY} OF {TOTAL} GO STRAIGHT THROUGH — NO REVIEW NEEDED
+          {READY} OF {TOTAL} GO STRAIGHT THROUGH, NO REVIEW NEEDED
         </text>
       </svg>
       <figcaption className="mt-4 text-[0.85rem] leading-relaxed text-chalk-faint">

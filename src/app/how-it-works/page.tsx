@@ -59,7 +59,7 @@ export default function HowItWorksPage() {
           </h1>
           <p className="mt-7 max-w-[58ch] text-[1.1rem] leading-relaxed text-chalk-muted">
             BACKTRACK is a navigator, not a tutor. It works out where you are trying to get, what is
-            actually in the way, and the smallest useful repair — then hands the teaching to Khan
+            actually in the way, and the smallest useful repair, then hands the teaching to Khan
             Academy and waits for proof.
           </p>
         </div>
@@ -73,7 +73,7 @@ export default function HowItWorksPage() {
         <SectionHead
           label="Honesty-first"
           title="Honesty gives you a better route."
-          lead="At some checkpoints BACKTRACK asks how an answer felt. This never changes whether the answer was right. It changes what gets checked next — so cheating only buys you a route that assumes you know things you don’t."
+          lead="At some checkpoints BACKTRACK asks how an answer felt. This never changes whether the answer was right. It changes what gets checked next, so cheating only buys you a route that assumes you know things you don’t."
         />
 
         <div className="mt-14 border-t border-hairline">
@@ -108,7 +108,7 @@ export default function HowItWorksPage() {
           <div className="space-y-6 self-center">
             <p className="text-[1.05rem] leading-relaxed text-chalk">
               The destination is the difference. A learner arrives because there is something they need
-              to be able to do <em>now</em> — today’s lesson, a topic next week, a question a video
+              to be able to do <em>now</em>: today’s lesson, a topic next week, a question a video
               caught them out on. Everything the product does is measured against that.
             </p>
             <div className="border-l-2 border-now pl-5">
@@ -152,7 +152,7 @@ export default function HowItWorksPage() {
             <Statement
               sub={
                 <>
-                  Learn however you want — Khan Academy, a teacher, your notes, an AI tutor. Prove what
+                  Learn however you want: Khan Academy, a teacher, your notes, an AI tutor. Prove what
                   you know. BACKTRACK routes from what you can demonstrate afterwards, not from whether
                   an explanation sounded convincing at the time.
                 </>

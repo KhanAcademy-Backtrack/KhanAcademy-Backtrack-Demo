@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const FACTS = [
-  ['Stage', 'Concept and prototype. The website and its interactive demo are the deliverable — there is no production system behind them.'],
+  ['Stage', 'Concept and prototype. The website and its interactive demo are the deliverable. There is no production system behind them.'],
   [
     'Purpose',
     'Prepared for the Khan Academy Education Impact Challenge at the Enactus Philippines 2026 National Competition. This site is supplementary to the competition deck, which stands on its own.',
@@ -103,9 +103,9 @@ export default function AboutPage() {
               Math first, and narrow on purpose.
             </h2>
             <p className="mt-6 max-w-[54ch] text-[1.02rem] leading-relaxed text-chalk-muted">
-              The demo goes deep on one thing — solving a quadratic by factoring, and the chain of steps
-              underneath it — because a narrow example that genuinely works is worth more than a broad
-              one that is only described. Algebra 1 is a reference scenario, not the brand.
+              The demo goes deep on one thing: solving a quadratic by factoring, and the chain of steps
+              underneath it. That is deliberate, because a narrow example that genuinely works is
+              worth more than a broad one that is only described. Algebra 1 is a reference scenario, not the brand.
             </p>
             <p className="mt-4 max-w-[54ch] text-[1.02rem] leading-relaxed text-chalk-muted">
               A pilot needs to be small enough to actually evaluate between November 2026 and March

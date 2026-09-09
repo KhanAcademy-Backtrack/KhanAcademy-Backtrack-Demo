@@ -92,16 +92,6 @@ const BUDGET = [
   ['Contingency', '₱10,000'],
 ];
 
-const WEIGHTS = [
-  ['Needs assessment', '15%'],
-  ['Business principles & financials', '15%'],
-  ['Innovation', '15%'],
-  ['Meaningful Khan Academy integration', '15%'],
-  ['Potential to scale', '15%'],
-  ['Potential positive impact', '15%'],
-  ['Pitch & Q&A', '10%'],
-];
-
 export default function EvidencePage() {
   return (
     <>
@@ -166,7 +156,7 @@ export default function EvidencePage() {
           <p className="t-label text-recalc">The product hypothesis</p>
           <p className="t-display mt-4 max-w-[24ch] text-[1.8rem] leading-[1.06] sm:text-[2.5rem]">
             Visible route compression and capability unlocks can do the work that streaks and XP
-            usually do — honestly.
+            usually do, honestly.
           </p>
           <p className="mt-5 max-w-[62ch] text-[1rem] leading-relaxed text-chalk-muted">
             That is the retention thesis, and it is the thing being tested. If it is wrong, adding dark
@@ -213,8 +203,8 @@ export default function EvidencePage() {
           <div>
             <p className="t-label text-chalk-faint">Reported separately</p>
             <p className="mt-3 max-w-[58ch] text-[1rem] leading-relaxed text-chalk-muted">
-              Public reach — view to click, click to diagnostic, diagnostic to route, route to Khan
-              practice, return visit — is reported apart from learning. Anyone can use the open public
+              Public reach is reported apart from learning: view to click, click to diagnostic,
+              diagnostic to route, route to Khan practice, return visit. Anyone can use the open public
               layer.{' '}
               <strong className="font-semibold text-chalk">
                 A website visitor is not a documented learning recovery
@@ -226,7 +216,7 @@ export default function EvidencePage() {
             <p className="t-label text-chalk-faint">Two limits we would state up front</p>
             <p className="mt-3 max-w-[58ch] text-[1rem] leading-relaxed text-chalk-muted">
               Baseline, return and delayed checks need fresh work under appropriate supervision to mean
-              anything. And we cannot reliably detect remote assistance — from a person or from an AI.
+              anything. And we cannot reliably detect remote assistance, whether from a person or from an AI.
             </p>
           </div>
         </div>
@@ -242,7 +232,7 @@ export default function EvidencePage() {
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-20">
           <div>
             <p className="t-label text-chalk-faint">
-              Planning allocation — ₱100,000 implementation-grant scenario
+              Planning allocation · ₱100,000 implementation-grant scenario
             </p>
             <dl className="mt-5 border-t border-hairline">
               {BUDGET.map(([k, v]) => (
@@ -293,47 +283,6 @@ export default function EvidencePage() {
                 </strong>
               </p>
             </div>
-          </div>
-        </div>
-      </Section>
-
-      <Section tone="field">
-        <SectionHead
-          label="Competition context"
-          title="The brief we are answering."
-          lead="Taken from the official challenge page. If a figure here disagrees with an internal document, the official page wins."
-        />
-        <div className="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <dl className="border-t border-hairline">
-            {[
-              ['Application deadline', '18 September 2026'],
-              ['National competition', '9–10 October 2026'],
-              ['Venue', 'De La Salle University, Manila'],
-              ['Implementation window', '1 November 2026 – 31 March 2027'],
-              ['Delegation', 'One faculty adviser and three students'],
-            ].map(([k, v]) => (
-              <div
-                key={k}
-                className="flex items-baseline justify-between gap-6 border-b border-hairline py-3.5"
-              >
-                <dt className="t-label text-chalk-faint">{k}</dt>
-                <dd className="text-right text-[0.98rem] text-chalk">{v}</dd>
-              </div>
-            ))}
-          </dl>
-          <div>
-            <p className="t-label text-chalk-faint">Judging weight</p>
-            <dl className="mt-5 border-t border-hairline">
-              {WEIGHTS.map(([k, v]) => (
-                <div
-                  key={k}
-                  className="flex items-baseline justify-between gap-6 border-b border-hairline py-3"
-                >
-                  <dt className="text-[0.95rem] text-chalk-muted">{k}</dt>
-                  <dd className="t-mono-num text-[0.95rem] font-medium text-now">{v}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </div>
       </Section>

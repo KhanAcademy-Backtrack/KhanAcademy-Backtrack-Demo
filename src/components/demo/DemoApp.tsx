@@ -183,7 +183,7 @@ export function DemoApp() {
       </div>
 
       {/* --- controls -------------------------------------------------- */}
-      <div className="sticky bottom-0 z-20 mt-auto border-t border-hairline bg-base/94 backdrop-blur-md">
+      <div className="sticky bottom-0 z-20 mt-auto border-t border-hairline bg-base">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-2.5 sm:px-8">
           <button
             type="button"
@@ -223,8 +223,8 @@ function ResumeBanner({ onClear, onKeep }: { onClear: () => void; onKeep: () => 
     <div className="border-b border-hairline bg-field">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 sm:px-8">
         <p className="text-[0.92rem] text-chalk">
-          <strong className="font-semibold">Welcome back.</strong> Your route was where you left it —
-          nothing expired while you were away.
+          <strong className="font-semibold">Welcome back.</strong> Your route was where you left it.
+          Nothing expired while you were away.
         </p>
         <div className="flex gap-4">
           <button type="button" className="btn-quiet text-[0.85rem] text-route" onClick={onKeep}>

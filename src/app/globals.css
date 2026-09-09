@@ -585,35 +585,58 @@ body {
    ---------------------------------------------------------------------- */
 
 .math .frac {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
+  display: inline-block;
   vertical-align: -0.52em;
-  margin-inline: 0.16em;
-  line-height: 1.12;
+  text-align: center;
+  margin-inline: 0.2em;
 }
 
 .math .frac-num {
-  padding: 0 0.34em 0.1em;
+  display: block;
+  line-height: 1.12;
+  padding: 0 0.36em 0.1em;
 }
 
 .math .frac-den {
-  padding: 0.12em 0.34em 0;
-  border-top: 0.055em solid currentColor;
+  display: block;
+  line-height: 1.12;
+  padding: 0.12em 0.36em 0;
+  border-top: 0.062em solid currentColor;
 }
 
 .math .rad {
   display: inline-flex;
   align-items: flex-start;
-  margin-inline: 0.08em;
+  margin-inline: 0.1em;
 }
 
 .math .rad-sign {
-  padding-inline-end: 0.02em;
+  font-size: 1.12em;
+  line-height: 1;
 }
 
 .math .rad-body {
-  border-top: 0.055em solid currentColor;
-  margin-top: 0.16em;
-  padding: 0.1em 0.16em 0 0.06em;
+  border-top: 0.072em solid currentColor;
+  margin-top: 0.15em;
+  padding: 0.07em 0.18em 0 0.04em;
+}
+
+
+/* Headings are focused programmatically when a demo screen changes, so a
+   screen reader announces the new screen. That is not a keyboard user
+   arriving at a control, so it should not draw a focus ring. */
+[tabindex='-1']:focus,
+[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
+/* Standing up on a phone, the route has the width to carry proper label
+   sizes. Shrinking the desktop type would be the wrong trade on the smaller
+   screen, not the right one. */
+.route-svg[data-vertical='true'] .route-node-label {
+  font-size: 13.5px;
+}
+
+.route-svg[data-vertical='true'] .route-node-sub {
+  font-size: 10.5px;
 }

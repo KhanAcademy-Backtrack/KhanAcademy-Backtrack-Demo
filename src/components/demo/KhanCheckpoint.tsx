@@ -10,7 +10,7 @@
 
    Every link here was opened and checked by hand. There is no API between
    these two products, BACKTRACK cannot see what happens on the other side of
-   the link, and the interface says so — which is exactly why the stop is only
+   the link, and the interface says so, which is exactly why the stop is only
    marked repaired by the fresh question that comes after it.
    ========================================================================== */
 
@@ -89,7 +89,7 @@ export function KhanCheckpoint({ skill }: { skill: Skill }) {
 
       <p className="mt-5 max-w-[70ch] text-[0.82rem] leading-relaxed text-ink-muted">
         <strong className="font-semibold text-ink">Opening a link is not learning.</strong> BACKTRACK
-        cannot see anything that happens on khanacademy.org — there is no integration and no
+        cannot see anything that happens on khanacademy.org. There is no integration and no
         partnership. Come back when you are ready and answer one fresh question here; that is the only
         thing that marks this stop repaired.
       </p>

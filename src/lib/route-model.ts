@@ -57,7 +57,7 @@ export const STATUS_META: Record<
   },
   checking: {
     word: 'Checking',
-    glyph: '?',
+    glyph: '',
     tone: 'recalc',
     reason: 'Being looked at right now.',
   },

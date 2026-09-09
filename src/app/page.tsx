@@ -45,7 +45,7 @@ export default function HomePage() {
           </p>
           <p className="self-end text-[1.05rem] leading-relaxed text-chalk-muted">
             The usual advice is <strong className="font-semibold text-chalk">“review.”</strong> Review{' '}
-            <em>what</em>, exactly? Nobody has told them which turn they missed — only that they are
+            <em>what</em>, exactly? Nobody has told them which turn they missed, only that they are
             behind. So the options on offer are: restart the whole unit, watch a generic explainer, or
             keep going and hope.
           </p>
@@ -112,7 +112,7 @@ export default function HomePage() {
               of them is teaching.
             </>
           }
-          lead="BACKTRACK is a navigator, not a tutor. It works out where you are trying to get, what is actually in the way, and the smallest useful repair — then hands the teaching to Khan Academy and waits for proof."
+          lead="BACKTRACK is a navigator, not a tutor. It works out where you are trying to get, what is actually in the way, and the smallest useful repair, then hands the teaching to Khan Academy and waits for proof."
         />
         <div className="mt-16">
           <LoopStepper />
@@ -201,7 +201,7 @@ export default function HomePage() {
           <Statement
             sub={
               <>
-                And during the learning itself, use whatever helps — Khan Academy, a teacher, your
+                And during the learning itself, use whatever helps: Khan Academy, a teacher, your
                 notes, an AI tutor.{' '}
                 <strong className="font-semibold text-chalk">
                   Learn however you want. Prove what you know.
@@ -237,7 +237,7 @@ export default function HomePage() {
                 <span className="text-route" aria-hidden="true">
                   ✓
                 </span>
-                Factoring — kept
+                Factoring · kept
               </p>
               <p className="flex items-center gap-3 text-[0.95rem] text-chalk-faint line-through">
                 <span aria-hidden="true">−</span>
@@ -272,12 +272,12 @@ export default function HomePage() {
               <strong className="font-semibold text-chalk">
                 I can do something now that I couldn’t do before
               </strong>{' '}
-              — and here is the thing it just unlocked.
+              , and here is the thing it just unlocked.
             </p>
           </div>
 
           <div className="bg-field p-7 sm:p-9">
-            <p className="t-label text-chalk-faint">Next turn — 3 min</p>
+            <p className="t-label text-chalk-faint">Next turn · 3 min</p>
             <p className="t-display mt-4 text-[1.7rem] leading-tight">
               One quick check could remove the last review step.
             </p>
@@ -286,7 +286,7 @@ export default function HomePage() {
                 Take the next turn
               </span>
               <span className="btn btn-ghost pointer-events-none !min-h-[42px] !text-[0.85rem]">
-                Stop here — save my route
+                Stop here, save my route
               </span>
             </div>
             <p className="mt-6 text-[0.95rem] leading-relaxed text-chalk-muted">
@@ -426,7 +426,7 @@ export default function HomePage() {
               The teacher confirms today’s goal. Once.
             </h3>
             <p className="mt-5 text-[0.98rem] leading-relaxed text-chalk-muted">
-              Usually the lesson they are already teaching this week — not a separate intervention
+              Usually the lesson they are already teaching this week, not a separate intervention
               curriculum to plan and maintain. Thirty-two learners get thirty-two routes to it without
               the teacher building thirty-two rescue plans.
             </p>
@@ -466,7 +466,7 @@ export default function HomePage() {
           <strong className="font-semibold text-chalk">
             Content gets learners in. Schools keep BACKTRACK in the routine.
           </strong>{' '}
-          Short-form video is not decoration on this project — it is how a self-study learner ever finds
+          Short-form video is not decoration on this project. It is how a self-study learner ever finds
           out that their problem has a name and a fix. Every clip lands on the topic it asked about,
           never on a homepage.
         </p>
@@ -524,7 +524,7 @@ export default function HomePage() {
           <Link href="/evidence" className="btn-quiet text-route">
             See the full evidence plan
           </Link>{' '}
-          — what external research supports, what is only a hypothesis, and how we would try to be
+          : what external research supports, what is only a hypothesis, and how we would try to be
           wrong.
         </p>
       </Section>

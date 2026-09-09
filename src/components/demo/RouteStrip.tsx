@@ -4,9 +4,9 @@
    The route, in one line.
 
    What the anchor shows when the full drawing is collapsed. Same model, same
-   colours, same status vocabulary — just the shape of the route rather than
-   the map of it, so the learner never loses sight of where they are while
-   still getting their screen back for the mathematics.
+   colours, same status vocabulary, just the shape of the route rather than
+   the map of it. It carries the stop names, because a row of unlabelled dots
+   and dashes is decoration, not information.
    ========================================================================== */
 
 import type { RouteModel } from '@/lib/route-model';
@@ -33,47 +33,58 @@ export function RouteStrip({ model, onExpand }: { model: RouteModel; onExpand: (
   );
 
   return (
-    <div className="flex min-w-0 items-center gap-1.5 overflow-x-auto py-1 no-scrollbar">
+    <button
+      type="button"
+      onClick={onExpand}
+      className="group flex w-full min-w-0 items-center gap-2 overflow-x-auto py-2 text-left no-scrollbar"
+    >
+      <span className="sr-only">Open the full route drawing</span>
       {nodes.map((n, i) => {
         const meta = STATUS_META[n.status];
         const c = tone(meta.tone);
         const covered = i <= lastDone;
         const isDest = n.kind === 'destination';
+        const label = n.short ?? n.label;
         return (
-          <span key={n.id} className="flex shrink-0 items-center gap-1.5">
+          <span key={n.id} className="flex shrink-0 items-center gap-2">
             {i > 0 && (
               <span
                 aria-hidden="true"
-                className="h-[2px] w-6 sm:w-9"
+                className="h-0 w-5 sm:w-8"
                 style={{
-                  background: covered ? 'var(--color-route)' : 'transparent',
-                  borderTop: covered ? 'none' : '2px dashed var(--color-chalk-faint)',
-                  opacity: covered ? 1 : 0.7,
+                  borderTop: covered
+                    ? '2px solid var(--color-route)'
+                    : '2px dashed var(--color-chalk-faint)',
+                  opacity: covered ? 1 : 0.65,
                 }}
               />
             )}
-            <button
-              type="button"
-              onClick={onExpand}
-              title={`${n.label} — ${meta.word}`}
-              className="grid h-6 w-6 place-items-center"
-            >
+            <span className="flex shrink-0 items-center gap-1.5">
               <span
                 aria-hidden="true"
                 className={isDest ? 'block h-2.5 w-2.5' : 'block h-2.5 w-2.5 rounded-full'}
                 style={{
                   background: covered || n.status === 'repair' ? c : 'transparent',
                   border: `2px solid ${c}`,
-                  opacity: n.status === 'unknown' ? 0.6 : 1,
+                  opacity: n.status === 'unknown' ? 0.65 : 1,
                 }}
               />
-              <span className="sr-only">
-                {n.label} — {meta.word}. Open the full route.
+              <span
+                className="whitespace-nowrap text-[0.78rem] font-medium"
+                style={{ color: n.status === 'unknown' ? 'var(--color-chalk-faint)' : c }}
+              >
+                {label}
               </span>
-            </button>
+            </span>
           </span>
         );
       })}
-    </div>
+      <span
+        aria-hidden="true"
+        className="t-label ml-2 shrink-0 text-chalk-faint transition-colors group-hover:text-route"
+      >
+        expand
+      </span>
+    </button>
   );
 }

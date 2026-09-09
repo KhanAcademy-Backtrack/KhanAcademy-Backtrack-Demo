@@ -1,7 +1,7 @@
 'use client';
 
 /* ==========================================================================
-   RouteMap — BACKTRACK's signature object.
+   RouteMap, BACKTRACK's signature object.
 
    The route is not a picture of a list. It is one continuous stroke through
    the stops between where a learner is and where their class is, and when the
@@ -49,8 +49,8 @@ const GEOM = {
 } as const;
 
 const VGEOM = {
-  ribbon: { spine: 26, dip: 44, padStart: 46, padEnd: 40, step: 82 },
-  inline: { spine: 20, dip: 34, padStart: 40, padEnd: 32, step: 66 },
+  ribbon: { spine: 24, dip: 46, padStart: 44, padEnd: 42, step: 96 },
+  inline: { spine: 20, dip: 38, padStart: 40, padEnd: 34, step: 80 },
 } as const;
 
 function toneColor(tone: string) {
@@ -176,13 +176,13 @@ export function RouteMap({
   /*
     The stroke carries three states, and they mean different things:
 
-      covered  — up to the last stop the learner has actually demonstrated.
+      covered , up to the last stop the learner has actually demonstrated.
                  Solid mint. This is the part that is theirs.
-      leg      — from there to the stop they are working on now. Solid, but in
+      leg     , from there to the stop they are working on now. Solid, but in
                  that stop's own colour, so a repair leg reads coral rather
                  than as more completed route. Painting a stop marked REPAIR in
                  "you have done this" green would be a lie about their progress.
-      ahead    — everything after. Faint and dashed, because it is not theirs.
+      ahead   , everything after. Faint and dashed, because it is not theirs.
   */
   const { covered, legEnd, legTone, pulseEnd, pulseTone } = useMemo(() => {
     let last = 0;
@@ -251,7 +251,7 @@ export function RouteMap({
       for (let i = 1; i < pts.length; i++) {
         len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
       }
-      /* The whole route is drawn dashed — "not yours yet" — and the covered
+      /* The whole route is drawn dashed, "not yours yet", and the covered
          part is painted solid over the top of it. */
       done.setAttribute('stroke-dasharray', `${len * p} ${len}`);
       halo.setAttribute('stroke-dasharray', `${len * p} ${len}`);
@@ -287,13 +287,13 @@ export function RouteMap({
       if (ghost) {
         ghost.setAttribute('d', polylinePath(from));
         ghost.style.opacity = '0.55';
-        ghost.style.transition = 'opacity 900ms linear';
+        ghost.style.transition = 'opacity 1500ms linear';
         requestAnimationFrame(() => {
           ghost.style.opacity = '0';
         });
       }
       const start = performance.now();
-      const dur = 760;
+      const dur = 1150;
       cancelAnimationFrame(rafRef.current);
       const tick = (now: number) => {
         const raw = Math.min((now - start) / dur, 1);
@@ -320,7 +320,7 @@ export function RouteMap({
       return;
     }
     setSweeping(true);
-    const t = setTimeout(() => setSweeping(false), 1100);
+    const t = setTimeout(() => setSweeping(false), 1700);
     return () => clearTimeout(t);
   }, [sweepKey, reduced]);
 
@@ -355,6 +355,7 @@ export function RouteMap({
       {width > 0 && (
         <svg
           className="route-svg"
+          data-vertical={vertical ? 'true' : undefined}
           viewBox={`0 0 ${viewW} ${height}`}
           width={viewW}
           height={height}
@@ -458,7 +459,7 @@ export function RouteMap({
                 strokeDasharray="26 4000"
                 initial={{ strokeDashoffset: 4000, opacity: 0.9 }}
                 animate={{ strokeDashoffset: -200, opacity: 0 }}
-                transition={{ duration: 1.05, ease: 'easeInOut' }}
+                transition={{ duration: 1.6, ease: 'easeInOut' }}
               />
             )}
 
@@ -477,6 +478,7 @@ export function RouteMap({
                   onSelect={onSelectNode}
                   reduced={Boolean(reduced)}
                   viewW={viewW}
+                  labelOffset={vertical ? (maxDepth - (p.node.depth ?? 0)) * g.dip : 0}
                   labelWidth={
                     vertical
                       ? viewW - (g.spine + maxDepth * g.dip) - 44
@@ -495,7 +497,7 @@ export function RouteMap({
       <ol className="sr-only">
         {nodes.map((n) => (
           <li key={n.id}>
-            {n.label} — {STATUS_META[n.status].word}. {n.why ?? STATUS_META[n.status].reason}
+            {n.label}, {STATUS_META[n.status].word}. {n.why ?? STATUS_META[n.status].reason}
           </li>
         ))}
       </ol>
@@ -518,6 +520,7 @@ function Node({
   reduced,
   labelWidth,
   viewW,
+  labelOffset,
 }: {
   node: RouteNode;
   x: number;
@@ -531,6 +534,7 @@ function Node({
   reduced: boolean;
   labelWidth: number;
   viewW: number;
+  labelOffset: number;
 }) {
   const meta = STATUS_META[node.status];
   const color = toneColor(meta.tone);
@@ -547,8 +551,8 @@ function Node({
   const maxChars = Math.max(10, Math.min(30, Math.floor(labelWidth / 6.4)));
   const labelLines = wrap(node.label, maxChars);
   const labelAnchor = vertical ? 'start' : 'middle';
-  const lx = vertical ? r + 14 : 0;
-  const ly = vertical ? -3 : r + 20;
+  const lx = vertical ? labelOffset + r + 16 : 0;
+  const ly = vertical ? -2 : r + 20;
 
   const interactive = Boolean(onSelect);
 
@@ -569,7 +573,7 @@ function Node({
          moment. */
       initial={reduced ? { x, y, opacity: 1, scale: 1 } : { x, y, opacity: 0, scale: 0.4 }}
       animate={{ x, y, opacity: 1, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 190, damping: 24, opacity: { duration: 0.28 } }}
+      transition={{ type: 'spring', stiffness: 110, damping: 22, opacity: { duration: 0.5 } }}
       className={interactive ? 'route-hit' : undefined}
       tabIndex={interactive ? 0 : undefined}
       role={interactive ? 'button' : undefined}
@@ -597,38 +601,43 @@ function Node({
 
       {isDest ? (
         <g>
-          {/* a destination marker, not a dot: a pin with a small pennant */}
-          <path
-            d={`M0,${r + 9} L0,${-r - 12}`}
-            stroke={color}
-            strokeWidth={1.6}
-            strokeLinecap="round"
-            opacity={0.75}
-          />
-          <path
-            d={`M0,${-r - 12} L${r + 9},${-r - 8} L0,${-r - 4} Z`}
-            fill={color}
-            opacity={solid ? 1 : 0.55}
-          />
+          {/* A chequered finish marker rather than a dot. A little pennant on
+              a pole was unreadable at fifteen pixels; two filled quarters in a
+              square are not. */}
           <rect
-            x={-r - 1.5}
-            y={-r - 1.5}
-            width={(r + 1.5) * 2}
-            height={(r + 1.5) * 2}
-            rx={2}
-            fill={solid ? color : 'var(--color-base)'}
+            x={-r - 2}
+            y={-r - 2}
+            width={(r + 2) * 2}
+            height={(r + 2) * 2}
+            rx={1.5}
+            fill="var(--color-base)"
             stroke={color}
-            strokeWidth={2.25}
+            strokeWidth={2.4}
           />
+          {!solid && (
+            <g fill={color} opacity={0.9}>
+              <rect x={-r - 0.6} y={-r - 0.6} width={r + 0.6} height={r + 0.6} />
+              <rect x={0} y={0} width={r + 0.6} height={r + 0.6} />
+            </g>
+          )}
           {solid && (
-            <path
-              d="M-3.4,0 L-1,2.6 L3.6,-2.8"
-              fill="none"
-              stroke="var(--color-base)"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <>
+              <rect
+                x={-r - 0.6}
+                y={-r - 0.6}
+                width={(r + 0.6) * 2}
+                height={(r + 0.6) * 2}
+                fill={color}
+              />
+              <path
+                d="M-3.6,0.2 L-1.1,2.8 L3.8,-3"
+                fill="none"
+                stroke="var(--color-base)"
+                strokeWidth={2.1}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </>
           )}
         </g>
       ) : (

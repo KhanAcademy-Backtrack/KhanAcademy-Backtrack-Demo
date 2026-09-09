@@ -66,7 +66,7 @@ export function MissedTurn() {
 
   useEffect(() => {
     if (!auto || !inView || reduced) return;
-    const t = setTimeout(() => setRerouted((v) => !v), rerouted ? 4200 : 2600);
+    const t = setTimeout(() => setRerouted((v) => !v), rerouted ? 6000 : 4000);
     return () => clearTimeout(t);
   }, [rerouted, auto, inView, reduced]);
 
