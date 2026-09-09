@@ -137,7 +137,7 @@ export default function HomePage() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href="/demo" className="btn btn-primary">
-                  Open the demo
+                  Try the demo
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link href="/start/quadratics" className="btn btn-ghost">
@@ -271,7 +271,7 @@ export default function HomePage() {
               everything gets. Not XP. Something concrete:{' '}
               <strong className="font-semibold text-chalk">
                 I can do something now that I couldn’t do before
-              </strong>{' '}
+              </strong>
               , and here is the thing it just unlocked.
             </p>
           </div>
@@ -542,7 +542,7 @@ export default function HomePage() {
           </p>
           <div className="mt-12 flex flex-wrap items-center gap-3">
             <Link href="/demo" className="btn btn-primary">
-              Walk the route
+              Try the demo
               <span aria-hidden="true">→</span>
             </Link>
             <Link href="/evidence" className="btn btn-ghost">

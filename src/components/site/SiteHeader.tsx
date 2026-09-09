@@ -8,13 +8,16 @@ import { Wordmark } from './Wordmark';
 
 const LINKS = [
   { href: '/how-it-works', label: 'How it works' },
-  { href: '/classrooms', label: 'Classrooms' },
+  { href: '/classrooms', label: 'For schools' },
   { href: '/evidence', label: 'Evidence' },
   { href: '/about', label: 'About' },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
+  /* Inside the demo, "Try the demo" is an invitation to somewhere the visitor
+     already is. It becomes the way back out instead. */
+  const inDemo = pathname === '/demo';
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
 
@@ -64,9 +67,18 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <Link href="/demo" className="btn btn-primary ml-3 !min-h-[38px] !text-[0.875rem]">
-            Open the demo
-          </Link>
+          {inDemo ? (
+            <Link
+              href="/"
+              className="btn btn-ghost ml-3 !min-h-[38px] !text-[0.875rem]"
+            >
+              Leave the demo
+            </Link>
+          ) : (
+            <Link href="/demo" className="btn btn-primary ml-3 !min-h-[38px] !text-[0.875rem]">
+              Try the demo
+            </Link>
+          )}
         </nav>
 
         <button
@@ -77,8 +89,14 @@ export function SiteHeader() {
           onClick={() => setOpen((v) => !v)}
         >
           <span className="sr-only">{open ? 'Close menu' : 'Menu'}</span>
+          {/* Each bar carries its closed shape as a real `d` attribute. Motion
+              animates `d` from whatever the element currently has, and with no
+              attribute to start from it wrote the string "undefined" into the
+              path on the first frame, which the browser rejected out loud on
+              every page of the site. */}
           <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true">
             <motion.path
+              d="M0 1 L22 1"
               animate={open ? { d: 'M2 1 L20 13' } : { d: 'M0 1 L22 1' }}
               stroke="currentColor"
               strokeWidth="1.7"
@@ -92,6 +110,7 @@ export function SiteHeader() {
               strokeLinecap="round"
             />
             <motion.path
+              d="M0 13 L22 13"
               animate={open ? { d: 'M2 13 L20 1' } : { d: 'M0 13 L22 13' }}
               stroke="currentColor"
               strokeWidth="1.7"
@@ -121,8 +140,11 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
-              <Link href="/demo" className="btn btn-primary mt-6">
-                Open the demo
+              <Link
+                href={inDemo ? '/' : '/demo'}
+                className={`mt-6 btn ${inDemo ? 'btn-ghost' : 'btn-primary'}`}
+              >
+                {inDemo ? 'Leave the demo' : 'Try the demo'}
               </Link>
             </nav>
           </motion.div>

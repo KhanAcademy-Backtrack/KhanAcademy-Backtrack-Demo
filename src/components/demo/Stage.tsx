@@ -17,6 +17,7 @@ import { FactorPairs } from '@/components/math/FactorPairs';
 import { KhanCheckpoint } from './KhanCheckpoint';
 import {
   Actions,
+  Aside,
   Choices,
   HonestLine,
   Moment,
@@ -27,6 +28,7 @@ import {
   Verdict,
   Why,
 } from './parts';
+import { Icon } from '@/components/ui/Icon';
 import {
   BANK,
   BUDGETS,
@@ -47,77 +49,28 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
   const guided = state.mode === 'guided';
 
   switch (state.screen) {
-    /* ---------------------------------------------------------------- */
-    case 'mode':
-      return (
-        <div className="mx-auto max-w-[1000px]">
-          <p className="t-label text-chalk-faint">Interactive demo</p>
-          <h1 className="t-display mt-4 text-[2.3rem] leading-[1.02] sm:text-[3.2rem]">
-            Two ways to see this work.
-          </h1>
-          <p className="mt-5 max-w-[58ch] text-[1.05rem] leading-relaxed text-chalk-muted">
-            No sign-in. Nothing is recorded about you, and nothing leaves your browser. The route you
-            see is built from the answers you actually give.
-          </p>
+    /* ----------------------------------------------------------------
+       The front door.
 
-          <div className="mt-10 grid gap-px border border-hairline bg-hairline md:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => send({ type: 'mode', mode: 'live' })}
-              className="group bg-field p-7 text-left transition-colors hover:bg-field-high sm:p-9"
-            >
-              <p className="t-label text-now">Try it yourself</p>
-              <p className="t-display mt-3 text-[1.7rem] leading-tight">
-                The route answers to you.
-              </p>
-              <p className="mt-4 text-[0.98rem] leading-relaxed text-chalk-muted">
-                BACKTRACK responds to your real answers. Right or wrong, the route follows the
-                evidence, including the evidence that you already knew it.
-              </p>
-              <p className="t-label mt-6 text-chalk group-hover:text-now">Start →</p>
-            </button>
-            <button
-              type="button"
-              onClick={() => send({ type: 'mode', mode: 'guided' })}
-              className="group bg-field p-7 text-left transition-colors hover:bg-field-high sm:p-9"
-            >
-              <p className="t-label text-chalk-faint">Follow an example learner</p>
-              <p className="t-display mt-3 text-[1.7rem] leading-tight">
-                Watch the recovery path.
-              </p>
-              <p className="mt-4 text-[0.98rem] leading-relaxed text-chalk-muted">
-                A fictional learner walks the version where something is genuinely missing. Their
-                choices are flagged as you go, and the whole path is marked as an illustration.
-              </p>
-              <p className="t-label mt-6 text-chalk group-hover:text-now">Watch →</p>
-            </button>
-          </div>
-
-          <HonestLine>
-            This is product logic you can test in ninety seconds, not a result we are asking you to
-            believe. No pilot has run, no school has committed, and no learning outcome has been
-            measured. The mathematics is real; everything about impact is a proposal.
-          </HonestLine>
-        </div>
-      );
-
-    /* ---------------------------------------------------------------- */
+       This used to be the second screen, behind a choice between "try it
+       yourself" and "follow an example learner". Nobody can make that choice
+       well before they know what either one contains, and it cost a click and
+       a screen to ask it, so the live version is simply what happens and the
+       worked example is an aside underneath.
+       ---------------------------------------------------------------- */
     case 'session':
       return (
         <div className="mx-auto max-w-[1000px]">
-          <Why>
-            Today’s goal is above, and it stays there.{' '}
+          <p className="t-label text-chalk-faint">Step 1 of 2 to start</p>
+          <h1 className="t-display mt-3 text-[2.2rem] leading-[1.02] sm:text-[3.1rem]">
+            How much time do you have?
+          </h1>
+          <p className="mt-5 max-w-[58ch] text-[1.02rem] leading-relaxed text-chalk-muted">
+            Your goal is at the top of the screen and it stays there.{' '}
             <strong className="font-semibold text-chalk">
-              BACKTRACK’s job is to work out what stands between you and that equation, then remove
-              only that.
-            </strong>
-          </Why>
-          <h2 className="t-display mt-8 text-[2rem] leading-tight sm:text-[2.7rem]">
-            How much do you have in you today?
-          </h2>
-          <p className="mt-4 max-w-[56ch] text-[1rem] leading-relaxed text-chalk-muted">
-            Five minutes is a real answer, not a failure. BACKTRACK picks a route that finishes rather
-            than one that gets abandoned, and you will see the route change as you choose.
+              BACKTRACK works out what stands between you and that equation, then removes only that.
+            </strong>{' '}
+            Five minutes is a real answer: the route is built to finish rather than be abandoned.
           </p>
 
           <div className="mt-9 grid gap-px border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-4">
@@ -131,18 +84,36 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
                 <p className="t-display text-[2rem] leading-none">{b.label}</p>
                 <p className="t-label mt-2 text-chalk-faint">{b.sub}</p>
                 <p className="mt-4 text-[0.9rem] leading-relaxed text-chalk-muted">{b.line}</p>
+                <p className="t-label mt-5 flex items-center gap-1.5 text-chalk group-hover:text-now">
+                  Start
+                  <Icon name="chevron-right" size={12} strokeWidth={2.5} />
+                </p>
                 {guided && EXAMPLE.budget === b.id && (
-                  <p className="t-label mt-4 text-recalc">Example learner</p>
+                  <p className="t-label mt-3 text-recalc">Example learner picks this</p>
                 )}
               </button>
             ))}
           </div>
 
-          <HonestLine>
-            This is not a decorative selector. It changes how deep the route goes, which checks are
-            worth spending your time on, and what BACKTRACK offers you next. The minute figures on the
+          {!guided && (
+            <p className="mt-7 text-[0.92rem] text-chalk-muted">
+              Would rather watch than answer?{' '}
+              <button
+                type="button"
+                className="btn-quiet text-route"
+                onClick={() => send({ type: 'switchGuided' })}
+              >
+                Follow an example learner instead
+              </button>
+              . Their choices are flagged as you go.
+            </p>
+          )}
+
+          <Aside summary="What this selector actually changes">
+            It is not decorative. It changes how deep the route goes, which checks are worth
+            spending your time on, and what BACKTRACK offers you next. The minute figures on the
             route are rough estimates for this example, not measurements.
-          </HonestLine>
+          </Aside>
         </div>
       );
 
@@ -151,7 +122,7 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
       const b = BUDGETS.find((x) => x.id === state.budget);
       return (
         <div className="mx-auto max-w-[1000px]">
-          <Why>
+          <Why label="Step 2 of 2 to start">
             Before routing you anywhere, BACKTRACK checks what you can already do.{' '}
             {b && <strong className="font-semibold text-chalk">{b.line}</strong>}
           </Why>
@@ -163,10 +134,10 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               exampleId={guided ? EXAMPLE.check : null}
             />
           </PaperPlate>
-          <HonestLine>
-            Nothing here is graded and nothing is stored about you. A wrong answer is the most useful
-            thing you can give BACKTRACK. It is the only signal that says where to look.
-          </HonestLine>
+          <p className="mt-7 text-[0.9rem] text-chalk-faint">
+            Nothing here is graded. A wrong answer is the most useful thing you can give BACKTRACK:
+            it is the only signal that says where to look.
+          </p>
         </div>
       );
     }
@@ -203,12 +174,12 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
             </Verdict>
 
             <div className="mt-10 border-t border-paper-line pt-8">
-              <p className="t-label text-ink-muted">Before the route changes</p>
+              <p className="t-label text-ink-muted">One more thing, then the route changes</p>
               <h3 className="mt-2 text-[1.4rem] font-medium text-ink">How did that feel?</h3>
               <p className="mt-2 max-w-[62ch] text-[0.95rem] leading-relaxed text-ink-muted">
                 This never changes whether your answer was right. It changes what BACKTRACK checks
-                next. That is the difference between a route built on evidence and a route built on a guess.{' '}
-                <strong className="font-semibold text-ink">Honesty gives you a better route.</strong>
+                next, so{' '}
+                <strong className="font-semibold text-ink">honesty gives you a better route.</strong>
               </p>
               <div
                 className="mt-5 grid gap-2 sm:grid-cols-2"
@@ -287,10 +258,10 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
                 : null,
             ]}
           />
-          <HonestLine>
-            No review was invented so that it could be dramatically removed. Those stops were on the
-            route because BACKTRACK genuinely did not know yet whether you needed them.
-          </HonestLine>
+          <Aside summary="Was that review invented so it could be removed?">
+            No. Those stops were on the route because BACKTRACK genuinely did not know yet whether
+            you needed them, and your answer is what ruled them out.
+          </Aside>
         </div>
       );
     }
@@ -425,10 +396,11 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
       const q = BANK[qid];
       return (
         <div className="mx-auto max-w-[1000px]">
-          <Why>
-            A <strong className="font-semibold text-chalk">fresh</strong> question, with different numbers
-            from the one you practised on. Nothing is marked repaired until you answer one of these,
-            and opening a Khan page never counts.
+          <Why label="Prove it">
+            Different numbers from the one you practised on. This is the only thing that marks the
+            stop repaired, and{' '}
+            <strong className="font-semibold text-chalk">getting it wrong costs you nothing</strong>:
+            you get the reason and another go.
           </Why>
           <PaperPlate className="mt-8">
             <Task q={q} />
@@ -438,12 +410,12 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               </Verdict>
             )}
             <Choices q={q} onAnswer={(id) => send({ type: 'answer', qid, cid: id })} />
-            <p className="mt-8 text-center text-[0.92rem] text-ink-muted">
+            <p className="mt-8 flex flex-wrap items-center justify-center gap-2 text-center text-[0.92rem] text-ink-muted">
+              <Icon name="hint" size={16} className="text-ink-muted" />
               Stuck?{' '}
               <button type="button" className="btn-quiet" onClick={() => send({ type: 'assist' })}>
-                Work through it again
-              </button>{' '}
-              . Using help is fine, and it gets recorded honestly next to your answer.
+                Go back and work through it again
+              </button>
             </p>
           </PaperPlate>
         </div>
@@ -506,9 +478,10 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               },
             ]}
           />
-          <p className="mt-6 text-[0.9rem] text-chalk-faint">
-            Learn however you want. Prove what you know. {skill.label} is marked repaired because of a
-            fresh answer, not because a page was opened.
+          <p className="mt-6 flex items-center gap-2 text-[0.9rem] text-chalk-faint">
+            <Icon name="check" size={14} strokeWidth={2.5} className="text-route" />
+            {skill.label} is marked repaired because of a fresh answer, not because a page was
+            opened.
           </p>
         </div>
       );
@@ -540,12 +513,11 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
             </div>
           </Moment>
           <Actions items={[{ label: 'Continue', onClick: () => go('next_turn'), primary: true }]} />
-          <HonestLine>
-            <strong className="font-semibold text-chalk-muted">What this is not.</strong> One worked
-            example inside a demonstration. It is not evidence that anything was retained, and
-            BACKTRACK will not claim you have mastered quadratics on the strength of it. A real check
-            would come back days later, with fresh questions, under supervision.
-          </HonestLine>
+          <Aside summary="What this is not">
+            One worked example inside a demonstration. It is not evidence that anything was
+            retained, and BACKTRACK will not claim you have mastered quadratics on the strength of
+            it. A real check would come back days later, with fresh questions, under supervision.
+          </Aside>
         </div>
       );
 
@@ -618,10 +590,9 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
               { label: 'Stop here, save my route', onClick: () => go('stopped') },
             ]}
           />
-          <HonestLine>
-            One continuation was offered. There is no feed here, no autoplay, and no second offer
-            waiting behind this one.
-          </HonestLine>
+          <p className="mt-7 text-[0.9rem] text-chalk-faint">
+            One continuation was offered. No feed, no autoplay, and no second offer behind this one.
+          </p>
         </div>
       );
 
@@ -782,61 +753,157 @@ export function Stage({ state, send }: { state: DemoState; send: Send }) {
    Screens with local interaction state
    ====================================================================== */
 
+/**
+ * The repair.
+ *
+ * This screen used to stack four instructions on top of each other: why you
+ * are here, a hands-on widget, a full Khan Academy panel, and a gate that
+ * only opened once the widget was finished. Three of those competed to be the
+ * primary action, and the fourth was a genuine trap: a learner who chose to
+ * go and learn it on Khan Academy came back and found no way forward, because
+ * the only route onward ran through a widget they had decided not to use.
+ *
+ * So the two ways of learning the step are now two lanes of one choice, only
+ * one is on screen at a time, and the thing that actually decides anything,
+ * the fresh question, is always reachable. That is not a loosened standard.
+ * The standard was never "did you do the widget"; it was always "can you
+ * answer a question you could not answer before", and that has not moved.
+ */
 function RepairScreen({ gap, state, send }: { gap: SkillId; state: DemoState; send: Send }) {
   const [done, setDone] = useState(false);
+  const [lane, setLane] = useState<'here' | 'khan'>('here');
+  const [visited, setVisited] = useState(false);
   const skill = SKILLS[gap];
 
-  useEffect(() => setDone(false), [gap]);
+  useEffect(() => {
+    setDone(false);
+    setVisited(false);
+    setLane('here');
+  }, [gap]);
+
+  const ready = done || visited;
 
   return (
     <div className="mx-auto max-w-[1100px]">
-      <Why>
-        This is the stop your route says is in the way.{' '}
-        <strong className="font-semibold text-chalk">Do it once here</strong>, use Khan Academy if you
-        want it, then a fresh question decides whether it is repaired.
-      </Why>
+      {/* --- 1. what this stop is, and why it is here ------------------ */}
+      <p className="t-label text-recalc">Your next stop</p>
+      <h2 className="t-display mt-2 text-[2rem] leading-[1.04] sm:text-[2.6rem]">{skill.label}</h2>
+      <p className="mt-4 max-w-[62ch] text-[1rem] leading-relaxed text-chalk-muted">
+        <strong className="font-semibold text-chalk">Why this is here.</strong> {skill.why}
+      </p>
 
-      <div className="mt-8">
-        {gap === 'distribute' ? <AreaModel onComplete={setDone} /> : <FactorPairs onComplete={setDone} />}
-      </div>
-
-      {/* --- the handover ------------------------------------------------ */}
-      <div className="mt-6 flex items-center gap-4">
-        <span className="h-px flex-1 bg-linear-to-r from-transparent to-hairline" aria-hidden="true" />
-        <p className="t-label text-chalk-faint">Or learn it properly first</p>
-        <span className="h-px flex-1 bg-linear-to-l from-transparent to-hairline" aria-hidden="true" />
-      </div>
-      <div className="mt-6">
-        <KhanCheckpoint skill={skill} />
-      </div>
-
-      <div className="mt-8">
-        {done ? (
-          <Actions
-            items={[
-              {
-                label: 'I’m ready for a fresh question',
-                onClick: () => send({ type: 'goto', screen: 'fresh_check' }),
-                primary: true,
-              },
-            ]}
+      {/* --- 2. two ways to learn it. One at a time. ------------------- */}
+      <div className="mt-9" role="group" aria-label="How would you like to learn this step">
+        <div className="flex flex-wrap gap-px border border-hairline bg-hairline">
+          <LaneTab
+            active={lane === 'here'}
+            onClick={() => setLane('here')}
+            title="Try it here"
+            sub="Two minutes, hands on"
+            done={done}
           />
-        ) : (
-          <p className="text-[0.95rem] text-chalk-faint">
-            {gap === 'distribute'
-              ? 'Claim all four regions above, then combine the middle terms, to continue.'
-              : 'Place a pair that satisfies both conditions above to continue.'}
+          <LaneTab
+            active={lane === 'khan'}
+            onClick={() => setLane('khan')}
+            title="Learn with Khan Academy"
+            sub="A full lesson and practice"
+            done={visited}
+          />
+        </div>
+
+        <div className="mt-6">
+          {lane === 'here' ? (
+            <>
+              {gap === 'distribute' ? (
+                <AreaModel onComplete={setDone} />
+              ) : (
+                <FactorPairs onComplete={setDone} />
+              )}
+              {!done && (
+                <p className="mt-4 text-[0.95rem] text-chalk-faint">
+                  {gap === 'distribute'
+                    ? 'Claim all four regions above, then combine the middle terms.'
+                    : 'Place a pair that satisfies both conditions above.'}
+                </p>
+              )}
+            </>
+          ) : (
+            <KhanCheckpoint skill={skill} onReturn={() => setVisited(true)} />
+          )}
+        </div>
+      </div>
+
+      {/* --- 3. the thing that actually decides ------------------------ */}
+      <div className="mt-10 border-t border-hairline pt-7">
+        <p className="t-label text-chalk-faint">When you are ready</p>
+        <p className="mt-2 max-w-[58ch] text-[1rem] leading-relaxed text-chalk">
+          BACKTRACK gives you a{' '}
+          <strong className="font-semibold">new question with different numbers</strong>. That
+          answer is the only thing that moves this stop off your route.
+        </p>
+        <Actions
+          items={[
+            {
+              label: 'Check my understanding',
+              onClick: () => send({ type: 'goto', screen: 'fresh_check' }),
+              primary: ready,
+            },
+          ]}
+        />
+        {!ready && (
+          <p className="mt-3 text-[0.85rem] text-chalk-faint">
+            You can go straight there if you already know this.
           </p>
         )}
       </div>
 
-      <HonestLine>
-        A link click is not learning. This screen exists so that the learner does the step once with
-        their hands before anything claims it is repaired, and the claim itself comes from the fresh
-        question on the next screen, not from this one.{' '}
+      <Aside summary="Why a link click is not enough">
+        BACKTRACK cannot see anything that happens on khanacademy.org, so opening a resource can
+        never mark a stop repaired. Learn it however you like, here, there, from a teacher or from
+        your own notes; the fresh question is what the route responds to.{' '}
         {state.assisted && 'You asked to work through it again, and that is recorded next to your answer.'}
-      </HonestLine>
+      </Aside>
     </div>
+  );
+}
+
+function LaneTab({
+  active,
+  onClick,
+  title,
+  sub,
+  done,
+}: {
+  active: boolean;
+  onClick: () => void;
+  title: string;
+  sub: string;
+  done: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`relative flex min-w-[200px] flex-1 items-center justify-between gap-3 px-5 py-4 text-left transition-colors ${
+        active ? 'bg-field-high' : 'bg-field hover:bg-field-high/60'
+      }`}
+    >
+      {active && (
+        <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] bg-route" />
+      )}
+      <span className="min-w-0">
+        <span
+          className={`block text-[1.05rem] font-medium ${active ? 'text-chalk' : 'text-chalk-muted'}`}
+        >
+          {title}
+        </span>
+        <span className={`t-label mt-1 block ${active ? 'text-route' : 'text-chalk-faint'}`}>
+          {sub}
+        </span>
+      </span>
+      {done && <Icon name="check" size={16} strokeWidth={2.5} className="text-route" />}
+    </button>
   );
 }
 
@@ -851,12 +918,10 @@ function DestinationScreen({ state, send }: { state: DemoState; send: Send }) {
 
   return (
     <div className="mx-auto max-w-[1000px]">
-      <Why>
-        This is the equation from the top of the screen , {' '}
-        <strong className="font-semibold text-chalk">
-          a fresh version of the thing that stopped you
-        </strong>
-        . Different numbers, same destination.
+      <Why label="The destination">
+        The same equation that has been at the top of the screen all session,{' '}
+        <strong className="font-semibold text-chalk">with different numbers</strong>. Nothing about
+        where you were going has moved.
       </Why>
 
       <PaperPlate className="mt-8">

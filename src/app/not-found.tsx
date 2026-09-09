@@ -19,7 +19,7 @@ export default function NotFound() {
             <span aria-hidden="true">→</span>
           </Link>
           <Link href="/demo" className="btn btn-ghost">
-            Open the demo
+            Try the demo
           </Link>
         </div>
       </div>

@@ -146,33 +146,48 @@ export function HeroCover() {
           abandoned branches, plotted points and fragments of the mathematics */}
       <Atmosphere variant="cover" />
 
-      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center gap-10 px-5 pb-12 pt-10 sm:px-8 sm:pt-14 lg:gap-14">
-        {/* ---- the class, and where it is ------------------------------- */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center gap-8 px-5 pb-10 pt-8 sm:px-8 sm:pt-10 lg:gap-10">
+        {/* ---- the statement, and the way in ---------------------------- */}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
           <div>
-            <p className="t-label text-chalk-faint">Today’s class</p>
-            <p className="mt-2 text-[1.05rem] font-medium text-chalk">
-              Algebra 1 · Quadratic equations
+            <p className="t-label text-chalk-faint">Today’s class · Algebra 1 · Quadratic equations</p>
+            <h1 className="t-display mt-3 text-[2.5rem] leading-[0.98] sm:text-[3.4rem] lg:text-[4.2rem]">
+              The shortest path back to
+              <br className="hidden sm:block" /> where your class is{' '}
+              <span className="text-route">now</span>.
+            </h1>
+            <p className="mt-5 max-w-[52ch] text-[1.05rem] leading-relaxed text-chalk-muted">
+              School keeps moving forward even when students don’t. BACKTRACK finds the one turn a
+              learner missed, routes the repair through Khan Academy, and puts them back on today’s
+              lesson, without restarting the chapter.
             </p>
-            <p className="mt-1 max-w-[30ch] text-[0.9rem] leading-relaxed text-chalk-faint">
-              The class moved on to this on Monday. It does not wait.
-            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Link href="/demo" className="btn btn-primary">
+                Try the demo
+                <span aria-hidden="true">→</span>
+              </Link>
+              <Link href="/how-it-works" className="btn btn-ghost">
+                How it works
+              </Link>
+              <span className="t-label text-chalk-faint">90 seconds · no sign-in</span>
+            </div>
           </div>
 
           {/* The destination is content, not decoration, so it is revealed with
               CSS and never waits for hydration. */}
-          <div className="material-paper settle d1 w-full px-6 py-5 md:max-w-[400px]">
-            <p className="t-label text-ink-muted">The destination</p>
+          <div className="material-paper settle d1 w-full px-6 py-5 lg:max-w-[420px] lg:justify-self-end">
+            <p className="t-label text-ink-muted">Where this learner is trying to get</p>
             <MathText size="lg" className="mt-2 block text-ink" as="div">
               x² + 7x + 12 = 0
             </MathText>
             <p className="mt-3 text-[0.85rem] leading-relaxed text-ink-muted">
-              It does not move all session. Everything else on the route is negotiable.
+              The class moved on to this on Monday. It does not wait, and it does not move all
+              session. Everything else on the route below is negotiable.
             </p>
           </div>
         </div>
 
-        {/* ---- the route ------------------------------------------------ */}
+        {/* ---- the route: the same object the demo runs on ------------- */}
         <div className="rise d2">
           <RouteMap
             model={current}
@@ -224,34 +239,13 @@ export function HeroCover() {
           )}
         </AnimatePresence>
 
-        {/* ---- the statement, and the handover -------------------------- */}
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
-          <div>
-            <h1 className="t-display text-[2.6rem] leading-[0.98] sm:text-[3.6rem] lg:text-[4.4rem]">
-              The shortest path back to
-              <br className="hidden sm:block" /> where your class is{' '}
-              <span className="text-route">now</span>.
-            </h1>
-            <p className="mt-6 max-w-[46ch] text-[1.05rem] leading-relaxed text-chalk-muted">
-              School keeps moving forward even when students don’t. BACKTRACK finds the one turn a
-              learner missed, routes the repair through Khan Academy, and puts them back on today’s
-              lesson, without restarting the chapter.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="/demo" className="btn btn-primary">
-                Walk the route
-                <span aria-hidden="true">→</span>
-              </Link>
-              <Link href="/how-it-works" className="btn btn-ghost">
-                How it works
-              </Link>
-            </div>
-            <p className="mt-6 flex items-center gap-2 text-[0.8rem] text-chalk-faint">
-              <span className="h-1.5 w-1.5 rounded-full bg-chalk-faint" aria-hidden="true" />
-              Concept-stage prototype for the Khan Academy Education Impact Challenge 2026. No pilot,
-              no partner school, no results.
-            </p>
-          </div>
+        {/* ---- the handover: the route responds to the visitor ---------- */}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-16">
+          <p className="flex items-start gap-2 self-end text-[0.8rem] leading-relaxed text-chalk-faint">
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-chalk-faint" aria-hidden="true" />
+            Concept-stage prototype for the Khan Academy Education Impact Challenge 2026. No pilot,
+            no partner school, no results.
+          </p>
 
           <HeroQuestion answered={answered} onAnswer={answer} phase={phase} />
         </div>
@@ -319,7 +313,7 @@ function HeroQuestion({
           : 'No red screen, no restart, no “review the whole unit”. One named step, and a way back.'}
       </p>
       <Link href="/demo" className="btn btn-primary mt-5">
-        Walk the full route
+        Try the demo
         <span aria-hidden="true">→</span>
       </Link>
     </div>

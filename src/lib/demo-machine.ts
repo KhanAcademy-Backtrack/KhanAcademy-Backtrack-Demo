@@ -22,7 +22,6 @@ import {
 import type { RouteModel, RouteNode } from './route-model';
 
 export type Screen =
-  | 'mode'
   | 'session'
   | 'check'
   | 'check_result'
@@ -54,7 +53,7 @@ export type Evidence = {
 };
 
 export type DemoState = {
-  mode: 'live' | 'guided' | null;
+  mode: 'live' | 'guided';
   screen: Screen;
   budget: number | null;
   baselineMinutes: number;
@@ -84,8 +83,12 @@ export type DemoState = {
 
 export function initialState(): DemoState {
   return {
-    mode: null,
-    screen: 'mode',
+    /* The demo opens on the real thing. Asking someone to choose between
+       "try it yourself" and "watch an example" before they have any idea what
+       either one contains is a decision made too early to be made well, so
+       live is simply the default and the example is offered as an aside. */
+    mode: 'live',
+    screen: 'session',
     budget: null,
     baselineMinutes: 0,
     evidence: [],
@@ -133,7 +136,7 @@ export function routeFor(s: DemoState): RouteModel {
     why: 'Where today started: stuck on the equation your class is doing right now.',
   });
 
-  if (s.screen !== 'mode' && s.screen !== 'session') {
+  if (s.screen !== 'session') {
     const answered = s.evidence.some((e) => e.questionId === 'check');
     const correct = s.evidence.find((e) => e.questionId === 'check')?.correct;
     nodes.push({
@@ -236,7 +239,7 @@ export function reduce(prev: DemoState, action: Action): DemoState {
 
   switch (action.type) {
     case 'mode':
-      return { ...s, mode: action.mode, screen: 'session' };
+      return { ...s, mode: action.mode };
 
     case 'budget': {
       const next = { ...s, budget: action.budget, flag: null };
@@ -291,13 +294,17 @@ export function reduce(prev: DemoState, action: Action): DemoState {
     case 'toggleMethods':
       return { ...s, showMethods: !prev.showMethods };
 
+    /* Switch to the worked example. If a budget has already been chosen the
+       example picks up from the check; if not, it starts where the learner
+       is, at the session screen, rather than dropping them into a check for
+       a route that has not been built yet. */
     case 'switchGuided':
       return {
         ...initialState(),
         mode: 'guided',
         budget: s.budget,
         baselineMinutes: s.baselineMinutes,
-        screen: 'check',
+        screen: s.budget ? 'check' : 'session',
       };
 
     /* Used by the undo timeline and by restoring a saved session. The state
@@ -507,6 +514,52 @@ export function afterCapability(s: DemoState): { screen: Screen; cursor: number 
   const next = s.gaps.findIndex((g) => !s.repaired.includes(g));
   if (next >= 0) return { screen: 'repair', cursor: next };
   return { screen: 'destination', cursor: s.cursor };
+}
+
+/**
+ * What the learner is doing right now, in the words they would use. This is
+ * the top line of the anchor, and it is the thing they asked for most often:
+ * not "where does this sit in the route" but "what am I on".
+ */
+export function currentStopLabel(s: DemoState): string | null {
+  switch (s.screen) {
+    case 'session':
+      return null;
+    case 'check':
+    case 'check_result':
+      return 'Today’s check';
+    case 'contrast':
+      return 'Checking a contrasting case';
+    case 'probe':
+    case 'probe_ok':
+      return 'Checking one step earlier';
+    case 'gap':
+    case 'repair':
+    case 'fresh_check':
+    case 'capability': {
+      const gap = currentGap(s) ?? s.repaired[s.repaired.length - 1];
+      return gap ? SKILLS[gap].label : 'Repairing a stop';
+    }
+    case 'shortcut':
+      return 'Shortcut found';
+    case 'destination':
+    case 'solved':
+      return 'Today’s equation';
+    case 'next_turn':
+    case 'next_turn_check':
+    case 'next_turn_result':
+      return 'One optional next turn';
+    case 'comeback_offer':
+    case 'comeback':
+    case 'comeback_result':
+      return 'Coming back after a week';
+    case 'stopped':
+      return 'Route saved';
+    case 'end':
+      return 'End of the demo';
+    default:
+      return null;
+  }
 }
 
 export function currentGap(s: DemoState): SkillId | null {

@@ -17,15 +17,46 @@ import { MathText } from '@/components/math/Math';
 import type { Choice, Question } from '@/lib/curriculum';
 
 /** One line, top of every screen: why am I doing this? */
-export function Why({ children, tone = 'route' }: { children: ReactNode; tone?: 'route' | 'recalc' }) {
+export function Why({
+  children,
+  tone = 'route',
+  label = 'Why you are here',
+}: {
+  children: ReactNode;
+  tone?: 'route' | 'recalc';
+  label?: string;
+}) {
   return (
-    <p
-      className={`max-w-[68ch] border-l-2 pl-4 text-[0.95rem] leading-relaxed text-chalk-muted sm:pl-5 ${
+    <div
+      className={`max-w-[68ch] border-l-2 pl-4 sm:pl-5 ${
         tone === 'recalc' ? 'border-recalc' : 'border-route'
       }`}
     >
-      {children}
-    </p>
+      <p className={`t-label ${tone === 'recalc' ? 'text-recalc' : 'text-route'}`}>{label}</p>
+      <p className="mt-1.5 text-[0.95rem] leading-relaxed text-chalk-muted">{children}</p>
+    </div>
+  );
+}
+
+/**
+ * Secondary information, folded away. A learner does not need every caveat at
+ * the moment they are trying to answer something, but the caveat should still
+ * be one click from where it applies rather than deleted.
+ */
+export function Aside({ summary, children }: { summary: string; children: ReactNode }) {
+  return (
+    <details className="group mt-8 max-w-[72ch] border-t border-hairline-soft pt-4">
+      <summary className="t-label flex cursor-pointer list-none items-center gap-2 text-chalk-faint transition-colors hover:text-chalk-muted">
+        <span
+          aria-hidden="true"
+          className="transition-transform duration-200 group-open:rotate-90"
+        >
+          &rsaquo;
+        </span>
+        {summary}
+      </summary>
+      <div className="mt-3 text-[0.85rem] leading-relaxed text-chalk-faint">{children}</div>
+    </details>
   );
 }
 
@@ -58,7 +89,7 @@ export function Choices({
 }) {
   return (
     <div className="mt-9 grid gap-2.5 sm:grid-cols-2" role="group" aria-label={q.prompt}>
-      {q.choices.map((c, i) => {
+      {q.choices.map((c) => {
         const isAnswer = answered === c.id;
         const state = !answered ? 'idle' : isAnswer ? (c.correct ? 'right' : c.unsure ? 'own' : 'wrong') : 'dim';
         return (
@@ -67,8 +98,7 @@ export function Choices({
             type="button"
             disabled={Boolean(answered)}
             onClick={() => onAnswer(c.id)}
-            style={{ animationDelay: `${i * 60}ms` }}
-            className={`rise group relative flex min-h-[92px] items-center justify-between gap-4 border px-5 py-4 text-left transition-[background-color,border-color,opacity] duration-300 ${
+            className={`group relative flex min-h-[92px] items-center justify-between gap-4 border px-5 py-4 text-left transition-[background-color,border-color,opacity] duration-300 ${
               state === 'dim' ? 'opacity-35' : 'opacity-100'
             } ${c.unsure ? 'sm:col-span-2' : ''} ${
               state === 'right'

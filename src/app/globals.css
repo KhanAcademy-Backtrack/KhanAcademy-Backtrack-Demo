@@ -173,6 +173,27 @@ body {
   transition: background-image 900ms linear;
 }
 
+/* While the learner is reading a question or working a widget the map has
+   nothing to say, so it steps back: the lights come down and the field
+   flattens toward the structural floor. It comes back up on the screens that
+   are actually about the route, which is what makes those land. */
+.material-map[data-focus='true'] {
+  background-image:
+    var(--grain),
+    linear-gradient(to right, rgba(120, 170, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 170, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(to right, rgba(120, 170, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 170, 255, 0.018) 1px, transparent 1px),
+    radial-gradient(120% 80% at 8% -10%, rgba(76, 201, 240, 0.05), transparent 60%),
+    radial-gradient(90% 70% at 100% 108%, rgba(56, 232, 176, 0.045), transparent 62%),
+    linear-gradient(175deg, #101a44 0%, var(--color-base) 58%);
+  transition: background-image 900ms linear;
+}
+
+.material-map[data-focus='true'] .drift-slow {
+  animation: none;
+}
+
 /* A quieter variant for long reading sections, so the page has rhythm. */
 .material-field {
   position: relative;

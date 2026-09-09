@@ -298,7 +298,7 @@ export default function EvidencePage() {
             believe.
           </p>
           <Link href="/demo" className="btn btn-primary mt-8">
-            Open the demo
+            Try the demo
             <span aria-hidden="true">→</span>
           </Link>
         </div>

@@ -70,7 +70,7 @@ export function AreaModel({ onComplete }: { onComplete: (done: boolean) => void 
     <div className="material-paper relative px-5 py-7 sm:px-10 sm:py-9">
       <p className="t-label text-ink-muted">Do the multiplication</p>
       <p className="mt-2 max-w-[52ch] text-[0.98rem] leading-relaxed text-ink-muted">
-        Every term on the left has to meet every term on top. Claim each region of the rectangle , 
+        Every term on the left has to meet every term on top. Claim each region of the rectangle,
         including the two that usually get skipped.
       </p>
 

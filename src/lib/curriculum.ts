@@ -407,18 +407,34 @@ export const EXAMPLE = {
   comeback: 'ok',
 };
 
-/* A normaliser, not an evaluator. Nothing typed by a visitor is executed. */
+/* A normaliser, not an evaluator. Nothing typed by a visitor is executed.
+
+   The previous version folded the separators into the same character class as
+   the minus signs, so a comma and a space both became "-": the answer "-4, -5"
+   normalised to "-4---5", found no delimiter, and was rejected. Which meant
+   the destination, the moment the whole demo is built to arrive at, refused
+   the exact format its own help text tells the learner to type.
+
+   The two jobs are now separate. First every dash-shaped character a keyboard
+   or a copy-paste can produce becomes an ASCII minus; then every separator a
+   person might reasonably use becomes a comma. */
 export function checkRoots(raw: string, roots: number[]): boolean {
   const cleaned = raw
     .toLowerCase()
-    .replace(/[−–, ]/g, '-')
-    .replace(/\s+/g, '')
-    .replace(/x=/g, '')
-    .replace(/and|or/g, ',');
-  const parts = cleaned.split(/[,;]+/).filter(Boolean);
+    /* every dash a browser, keyboard or textbook might hand us */
+    .replace(/[−–—‐‑˗－]/g, '-')
+    /* "x = -4", "x1=-4" */
+    .replace(/x\s*\d*\s*=/g, '')
+    /* the ways people write "and" */
+    .replace(/\band\b|\bor\b|&/g, ',')
+    /* anything left that separates two answers */
+    .replace(/[;\s]+/g, ',')
+    .replace(/,+/g, ',');
+
+  const parts = cleaned.split(',').filter(Boolean);
   if (parts.length !== roots.length) return false;
   const got = parts.map(Number);
-  if (got.some((n) => Number.isNaN(n))) return false;
+  if (got.some((n) => !Number.isFinite(n))) return false;
   const want = [...roots].sort((a, b) => a - b);
   const have = [...got].sort((a, b) => a - b);
   return want.every((v, i) => v === have[i]);
