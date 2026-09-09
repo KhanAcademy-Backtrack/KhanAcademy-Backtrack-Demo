@@ -1,5 +1,30 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# build output
+.next/
+out/
+build/
+dist/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# editor / os
 .DS_Store
 Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# working notes kept out of the repo
+.refs/
+
+# vercel
 .vercel
-node_modules/
-*.log
+*.tsbuildinfo
+next-env.d.ts
