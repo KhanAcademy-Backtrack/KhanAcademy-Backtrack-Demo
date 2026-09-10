@@ -21,7 +21,7 @@
    ========================================================================== */
 
 const SUP: Record<string, string> = { '²': '2', '³': '3' };
-const OPS = new Set(['+', '−', '-', '=', '×', '·', '÷', '<', '>', '≤', '≥', '±', '≠', '→']);
+const OPS = new Set(['+', '−', '-', '=', '×', '·', '÷', '<', '>', '≤', '≥', '±', '≠', '→', ':']);
 
 const SPOKEN: Record<string, string> = {
   '+': 'plus',
@@ -40,6 +40,9 @@ const SPOKEN: Record<string, string> = {
   '√': 'the square root of',
   '→': 'yields',
   '/': 'over',
+  ':': 'to',
+  '≤': 'is less than or equal to',
+  '≥': 'is greater than or equal to',
   ',': ',',
 };
 
@@ -103,7 +106,7 @@ export function parse(src: string, roman = false): Node[] {
       continue;
     }
 
-    if (ch === ' ') continue;
+    if (ch === ' ') {if(roman)out.push({t:'space'});continue;}
     if (SUP[ch]) {
       out.push({ t: 'sup', v: SUP[ch] });
       continue;
@@ -121,7 +124,7 @@ export function parse(src: string, roman = false): Node[] {
       continue;
     }
     if (OPS.has(ch)) {
-      out.push({ t: 'op', v: ch });
+      out.push({ t: 'op', v: ch==='-'?'−':ch });
       continue;
     }
     if (/[a-zA-Z]/.test(ch)) {

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { initialRecovery, problemFor, recoveryReducer as reduce, isCorrect, validRecovery, ORDER, TOPICS } from '../src/lib/recovery.ts';
 let clock=100000;
 const act=(s,a)=>reduce(s,{...a,now:++clock});
-const start=(topic='quadratics',budget=60)=>act(initialRecovery(topic),{type:'start',budget,mode:'self'});
+const start=(topic='quadratics',budget=60)=>act({...initialRecovery(topic),problemVersion:2},{type:'start',budget,mode:'self'});
 const answer=(s,correct=true,confidence='unsure')=>act(s,{type:'submit',answers:correct?problemFor(s).expected.map(String):problemFor(s).labels.map(()=>'-999'),confidence});
 const advance=s=>s.phase==='pause'?act(s,{type:'resume'}):act(s,{type:'continue'});
 test('all generated exercises accept mathematics, root order and Unicode minus',()=>{
@@ -36,7 +36,7 @@ test('session budgets change block size without hiding prerequisites',()=>{const
 test('repeated failure offers human support rather than an endless loop',()=>{let s={...start(),active:'zero'};for(let i=0;i<3;i++){s=answer(s,false);if(i<2){s=advance(s);s=act(s,{type:'practice',detail:'other'});}}assert.equal(s.next,'support');});
 test('comeback preserves history but reopens the destination after failure',()=>{let s=advance(answer(advance(answer(start()))));assert.equal(s.phase,'complete');const count=s.evidence.length;s=act(s,{type:'return'});s=answer(s,false);assert.equal(s.goalPassed,false);assert.ok(s.evidence.length>count);assert.ok(!s.passed.includes('goal'));});
 test('corrupted local storage is rejected safely',()=>{assert.equal(validRecovery(null),false);assert.equal(validRecovery({version:1,phase:'check'}),false);assert.equal(validRecovery({...initialRecovery(),planned:['madeup']}),false);assert.equal(validRecovery({...initialRecovery(),serial:Infinity}),false);assert.ok(validRecovery(initialRecovery()));});
-test('fresh exercises have different expressions, and quadratic roots are distinct',()=>{for(const topic of Object.keys(TOPICS))for(const active of ORDER){const seen=new Set();for(let serial=0;serial<120;serial++){const p=problemFor({...initialRecovery(topic),active,serial});assert.ok(!seen.has(p.expression),p.id+' repeated '+p.expression);seen.add(p.expression);if(p.unordered)assert.equal(new Set(p.expected).size,p.expected.length);}}});
+test('fresh exercises have different expressions, and quadratic roots are distinct',()=>{for(const topic of Object.keys(TOPICS))for(const active of ORDER){const seen=new Set();for(let serial=0;serial<120;serial++){const p=problemFor({...initialRecovery(topic),problemVersion:2,active,serial});assert.ok(!seen.has(p.expression),p.id+' repeated '+p.expression);seen.add(p.expression);if(p.unordered)assert.equal(new Set(p.expected).size,p.expected.length);}}});
 test('a new comeback requires two new checks, not the previous comeback answers',()=>{let s=advance(answer(advance(answer(start()))));s=act(s,{type:'return'});s=advance(answer(advance(answer(s))));assert.equal(s.phase,'complete');s=act(s,{type:'return'});s=answer(s);assert.equal(s.phase,'feedback');s=answer(advance(s));assert.equal(s.phase,'moment');});
 test('a demonstrated repair does not force untested foundations into the route',()=>{let s=advance(answer(start(),false));s=advance(answer(s,false,'never'));assert.equal(s.phase,'learn');s=act(s,{type:'practice',detail:'self-reported'});s=answer(advance(answer(s)));assert.equal(s.phase,'moment');assert.equal(s.nextSkill,'zero');assert.ok(!s.planned.includes('distribute'));assert.ok(!s.passed.includes('distribute'));});
 

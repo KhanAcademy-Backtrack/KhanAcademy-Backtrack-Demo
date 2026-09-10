@@ -35,7 +35,7 @@ async function answerCurrent(page,topic){
 }
 try{
  await scenario('mobile palette and navigation',async page=>{
-   await page.goto(origin);await page.getByRole('heading',{name:'Let’s make a start.'}).waitFor();await overflow(page);
+   await page.goto(origin);await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('heading',{name:'What would help you learn today?'}).waitFor();await overflow(page);
    assert.equal(await page.locator('.study-space .button-primary').first().evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(20, 191, 150)');
    assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(10, 42, 102)');
    await page.screenshot({path:path.join(root,'.refs/browser-review/mobile-home.png'),fullPage:true});
@@ -43,13 +43,13 @@ try{
  },{width:390,height:844});
  await scenario('challenge to fresh checks reviewer and return',async page=>{
    await page.goto(origin+'/challenge?code=FQ1');await page.getByLabel('First number',{exact:true}).fill('2');await page.getByLabel('Second number',{exact:true}).fill('6');await page.getByRole('button',{name:'Check this answer',exact:true}).click();
-   await page.getByRole('button',{name:'Try a fresh question'}).click();await page.getByRole('heading',{name:'Find two numbers that add to -10 and multiply to 21.'}).waitFor();
+   await page.getByRole('button',{name:'Try a fresh question'}).click();await page.locator('.question-stage').waitFor();
    assert.equal(await page.getByText('Comeback check',{exact:true}).count(),0);
-   await page.getByRole('textbox',{name:'First factor number',exact:true}).fill('-3');await page.getByRole('textbox',{name:'Second factor number',exact:true}).fill('-7');await page.getByRole('button',{name:'Check my answer'}).click();await page.getByRole('button',{name:'Continue',exact:true}).click();
-   await page.getByRole('textbox',{name:'First factor number',exact:true}).fill('4');await page.getByRole('textbox',{name:'Second factor number',exact:true}).fill('-7');await page.getByRole('button',{name:'Check my answer'}).click();await page.getByRole('button',{name:'Continue my session'}).click();
+   for(let i=0;i<2;i++){const st=await saved(page),r=st.routes.quadratics,p=problemFor(r);for(let j=0;j<p.labels.length;j++)await page.getByRole('textbox',{name:p.labels[j],exact:true}).fill(String(p.expected[j]));await page.getByRole('button',{name:'Check my answer'}).click();if(i===0)await page.getByRole('button',{name:'Continue',exact:true}).click();}
+   await page.getByRole('button',{name:'Continue my session'}).click();
    await page.getByRole('heading',{name:'You used it on fresh problems.'}).waitFor();await page.getByRole('textbox',{name:'Note to future you'}).fill('Check both the sum and the product.');await page.getByRole('button',{name:'Save my note'}).click();
    const before=await saved(page);assert.equal(before.xp,10);assert.equal(Object.keys(before.review).length,1);assert.ok(before.review['skill:factor'].dueAt>Date.now());
-   await page.goto(origin);await page.getByRole('link',{name:'Choose another topic'}).waitFor();await page.getByText('Check both the sum and the product.',{exact:true}).waitFor();await page.reload();
+   await page.goto(origin);await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('link',{name:'Choose another topic'}).waitFor();await page.getByRole('button',{name:'I don’t recall yet'}).click();await page.getByText('Check both the sum and the product.',{exact:true}).waitFor();await page.reload();
    await page.getByRole('link',{name:'Choose another topic'}).waitFor();assert.equal((await saved(page)).xp,10);await page.screenshot({path:path.join(root,'.refs/browser-review/returning-home.png'),fullPage:true});
  });
  await scenario('personal notes draft edit save and recall',async page=>{
@@ -73,8 +73,7 @@ try{
  });
  await scenario('quiz rehearsal can finish without a forced hint',async page=>{
    await page.goto(origin+'/packs');await page.getByRole('button',{name:'Quiz rehearsal',exact:true}).first().click();
-   for(let round=0;round<2;round++){
-     await page.getByRole('button',{name:'I don’t know yet',exact:true}).click();await page.getByRole('button',{name:'Next question'}).click();
+   for(let round=0;round<8;round++){
      await page.getByRole('button',{name:'I don’t know yet',exact:true}).click();await page.getByRole('button',{name:'Continue my session'}).click();
      if(await page.getByRole('heading',{name:'You gave a difficult step some attention.'}).count())break;
    }
@@ -91,7 +90,7 @@ try{
    await page.goto(origin+'/start/motion');
    await page.getByRole('heading',{name:'How much time today?'}).waitFor();
    await page.getByRole('button',{name:'15 min'}).click();
-   await page.getByRole('button',{name:'Find my missing step'}).click();
+   await page.getByRole('button',{name:'Start with a check'}).click();
 
    // A wrong destination answer, honestly uncertain, opens an investigation.
    await page.getByText('Destination check',{exact:true}).waitFor();
@@ -106,7 +105,7 @@ try{
    await overflow(page);
 
    // The original Dunlo lab: predict first, then the visual, then a fresh check.
-   await page.getByRole('button',{name:'Learn this step'}).click();
+   await page.getByRole('button',{name:'Show me an example first'}).click();
    await page.getByRole('button',{name:'See it visually'}).click();
    await page.getByRole('radio',{name:/the 4 m\/s it already had still counts/}).check();
    await page.getByRole('button',{name:'Now show me'}).click();

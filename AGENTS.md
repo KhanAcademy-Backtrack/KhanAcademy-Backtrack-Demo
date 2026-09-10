@@ -37,3 +37,8 @@ Open item for the next session: no Khan Academy chemistry or physics URL could b
 Presentation work stays paused. The "five mathematics areas" framing still needs a later deck pass in `docs/KEIC_WINNING_STRATEGY.md`, `docs/PITCH_AND_QA_PREP.md`, `docs/JUDGE_FINAL_REVIEW.md` and `docs/PITCH_DECK_15_SLIDES.md`.
 
 Attribution: the user has asked that Claude and any other agent never appear as a co-author on commits or pull requests. Do not add `Co-Authored-By` trailers or generated-with footers to anything pushed from this repository.
+
+
+Visual-learning release (11 September 2026): see docs/RELEASE_2026_09_11.md and docs/research/2026-09-11/LEARNING_DESIGN_DECISIONS.md. New maths generators use problemVersion3; preserve v1/v2 and per-attempt versions/expressions. Original MathsLab workspaces, contextual bookmark and first-visit spotlight tour must retain accessible/static/quiet paths. Routing probes are assisted evidence. Same-day repetition must not repeatedly advance spaced review. Quiz coverage receipts retain gaps in shared scope without private notes. Preserve all nine destinations including science. User wants smooth, simple, cute motion and personality that does not compete with thinking. Private ongoing execution checkpoint is .refs/NEXT_RELEASE_ACTIVE.md; never stage it or the original implementation prompt. Current user instructions explicitly authorize presentation work after product work, superseding earlier pauses.
+
+Latest scope: edit only site and documentation for now. Do not edit the Canva presentation or exports until requested again. Keep learning claims provisional until real learner and retention evidence exists.

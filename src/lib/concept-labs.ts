@@ -12,6 +12,7 @@ export function visualKind(s:Recovery):ConceptKind|undefined{
 }
 /** The serials a lab reveals, reserved so an explanation never leaks the next check. */
 export function visualReserveThrough(s:Recovery,kind:ConceptKind){
+ if(s.problemVersion===3&&!isScienceKind(kind))return Math.max(s.serial+2,kind==='fractions'?8:kind==='ratios'?7:2);
  if(kind==='graphs'&&s.active==='coordinates')return Math.floor(s.serial/5)*5+4;
  if(kind==='graphs'&&s.serial===0)return 7;
  if(kind==='ratios'){const size=s.active==='unit_rate'?5:4;return Math.floor(s.serial/size)*size+size-1;}

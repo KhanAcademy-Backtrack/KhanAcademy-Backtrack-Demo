@@ -5,12 +5,12 @@ import {factorComparison,testSolution,replayModel} from '../src/lib/error-replay
 import {routeSummary,importRouteRecord,actionSheetCsv} from '../src/lib/teacher-routine.ts';
 import {clearBacktrackActivity,DEVICE_RESET_KEY} from '../src/lib/device-data.ts';
 const act=(s,a)=>reduce(s,{now:1000,...a});
-const start=()=>act(initialRecovery(),{type:'start',budget:60,mode:'self'});
+const start=()=>act({...initialRecovery(),problemVersion:2},{type:'start',budget:60,mode:'self'});
 
 test('fresh quadratics cover three sign patterns and each solution satisfies the polynomial',()=>{
   const patterns=new Set();
   for(let serial=0;serial<180;serial++)for(const active of ['goal','zero','factor','distribute']){
-    const p=problemFor({...initialRecovery(),serial,active}),[a,b]=p.factorPair;
+    const p=problemFor({...initialRecovery(),problemVersion:2,serial,active}),[a,b]=p.factorPair;
     assert.doesNotMatch(p.expression,/\+ -|− -|− −/);
     assert.notEqual(a,b);
     if(active==='goal'||active==='zero'){
@@ -43,7 +43,7 @@ test('error replay exposes why a tempting pair fails and why one zero factor suf
 test('replay examples remain excluded from fresh checks through reload, pause and return',()=>{
   let s={...start(),active:'factor',serial:1,phase:'learn'};
   s=act(s,{type:'expose-pair',pair:quadraticPair(2)});s=act(s,{type:'expose-pair',pair:quadraticPair(3)});
-  s=act(initialRecovery(),{type:'restore',state:JSON.parse(JSON.stringify(s))});
+  s=act({...initialRecovery(),problemVersion:2},{type:'restore',state:JSON.parse(JSON.stringify(s))});
   s=act(s,{type:'pause'});s=act(s,{type:'resume'});s=act(s,{type:'practice',detail:'interactive-replay'});
   assert.equal(s.serial,4);assert.equal(s.evidence.length,0);assert.deepEqual(s.passed,[]);
   assert.ok(!s.exposedPairs.includes(pairKey(problemFor(s).factorPair)));

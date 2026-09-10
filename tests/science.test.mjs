@@ -306,7 +306,7 @@ test('the pre-existing destination examples still read exactly as they did',()=>
     'x squared plus 7 x plus 12 equals 0',
     '3 open bracket x plus 2 close bracket plus 2 x equals 31',
     'the fraction 2 over 3, end fraction plus the fraction 1 over 4, end fraction',
-    '3 : 24 equals 5 : x',
+    '3 to 24 equals 5 to x',
     'y equals 2 x plus 3',
   ]);
 });

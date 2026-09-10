@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, STIX_Two_Text } from 'next/font/google';
 import './globals.css';
 import './study.css';
 import './palette.css';
+import './maths-labs.css';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import {StudyProvider} from '@/components/study/StudyProvider';
