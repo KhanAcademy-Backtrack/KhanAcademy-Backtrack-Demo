@@ -1,20 +1,27 @@
 # BACKTRACK: 15-slide pitch deck
 
-The opening makes the need visible before asking anyone to try the demo: a learner may be stuck on one step while searching whole lessons. The answer gives BACKTRACK a clue about which check to try, a short Khan repair supports that step, and fresh tasks check the return.
+The opening states the problem and shows the response: check today’s task, practice a missing skill with Khan Academy, and return with a fresh check. The GPS route connects those actions. The first three slides explain the proposal without depending on a live demo.
 
-Exactly 15 slides. The native Canva design is the authoritative editable version. The current PDF is exported from Canva; the PowerPoint is a backup with embedded DM Sans regular and bold. The slides use one font family, a subtle paper texture, native separators, clear flows, and aligned comparisons. Slide 7 is dedicated to the demo, with a clickable button, visible link, and QR.
+The native Canva design is authoritative. This script follows its current PDF export. The 15-slide PDF and editable PowerPoint backup use DM Sans regular and bold. Smooth vector routes, separate editable labels and stops, native comparison cards, and clear separators establish the visual order. Slide 7 is entirely a clickable demo invitation.
 
-## Slide 1: backtrack.
+## Slide 1: Find the missing skill. Get back to today’s lesson.
 
-Make the navigation problem understandable in one glance.
+Explain the learner problem and the complete BACKTRACK response on the opening slide.
 
 ### On-slide copy
 
 - backtrack.
-- Stuck on one step.
-- Lost in whole lessons.
-- Find the step. Get a focused Khan repair. Return to your task.
+- Find the missing skill.
+- Get back to today’s lesson.
+- THE PROBLEM
+- A student gets stuck, but doesn’t know which earlier skill to review.
 - University of the Philippines Manila
+- Check today’s
+- task
+- Practice the missing skill
+- with Khan Academy
+- Return to today’s lesson
+- with a fresh check
 
 ## Slide 2: The search can become the study session
 
@@ -32,43 +39,46 @@ Show how a broad search can miss a specific earlier obstacle.
 - Multiply to 12. Add to 7.
 - BACKTRACK checks the gap before choosing the repair.
 
-## Slide 3: A short repair. A clear way back.
+## Slide 3: How BACKTRACK gets a learner unstuck
 
-Explain the complete recovery loop without relying on a live demonstration.
+Make the full learning sequence easy to follow in four steps.
 
 ### On-slide copy
 
-- A short repair. A clear way back.
+- How BACKTRACK gets a learner unstuck
 - 1
-- Try today’s task
+- Try today’s
+- task
 - 2
-- Find a useful
-- earlier step
+- Check earlier
+- skills
 - 3
-- Learn + practise
-- with Khan
+- Practice with
+- Khan Academy
 - 4
-- Try a fresh
-- current task
-- Your answer shapes the route. The repair fits the missing step.
+- Try it again with
+- fresh numbers
+- Answers choose the next step. Fresh problems check the return.
 
 ## Slide 4: Two wrong answers. Different help.
 
-Show that two wrong answers can point to different starting checks.
+Show how two wrong answers can point to different starting checks.
 
 ### On-slide copy
 
 - Two wrong answers. Different help.
-- Tried x = 3, 4
--  Check signs →  fresh goal
-- Tried x = 2, 6
--  Check factors
--  Fresh goal
-- The mistake points to the starting check.
+- For x² + 7x + 12 = 0
+- x = 3, 4
+- Right pair, wrong signs.
+- Check signs and solutions.
+- x = 2, 6
+- Wrong factor pair.
+- Check product and sum.
+- Return with fresh numbers
 
 ## Slide 5: Khan material, focused on the missing step
 
-Make a focused Khan learning stop concrete.
+Show how a focused Khan segment connects to local practice and the return task.
 
 ### On-slide copy
 
@@ -94,7 +104,7 @@ Make a focused Khan learning stop concrete.
 
 ## Slide 6: Back to the skill that stopped them
 
-Show the fresh return at the original level of difficulty.
+Make the return concrete with a fresh problem at the original level.
 
 ### On-slide copy
 
@@ -106,7 +116,7 @@ Show the fresh return at the original level of difficulty.
 
 ## Slide 7: Try the demo. Watch the route change.
 
-Invite the audience to compare two answers in the interactive sample.
+Invite the audience to compare the two wrong turns in the demo.
 
 ### On-slide copy
 
@@ -114,7 +124,7 @@ Invite the audience to compare two answers in the interactive sample.
 - Compare two wrong answers.
 - See why they get different repairs.
 - Try BACKTRACK
-- backtrack-learning.vercel.app
+- backtrack-learning.vercel.app/demo
 - Scan to start
 - A few sample routes to help you picture BACKTRACK. The full product is still in
 - development.
@@ -149,7 +159,7 @@ Explain lasting recovery in plain language.
 
 ## Slide 9: A five-month school pilot
 
-Show the five-month pilot sequence.
+Show the proposed five-month school sequence.
 
 ### On-slide copy
 
@@ -175,7 +185,7 @@ Show the five-month pilot sequence.
 
 ## Slide 10: Does the route add value?
 
-Compare two practice routines against the same assessments.
+Compare two practice routines using the same assessments.
 
 ### On-slide copy
 
@@ -187,25 +197,25 @@ Compare two practice routines against the same assessments.
 - The same fresh assessments
 - After practice, then 7-14 days later. Similar time and support.
 
-## Slide 11: The route is the reward
+## Slide 11: Skip the review you don’t need.
 
-Show how progress changes the next action.
+Explain how demonstrated knowledge removes unnecessary review.
 
 ### On-slide copy
 
-- The route is the reward
+- Skip the review you don’t need.
 - What the learner does What changes
 - Know the step
--  Skip its review
+- Skip its review
 - Repair a gap
--  Move closer to the goal
+- Move closer to the goal
 - Come back later
--  Keep earlier progress
+- Keep earlier progress
 - Progress changes what you need to do next.
 
 ## Slide 12: One routine. Many learning goals.
 
-Explain how another destination and educator can reuse the routine.
+Show how another destination and educator can reuse the routine.
 
 ### On-slide copy
 
@@ -218,7 +228,7 @@ Explain how another destination and educator can reuse the routine.
 
 ## Slide 13: A budget built around learners
 
-Show the planned budget and priorities.
+Make the budget and its priorities readable.
 
 ### On-slide copy
 
@@ -229,36 +239,36 @@ Show the planned budget and priorities.
 - evaluation
 - Learner access stays free.
 - Allocation
--  PHP
+- PHP
 - Learning review
--  24,000
+- 24,000
 - Access support
--  18,000
+- 18,000
 - Evaluation
--  18,000
+- 18,000
 - Deployment
--  16,000
+- 16,000
 - Product operations
--  8,000
+- 8,000
 - Teacher onboarding
--  8,000
+- 8,000
 - Recruitment content
--  3,000
+- 3,000
 - Contingency
--  5,000
+- 5,000
 - Total
--  100,000
+- 100,000
 - Planning allocation
 
-## Slide 14: backtrack.
+## Slide 14: A route back to today’s lesson.
 
-Resolve the opening problem and introduce the team.
+Resolve the opening problem and identify the team.
 
 ### On-slide copy
 
 - backtrack.
-- A route back to today’s
-- lesson.
+- A route back to
+- today’s lesson.
 - University of the Philippines Manila
 - Matthew Labrador, Paul Recio, Harry Gomez
 - Coach: Justin Mesias

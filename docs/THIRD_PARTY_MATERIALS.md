@@ -27,3 +27,5 @@ The current Canva deck uses DM Sans. Its editable PowerPoint backup embeds DM Sa
 Reviewed the Canva project timeline template at https://www.canva.com/templates/s/timeline/?continuation=750 and the creator’s Canva startup pitch reference at https://morebyus.com/products/animated-startup-pitch-deck-template-canva . The references informed node size, consistent spacing, restrained colour, and clear comparison layouts. No template assets or paid design files were copied into BACKTRACK.
 
 DM Sans font source and license: https://github.com/google/fonts/tree/main/ofl/dmsans . The native Canva export is authoritative; earlier Plus Jakarta Sans exports were superseded.
+
+The GPS route and comparison connectors in the current deck are BACKTRACK-authored SVG graphics. The SVG sources accompany the package; presentation text, cards, and stops remain separate editable Canva elements.

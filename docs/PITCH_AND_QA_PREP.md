@@ -2,57 +2,51 @@
 
 ## One sentence
 
-BACKTRACK helps a learner find a missing step, practice it with Khan Academy, and return to the lesson they need now.
+BACKTRACK helps a learner find a missing skill, practice it with Khan Academy, and return to the lesson they need now.
 
 ## Ten seconds
 
-Stuck on today’s lesson, but unsure what to review? BACKTRACK finds an earlier step, connects it to Khan practice, and checks your way back.
+A student is stuck but doesn’t know what to review. BACKTRACK finds a useful earlier step, guides Khan practice, and checks the return.
 
 ## Thirty seconds
 
-A learner gets stuck on today’s equation and hears “review.” But review what? BACKTRACK checks the steps underneath that goal. If the learner demonstrates one, its review disappears. If they need help, the route connects them to a specific Khan lesson and exercise. Fresh problems check the return. Our proposed school pilot will measure who gets back to the lesson and can still do it 7–14 days later.
+A learner knows which question is stopping them, but may not know which earlier skill needs work. BACKTRACK uses their answer to choose a starting check, offers focused Khan practice, and brings them back to a fresh problem. Two wrong answers can lead to different help. The proposed school pilot will measure who gets back to the lesson and can still do it 7–14 days later.
 
 ## Five-minute pitch script
 
-Use this as a rehearsal script, not words to read from slides. The deck has 15 pages including sources. Rehearse to finish in about 4:45, leaving room for pauses. Keep the live interaction brief and have the static route diagrams ready if connectivity fails.
+Use this as a rehearsal script, not text to read from the slides. Leave time for pauses and a brief interaction. The 15-slide PDF can explain the full proposal when a live demonstration is impractical.
 
-“Picture a learner with one hard homework question and a short study break. They can search the topic and watch a lesson, yet still not know which step is missing. We built BACKTRACK to make that next decision easier.
+“A student gets stuck on today’s math and is told to review. They can find a whole lesson, but which earlier step actually needs work? BACKTRACK makes that decision easier.
 
-A GPS keeps your destination while recalculating the route. BACKTRACK starts with the task the learner needs now and looks for a useful place to work.
+The idea is a GPS for learning. The destination is the lesson the student needs now. The route goes back to a useful earlier skill, gives that skill some focused practice, then returns to the destination.
 
-Now imagine a learner looking at this quadratic equation. Their class is already here. Something underneath it stopped making sense. The advice is to review. But review what?
+Consider this quadratic equation. The difficulty may come from finding factors, multiplying brackets, or turning factors into solutions. A broad search for quadratics does not tell the learner which of those steps to work on first.
 
-The difficulty could be finding factors. It could be multiplying brackets. It could be knowing that each factor can equal zero. Giving every learner the same review ignores those differences.
+BACKTRACK begins with the task and the learner’s answer. Imagine two answers: three and four, or two and six. Both are wrong as solutions to this equation, but they give different clues. The first pair fits the factors and points us toward signs and solutions. The second points us toward checking the factor pair.
 
-BACKTRACK starts with the destination. A learner or teacher chooses the goal they need now. Their answer can give a wrong-turn clue. For the same quadratic, one learner may have the right factor numbers but the wrong signs, while another has the wrong pair. Those answers lead to different starting checks. The route explains the choice and tests it.
+Those answers lead to different starting checks. The route explains the choice. When the learner demonstrates a step, its review can leave the route. When a step needs work, BACKTRACK opens a small learning stop: one idea, a worked example, and a chance to try it.
 
-That is our first product moment: the reward is less unnecessary review. We don’t invent minutes saved. Two fresh answers can remove an actual review stop. A learner who needs a repair gets a different reward: they can demonstrate something they couldn’t demonstrate before.
+Khan Academy supplies the learning resources. The factoring stop includes a ninety-four-second segment about matching a sum and product, with an option to continue watching. The learner can also work through the concept and practice directly inside BACKTRACK. Fresh problems then check whether they can return to the goal.
 
-The learning stop is small and specific: one idea, a worked example, then a chance to try it. Official Khan videos play the relevant segment, with an option to continue. Original Khan exercises support further practice. Fresh BACKTRACK checks bring the learner back to the goal.
+Slide seven invites you to try it. Click the button or scan the code, compare the two wrong answers, and see why they get different help. The five sample destinations include quadratics, brackets, fractions, ratios, and reading graphs.
 
-The next slide invites you to try the demo. Click the button or scan the code. Try each of the two wrong answers and see why they get different starting checks.
+The school question is simple: can learners who were stuck complete a fresh task after practice, and still do it a week or two later? We call that retained reentry. We will report the return among learners who began unable to complete the goal, including those who do not finish.
 
-The destination then comes back into focus. The learner tries a fresh current-level task. That gives us a clear question to test in school: did this route help them return, and did that return last?
+From November 2026 through March 2027, we propose eighty to one hundred twenty learners across two or three cohorts. Teachers will confirm the destinations and assessments, share the relevant route, and assign the matched practice in their existing Khan classes. The routine fits recurring study, remediation, or laboratory time.
 
-Our signature measure is retained reentry. Among learners initially blocked at the selected destination, how many pass a fresh post-route assessment and still pass a parallel task seven to fourteen days later? The denominator includes every eligible learner enrolled in the evaluation. Missing follow-up will be visible.
+We will compare the BACKTRACK-supported routine with teacher-selected Khan practice using similar time and support. Both will receive fresh assessments after practice and again seven to fourteen days later. We will also record repeated Khan use, learner frustration, teacher effort, and actual costs.
 
-From November through March, we propose eighty to one hundred twenty learners across two or three cohorts, subject to school agreements, permissions, and access. Teachers will confirm the maps and assessments. A recurring lab, remediation, or homework window will fit the school’s routine.
+Progress gives learners a reason to continue. A checked step removes unnecessary review. A repair moves them closer to the goal. A later visit preserves earlier work. Short sessions can pause without forcing a restart.
 
-We want a fair comparison: the BACKTRACK workflow against teacher-selected Khan practice, with similar time and support. Where feasible, a randomized delayed start lets both groups receive the route while preserving a comparison window. If that design isn’t possible, we’ll report feasibility rather than pretend a pre-and-post change proves causation.
+The same routine can grow through a destination kit: the goal, reviewed skill map, checks, matched Khan material, and facilitator guide. Another educator should be able to run that kit and tell us where it needs improvement.
 
-The route is also the reward. Knowing a step means its review can leave the route. Learning a new step means a visible gap closes. Coming back later means continuing with earlier work saved. That is a practical reason to keep learning: progress changes what you need to do next.
+Our one-hundred-thousand-peso implementation scenario prioritizes learning design, access, school delivery, and evaluation. Learner access stays free. Measured costs and conversations with institutional budget owners will guide continuation.
 
-The replication unit is a destination kit: the goal, reviewed map, checks, Khan material, return assessments, and facilitator guide. We will ask a second educator to use it and measure how much help they need.
-
-A one-hundred-thousand-peso implementation scenario prioritizes learning review, access, school deployment, and evaluation. Learner access stays free. We will measure costs and interview actual budget owners before inventing a school price.
-
-We are the University of the Philippines Manila BACKTRACK team. Our next step is to run this recovery routine with schools and measure the return.
-
-By March, we want to show more than another account created. We want a learner who found a route back to today’s lesson, and evidence that the learning stayed.”
+We are the University of the Philippines Manila BACKTRACK team. We want students to leave a stuck moment with a useful next step, and a clear route back to today’s lesson.”
 
 ## Demonstration rehearsal
 
-Open the deployed /demo route before the slot. Tap the sample 3 and 4: the route starts with signs and solutions. Replay and try 2 and 6: the route starts with factor pairs. Continue and open the matching short Khan repair. Do not manufacture a real learner story. Use the static deck to show later states if time is short. The app’s working answer-driven path is distinct from pilot evidence.
+Open https://backtrack-learning.vercel.app/demo before the slot. Tap 3 and 4, then open the repair: the route starts with signs and solutions. Replay and try 2 and 6: it starts with factor pairs. Show the local concept or focused Khan segment, then point to the fresh return. Use the static deck for later states if the slot is short. Present the interaction as the sample it is.
 
 ## Hostile questions and answers
 

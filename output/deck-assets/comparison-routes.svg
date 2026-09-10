@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1152" height="94" viewBox="0 0 1152 94">
+  <title>Two starting checks return to the same learning goal</title>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M264 0 C264 46 480 57 576 57 M888 0 C888 46 672 57 576 57 M576 57 V82" stroke="#ffffff" stroke-width="10"/>
+    <path d="M264 0 C264 46 480 57 576 57" stroke="#087e70" stroke-width="4"/>
+    <path d="M888 0 C888 46 672 57 576 57" stroke="#c96331" stroke-width="4"/>
+    <path d="M576 57 V82 M568 74 L576 82 L584 74" stroke="#5753fa" stroke-width="4"/>
+  </g>
+</svg>

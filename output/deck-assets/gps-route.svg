@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="150" viewBox="0 0 1020 150">
+  <title>BACKTRACK recovery route</title>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 50 C155 50 175 140 440 140 C680 140 635 20 880 20 L1000 20" stroke="#ffffff" stroke-width="13"/>
+    <path d="M20 50 C155 50 175 140 440 140 C680 140 635 20 880 20" stroke="#c96331" stroke-width="7"/>
+    <path d="M880 20 H1000 M986 9 L1000 20 L986 31" stroke="#087e70" stroke-width="7"/>
+  </g>
+</svg>

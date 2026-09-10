@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,re,html,hashlib,sys
+import json,re,html,hashlib,sys,argparse
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -9,6 +9,11 @@ from reportlab.lib.utils import ImageReader
 from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,KeepTogether,PageBreak
 from reportlab.lib.pagesizes import A4
 from pypdf import PdfReader
+
+parser=argparse.ArgumentParser(description='Build support PDFs while preserving the Canva deck.')
+parser.add_argument('--only',nargs='+',help='Build only these document stems, such as PITCH_AND_QA_PREP.')
+parser.add_argument('--include-backup-deck',action='store_true',help='Explicitly replace the Canva PDF with the older local backup design.')
+args=parser.parse_args()
 
 root=Path(__file__).resolve().parents[1]; out=root/'output'/'pdf';out.mkdir(parents=True,exist_ok=True)
 fonts=root/'.refs'/'fonts'
@@ -58,19 +63,21 @@ def markdown_pdf(p):
     flush();write_doc(('DECK_BUILD_NOTES' if p.stem=='PITCH_DECK_15_SLIDES' else p.stem)+'.pdf',title,flow)
 
 docs=['SUBMISSION_CHECKLIST','SUBMISSION_COPY','KEIC_WINNING_STRATEGY','COMPETITOR_STRESS_TEST','PITCH_DECK_15_SLIDES','PILOT_IMPLEMENTATION_PLAN','MEASUREMENT_AND_EVALUATION','BUSINESS_AND_SUSTAINABILITY','VALIDATION_BEFORE_SUBMISSION','CLAIMS_AND_SOURCES_LEDGER','PITCH_AND_QA_PREP','THIRD_PARTY_MATERIALS','JUDGE_FINAL_REVIEW']
+if args.only and set(args.only)-set(docs):parser.error('Unknown document stem: '+', '.join(sorted(set(args.only)-set(docs))))
 for name in docs:
+    if args.only and name not in args.only:continue
     p=root/'docs'/f'{name}.md'
     if p.exists():markdown_pdf(p)
 
 submission=json.loads((root/'docs'/'submission.json').read_text(encoding='utf-8-sig'))
-for i,section in enumerate(submission['sections']):
+for i,section in enumerate(submission['sections'] if not args.only else []):
     name=re.sub(r'[^A-Za-z0-9]+','_',section['name']).strip('_')
     wc=len(' '.join(section['paragraphs']).split())
     flow=[Paragraph(inline(section['name']),styles['title']),Paragraph(f'BACKTRACK: Your GPS for Learning<br/>University of the Philippines Manila<br/>{wc} words · Maximum 300 words',styles['note'])]
     flow += [Paragraph(inline(p),styles['field']) for p in section['paragraphs']]
     write_doc(f'ANSWER_{i+1:02}_{name}.pdf',section['name'],flow)
 
-layout=json.loads((root/'.refs'/'deck-build'/'deck-layout.json').read_text(encoding='utf-8')) if '--include-backup-deck' in sys.argv else []
+layout=json.loads((root/'.refs'/'deck-build'/'deck-layout.json').read_text(encoding='utf-8')) if args.include_backup_deck else []
 # The authoritative deck is exported from Canva. Rebuild the local backup only explicitly.
 if layout:
     deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('BACKTRACK · KEIC 2026');c.setAuthor('University of the Philippines Manila BACKTRACK team')
