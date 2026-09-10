@@ -49,3 +49,4 @@ html, body { color: var(--brand-navy); background: var(--brand-white); }
 .fraction-strip.second>span { border-color: #94a9c8; }
 ::selection { background: #b8eee0; color: var(--brand-navy); }
 .about-university-logo { display:block; max-width:100%; height:auto; width:360px; margin:24px 0; }
+@media(min-width:781px){.pack-library .pack-khan-resources>div{min-height:76px}}

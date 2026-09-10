@@ -1,4 +1,4 @@
-import type {Problem} from './recovery.ts';
+import type {Problem,Confidence} from './recovery.ts';
 export type Challenge={code:string;family:'factors'|'fractions'|'ratios';audience:string;hook:string;title:string;question:Problem;khanId:string;insight:string};
 const templates={
  factors:{expression:'x² + 7x + 12',prompt:'Which two numbers belong inside the factors?',labels:['First number','Second number'],expected:[3,4],unordered:true,hint:'Match the sum and the product.',explanation:'3 + 4 = 7, and 3 × 4 = 12. Both conditions must match.',factorPair:[3,4] as [number,number]},
@@ -21,3 +21,10 @@ const entries:[string,Challenge['family'],string,string,string][]=[
 ];
 export const CHALLENGES:Challenge[]=entries.map(([code,family,audience,hook,title])=>({code,family,audience,hook,title,question:{id:`source:${code}`,...templates[family]},khanId:family==='factors'?'factor-quadratics':family==='fractions'?'unlike-fractions':'unit-rates',insight:templates[family].explanation}));
 export const findChallenge=(code:string)=>CHALLENGES.find(c=>c.code===code.trim().toUpperCase());
+
+export function challengeNextStep(confidence:Confidence,correct:boolean,unknown:boolean):{mode:'learn'|'review'|'challenge';reason:string}{
+ if(confidence==='forgot'||confidence==='never')return {mode:'learn',reason:confidence==='forgot'?'You asked for a refresher. Start with the idea, then try it.':'Start with an explanation, then find what you can do with it.'};
+ if(unknown)return {mode:'review',reason:'A short starting check will help us choose useful support.'};
+ if(!correct&&confidence==='know')return {mode:'challenge',reason:'A contrasting example checks the step that felt familiar.'};
+ return correct?{mode:'challenge',reason:'Use the idea on fresh numbers.'}:{mode:'review',reason:'A fresh check will help decide which step to work on.'};
+}

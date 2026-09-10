@@ -40,6 +40,6 @@ export function HomeExperience(){
       </figure>
       <div className="hero-response" role="status">{answer==='right'?<><strong>3 × 4 = 12. 3 + 4 = 7.</strong><span>One fresh check can help confirm whether you need this review.</span></>:answer==='gap'?<><strong>{choice==='unsure'?'Start with a short factor review.':'2 × 6 = 12, but 2 + 6 = 8.'}</strong><span>Check this possible gap, then get the explanation you need.</span></>:<span>Choose an answer above to see the route change.</span>}</div>{answer&&<Link className="hero-next-link" href={answer==='right'?'/try/factors':'/demo?turn=factors'}>{answer==='right'?'Try a fresh check ↗':'Show me the next step ↗'}</Link>}
     </div>
-    <div className="home-bottom"><span>BACKTRACK finds the next step.</span><a className="khan-attribution" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer"><span>Learning resources from</span><img src="/khan-academy.svg" alt="Khan Academy" width="176" height="28"/></a><Link href="/how-it-works">See the loop ↗</Link></div>
+    <div className="home-bottom"><span>Dunlo finds the next step.</span><a className="khan-attribution" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer"><span>Learning resources from</span><img src="/khan-academy.svg" alt="Khan Academy" width="176" height="28"/></a><Link href="/how-it-works">See the loop ↗</Link></div>
   </section>;
 }

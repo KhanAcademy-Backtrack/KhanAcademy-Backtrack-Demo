@@ -5,6 +5,7 @@ import {initialRecovery,recoveryReducer as reduce,problemFor,validRecovery} from
 import {KHAN_ENTRIES,resolveKhanUrl} from '../src/lib/khan-entry.ts';
 import {loadStudy,readStudyImport,restoreStudy} from '../src/lib/study-storage.ts';
 import {cardsFromNotes,noteSections,suggestedTopics,validStudyCard} from '../src/lib/study-cards.ts';
+import {challengeNextStep} from '../src/lib/challenges.ts';
 const now=Date.UTC(2026,8,10,8);let clock=now;
 const act=(s,a)=>reduce(s,{now:++clock,...a});
 const answer=s=>act(s,{type:'submit',answers:problemFor(s).expected.map(String),confidence:'unsure'});
@@ -89,4 +90,15 @@ test('first Khan study is not called a comeback and independent return clears it
 test('two differently named shared packs with the same topics keep distinct identities',()=>{
  const a=parseSharedPack(new URLSearchParams({scope:'quadratics',title:'Friday quiz'}));const b=parseSharedPack(new URLSearchParams({scope:'quadratics',title:'Study circle'}));
  assert.notEqual(a.id,b.id);assert.equal(a.id,parseSharedPack(new URLSearchParams({scope:'quadratics',title:'Friday quiz'})).id);
+});
+
+test('challenge confidence and unknown responses choose useful support without claiming a skill',()=>{
+ const state=initialStudy(),pack=packFromKhan(KHAN_ENTRIES[0]);
+ for(const confidence of ['know','unsure','forgot','never']){
+  const choice=challengeNextStep(confidence,false,true),plan=planSession(state,pack,5,choice.mode,now),route=prepareRound(state,plan.tasks[0],now);
+  assert.equal(route.phase,['forgot','never'].includes(confidence)?'learn':'check');assert.equal(route.goalPassed,false);assert.equal(route.evidence.length,0);assert.equal(state.xp,0);
+ }
+ assert.equal(challengeNextStep('know',false,false).mode,'challenge');
+ const event={kind:'challenge_attempt',at:now,detail:'FQ1:unknown',confidence:'unsure',response:'unknown'};
+ assert.ok(validStudy({...state,events:[event]}));assert.equal(validStudy({...state,events:[{...event,confidence:'genius'}]}),false);
 });

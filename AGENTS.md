@@ -23,3 +23,5 @@ Latest visual direction (10 September): user supplied the exact Khan palette —
 Handoffs requested by the user belong directly in the chat. Keep durable working notes too, but do not substitute a Drive link for the requested handoff text. Never claim unfinished or untested expanded features are complete.
 
 Companion expression: user likes the blinking/closing eyes. Keep that animation, use a clear friendly smile, and omit the straight decorative line below the mouth that made the expression look stern.
+
+Latest learner UX requirements: keep “How does this feel?” and all four confidence choices visible, with no accordion. “I don’t know yet” must be available in the challenge entry as well as the recovery checks; these responses should guide support, not award learning evidence. Align pack-card sections and actions across desktop columns despite unequal copy. Use Dunlo consistently in learner-facing copy. Public address is now https://dunlo.vercel.app/; the same Vercel project was renamed to dunlo (same project ID). Update current slides, QR codes and deliverable links to this address.
