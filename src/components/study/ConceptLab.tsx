@@ -3,8 +3,13 @@ import {useEffect,useRef,useState} from 'react';
 import {MathText} from '@/components/math/Math';
 import {GraphBoard} from '@/components/product/GraphBoard';
 import {problemFor,type Recovery} from '@/lib/recovery';
-import {visualReserveThrough} from '@/lib/concept-labs';
-export function ConceptLab({kind,onContinue,state,onExpose}:{kind:'fractions'|'ratios'|'graphs'|'brackets';onContinue:()=>void;state?:Recovery;onExpose?:(serial:number)=>void}){
+import {visualReserveThrough,isScienceKind,type ConceptKind} from '@/lib/concept-labs';
+import {ScienceLab,type ScienceKind} from './ScienceLab';
+export function ConceptLab({kind,onContinue,state,onExpose}:{kind:ConceptKind;onContinue:()=>void;state?:Recovery;onExpose?:(serial:number)=>void}){
+ if(isScienceKind(kind))return <ScienceLab kind={kind as ScienceKind} onContinue={onContinue} state={state} onExpose={onExpose} reserve={state?visualReserveThrough(state,kind):undefined}/>;
+ return <ConceptLabMaths kind={kind} onContinue={onContinue} state={state} onExpose={onExpose}/>;
+}
+function ConceptLabMaths({kind,onContinue,state,onExpose}:{kind:ConceptKind;onContinue:()=>void;state?:Recovery;onExpose?:(serial:number)=>void}){
  const [matched,setMatched]=useState(false),[quantity,setQuantity]=useState(5),[x,setX]=useState(2),[slow,setSlow]=useState(false);const exposed=useRef(false);
  useEffect(()=>{if(exposed.current||!state)return;exposed.current=true;onExpose?.(visualReserveThrough(state,kind));},[kind,state,onExpose]);
  const p=state?problemFor(state):undefined;

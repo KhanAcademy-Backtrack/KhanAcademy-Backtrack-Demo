@@ -24,3 +24,39 @@
 @media(min-width:781px){.pack-library>article{display:grid;grid-template-rows:subgrid;grid-row:span 8;row-gap:0}.pack-library>article>.pack-artwork,.pack-library>article>h2,.pack-library>article>ul,.pack-library>article>.pack-actions{align-self:start}.pack-library>article>.pack-khan-resources{margin-top:4px}.pack-library>article>label{align-self:end}.pack-library .pack-notes{margin:16px 0}.pack-library>article>p{margin:0}}
 @media(max-width:780px){.confidence-visible{display:grid;grid-template-columns:1fr 1fr}.confidence-visible legend{font-size:13px}.confidence-visible button{font-size:12px;padding:10px 8px}.confidence-visible button[aria-pressed=true]{padding:9px 7px}.source-challenge .question-actions{gap:13px}.source-challenge .question-actions .button-primary{width:100%;justify-content:center}}
 .study-backups{grid-column:1/-1;border-top:1px solid #dbe6df;padding-top:16px;font-size:13px}.study-backups summary{cursor:pointer;min-height:40px;color:#0a2a66}.study-backups>div{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:8px 0}.study-backups .button-text{white-space:nowrap}.study-backups>p{font-size:12px;margin:8px 0}
+
+/* Chemistry and physics guides. Original drawings, palette colours only. */
+.science-lab .lab-predict fieldset{border:0;padding:0;margin:0;min-width:0}
+.science-lab .lab-predict legend{font-size:16px;line-height:1.5;color:#0a2a66;font-weight:600;margin-bottom:12px}
+.science-lab .lab-predict label{display:flex;align-items:flex-start;gap:11px;min-height:44px;padding:6px 0;font-size:14px;color:#0a2a66}
+.science-lab .lab-predict input{width:20px;height:20px;margin-top:2px;accent-color:#0a2a66;flex:none}
+.lab-step{font-size:12px!important;letter-spacing:.06em;text-transform:uppercase;color:#475e7c!important;font-weight:700}
+.lab-predict-result{border-left:2px solid #14bf96;padding-left:13px}
+.lab-predict .button-secondary{margin-top:14px;font-size:13px}
+.lab-equation{background:#fff;border:1px solid #d9e7e0;border-radius:9px;padding:16px 14px;margin:18px 0;overflow-x:auto}
+.lab-equation .math{white-space:nowrap}
+.concept-invariant{border-left:3px solid #14bf96;padding-left:14px;font-size:14px!important;color:#0a2a66!important;font-weight:600;margin:18px 0!important}
+.balance-figure,.moles-figure,.track-figure,.forces-figure{display:block;width:100%;height:auto;max-width:420px;margin:18px 0}
+.lab-steppers{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0}
+.lab-stepper{flex:1 1 132px;min-width:0}
+.lab-stepper>span{display:block;font-size:12px;color:#475e7c;margin-bottom:7px}
+.lab-stepper>div{display:flex;align-items:stretch;border:2px solid #9ab3d6;border-radius:6px;overflow:hidden;background:#fff}
+.lab-stepper button{min-width:44px;min-height:44px;border:0;background:#eff5fc;color:#0a2a66;font-size:19px}
+.lab-stepper button:disabled{color:#9ab3d6}
+.lab-stepper output{flex:1;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600;color:#0a2a66;min-width:44px}
+.atom-ledger{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 4px}
+.atom-ledger caption{text-align:left;font-size:12px;color:#475e7c;padding-bottom:8px}
+.atom-ledger th,.atom-ledger td{border-bottom:1px solid #dbe6df;padding:9px 6px;text-align:left;color:#0a2a66}
+.atom-ledger thead th{font-size:12px;color:#475e7c;font-weight:600}
+.atom-ledger tbody tr[data-match=false] td{color:#a64613;font-weight:700}
+.lab-readout{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.lab-readout>div{flex:1 1 96px;border:1px solid #d9e7e0;border-radius:9px;background:#fff;padding:12px 10px}
+.lab-readout dt{font-size:11px;color:#475e7c;margin-bottom:5px}
+.lab-readout dd{margin:0;font-size:17px;font-weight:600;color:#0a2a66}
+.science-lab .fine-print{margin-top:14px}
+.builder-subjects{display:flex;flex-wrap:wrap;gap:20px}
+.builder-subjects fieldset{flex:1 1 170px;min-width:0}
+.manual-review-group h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#475e7c;margin:16px 0 8px}
+.manual-review-group>div{display:flex;flex-wrap:wrap;gap:9px}
+.pack-artwork.artwork-chemistry text,.pack-artwork.artwork-physics text{font-family:var(--font-math)}
+@media(max-width:780px){.lab-equation{padding:13px 11px}.lab-equation .math{font-size:1.25rem}.lab-steppers{gap:10px}.lab-stepper{flex:1 1 108px}.atom-ledger{font-size:12px}.lab-readout dd{font-size:15px}.builder-subjects{gap:14px}}
