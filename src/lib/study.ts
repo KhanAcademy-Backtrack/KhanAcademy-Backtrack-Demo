@@ -70,7 +70,8 @@ export function planSession(s:StudyState,pack:Pack,minutes:number,mode:RoundMode
   const preparing=Number.isFinite(testAt)&&testAt>=now&&testAt-now<=3*DAY;
   if(preparing&&mode!=='learn')add(topics[0],origin?.skill??'goal','challenge','A fresh application from your upcoming quiz scope.');
   if(mode==='review'&&due[0])add(due[0].topic,due[0].skill,'review','A scheduled fresh look at an earlier step.');
-  for(const topic of topics){const skill=origin?.skill??(mode==='challenge'?'goal':TOPICS[topic].path.find(x=>(s.review[skillKey(topic,x)]?.streak??0)<2)??'goal');add(topic,skill,mode,mode==='learn'?'Start with an explanation, then use the idea.':mode==='challenge'?'Apply the idea on a fresh problem.':'Work toward the topics in this pack.');}
+  const bridge:Partial<Record<Skill,string>>={expand:'Distributing to every term will help with equations in this pack.',factor:'A matching factor pair helps you find the roots of a quadratic.',zero:'Connect each factor to the value that makes it zero.',equivalent:'Equal-sized units will let you add these fractions.',coordinates:'Read the axes before connecting a point to its rule.',unit_rate:'Finding the amount for one makes it possible to scale the quantity.'};
+  for(const topic of topics){const skill=origin?.skill??(mode==='challenge'?'goal':TOPICS[topic].path.find(x=>(s.review[skillKey(topic,x)]?.streak??0)<2)??'goal');add(topic,skill,mode,mode==='learn'?`${bridge[skill]??'A useful starting point for this pack.'} Start with an example.`:mode==='challenge'?'Apply the idea on a fresh problem.':bridge[skill]??'A useful starting point for this pack.');}
   if(mode==='review')for(const x of due.slice(1))add(x.topic,x.skill,'review','Another earlier step kept within reach.');
   return {id:`session-${now}`,packId:pack.id,minutes,tasks:tasks.slice(0,limit),deferred:Math.max(0,tasks.length-limit),startedAt:now,lastAt:now,index:0,complete:false,rewarded:false,difficultyAdjusted:false};
 }
