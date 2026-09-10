@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {problemFor} from '../src/lib/recovery.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const origin='http://127.0.0.1:3050';
@@ -21,6 +22,17 @@ async function scenario(name,run,viewport={width:1280,height:850}){
 }
 const saved=page=>page.evaluate(()=>JSON.parse(localStorage.getItem('backtrack.study.v1')||'null'));
 const overflow=async page=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Horizontal page overflow');
+/** The live route from local storage, so the science journey answers the problem actually on screen. */
+const routeOf=(page,topic)=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)||'null'),`backtrack.route.v1.${topic}`);
+async function answerCurrent(page,topic){
+  const p=problemFor(await routeOf(page,topic));
+  for(let i=0;i<p.labels.length;i++){
+    const unit=p.fields?.[i]?.unit,name=unit?`${p.labels[i]} in ${unit}`:p.labels[i];
+    await page.getByRole('textbox',{name,exact:true}).fill(String(p.expected[i]));
+  }
+  await page.getByRole('button',{name:'Check my answer'}).click();
+  return p;
+}
 try{
  await scenario('mobile palette and navigation',async page=>{
    await page.goto(origin);await page.getByRole('heading',{name:'Let’s make a start.'}).waitFor();await overflow(page);
@@ -74,6 +86,84 @@ try{
    await page.getByLabel('Teaching week').selectOption('1');assert.equal(await page.locator('.teacher-learner').count(),3);
    await page.getByLabel('Current class goal').selectOption('fractions');assert.equal(await page.locator('.teacher-learner').count(),0);
    await page.getByLabel('Current class goal').selectOption('quadratics');assert.equal(await page.locator('.teacher-learner').count(),3);
+ });
+ await scenario('a physics destination routes into a repair, a lab, then fresh checks and a rematch',async page=>{
+   await page.goto(origin+'/start/motion');
+   await page.getByRole('heading',{name:'How much time today?'}).waitFor();
+   await page.getByRole('button',{name:'15 min'}).click();
+   await page.getByRole('button',{name:'Find my missing step'}).click();
+
+   // A wrong destination answer, honestly uncertain, opens an investigation.
+   await page.getByText('Destination check',{exact:true}).waitFor();
+   const goal=problemFor(await routeOf(page,'motion'));
+   assert.equal(goal.fields[0].unit,'m/s','the unit belongs beside the box, not inside it');
+   await page.getByRole('textbox',{name:'Final speed in m/s',exact:true}).fill('1');
+   await page.getByRole('button',{name:'I’m unsure'}).click();
+   await page.getByRole('button',{name:'Check my answer'}).click();
+   await page.getByRole('button',{name:'Continue',exact:true}).click();
+   await page.locator('.question-stage').waitFor();
+   assert.equal(await page.locator('.question-meta .eyebrow').innerText(),'UNIT CONVERSION','the goal miss opens the unit-conversion prerequisite');
+   await overflow(page);
+
+   // The original Dunlo lab: predict first, then the visual, then a fresh check.
+   await page.getByRole('button',{name:'Learn this step'}).click();
+   await page.getByRole('button',{name:'See it visually'}).click();
+   await page.getByRole('radio',{name:/the 4 m\/s it already had still counts/}).check();
+   await page.getByRole('button',{name:'Now show me'}).click();
+   await page.getByRole('heading',{name:'Acceleration is speed added, second by second.'}).waitFor();
+   await page.getByRole('button',{name:'Increase seconds'}).click();
+   assert.match(await page.locator('.concept-invariant').innerText(),/final speed is/);
+   assert.equal(await page.locator('.science-lab .track-figure').getAttribute('role'),'img');
+   await page.screenshot({path:path.join(root,'.refs/browser-review/science-lab.png'),fullPage:true});
+   await page.getByRole('button',{name:'Use the idea on a fresh check'}).click();
+
+   // Two fresh, unassisted answers on problems the lab never showed.
+   const seen=new Set();
+   for(let i=0;i<2;i++){
+     const p=await answerCurrent(page,'motion');
+     assert.ok(!seen.has(p.expression),'a revealed problem came back as a fresh check');
+     seen.add(p.expression);
+     if(i===0)await page.getByRole('button',{name:'Continue',exact:true}).click();
+   }
+   await page.getByText('New capability',{exact:true}).waitFor();
+
+   const data=await saved(page);
+   const item=data.review['skill:unit_convert'];
+   assert.ok(item,'the science step reaches the reviewer');
+   assert.equal(item.topic,'motion');
+   assert.equal(item.streak,2);
+   assert.ok(item.dueAt>Date.now(),'two fresh checks earn a future review date');
+   assert.ok(!data.review['motion:goal']?.independentAt,'the destination is not passed off the back of a prerequisite');
+
+   // The step is waiting in the reviewer, and a Rematch opens a fresh version.
+   await page.goto(origin+'/review');
+   const card=page.locator('.review-grid article').filter({has:page.getByRole('heading',{name:'Unit conversion',exact:true})});
+   await card.getByRole('button',{name:/Rematch/}).click();
+   await page.locator('.question-stage').waitFor();
+   assert.equal(await page.getByRole('heading',{name:goal.prompt}).count(),0,'a rematch is a fresh version, not the old one');
+   await overflow(page);
+ });
+ await scenario('science destinations, packs and class options are grouped by subject',async page=>{
+   await page.goto(origin+'/start');
+   for(const heading of ['Mathematics','Chemistry','Physics'])await page.getByRole('heading',{name:heading,exact:true}).waitFor();
+   assert.equal(await page.locator('.destination-option').count(),9);
+   await page.getByRole('link',{name:/Balancing equations/}).click();
+   await page.getByRole('heading',{name:'How much time today?'}).waitFor();
+   await overflow(page);
+   await page.goto(origin+'/packs');
+   await page.getByRole('heading',{name:'Counting in chemistry',exact:true}).waitFor();
+   await page.getByRole('heading',{name:'Motion and forces',exact:true}).waitFor();
+   const rows=await page.locator('.pack-library>article').evaluateAll(cards=>cards.map(c=>c.children.length));
+   assert.deepEqual([...new Set(rows)],[8],'a pack card must keep its eight children for the desktop subgrid');
+   await page.goto(origin+'/schools');
+   assert.deepEqual(await page.getByLabel('Current class goal').locator('optgroup').evaluateAll(g=>g.map(x=>x.label)),['Mathematics','Chemistry','Physics']);
+   // Balancing has no hand-verified Khan exercise on either of its steps, and says so.
+   await page.getByLabel('Current class goal').selectOption('balancing');
+   await page.getByText('No reviewed Khan Academy exercise is matched to this goal yet.',{exact:false}).waitFor();
+   // A physics goal still reaches matched Khan practice through its mathematics prerequisite.
+   await page.getByLabel('Current class goal').selectOption('forces');
+   await page.getByRole('link',{name:/Evaluate expressions/}).waitFor();
+   await overflow(page);
  });
  await scenario('group turns do not become personal mastery',async page=>{
    await page.goto(origin+'/together');await page.getByRole('textbox',{name:'Who is at the study table?'}).fill('Ana, Ben');await page.getByRole('button',{name:'Start taking turns'}).click();await page.getByRole('heading',{name:'Ana’s turn.'}).waitFor();
