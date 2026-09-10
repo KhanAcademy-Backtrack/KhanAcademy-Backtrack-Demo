@@ -96,3 +96,14 @@ h1,h2,h3{font-family:var(--font-sans);font-weight:700;letter-spacing:-.035em}em{
 .home-map>.hero-response{border-top:1px solid #dfe5ef;margin:8px 0 0;padding-top:16px;min-height:74px;font-size:.85rem;line-height:1.6}
 .home-map>.hero-response strong{font-weight:650}
 @media(max-width:780px){.home-map{padding:24px 17px 18px;min-height:0}.hero-question{margin-top:20px;padding-top:18px}.hero-options button{flex:1;padding-inline:7px}.hero-stops strong{font-size:12px}.hero-stops small{font-size:11px}.hero-stops li{width:35%}.hero-stops li:first-child{left:-1.667%}.hero-stops li:nth-child(2){left:32.5%}.hero-stops li:last-child{left:66.667%}.hero-stops li:first-child .hero-stop-number{left:33.333%}.hero-stops li:last-child .hero-stop-number{left:66.667%}.brand img{width:162px;height:36px}.home-map>.hero-response{font-size:.8rem;min-height:85px}}
+
+/* Notation added for chemistry and units: subscripts and an explicit thin space. */
+.math .sub{font-size:.62em;vertical-align:sub;line-height:0}.math .thin{display:inline-block;width:.22em}
+/* Destinations are grouped by subject so nine of them stay scannable. */
+.destination-group{margin-bottom:40px}.destination-subject{font-size:.85rem;letter-spacing:.09em;text-transform:uppercase;color:#475e7c;font-weight:700;margin-bottom:6px}.destination-option h3{font-size:1.6rem;margin-bottom:15px;font-family:var(--font-sans);font-weight:700;letter-spacing:-.035em}
+/* A unit belongs beside the box, never inside it. */
+.field-unit{display:flex;align-items:center;padding:0 10px;font-size:.85rem;color:#475e7c;white-space:nowrap}
+.choice-field{border:0;padding:0;margin:0;min-width:0}.choice-field legend{font-size:.75rem;color:#475e7c;margin-bottom:8px}.choice-field label{display:flex;align-items:center;gap:10px;min-height:44px;font-size:.9rem;color:#0a2a66}.choice-field input{width:20px;height:20px;accent-color:#0a2a66;flex:none}
+.answer-inputs.stacked-answers{flex-direction:column;align-items:stretch;gap:20px}.answer-inputs.stacked-answers .number-field{max-width:220px}
+.khan-unmatched,.repair-source.unmatched,.pack-khan-resources.unmatched{font-size:.85rem;line-height:1.7;color:#475e7c;border-left:2px solid #cbd9eb;padding-left:14px;margin-top:18px}
+@media(max-width:780px){.destination-option h3{font-size:1.25rem}.destination-group{margin-bottom:26px}}
