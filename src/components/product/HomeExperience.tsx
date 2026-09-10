@@ -20,7 +20,7 @@ export function HomeExperience(){
     return ()=>controls.stop();
   },[choice,d,reduce,controls]);
   return <section className="home-stage">
-    <div className="home-copy"><p className="eyebrow">Your GPS for learning</p><h1><span>Your GPS recalculates.</span><em>Why doesn’t learning?</em></h1><p className="home-sub">Stuck on today’s lesson, but unsure what to review? BACKTRACK finds a useful earlier step, connects it to Khan practice, and checks your way back.</p><Link className="button-primary" href="/start">Start your route <span aria-hidden="true">↗</span></Link><p className="fine-print">Free to try. No account needed.</p></div>
+    <div className="home-copy"><p className="eyebrow">Your GPS for learning</p><h1><span>Stuck on a problem?</span><em>Find what’s missing.</em></h1><p className="home-sub">You can find a whole lesson and still not know which part you need. BACKTRACK starts from your answer, finds a useful check, and brings you a focused Khan repair.</p><Link className="button-primary" href="/demo">Try the demo <span aria-hidden="true">↗</span></Link><Link className="home-topic-link" href="/start">Choose your own topic ↗</Link><p className="fine-print">Free to try. No account needed.</p></div>
     <div className="home-map">
       <div className="home-destination"><span className="eyebrow">Today’s goal</span><p>Quadratic equations</p><MathText size="lg">x² + 7x + 12 = 0</MathText></div>
       <svg className="hero-route" viewBox="0 0 710 440" role="img" aria-label={answer==='gap'?'The route bends toward a factoring check, then reconnects to today’s quadratic.':answer==='right'?'A shorter route leads to a fresh verification at today’s destination.':'A route connects your current step to today’s quadratic.'}>

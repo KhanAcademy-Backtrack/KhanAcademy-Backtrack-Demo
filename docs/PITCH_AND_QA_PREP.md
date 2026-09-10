@@ -6,7 +6,7 @@ BACKTRACK helps a learner find a missing step, practice it with Khan Academy, an
 
 ## Ten seconds
 
-Your GPS recalculates when you miss a turn. BACKTRACK does that for learning: find the missing step, practice on Khan, and return to today’s lesson.
+Stuck on today’s lesson, but unsure what to review? BACKTRACK finds an earlier step, connects it to Khan practice, and checks your way back.
 
 ## Thirty seconds
 
@@ -16,17 +16,21 @@ A learner gets stuck on today’s equation and hears “review.” But review wh
 
 Use this as a rehearsal script, not words to read from slides. The deck has 15 pages including sources. Rehearse to finish in about 4:45, leaving room for pauses. Keep the live interaction brief and have the static route diagrams ready if connectivity fails.
 
-“When you miss a turn, your GPS doesn’t send you back home. It recalculates. The destination stays. The route changes.
+“Picture a learner with one hard homework question and a short study break. They can search the topic and watch a lesson, yet still not know which step is missing. We built BACKTRACK to make that next decision easier.
+
+A GPS keeps your destination while recalculating the route. BACKTRACK starts with the task the learner needs now and looks for a useful place to work.
 
 Now imagine a learner looking at this quadratic equation. Their class is already here. Something underneath it stopped making sense. The advice is to review. But review what?
 
 The difficulty could be finding factors. It could be multiplying brackets. It could be knowing that each factor can equal zero. Giving every learner the same review ignores those differences.
 
-BACKTRACK starts with the destination. A learner or teacher chooses the goal they need now. The learner answers a real problem. When they struggle, the route investigates one step underneath. When they demonstrate a step, the review can leave the route.
+BACKTRACK starts with the destination. A learner or teacher chooses the goal they need now. Their answer can give a wrong-turn clue. For the same quadratic, one learner may have the right factor numbers but the wrong signs, while another has the wrong pair. Those answers lead to different starting checks. The route explains the choice and tests it.
 
 That is our first product moment: the reward is less unnecessary review. We don’t invent minutes saved. Two fresh answers can remove an actual review stop. A learner who needs a repair gets a different reward: they can demonstrate something they couldn’t demonstrate before.
 
-Khan Academy is the learning engine. Its official videos play in the learning step. Matched exercises open on Khan. The learner returns to BACKTRACK for fresh numbers, and their route stays saved. A click is not practice completion. We keep those records separate.
+The learning stop is small and specific: one idea, a worked example, then a chance to try it. Official Khan videos play the relevant segment, with an option to continue. Original Khan exercises support further practice. Fresh BACKTRACK checks bring the learner back to the goal.
+
+The next slide invites you to try the demo. Click the button or scan the code. Try each of the two wrong answers and see why they get different starting checks.
 
 The destination then comes back into focus. The learner tries a fresh current-level task. That gives us a clear question to test in school: did this route help them return, and did that return last?
 
@@ -36,7 +40,7 @@ From November through March, we propose eighty to one hundred twenty learners ac
 
 We want a fair comparison: the BACKTRACK workflow against teacher-selected Khan practice, with similar time and support. Where feasible, a randomized delayed start lets both groups receive the route while preserving a comparison window. If that design isn’t possible, we’ll report feasibility rather than pretend a pre-and-post change proves causation.
 
-We know adaptive learning already exists. ALEKS uses objectives and prerequisites. Gemini now offers goal-based diagnostic study plans. Our claim is not that we invented personalization. Our opportunity is a focused, reusable Khan recovery workflow that schools can inspect and evaluate.
+The route is also the reward. Knowing a step means its review can leave the route. Learning a new step means a visible gap closes. Coming back later means continuing with earlier work saved. That is a practical reason to keep learning: progress changes what you need to do next.
 
 The replication unit is a destination kit: the goal, reviewed map, checks, Khan material, return assessments, and facilitator guide. We will ask a second educator to use it and measure how much help they need.
 
@@ -48,7 +52,7 @@ By March, we want to show more than another account created. We want a learner w
 
 ## Demonstration rehearsal
 
-Open the deployed /start/quadratics route before the slot. Choose a longer block for a continuous walkthrough. Answer the destination incorrectly or use “I don’t know yet.” Continue to a prerequisite and show its Khan lesson. Do not manufacture a real learner story. Use the static deck to show later states if time is short. The app’s working answer-driven path is distinct from pilot evidence.
+Open the deployed /demo route before the slot. Tap the sample 3 and 4: the route starts with signs and solutions. Replay and try 2 and 6: the route starts with factor pairs. Continue and open the matching short Khan repair. Do not manufacture a real learner story. Use the static deck to show later states if time is short. The app’s working answer-driven path is distinct from pilot evidence.
 
 ## Hostile questions and answers
 
@@ -88,7 +92,7 @@ Open the deployed /start/quadratics route before the slot. Choose a longer block
 
 **How do you protect minors?** School approval, required parent/guardian permissions, adult oversight, minimal data, school-controlled identity keys, restricted records, aggregate reporting, and an institutional review process. We do not claim blanket legal compliance from the software design.
 
-**Would you rank this first today?** We cannot responsibly rank unseen competing teams. Our controllable advantages are a clear product demonstration and a disciplined test. The biggest remaining weaknesses are field validation and partner access, which need real work rather than stronger adjectives.
+**Why does this deserve attention?** A learner can have access to excellent lessons and still be unable to choose useful help. BACKTRACK makes that decision visible and testable: the mistake informs a check, the repair fits the step, and the learner returns to the task. The opportunity is to make existing Khan resources easier to use at the moment of difficulty.
 
 ## Weak answers to avoid
 

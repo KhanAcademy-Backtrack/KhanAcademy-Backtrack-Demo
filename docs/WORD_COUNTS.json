@@ -3,11 +3,11 @@
   "sections": [
     {
       "section": "Executive Summary",
-      "words": 217
+      "words": 248
     },
     {
       "section": "Needs Assessment",
-      "words": 213
+      "words": 225
     },
     {
       "section": "Business Principles & Financials",
@@ -15,11 +15,11 @@
     },
     {
       "section": "Innovation",
-      "words": 202
+      "words": 234
     },
     {
       "section": "Meaningful Khan Academy Integration",
-      "words": 231
+      "words": 255
     },
     {
       "section": "Potential to Scale",
@@ -30,5 +30,5 @@
       "words": 217
     }
   ],
-  "executiveShortCharacters": 216
+  "executiveShortCharacters": 232
 }

@@ -4,7 +4,7 @@
 
 Use the seven answers in SUBMISSION_COPY, or the separate answer PDFs. Each is below 300 words. Upload BACKTRACK_KEIC_2026.pdf as the deck. It has 15 pages including the cover and sources. Do not upload the deck blueprint in place of the deck.
 
-The clickable product link is https://backtrack-learning.vercel.app/start/quadratics . The homepage is https://backtrack-learning.vercel.app/ . The earlier comparison site remains at https://backtrack-five.vercel.app/ .
+The clickable product link is https://backtrack-learning.vercel.app/demo . The homepage is https://backtrack-learning.vercel.app/ . The earlier comparison site remains at https://backtrack-five.vercel.app/ .
 
 ## Confirm before pressing Submit
 

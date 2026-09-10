@@ -1,17 +1,18 @@
 from pathlib import Path
-import json,re,html,hashlib
+import json,re,html,hashlib,sys
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.utils import ImageReader
-from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,KeepTogether
+from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,KeepTogether,PageBreak
 from reportlab.lib.pagesizes import A4
 from pypdf import PdfReader
 
 root=Path(__file__).resolve().parents[1]; out=root/'output'/'pdf';out.mkdir(parents=True,exist_ok=True)
 fonts=root/'.refs'/'fonts'
+if not fonts.exists():fonts=root/'output'/'Fonts'
 for key,name in [('BT','Regular'),('BTBold','Bold'),('BTSemi','SemiBold')]:pdfmetrics.registerFont(TTFont(key,str(fonts/f'PlusJakartaSans-{name}.ttf')))
 pdfmetrics.registerFontFamily('BT',normal='BT',bold='BTBold',italic='BT',boldItalic='BTBold')
 ink=colors.HexColor('#151521');muted=colors.HexColor('#505A6B');blue=colors.HexColor('#5753FA');teal=colors.HexColor('#087E70')
@@ -46,7 +47,10 @@ def markdown_pdf(p):
         line=line.strip()
         if not line:flush();continue
         if line.startswith('# '):flush();title=line[2:];flow.append(Paragraph(inline(title),styles['title']))
-        elif line.startswith('## '):flush();flow.append(Paragraph(inline(line[3:]),styles['h2']))
+        elif line.startswith('## '):
+            flush()
+            if p.stem=='PITCH_DECK_15_SLIDES' and line.startswith('## Slide ') and not line.startswith('## Slide 1:'):flow.append(PageBreak())
+            flow.append(Paragraph(inline(line[3:]),styles['h2']))
         elif line.startswith('### '):flush();flow.append(Paragraph(inline(line[4:]),styles['h3']))
         elif line.startswith('- '):flush();flow.append(Paragraph('- '+inline(line[2:]),styles['bullet']))
         elif re.match(r'^\d+\. ',line):flush();flow.append(Paragraph(inline(line),styles['bullet']))
@@ -66,25 +70,45 @@ for i,section in enumerate(submission['sections']):
     flow += [Paragraph(inline(p),styles['field']) for p in section['paragraphs']]
     write_doc(f'ANSWER_{i+1:02}_{name}.pdf',section['name'],flow)
 
-layout=json.loads((root/'.refs'/'deck-build'/'deck-layout.json').read_text(encoding='utf-8'))
-deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('BACKTRACK · KEIC 2026');c.setAuthor('University of the Philippines Manila BACKTRACK team')
-for slide in layout:
-    c.saveState();c.scale(.75,.75)
-    for e in slide['elements']:
-        typ=e['type']
-        if typ=='text':
-            c.setFillColor(colors.HexColor(e['color']));c.setFont('BTBold' if e['bold'] else 'BT',e['size'])
-            for j,line in enumerate(e['text'].split('\n')):c.drawString(e['x'],720-e['y']-e['size']-j*e['size']*1.22,clean(line))
-            if e.get('link'):c.linkURL(e['link'],(e['x'],720-e['y']-e['h'],e['x']+e['w'],720-e['y']),relative=1,thickness=0)
-        elif typ=='rect':
-            c.setFillColor(colors.HexColor(e['fill']));c.setStrokeColor(colors.HexColor(e['line']) if e['line']!='none' else colors.HexColor(e['fill']));c.rect(e['x'],720-e['y']-e['h'],e['w'],e['h'],fill=1,stroke=int(e['line']!='none'))
-        elif typ=='circle':
-            c.setFillColor(colors.HexColor(e['fill']));c.setStrokeColor(colors.HexColor(e['line']));c.setLineWidth(2);c.circle(e['x'],720-e['y'],e['r'],fill=1,stroke=1)
-        elif typ=='poly':
-            c.setStrokeColor(colors.HexColor(e['color']));c.setLineWidth(e['width']);p=c.beginPath();p.moveTo(e['points'][0][0],720-e['points'][0][1]);[p.lineTo(x,720-y) for x,y in e['points'][1:]];c.drawPath(p)
-        elif typ=='image':c.drawImage(ImageReader(e['path']),e['x'],720-e['y']-e['h'],width=e['w'],height=e['h'],mask='auto')
-    c.restoreState();c.showPage()
-c.save()
+layout=json.loads((root/'.refs'/'deck-build'/'deck-layout.json').read_text(encoding='utf-8')) if '--include-backup-deck' in sys.argv else []
+# The authoritative deck is exported from Canva. Rebuild the local backup only explicitly.
+if layout:
+    deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('BACKTRACK · KEIC 2026');c.setAuthor('University of the Philippines Manila BACKTRACK team')
+    for slide in layout:
+        c.saveState();c.scale(.75,.75)
+        for e in slide['elements']:
+            typ=e['type']
+            if typ=='text':
+                c.setFillColor(colors.HexColor(e['color']));c.setFont('BTBold' if e['bold'] else 'BT',e['size'])
+                for j,line in enumerate(e['text'].split('\n')):
+                    y=720-e['y']-e['size']-j*e['size']*1.22
+                    if e.get('align')=='center':c.drawCentredString(e['x']+e['w']/2,y,clean(line))
+                    else:c.drawString(e['x'],y,clean(line))
+                if e.get('link'):c.linkURL(e['link'],(e['x'],720-e['y']-e['h'],e['x']+e['w'],720-e['y']),relative=1,thickness=0)
+            elif typ=='rect':
+                c.setFillColor(colors.HexColor(e['fill']));c.setStrokeColor(colors.HexColor(e['line']) if e['line']!='none' else colors.HexColor(e['fill']))
+                if e.get('radius'):c.roundRect(e['x'],720-e['y']-e['h'],e['w'],e['h'],e['radius'],fill=1,stroke=int(e['line']!='none'))
+                else:c.rect(e['x'],720-e['y']-e['h'],e['w'],e['h'],fill=1,stroke=int(e['line']!='none'))
+            elif typ=='circle':
+                c.setFillColor(colors.HexColor(e['fill']));c.setStrokeColor(colors.HexColor(e['line']) if e['line']!='none' else colors.HexColor(e['fill']));c.setLineWidth(e.get('width',2));c.circle(e['x'],720-e['y'],e['r'],fill=1,stroke=int(e['line']!='none'))
+            elif typ=='poly':
+                c.setStrokeColor(colors.HexColor(e['color']));c.setLineWidth(e['width']);p=c.beginPath();p.moveTo(e['points'][0][0],720-e['points'][0][1]);[p.lineTo(x,720-y) for x,y in e['points'][1:]];c.drawPath(p)
+            elif typ=='image':c.drawImage(ImageReader(e['path']),e['x'],720-e['y']-e['h'],width=e['w'],height=e['h'],mask='auto')
+            elif typ=='table':
+                rowh=e['h']/len(e['values'])
+                for r,row in enumerate(e['values']):
+                    x=e['x'];y=720-e['y']-(r+1)*rowh
+                    for col,value in enumerate(row):
+                        emph=r in [0,len(e['values'])-1]
+                        c.setFillColor(colors.HexColor(e['colors']['pale'] if emph else e['colors']['white']))
+                        c.setStrokeColor(colors.HexColor(e['colors']['line']));c.setLineWidth(.6)
+                        c.rect(x,y,e['widths'][col],rowh,fill=1,stroke=1)
+                        size=e['headerSize'] if r==0 else e['fontSize']
+                        c.setFillColor(colors.HexColor(e['colors']['blue'] if r==len(e['values'])-1 else e['colors']['ink']))
+                        c.setFont('BTBold' if col==1 or emph else 'BT',size)
+                        c.drawString(x+10,y+(rowh-size)/2+3,value);x+=e['widths'][col]
+        c.restoreState();c.showPage()
+    c.save()
 report=[]
 for f in sorted(out.glob('*.pdf')):
     r=PdfReader(str(f));texts=[p.extract_text() or '' for p in r.pages]

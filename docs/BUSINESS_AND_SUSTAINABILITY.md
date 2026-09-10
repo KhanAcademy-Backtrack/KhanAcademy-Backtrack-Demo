@@ -1,5 +1,7 @@
 # BACKTRACK: business and sustainability
 
+A learner needs help choosing which earlier step to review. A school needs a manageable way to connect that review to the current lesson. This plan sets out the resources needed to provide that routine and measure its value.
+
 ## Value proposition
 
 For learners, BACKTRACK aims to reduce uncertainty about what to review and preserve knowledge they can demonstrate. For schools, it aims to turn existing Khan access into a repeatable recovery routine with manageable teacher effort. For a sponsor, the proposed purchase is a supported implementation and evidence package, not a count of registrations.

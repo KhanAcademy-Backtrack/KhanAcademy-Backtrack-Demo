@@ -1,5 +1,7 @@
 # BACKTRACK: pilot implementation plan
 
+A learner is stuck on today’s lesson and does not know which earlier skill to review. This pilot will test whether a short, targeted route through Khan material helps them return to that lesson.
+
 ## The March evidence story
 
 A learner initially cannot complete a current mathematics goal. Their route identifies a useful step to investigate. They complete matched Khan practice, then pass fresh supervised destination tasks. A check 7–14 days later tests whether the return holds. A second educator reuses the destination kit. Every link in this chain must have its own evidence source.
@@ -8,7 +10,7 @@ A learner initially cannot complete a current mathematics goal. Their route iden
 
 Planning target: 80–120 eligible secondary learners across two or three cohorts, conditional on partner access, adviser review, permissions, and school schedules. Seek at least two educators so replication is testable. No named school is currently represented as committed.
 
-Begin with two destination families: equations with brackets and quadratic equations. Teachers confirm curriculum fit and may reject or revise either. The public examples use algebra content rather than a certified Philippine grade mapping. The product can grow across grades and subjects as reviewed destination kits become available.
+Begin the evaluated pilot with two destination families: equations with brackets and quadratic equations. The public demo also includes fractions, ratios, and graphs; those samples do not automatically expand the evaluated cohort. Teachers confirm curriculum fit and may reject or revise either. The public examples use algebra content rather than a certified Philippine grade mapping. The product can grow across grades and subjects as reviewed destination kits become available.
 
 Use one primary destination per enrolled learner for the headline analysis. Learners who already pass the baseline are tracked as a separate maintenance group, not counted as recovered. Public visitors and social-media acquisition users remain separate from the formal cohort.
 
@@ -58,7 +60,7 @@ Team roster supplied by Matthew: Justin Mesias, coach; Matthew Labrador, Paul Re
 1. Confirm the learner’s current goal and available block.
 2. Check a destination or relevant prerequisite.
 3. Investigate a deeper step if needed. Do not infer an entire knowledge profile from one answer.
-4. Open the matched Khan explanation and assigned practice.
+4. Use the short learning stop: one idea, a worked example, and practice. A matching official Khan video can open at its relevant segment, with an option to continue. Teachers assign the original Khan exercises for the repeated school routine.
 5. Return for fresh practice evidence. Use a separate supervised assessment for the formal outcome.
 6. Pause or take one optional next turn. A learner may stop without a penalty.
 

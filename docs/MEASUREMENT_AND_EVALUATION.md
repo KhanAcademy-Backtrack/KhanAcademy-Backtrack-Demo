@@ -1,5 +1,7 @@
 # BACKTRACK: measurement and evaluation
 
+The problem is a learner who cannot complete today’s task and does not know what to review. The evaluation asks whether BACKTRACK’s targeted route helps them return to that task and retain the skill.
+
 ## Primary question
 
 Does a destination-focused BACKTRACK plus Khan workflow produce more retained reentry than a realistic teacher-selected Khan routine with comparable access and support?

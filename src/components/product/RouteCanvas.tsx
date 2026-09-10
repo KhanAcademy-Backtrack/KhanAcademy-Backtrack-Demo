@@ -28,6 +28,6 @@ export function RouteCanvas({ state, compact = false }: { state: Recovery; compa
       </svg>
       <ol className="roadmap-stops">{nodes.map(id=><li key={id} data-active={id===state.active}><button onClick={()=>setSelected(selected===id?null:id)} aria-expanded={selected===id}><span>{id==='goal'?'Today’s goal':LABELS[id]}</span><small>{status(id)}</small></button></li>)}</ol>
     </div>
-    {selected&&nodes.includes(selected)&&<p className="route-reason">{selected==='goal'?`Return to ${TOPICS[state.topic].label.toLowerCase()} with two fresh problems.`:`A useful step toward ${TOPICS[state.topic].label.toLowerCase()}. Pass two fresh checks to skip its review.`}</p>}
+    {selected&&nodes.includes(selected)&&<p className="route-reason">{state.routeClue?.skill===selected?state.routeClue.message:selected==='goal'?`Return to ${TOPICS[state.topic].label.toLowerCase()} with two fresh problems.`:`A useful step toward ${TOPICS[state.topic].label.toLowerCase()}. Pass two fresh checks to skip its review.`}</p>}
   </div>;
 }

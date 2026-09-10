@@ -10,17 +10,17 @@ Coach: Justin Mesias
 
 Students: Matthew Labrador, Paul Recio, Harry Gomez
 
-Copy only the paragraphs under each field heading. Counts use whitespace-separated words; the live portal remains authoritative. All narratives stay below 300 words. No interview, school commitment, or pilot outcome is invented.
+Copy only the paragraphs under each field heading. Counts use whitespace-separated words; the live portal remains authoritative. All narratives stay below 300 words.
 
 ## Executive Summary
 
-Word count: 217
+Word count: 248
 
-When a learner misses a turn, school keeps moving. The instruction is often to review, but the learner may not know what to review. BACKTRACK gives them a new route to the lesson they need now.
+Being told to review does not tell a learner where to start. A short study break can disappear into searching broad lessons when the obstacle is one earlier skill. BACKTRACK uses the current task and the learner’s answer to find a useful starting check, offer a focused Khan repair, and test the return.
 
-A learner or teacher selects a destination. Short mathematics checks investigate relevant prerequisites. Demonstrated knowledge removes review from the route; difficulty can introduce an earlier step. Official Khan Academy videos support learning inside the experience, with matched exercises on Khan. Fresh BACKTRACK checks then test whether the learner can return to the destination. Progress stays saved when life interrupts.
+A learner or teacher selects a destination. Short mathematics checks investigate relevant prerequisites. Demonstrated knowledge removes review from the route; difficulty can introduce an earlier step. The learning stop presents a short explanation, a worked example, and practice inside BACKTRACK. Official Khan videos focus on the relevant part, with an option to continue. Fresh checks then test the return. Progress stays saved when life interrupts.
 
-The current public product supports equations with brackets and quadratic equations. Our broader ambition is a reusable recovery navigator across curriculum destinations, for schools and self-study.
+The public demo includes quadratic equations, equations with brackets, adding fractions, ratios, and reading linear graphs. These sample routes show a recovery workflow that can extend across reviewed curriculum destinations, for schools and self-study.
 
 For November 2026 through March 2027, we propose 80–120 learners across two or three school cohorts, subject to agreements, permissions, and access. Teachers will confirm destinations, assign relevant Khan practice, and supervise separate return assessments. Our signature outcome is retained reentry: initially blocked learners who pass a fresh destination task and still pass a parallel task 7–14 days later.
 
@@ -28,11 +28,11 @@ The University of the Philippines Manila team will measure learning, repeated re
 
 ## Needs Assessment
 
-Word count: 213
+Word count: 225
 
-A learner can have access to excellent lessons and still not know which earlier skill is blocking the topic in front of them. In algebra, an error while solving a quadratic might involve factoring, multiplication, or the zero-product rule. Sending everyone through the same review can miss that distinction.
+Excellent content can still be hard to use when a learner cannot name the skill they are missing. Searching the broad topic may lead to a whole lesson, while the immediate problem is one earlier step, such as turning factors into solutions. For learners studying in short windows, choosing the right help is part of the problem.
 
-BACKTRACK addresses this navigation barrier among secondary mathematics learners returning to a current classroom or self-study goal. It does not claim that prerequisite gaps explain the entire Philippine education crisis. Teaching quality, language, attendance, household conditions, and access also matter.
+The navigation problem matters when secondary mathematics learners return to a classroom or self-study goal: they need useful review without repeating everything underneath it. A teacher also needs a manageable way to support different gaps while keeping the class working toward a shared lesson.
 
 The proposed school work starts with teacher-confirmed destinations and recurring access to devices and Khan Academy. We will record learners excluded or delayed by connectivity rather than assuming universal access. Learners needing support beyond the route will be referred to an educator.
 
@@ -54,11 +54,13 @@ Continuation options include university extension, school networks, education no
 
 ## Innovation
 
-Word count: 202
+Word count: 234
 
 BACKTRACK’s organizing question is: what is blocking the thing this learner needs now, and which useful step could get them back? The destination remains visible while the route changes with their answers.
 
-Adaptive learning, prerequisite graphs, and goal-based tutoring already exist. ALEKS and modern AI learning tools overlap with this idea. We do not claim to have invented personalization. Our proposed contribution is the complete recovery workflow around Khan: a teacher-confirmed destination, an inspectable route, relevant practice, fresh evidence of return, and a reusable school kit.
+ALEKS and modern AI learning tools already offer adaptive practice, prerequisite checks, and goal-based study plans. BACKTRACK concentrates those ideas into a recovery routine around Khan: a teacher-confirmed destination, a visible route, relevant practice, fresh evidence of return, and a reusable school kit.
+
+Two wrong answers can need different help. A learner who finds the right factors but writes the wrong solutions can get a different first check from one who mixes up the factor pair. BACKTRACK explains that turn and tests it with fresh problems.
 
 The reward is concrete. When a learner demonstrates a step, its review leaves the route. When a learner needs help, a deeper step can appear. Confidence changes support and follow-up checks, not mathematical correctness. The current product requires two distinct unassisted checks for a route-specific decision with later checks to see what stays with the learner.
 
@@ -68,9 +70,9 @@ The working website lets judges experience those decisions. The pilot will test 
 
 ## Meaningful Khan Academy Integration
 
-Word count: 231
+Word count: 255
 
-BACKTRACK gives learners a specific reason to use Khan Academy: a step that stands between them and today’s lesson. Each reviewed destination kit maps prerequisites to Khan explanations and exercises. Official Khan videos play inside the learning step; practice opens on Khan, while the BACKTRACK route stays saved.
+BACKTRACK gives learners a specific reason to use Khan Academy: an earlier step that stands between them and today’s lesson. Each destination maps prerequisites to Khan explanations and exercises. Inside BACKTRACK, a concise concept, worked example, and local practice connect that material to the learner’s need. Official videos can start and stop at a relevant segment, with an option to continue watching. Original Khan exercises remain available for extended practice.
 
 In the proposed school pilot, teachers confirm the current destination and assign the mapped exercises in their existing Khan classes. Learners investigate their route, complete relevant practice, and return for fresh checks. The routine repeats across teaching weeks rather than ending at registration or a single lesson open.
 
@@ -78,7 +80,7 @@ We will distinguish three evidence sources: BACKTRACK activity, authorized Khan 
 
 Khan’s published teacher reporting tools provide a practical starting point, including assignment-score CSV exports. We will confirm available fields and authorized access with each partner and during capacity building. The workflow can use existing teacher-authorized reports while the team explores further supported integrations.
 
-Meaningful-use measures will include repeated completion of relevant Khan exercise assignments across offered weeks, supported by available reports, alongside learning outcomes and teacher effort. Khan supplies a coherent learning and practice environment; BACKTRACK tests whether a clear destination and return loop can make that environment more useful and more consistently used.
+Meaningful-use measures will include repeated completion of relevant Khan assignments across offered weeks, supported by available reports, alongside learning outcomes and teacher effort. Khan provides the explanations, exercises, and classroom reporting. BACKTRACK tests whether a clear reason for practice and a checked return can make those resources more useful and more consistently used.
 
 ## Potential to Scale
 
@@ -110,9 +112,9 @@ The proposed 80–120 learner target depends on school access and permissions. A
 
 ## Executive Summary: character-limit fallback
 
-The live field configuration has max_length 300 despite saying 300 words. Use the full summary if the portal permits it or the organizer fixes it. Otherwise this concise fallback is 216 characters and 34 words:
+The live field configuration has max_length 300 despite saying 300 words. Use the full summary if the portal permits it or the organizer fixes it. Otherwise this concise fallback is 232 characters and 41 words:
 
-BACKTRACK helps learners find a missing step, practice with Khan Academy, and return to today’s lesson. Our school pilot will track fresh-task success, repeat Khan use, and whether the recovery holds 7–14 days later.
+Learners can access lessons yet still not know what to review. BACKTRACK uses the task and their answers to choose a useful check, offer a short Khan repair, and test the return. A school pilot will check whether the recovery lasts.
 
 ## Required fields still for the team
 

@@ -7,6 +7,7 @@ export type Attempt = { id: string; skill: Skill; answer: string[]; correct: boo
 export type Event = { kind: 'khan_open' | 'practice_report' | 'other_support' | 'pause' | 'resume' | 'next_turn'; skill: Skill; at: number; detail?: string };
 export type Recovery = {
   exposedUntil?: number;
+  routeClue?: {skill:Skill;message:string;serial:number};
   version: 1; topic: Topic; mode: 'self' | 'class'; budget: number; phase: Phase;
   active: Skill; planned: Skill[]; passed: Skill[]; learned: Skill[]; suspected: Skill[];
   evidence: Attempt[]; events: Event[]; serial: number; assisted: boolean;
@@ -71,14 +72,32 @@ export function isCorrect(p: Problem, answers: string[]): boolean {
   const values = normalized.map(Number), expected = [...p.expected];
   if (values.some(x => !Number.isFinite(x))) return false;
   if(p.format==='fraction'){
-    if(!values.every(Number.isSafeInteger)||values[1]===0)return false;
-    const gcd=(a:number,b:number):number=>b===0?Math.abs(a):gcd(b,a%b);
-    const simplify=([n,d]:number[])=>{const g=gcd(n,d),sign=d<0?-1:1;return [n/g*sign,d/g*sign];};
-    const actual=simplify(values),target=simplify(expected);
-    return actual.every((x,i)=>x===target[i]);
+    const exact=(value:string)=>{const sign=value.startsWith('-')?-1:1;const [whole,decimal='']=value.replace(/^[+-]/,'').split('.');return {n:BigInt((whole||'0')+decimal)*BigInt(sign),d:BigInt(10)**BigInt(decimal.length)};};
+    const n=exact(normalized[0]),d=exact(normalized[1]);
+    return d.n!==BigInt(0)&&n.n*d.d*BigInt(expected[1])===d.n*n.d*BigInt(expected[0]);
   }
   if (p.unordered) { values.sort((a,b)=>a-b); expected.sort((a,b)=>a-b); }
   return values.every((x,i)=>x===expected[i]);
+}
+export function wrongTurnClue(s:Recovery,p:Problem,answers:string[]):{skill:Skill;message:string}|undefined {
+  if(s.active!=='goal'||answers.some(x=>!x.trim())||isCorrect(p,answers))return;
+  const clean=answers.map(x=>x.trim().replace(/[−–－]/g,'-'));
+  if(clean.some(x=>!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(x)))return;
+  const values=clean.map(Number);
+  if(values.some(x=>!Number.isFinite(x)))return;
+  if(s.topic==='quadratics'&&values.length===2){
+    const actual=values.map(Math.abs).sort((a,b)=>a-b),factors=p.expected.map(Math.abs).sort((a,b)=>a-b);
+    if(actual.every((x,i)=>x===factors[i]))return {skill:'zero',message:'Those numbers fit the factor pair. Let’s check how the factors become solutions.'};
+    if(actual[0]*actual[1]===factors[0]*factors[1])return {skill:'factor',message:'The product fits, but the sum does not. Let’s check the factor pair first.'};
+    if(actual[0]+actual[1]===factors[0]+factors[1])return {skill:'factor',message:'The sum fits, but the product does not. Let’s check the factor pair first.'};
+  }
+  if(s.topic==='fractions'){
+    const fractions=[...p.expression.matchAll(/\\frac\{(\d+)\}\{(\d+)\}/g)];
+    if(fractions.length===2){
+      const wrong=[Number(fractions[0][1])+Number(fractions[1][1]),Number(fractions[0][2])+Number(fractions[1][2])];
+      if(isCorrect({...p,expected:wrong},answers))return {skill:'same_denominator',message:'Adding the denominators changes the size of the parts. Let’s check equal-sized parts first.'};
+    }
+  }
 }
 export function recentSuccesses(s: Recovery, skill: Skill): number {
   let n=0; const seen = new Set<string>();
@@ -96,7 +115,7 @@ export type RecoveryAction =
   | { type: 'submit'; answers: string[]; confidence: Confidence; now: number }
   | { type: 'continue'; now: number }
   | { type: 'hint'; now: number }
-  | { type: 'learn'; now: number }
+  | { type: 'learn'; now: number; skill?:Skill }
   | { type: 'expose'; serial: number; now: number }
   | { type: 'practice'; detail: string; now: number; advance?:1|2 }
   | { type: 'khan'; detail: string; now: number }
@@ -113,7 +132,7 @@ export function recoveryReducer(prev: Recovery, action: RecoveryAction): Recover
   const s = {...prev, updatedAt:action.now};
   if (action.type==='start') return {...s, budget: action.budget, mode:action.mode, phase:'check', blockLimit: action.budget<=5?1:action.budget<=15?3:action.budget<=30?6:10, startedAt:action.now};
   if (action.type==='hint' && s.phase==='check') return {...s, assisted:true};
-  if (action.type==='learn') return {...s, phase:'learn', learned:add(s.learned,s.active)};
+  if (action.type==='learn') {const skill=action.skill??s.active;return {...s, active:skill, phase:'learn', learned:add(s.learned,skill)};}
   if (action.type==='expose' && s.phase==='learn') return {...s,exposedUntil:Math.max(s.exposedUntil??0,action.serial)};
   if (action.type==='khan') return {...s, events:[...s.events,{kind:'khan_open',skill:s.active,at:action.now,detail:action.detail}]};
   if (action.type==='practice') return {...s, learned:add(s.learned,s.active), serial:Math.max(s.serial+(action.advance??1),(s.exposedUntil??-1)+1), assisted:false, phase:'check', events:[...s.events,{kind:action.detail==='self-reported'?'practice_report':'other_support',skill:s.active,at:action.now,detail:action.detail}]};
@@ -138,6 +157,10 @@ export function recoveryReducer(prev: Recovery, action: RecoveryAction): Recover
     n.planned=ORDER.filter(x=>new Set([...s.planned,...children]).has(x));
     const misses=n.evidence.filter(e=>e.skill===s.active&&!e.correct).length;
     if (action.confidence==='know' && misses===1) return {...n,nextSkill:s.active,message:'Let’s check a fresh example before changing your route.'};
+    const clue=wrongTurnClue(s,p,action.answers);
+    if(clue&&misses<3&&!s.evidence.some(e=>e.skill!=='goal')){
+      return {...n,planned:[clue.skill,'goal'],nextSkill:clue.skill,next:'check',routeClue:{...clue,serial:s.serial},message:clue.message};
+    }
     if ((action.confidence==='forgot'||action.confidence==='never') && s.active!=='goal') return {...n,next:misses>=3?'support':'learn',nextSkill:s.active,message:'A refresher first. Then fresh numbers.'};
     n.nextSkill=children[0]??s.active;
     n.next=misses>=3?'support':children.length?'check':'learn';
@@ -171,6 +194,7 @@ export function validRecovery(value: unknown): value is Recovery {
     && Number.isInteger(s.serial) && s.serial>=0 && s.serial<100000 && [5,15,30,60].includes(s.budget) && s.blockLimit>0 && s.blockCount>=0 && (s.cycleStart===undefined||(Number.isInteger(s.cycleStart)&&s.cycleStart>=0)) && ['planned','passed','learned','suspected'].every(k=>Array.isArray(s[k as keyof Recovery])&&(s[k as keyof Recovery] as Skill[]).every(x=>skills.has(x)))
     && ['assisted','goalPassed','goalWasBlocked','returnCheck','extension'].every(k=>typeof s[k as keyof Recovery]==='boolean')
     && (s.exposedUntil===undefined||(Number.isInteger(s.exposedUntil)&&s.exposedUntil>=0&&s.exposedUntil<100000))
+    && (s.routeClue===undefined||(typeof s.routeClue==='object'&&s.routeClue!==null&&skills.has(s.routeClue.skill)&&typeof s.routeClue.message==='string'&&Number.isInteger(s.routeClue.serial)&&s.routeClue.serial>=0))
     && typeof s.message==='string' && Array.isArray(s.evidence)&&s.evidence.length<2000&&s.evidence.every(e=>typeof e.id==='string'&&skills.has(e.skill)&&Array.isArray(e.answer)&&e.answer.every(x=>typeof x==='string')&&typeof e.correct==='boolean'&&typeof e.assisted==='boolean'&&Number.isFinite(e.at)&&['know','unsure','forgot','never'].includes(e.confidence)&&['route','return','next'].includes(e.purpose))
     && Array.isArray(s.events)&&s.events.length<5000&&s.events.every(e=>skills.has(e.skill)&&typeof e.kind==='string'&&Number.isFinite(e.at));
 }

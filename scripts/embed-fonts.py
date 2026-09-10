@@ -8,6 +8,10 @@ from fontTools.ttLib import TTFont
 from lxml import etree as ET
 root=Path(__file__).resolve().parents[1]
 source=Path(sys.argv[1]);dest=Path(sys.argv[2])
+family=sys.argv[3] if len(sys.argv)>3 else 'Plus Jakarta Sans'
+prefix='DMSans' if family=='DM Sans' else 'PlusJakartaSans'
+font_dir=root/'.refs'/'fonts'
+if not (font_dir/f'{prefix}-Regular.ttf').exists():font_dir=root/'output'/'Fonts'
 P='http://schemas.openxmlformats.org/presentationml/2006/main'
 R='http://schemas.openxmlformats.org/officeDocument/2006/relationships'
 PKG='http://schemas.openxmlformats.org/package/2006/relationships'
@@ -35,17 +39,34 @@ def eot(file):
     assert all(ord(c) in font.getBestCmap() for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
     return bytes(b),{'family':name(font,1),'style':name(font,2),'weight':os.usWeightClass,'fsType':os.fsType,'fontBytes':len(data),'eotBytes':len(b),'fontSha256':hashlib.sha256(data).hexdigest()}
 with zipfile.ZipFile(source) as z:parts={n:z.read(n) for n in z.namelist()}
+if family=='DM Sans':
+    # Canva exports a separate face name for bold; use standard family + bold
+    # so PowerPoint resolves both weights through its embedded-font family.
+    for n,b in list(parts.items()):
+        if n.startswith('ppt/slides/') and n.endswith('.xml'):
+            xml=ET.fromstring(b)
+            for e in xml.iter():
+                if e.get('typeface')=='DM Sans Bold':
+                    e.set('typeface','DM Sans');e.getparent().set('b','1')
+            parts[n]=ET.tostring(xml,encoding='UTF-8',xml_declaration=True,standalone=True)
 before_slides={n:b for n,b in parts.items() if n.startswith('ppt/slides/')}
 presentation=ET.fromstring(parts['ppt/presentation.xml']);presentation.set('embedTrueTypeFonts','1');presentation.set('saveSubsetFonts','0')
 old=presentation.find(f'{{{P}}}embeddedFontLst')
 if old is not None:presentation.remove(old)
 font_list=ET.Element(f'{{{P}}}embeddedFontLst')
-font=ET.SubElement(font_list,f'{{{P}}}embeddedFont');ET.SubElement(font,f'{{{P}}}font',typeface='Plus Jakarta Sans',pitchFamily='34',charset='0')
+font=ET.SubElement(font_list,f'{{{P}}}embeddedFont');ET.SubElement(font,f'{{{P}}}font',typeface=family,pitchFamily='34',charset='0')
 rels=ET.fromstring(parts['ppt/_rels/presentation.xml.rels']);types=ET.fromstring(parts['[Content_Types].xml'])
+# Replace pre-existing presentation font parts instead of leaving unused fonts.
+for relationship in list(rels):
+    if relationship.get('Type')==R+'/font':
+        target='ppt/'+relationship.get('Target','')
+        parts.pop(target,None);rels.remove(relationship)
+        for item in list(types):
+            if item.get('PartName')=='/'+target:types.remove(item)
 if not any(x.get('Extension')=='fntdata' for x in types):ET.SubElement(types,f'{{{CT}}}Default',Extension='fntdata',ContentType='application/x-fontdata')
 report=[]
 for i,(role,style) in enumerate([('regular','Regular'),('bold','Bold')],1):
-    data,info=eot(root/'.refs'/'fonts'/f'PlusJakartaSans-{style}.ttf');rid=f'rIdBacktrackFont{i}';part=f'ppt/fonts/font{i}.fntdata'
+    data,info=eot(font_dir/f'{prefix}-{style}.ttf');rid=f'rIdBacktrackFont{i}';part=f'ppt/fonts/font{i}.fntdata'
     parts[part]=data;ET.SubElement(rels,f'{{{PKG}}}Relationship',Id=rid,Type=R+'/font',Target=f'fonts/font{i}.fntdata');ET.SubElement(font,f'{{{P}}}{role}',{f'{{{R}}}id':rid});report.append({**info,'part':part})
 after={'custShowLst','photoAlbum','custDataLst','kinsoku','defaultTextStyle','modifyVerifier','extLst'}
 index=next((i for i,e in enumerate(presentation) if ET.QName(e).localname in after),len(presentation));presentation.insert(index,font_list)

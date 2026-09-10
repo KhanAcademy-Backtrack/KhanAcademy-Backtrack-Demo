@@ -1,409 +1,289 @@
 # BACKTRACK: 15-slide pitch deck
 
-Exactly 15 slides including cover and sources. The final PDF must include the verified separate deployment link on slides 1, 4 and 14. Main style: predominantly white, one interface typeface, violet actions and teal routes, matching the final website.
+The opening makes the need visible before asking anyone to try the demo: a learner may be stuck on one step while searching whole lessons. The answer gives BACKTRACK a clue about which check to try, a short Khan repair supports that step, and fresh tasks check the return.
 
-## Slide 1: Your GPS recalculates. Why doesn’t learning?
+Exactly 15 slides. The native Canva design is the authoritative editable version. The current PDF is exported from Canva; the PowerPoint is a backup with embedded DM Sans regular and bold. The slides use one font family, a subtle paper texture, native separators, clear flows, and aligned comparisons. Slide 7 is dedicated to the demo, with a clickable button, visible link, and QR.
 
-### Exact on-slide copy
+## Slide 1: backtrack.
 
-- Your GPS recalculates. Why doesn’t learning?
-- BACKTRACK
-- A new route to the lesson you need now.
+Make the navigation problem understandable in one glance.
+
+### On-slide copy
+
+- backtrack.
+- Stuck on one step.
+- Lost in whole lessons.
+- Find the step. Get a focused Khan repair. Return to your task.
 - University of the Philippines Manila
 
-### Key visual
+## Slide 2: The search can become the study session
 
-A route bends around a missing step and reconnects to a fixed destination.
+Show how a broad search can miss a specific earlier obstacle.
 
-### Evidence or source
+### On-slide copy
 
-Working BACKTRACK concept; no outcome claim.
-
-### Purpose
-
-Make the metaphor immediately understandable.
-
-### Keep out
-
-Statistics, feature lists, or a long team introduction.
-
-## Slide 2: “Review.” Review what?
-
-### Exact on-slide copy
-
-- “Review.” Review what?
-- TODAY’S CLASS
+- The search can become the study session
+- 01  WHAT THEY NEED TO FINISH
+- Solve this equation
 - x² + 7x + 12 = 0
-- A learner can be stuck here because of a step underneath.
+- They search “quadratics”.
+- 02  WHAT MAY BE BLOCKING IT
+- Find the factor pair
+- Multiply to 12. Add to 7.
+- BACKTRACK checks the gap before choosing the repair.
 
-### Key visual
+## Slide 3: A short repair. A clear way back.
 
-Large current equation, with factoring and multiplication named underneath as possible checks.
+Explain the complete recovery loop without relying on a live demonstration.
 
-### Evidence or source
+### On-slide copy
 
-Illustrative mathematics; local need validation pending.
+- A short repair. A clear way back.
+- 1
+- Try today’s task
+- 2
+- Find a useful
+- earlier step
+- 3
+- Learn + practise
+- with Khan
+- 4
+- Try a fresh
+- current task
+- Your answer shapes the route. The repair fits the missing step.
 
-### Purpose
+## Slide 4: Two wrong answers. Different help.
 
-Show the navigation problem without reducing the education crisis to one cause.
+Show that two wrong answers can point to different starting checks.
 
-### Keep out
+### On-slide copy
 
-Invented student quotations, national causation claims, and stock crisis numbers.
+- Two wrong answers. Different help.
+- Tried x = 3, 4
+-  Check signs →  fresh goal
+- Tried x = 2, 6
+-  Check factors
+-  Fresh goal
+- The mistake points to the starting check.
 
-## Slide 3: The destination stays. The route changes.
+## Slide 5: Khan material, focused on the missing step
 
-### Exact on-slide copy
+Make a focused Khan learning stop concrete.
 
-- The destination stays. The route changes.
-- Current goal
-- Check a prerequisite
-- Find useful practice
-- Fresh return task
+### On-slide copy
 
-### Key visual
+- Khan material, focused on the missing step
+- 1
+- Watch the key part
+- 1:34 focused segment
+- Match sum and product
+- 2
+- Try the step here
+- Use the idea with
+- different numbers
+- 3
+- Return to the goal
+- Solve a fresh quadratic
+- equation
+- Short enough to use now. More Khan practice when they need it.
+- Khan Academy: factoring quadratics
 
-Editable route diagram that inserts a prerequisite detour while retaining the goal.
+### Clickable links
 
-### Evidence or source
+- https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-multiplying-factoring/x2f8bb11595b61c86:factor-quadratics-intro/v/factoring-simple-quadratic-expression
 
-Implemented route behavior; authored dependency map.
+## Slide 6: Back to the skill that stopped them
 
-### Purpose
+Show the fresh return at the original level of difficulty.
 
-Explain the product in one visible loop.
+### On-slide copy
 
-### Keep out
-
-A dense full curriculum graph or a claim of exact diagnosis.
-
-## Slide 4: The reward is less review.
-
-### Exact on-slide copy
-
-- The reward is less review.
-- Two fresh checks
-- One review removed
-- Your earlier progress stays.
-- Try BACKTRACK
-
-### Key visual
-
-Before/after route drawings with one specific review stop removed, not fake minutes saved.
-
-### Evidence or source
-
-Illustrative states from the working product; no field retention result.
-
-### Purpose
-
-Demonstrate the signature motivation mechanic and link to the product.
-
-### Keep out
-
-XP, fabricated saved minutes, or a made-up learner outcome.
-
-## Slide 5: Khan is the learning engine.
-
-### Exact on-slide copy
-
-- Khan is the learning engine.
-- WATCH HERE
-- Official Khan lessons inside the route.
-- PRACTICE ON KHAN
-- Matched exercises in an existing learning environment.
-- RETURN HERE
-- Fresh checks reconnect the route.
-
-### Key visual
-
-Official Khan logo and three clear stages, with practice visually central.
-
-### Evidence or source
-
-Khan resources and official teacher reporting guide.
-
-### Purpose
-
-Make the platform relationship concrete for the 25% integration category.
-
-### Keep out
-
-Claiming an API relationship, automatic result sync, or endorsement.
-
-## Slide 6: Back to today’s lesson.
-
-### Exact on-slide copy
-
-- Back to today’s lesson.
-- FRESH DESTINATION TASK
+- Back to the skill that stopped them
+- FRESH CURRENT-LEVEL TASK
 - x² + 11x + 28 = 0
-- x = −4 or x = −7
-- The route ends with something the learner can demonstrate.
+- x = -4 or x = -7
+- New numbers. The same skill they came to recover.
 
-### Key visual
+## Slide 7: Try the demo. Watch the route change.
 
-The fresh equation and worked return, with the route reconnecting.
+Invite the audience to compare two answers in the interactive sample.
 
-### Evidence or source
+### On-slide copy
 
-Worked product example. Formal learning outcomes remain unmeasured.
-
-### Purpose
-
-Show the intended capability rather than claiming a pilot outcome.
-
-### Keep out
-
-Presenting this authored example as data from a real student.
-
-## Slide 7: Did the return last?
-
-### Exact on-slide copy
-
-- Did the return last?
-- RETAINED REENTRY
-- Pass a fresh destination task after the route
-- Pass again 7–14 days later
-- Report against every enrolled baseline-blocked learner.
-
-### Key visual
-
-Post and delayed check connected to a single clearly named outcome.
-
-### Evidence or source
-
-Proposed evaluation design; retrieval and spacing research informs timing.
-
-### Purpose
-
-Give judges one memorable, defensible metric.
-
-### Keep out
-
-An invented recovery percentage or excluding missing follow-up.
-
-## Slide 8: Five months to earn the evidence.
-
-### Exact on-slide copy
-
-- Five months to earn the evidence.
-- 80–120 learners
-- 2–3 cohorts
-- Planning targets, subject to school agreements, permissions and access.
-- NOV · Review + baseline
-- DEC–JAN · First cycle + comparison
-- FEB · Second educator + replication
-- MAR · Follow-up + handover
-
-### Key visual
-
-A clean November–March implementation timeline.
-
-### Evidence or source
-
-Official KEIC implementation dates; proposed cohort and plan.
-
-### Purpose
-
-Separate the ambitious product from the bounded proof.
-
-### Keep out
-
-Implying schools or learners are already committed.
-
-## Slide 9: A fair comparison.
-
-### Exact on-slide copy
-
-- A fair comparison.
-- Teacher-selected Khan practice
-- BACKTRACK-supported Khan practice
-- Comparable access time and adult support.
-- Fresh post and delayed tasks in both groups.
-- Randomized delayed start where feasible. Otherwise report feasibility, not causation.
-
-### Key visual
-
-Two parallel study conditions converging on the same assessments.
-
-### Evidence or source
-
-Proposed design; school and evaluator approval required.
-
-### Purpose
-
-Show that the team intends to test incremental value.
-
-### Keep out
-
-Power claims, assumed effect sizes, or a false claim that randomization is secured.
-
-## Slide 10: Adaptive learning already exists.
-
-### Exact on-slide copy
-
-- Adaptive learning already exists.
-- ALEKS · Objectives and prerequisites
-- Gemini · Goal-based diagnosis and study plans
-- Khan · Personalization and learning infrastructure
-- Our opportunity: a repeatable Khan recovery routine that schools can inspect and test.
-
-### Key visual
-
-A clear competitor acknowledgment with the proposed workflow distinguished beneath it.
-
-### Evidence or source
-
-ALEKS custom objectives; Google study notebooks, June 2026; Khan Learning Paths documentation.
-
-### Purpose
-
-Defuse the strongest novelty objection before Q&A.
-
-### Keep out
-
-“We invented adaptive learning” or “AI cannot diagnose gaps.”
-
-## Slide 11: One goal. A manageable routine.
-
-### Exact on-slide copy
-
-- One goal. A manageable routine.
-- Teacher confirms the destination.
-- Learners follow different routes.
-- Khan assignments provide practice.
-- Separate supervised tasks check the return.
-- Measure teacher minutes, not just learner clicks.
-
-### Key visual
-
-One class destination branches into routes, then returns to an educator’s assessment.
-
-### Evidence or source
-
-Proposed school workflow; sharing a topic link works in the current build.
-
-### Purpose
-
-Make adoption credible and burden measurable.
-
-### Keep out
-
-A fake classroom dashboard with invented participant counts.
-
-## Slide 12: A kit another educator can use.
-
-### Exact on-slide copy
-
-- A kit another educator can use.
-- A reviewed destination map
-- Checks and answer rationales
-- Matched Khan material
-- Parallel return assessments
-- Facilitator and reporting guide
-- Topic links for schools, Reels and self-study.
-
-### Key visual
-
-The reusable kit as six plainly labeled components, with the second educator as the replication test.
-
-### Evidence or source
-
-Proposed replication model; two working topic entries.
-
-### Purpose
-
-Show what actually scales beyond the student team.
-
-### Keep out
-
-A national rollout map or unearned thousands-of-users claims.
-
-## Slide 13: PHP 100,000 implementation scenario.
-
-### Exact on-slide copy
-
-- PHP 100,000 implementation scenario.
-- Learning review · 24,000
-- Access support · 18,000
-- Deployment · 16,000
-- Evaluation · 18,000
-- Product operations · 8,000
-- Teacher onboarding · 8,000
-- Recruitment content · 3,000
-- Contingency · 5,000
-- Planning allocation. Not quotes or secured funds. Learner access stays free.
-
-### Key visual
-
-Readable allocation list with an explicit total and measured-cost commitment.
-
-### Evidence or source
-
-BACKTRACK planning allocation; official champion implementation-grant amount.
-
-### Purpose
-
-Demonstrate resource choices and honest unit economics.
-
-### Keep out
-
-Treating the team award as grant money or inventing a school price.
-
-## Slide 14: Keep the goal. Change the route.
-
-### Exact on-slide copy
-
-- Keep the goal. Change the route.
-- BACKTRACK · University of the Philippines Manila
-- Matthew Labrador · Paul Recio · Harry Gomez
-- Coach: Justin Mesias
-- A new route to today’s lesson. A clear way to measure the return.
+- Try the demo. Watch the route change.
+- Compare two wrong answers.
+- See why they get different repairs.
 - Try BACKTRACK
+- backtrack-learning.vercel.app
+- Scan to start
+- A few sample routes to help you picture BACKTRACK. The full product is still in
+- development.
 
-### Key visual
+### Clickable links
 
-A completed route and the product link, followed by the named team.
+- https://backtrack-learning.vercel.app/demo
 
-### Evidence or source
+## Slide 8: Can they still do it next week?
 
-Team names supplied by Matthew.
+Explain lasting recovery in plain language.
 
-### Purpose
+### On-slide copy
 
-Close with the product idea and a clear invitation to use it.
+- Can they still do it next week?
+- 1
+- Stuck before the
+- route
+- 2
+- Pass a fresh task
+- after practice
+- 3
+- Pass again 7-14
+- days later
+- Retained reentry
+- Count everyone who started unable to do the task.
+- Spacing and retrieval · 2022
 
-### Keep out
+### Clickable links
 
-A fake partner logo wall, promised victory, or unmeasured success claims.
+- https://doi.org/10.1038/s44159-022-00089-1
+
+## Slide 9: A five-month school pilot
+
+Show the five-month pilot sequence.
+
+### On-slide copy
+
+- A five-month school pilot
+- 80-120 learners across 2-3 cohorts
+- NOV
+- Review maps +
+- baseline
+- DEC
+- First school
+- cycle
+- JAN
+- Compare +
+- improve
+- FEB
+- New educator +
+- repeat
+- MAR
+- Follow-up +
+- handover
+- November 2026-March 2027
+- Pilot targets, fitted to each school’s access and timetable.
+
+## Slide 10: Does the route add value?
+
+Compare two practice routines against the same assessments.
+
+### On-slide copy
+
+- Does the route add value?
+- Khan practice
+- Selected by the teacher
+- Khan + BACKTRACK
+- Practice tied to the recovery route
+- The same fresh assessments
+- After practice, then 7-14 days later. Similar time and support.
+
+## Slide 11: The route is the reward
+
+Show how progress changes the next action.
+
+### On-slide copy
+
+- The route is the reward
+- What the learner does What changes
+- Know the step
+-  Skip its review
+- Repair a gap
+-  Move closer to the goal
+- Come back later
+-  Keep earlier progress
+- Progress changes what you need to do next.
+
+## Slide 12: One routine. Many learning goals.
+
+Explain how another destination and educator can reuse the routine.
+
+### On-slide copy
+
+- One routine. Many learning goals.
+- Fractions Algebra Graphs
+- Every new destination uses a reusable kit
+- A reviewed map + fresh checks + matched Khan material
+- Another educator can run the same recovery routine.
+- For classes, self-study, and the next topic a learner needs.
+
+## Slide 13: A budget built around learners
+
+Show the planned budget and priorities.
+
+### On-slide copy
+
+- A budget built around learners
+- PHP 100,000
+- 60%
+- for learning review, access and
+- evaluation
+- Learner access stays free.
+- Allocation
+-  PHP
+- Learning review
+-  24,000
+- Access support
+-  18,000
+- Evaluation
+-  18,000
+- Deployment
+-  16,000
+- Product operations
+-  8,000
+- Teacher onboarding
+-  8,000
+- Recruitment content
+-  3,000
+- Contingency
+-  5,000
+- Total
+-  100,000
+- Planning allocation
+
+## Slide 14: backtrack.
+
+Resolve the opening problem and introduce the team.
+
+### On-slide copy
+
+- backtrack.
+- A route back to today’s
+- lesson.
+- University of the Philippines Manila
+- Matthew Labrador, Paul Recio, Harry Gomez
+- Coach: Justin Mesias
 
 ## Slide 15: Research behind the approach
 
-### Exact on-slide copy
+Provide clickable research sources.
+
+### On-slide copy
 
 - Research behind the approach
-- Khan Academy teacher reporting
+- Khan Academy teacher reports
 - ALEKS custom objectives
-- Google Gemini study notebooks · June 25, 2026
+- Gemini study notebooks · 2026
 - IES learning practice guide
-- Carpenter, Pan & Butler · Spacing and retrieval
-- Foster · Confidence assessment
+- Spacing and retrieval · 2022
+- Confidence assessment · Foster
 - Self-Determination Theory in education
 
-### Key visual
+### Clickable links
 
-A readable linked research inventory supporting the learning design and competitor comparison.
-
-### Evidence or source
-
-Exact research URLs in notes and the source links on this page.
-
-### Purpose
-
-Make substantive claims auditable.
-
-### Keep out
-
-Organizer rules, application links, internal review notes, tiny URLs, or extra pages.
+- https://support.khanacademy.org/hc/en-us/articles/360031129891-What-reporting-options-are-available-on-Khan-Academy-for-teachers-to-track-student-performance
+- https://www.mheducation.com/unitas/school/explore/sites/aleks/customizing-custom-objectives.pdf
+- https://blog.google/innovation-and-ai/products/gemini-app/gemini-study-notebooks/
+- https://ies.ed.gov/ncee/wwc/practiceguide/1
+- https://doi.org/10.1038/s44159-022-00089-1
+- https://doi.org/10.1007/s10763-021-10207-9
+- https://selfdeterminationtheory.org/topics/application-education/

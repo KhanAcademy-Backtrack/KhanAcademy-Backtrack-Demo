@@ -60,8 +60,34 @@ test('guided examples stay excluded from fresh checks after pause and reload',()
     assert.equal(s.goalPassed,false);
   }
 });
-test('fraction equality rejects tiny decimal denominators and unsafe numbers',()=>{
+test('fraction equality is exact for decimals and tiny magnitudes',()=>{
  const p=problemFor(initialRecovery('fractions'));
- for(const pair of [['0','0.000000000001'],['0.000000000001','0.000000000001'],['11000000000000000','12000000000000000']])assert.equal(isCorrect(p,pair),false);
+ for(const pair of [['0','0.000000000001'],['0.000000000001','0.000000000001'],['0.000000000010','0.000000000012']])assert.equal(isCorrect(p,pair),false);
+ for(const pair of [['.11','.12'],['0.000000000011','0.000000000012'],['11000000000000000','12000000000000000']])assert.ok(isCorrect(p,pair));
  assert.ok(isCorrect(p,['1100000','1200000']));
+});
+
+test('different wrong answers lead to different starting checks without awarding mastery',()=>{
+ const signs=act(start(),{type:'submit',answers:['3','4'],confidence:'unsure'});
+ const product=act(start(),{type:'submit',answers:['2','6'],confidence:'unsure'});
+ assert.equal(signs.nextSkill,'zero');assert.deepEqual(signs.planned,['zero','goal']);
+ assert.equal(product.nextSkill,'factor');assert.deepEqual(product.planned,['factor','goal']);
+ for(const s of [signs,product]){assert.equal(s.correct,false);assert.deepEqual(s.passed,[]);assert.equal(s.evidence.length,1);assert.ok(validRecovery(s));assert.ok(s.routeClue.message);}
+ const confident=act(start(),{type:'submit',answers:['3','4'],confidence:'know'});
+ assert.equal(confident.nextSkill,'goal');
+});
+test('a clue can avoid an unnecessary review while the fresh destination remains required',()=>{
+ let s=advance(act(start(),{type:'submit',answers:['3','4'],confidence:'unsure'}));
+ assert.equal(s.active,'zero');
+ s=answer(advance(answer(s)));assert.equal(s.phase,'moment');assert.equal(s.nextSkill,'goal');
+ assert.equal(s.goalPassed,false);assert.ok(!s.passed.includes('factor'));
+ s=advance(s);s=advance(answer(advance(answer(s))));
+ assert.equal(s.phase,'complete');assert.ok(s.goalPassed);assert.equal(s.evidence.some(e=>e.skill==='factor'),false);
+});
+test('adding denominators triggers a parts-size check, and malformed input is not a clue',()=>{
+ const s=act(start('fractions'),{type:'submit',answers:['3','7'],confidence:'unsure'});
+ assert.equal(s.nextSkill,'same_denominator');assert.deepEqual(s.passed,[]);
+ const invalid=act(start(),{type:'submit',answers:['0x3','0x4'],confidence:'unsure'});
+ assert.equal(invalid.routeClue,undefined);
+ assert.equal(validRecovery({...initialRecovery(),routeClue:{skill:'madeup',message:'x',serial:0}}),false);
 });
