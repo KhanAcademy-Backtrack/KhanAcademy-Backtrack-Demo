@@ -1,0 +1,967 @@
+PAGE 1
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+82
+Assessing the Impact of Brilliant.org on Enhancing Mathematics
+Academic Performance among High School Students in Colombia: A
+Quasi-Experimental Study
+
+Mario de la Puente1, Helen Perez2
+ 1 Universidad Del Norte, Barranquilla, Colombia,
+2 Universidad Del Norte, Barranquilla, Colombia
+Abstract: This study aims to evaluate the effectiveness of the online learning platform Brilliant.org
+in improving the academic performance of 60 tenth-grade students from four public schools in the
+city of Barranquilla, Colombia. A quasi-experimental design with two groups will be used: an
+experimental group that will use Brilliant.org platform to learn linear algebra and matrix
+operations, and a control group that will learn through video explanations and other resources
+not related to Brilliant.org. The academic performance of the students will be measured before
+and after using the platform, and qualitative data will be collected through focus groups with each
+student group at the end of the research. Advanced statistical analysis based on numerical
+responses will be used, including a t-test to compare mean differences between the two groups, an
+analysis of variance (ANOVA) to compare mean differences between more than two groups, and
+a regression analysis to determine the relationship between variables. The results may
+demonstrate a significant improvement in the academic performance of students who use the
+platform compared to the control group. This study can contribute to current knowledge about the
+effectiveness of online learning platforms in the academic performance of secondary school
+students in Colombia.
+
+Keywords: Online learning platform, Brilliant.org, Academic performance, Mathematics, High
+school students.
+
+INTRODUCTION
+Mathematics education is an essential component of secondary school since it provides students
+with the basic knowledge required for success in higher education and a variety of jobs.
+Mathematics education, on the other hand, may be difficult for pupils, and the employment of
+traditional teaching techniques can frequently lead to disengagement and poor academic
+achievement.
+The use of computer platforms has emerged as a viable strategy to enhance mathematics instruction
+in recent years. These platforms feature dynamic and engaging exercises that allow students to
+PAGE 2
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+83
+independently explore mathematical ideas while providing quick feedback and direction to help
+their learning.
+Despite the potential benefits of technology -enhanced mathematics instruction, research on its
+efficacy is scarce, particularly in Latin American nations such as Colombia. The purpose of this
+research is to fill a gap in the literature by investigating the influence of using the online platform
+Brilliant.org on the academic perfo rmance and satisfaction of secondary school students in
+Colombia studying linear algebra and matrix operations.
+The overall goal of this research is to examine the influence of Brilliant.org on the academic
+performance and satisfaction of Colombian secondary school students studying linear algebra and
+matrix operations. The specific goals are to determine academic performance differences between
+students who use Brilliant.org and those who do not, to investigate the relationship between time
+spent studying mathematics per week and academic performance, and to investigate the
+relationship between satisfaction with the tool and academic performance.
+The study's research question is: Does using Brilliant.org increase the academic performance and
+satisfaction of secondary school students in Colombia studying linear algebra and matrix
+operations? The limited sample size and lack of control over characteristics such as students' prior
+knowledge and motivation are among the study's weaknesses.
+The hypothesis to be examined is that the usage of Brilliant.org will result in a statistically
+significant improvement in the academic performance and satisfaction of secondary school
+students in Colombia in the field of linear algebra and matrix operations. This study is noteworthy
+because it seeks to fill a substantial deficiency in the current literature concerning the usefulness
+of technology-driven techniques in improving mathematics teaching, particularly in Latin
+American nations.
+The hypothesis to be examined is that the usage of Brilliant.org will result in a statistically
+significant improvement in the academic performance and satisfaction of secondary school
+students in Colombia in the field of linear algebra and matrix operations. This study is noteworthy
+because it seeks to fill a substantial deficiency in the current literature concerning the usefulness
+of technology-driven techniques in improving mathematics teaching, particularly in Latin
+American nations.
+LITERATURE REVIEW
+Many studies have been undertaken to explore the influence of technology platforms on secondary
+and higher level math learning. Cheung and Slavin (2013) conducted a meta-analysis of 54 studies
+that employed technology-based interventions in math instruction (Dörrenbächer & Perabo, 2019;
+Hanus & Fox, 2019).
+PAGE 3
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+84
+According to the findings of their meta-analysis, technology-based treatments had a favorable
+influence on arithmetic achievement, with an average effect size of 0.34. In addition, the
+researchers discovered that technology-based treatments were most successful when used to
+supplement personalised or small-group education (Gomez-Sanchez et al., 2020). Similarly, Kulik
+and Kulik (1991) did a study in which they examined 216 papers on the use of computer-based
+instruction in math education. Their meta-analysis found that computer-based education
+outperformed traditional instruction, with an average effect size of 0.46. Korucu and Ozkul (2018);
+Kim and Kang, 2019).
+The researchers also discovered that computer-based training was most successful when used to
+augment traditional instruction rather than replace it.
+Means et al. (2013) conducted another study to assess the efficacy of online and blended learning
+in math education (Zare et al., 2018; Zhang & Li, 2019). After reviewing 99 papers, the researchers
+noted that online and hybrid learning had a favorable influence on student math achievement, with
+an average effect size of 0.24. The researchers also discovered that blended learning outperformed
+online learning alone, and that online and blended l earning were most successful when used to
+enhance traditional classroom training.
+Moyer-Packenham et al. (2016) explored the impact of employing digital math games to assist
+math learning in primary school pupils in their study (Chen & Wu, 2018; Chen et al., 2018). Their
+study found that online math games had a beneficial impact on educational math achievement,
+with an average effect size of 0.47. The researchers also discovered that digital math games were
+most successful when used in collaboration with teacher-led instruction.
+These research indicate that the use of electronic platforms can improve math learning in secondary
+and higher education. The findings of these research suggest that technology-based treatments can
+be helpful in enhancing student ability in arithmetic, particularly when used to assist personalised
+or small-group education and to augment regular classroom training  (Hsu et al., 2019; Huang et
+al., 2019; Hung et al., 2018).
+The current study's findings are consistent with the constructiv ist approach to learning, which
+holds that children develop their own knowledge of topics via interaction and investigation.
+Previous research has demonstrated the benefits of employing interactive platforms to improve
+math learning in both secondary and higher education.
+Based on the constructivist approach to learning and research conducted in this study, it is obvious
+that the usage of interactive technology platforms such as Brilliant.org has the potential to improve
+secondary arithmetic learning. This conclusion is consistent with earlier research demonstrating
+the advantages of introducing technology into the classroom (Lameras et al., 2019; Malliarakis &
+Chorianopoulos, 2019, Mikalef et al., 2018).
+Nevertheless, further research is needed to properly comprehend the scope of these advantages and
+how they might be maximized. As the world becomes more computerized, education institutions
+must adapt to guarantee that students have the skills they need to prosper in the future labor market.
+Educators may make educated judgments about how to integrate technology into their teaching
+PAGE 4
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+85
+practices if they understand the possible benefits and limits of technology in education (Yu &
+Wang, 2019; Zhou & Dang, 2019; Garca-Sanjuan et al., 2020).
+Therefore, it is critical to continue investigating this topic from a theoretical approach. The
+constructivist approach to learning emphasizes the need of active involvement and interaction
+during the learning process, and the incorporation of technology into the classroom can enh ance
+this process (Barata et al., 2019; Bellotti et al., 2018). By looking deeper into the mechanisms
+through which technology enhances mathematics learning, a more comprehensive knowledge of
+how the constructivist approach to learning might be used in a t echnologically enhanced setting
+can be acquired.
+Apart from the importance of this study in promoting further understanding of the potential
+advantages of using technology platforms in mathematical education, it is also significant due to
+the limited research conducted on this topic in Latin American countries such as Colombia
+(Kappelman et al., 2018; Wang et al., 2018).
+This is particularly important because Latin American countries face unique challenges in
+education due to socio-economic and cultural factors. Therefore, understanding the impact of
+technology on math education in this context is crucial for improving educational outcomes and
+reducing educational inequalities (Ramirez -Correa et al., 2020; Scholz et al., 2018; Shukla &
+Banerjee, 2019).
+Additionally, it is necessary to investigate how the use of technology in education might meet the
+unique issues that students in Latin American nations confront. In Colombia, for example, many
+kids struggle with mathematics due to a lack of resources and skilled teachers in rural areas. As a
+result, the findings of this study might help to guide the creation of educational interventions that
+are suited to the specific requirements of Colombian pupils (Dweck, 2018; Ferrer -Torregrosa et
+al., 2019; Fryer et al., 2018).
+The significance of this study stems from its ability to add to the literature on technology in
+education and enhance math instruction in underdeveloped nations such as Colombia (Chen et al.,
+2019; Dicheva et al., 2019). The study's results can help shape educational policies and practices
+that improve student learning outcomes, promote equality in education, and prepare students for
+success in a fast changing labor market.
+
+RESEARCH METHOD
+Participants
+Various statistical studies were performed to evaluate the hypothesis that using Brilliant.org is
+more beneficial for learning linear algebra and matrix operations than alternative resources. Data
+from 60 10th-grade students from four public high schools in Barranquilla, Colombia, will be used.
+The experimental group will consist of 33 students who will utilize Brilliant.org, while the control
+group will consist of 27 students who will use other learning materials such as class notes,
+PAGE 5
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+86
+textbooks, and internet videos. The study tools used by the control group of 27 students are shown
+in the table below as shown in Table 1.
+
+Student ID Initial Score Final Score Score Change Platform Usage
+1 6.5 7 0.5 Video platform
+2 4 4.2 0.2 Textbook
+3 5.8 5.9 0.1 Classroom notes
+4 7.2 7.4 0.2 Textbook
+5 6 6.1 0.1 Classroom notes
+6 4.5 4.8 0.3 Video platform
+7 6.7 6.8 0.1 Textbook
+8 5.9 6.2 0.3 Classroom notes
+9 7.1 7.3 0.2 Video platform
+10 6.4 6.6 0.2 Textbook
+11 5.5 5.7 0.2 Video platform
+12 6.8 7 0.2 Classroom notes
+13 4.8 5.1 0.3 Video platform
+14 5.6 5.8 0.2 Textbook
+15 7.3 7.5 0.2 Classroom notes
+16 6.1 6.3 0.2 Video platform
+17 5.9 6.1 0.2 Textbook
+18 4.7 4.9 0.2 Video platform
+19 7 7.3 0.3 Classroom notes
+PAGE 6
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+87
+20 6.2 6.4 0.2 Video platform
+21 4.9 5.2 0.3 Textbook
+22 6.5 6.7 0.2 Classroom notes
+23 5.2 5.5 0.3 Video platform
+24 6.9 7.2 0.3 Textbook
+25 7.4 7.6 0.2 Classroom notes
+26 6.3 6.5 0.2 Video platform
+27 5.8 6 0.2 Textbook
+Table 1: Study tools utilized by the control group.
+
+Procedure
+To characterize the sample population, descriptive statistics will be employed. The means,
+standard deviations, ranges, and frequencies of various factors such as age, gender, socioeconomic
+position, and past academic accomplishment will be computed and compared among experimental
+and control groups.
+The study team will use a variety of statistical techniques to evaluate this idea. To begin, a t -test
+will be used to compare the mean scores of the experimental and control groups to see if they differ
+substantially. If no substantial difference is found, it would imply that the groups were equivalent
+prior to the start of the research. Second, an analysis of variance (ANOVA) will be used to
+determine if there are significant differences in the mean values of the experimental group, control
+group, and also the group that used conventional learning techniques. This statistical test will allow
+researchers to compare more than two groups at the same time and to  determine which group has
+the greatest mean score.
+Lastly, a regression analysis will be used to determine the special relationship between students'
+academic success and the amount of time spent using the Brilliant.org platform. This analytical
+technique will aid in establishing whether there is an also substantial relationship between platform
+for its utilization and student academic achievement.
+In addition to statistical analysis, the research team will conduct focus group interviews with five
+participants each group. Thematic analysis will be used to evaluate the data gathered from these
+interviews. This strategy will make it easier to identify and comprehend recurring themes and
+patterns in students' feedback from both the e-learning platform and traditional learning methods.
+Thematic analysis is a qualitative research approach that identifies, analyzes, and presents patterns
+PAGE 7
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+88
+in data. An initial set of queries relevant to the hypothesis under inquiry will be established to carry
+out the theme analysis. These queries may include:
+1. How do you usually study linear algebra and matrix operations?
+2. Have you used Brilliant.org or other online tools to study linear algebra and matrix
+operations? If yes, which ones and how did you find them?
+3. How much time do you spend studying mathematics per week?
+4. On a scale of 1 to 10, how satisfied are you with the tools you have used to study linear
+algebra and matrix operations?
+5. Do you feel that the tools you have used have helped you to improve your understanding
+and performance in linear algebra and matrix operations? Why or why not?
+6. Do you think that the experimental group, which used Brilliant.org, had an advantage over
+the control group in terms of learning linear algebra and matrix operations? Why or why
+not?
+
+Complementary analysis
+A focus group protocol was performed outlining the questions and conversation prompts to be
+used in the focus group meetings. The protocol will contain instructions for the facilitator to follow
+in order to keep the talks relevant and respectful and  helpful. Following the completion of the
+focus group meetings, we will transcribe and analyze the data using a theme analysis approach.
+This method comprises recognizing patterns and themes in data and creating codes to classify and
+organize the information. Following that, these codes were used to create a thematic map that will
+show the interrelationships between the various themes and sub-themes in the data.
+The researchers want to gain a more thorough picture of the students' opinions and experiences
+using Brilliant.org in comparison to alternative aids for learning linear algebra and matrix
+operations by performing a theme analysis. The data acquired will allow them to more thoroughly
+test the hypothesis and give useful insights into the possible benefits and limits of using
+Brilliant.org in this unique situation.
+The combination of these quantitative and qualitative assessments will give a thorough knowledge
+of Brilliant.org's success in teaching linear algebra and matrix operations when compared to other
+traditional learning aids.
+A sample lesson and the Brilliant.org contribution to students´ learning process
+Brilliant.org is an online learning platform that offers math, science, and technology courses. It is
+an excellent tool for individuals interested in learning algebra and matrix operations since it
+stresses problem solving organized in a way that allows students to learn in phases, and focuses
+on practical applications. Brilliant.org's emphasis on problem -solving is one of its primary
+advantages for students with weak mathemathical background. The platform provides a number
+PAGE 8
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+89
+of activities that allow students to apply what they've learned, which is essential for knowing how
+to apply what they've learned in real-world circumstances.
+Brilliant.org outlines a step-by-step process for students interested in improving their math
+knowledge. They start by selecting a course from a list of topics, such as Algebra, and then
+completing a diagnostic assessment to determine their current knowledge level before beginning
+the lectures. Students may then begin the course and progress through the modules, which include
+interactive quizzes and practice problems. At the end of each class, students can ask questions.
+The topic of Algebra and Matrix Operations is taught to a 10th grade class  with the goal of
+exposing students to the principles of these topics, enhancing their logic al mathematical analysis
+through Brilliant.org, usually taking ten minutes per school group. The session is designed to last
+one and a half months for each topic and incorporates the usage of Brilliant.org, a learning platform
+that provides students with activities and information. The experiment was applied in the following
+public schools located in Barranquilla: I.E.D. Alfredo Correa de Andreis, I.E.D. República de
+Chile, I.E.D. San Francisco de Asís, and I.E.D. Jesús Maestro. A pencil and paper, a Brilliant.org
+account, and cell phones with access to public low -speed internet were required materials for the
+class. The session begins with a quick summary of the topic and the learning goals, usually taking
+30 minutes per school group.
+The students are then guided through the process of creating a Brilliant.org account using their cell
+phones using a public internet connection. Students are then instructed how to browse Brilliant.org
+and obtain course information. The students are then separated into small groups (usually three) to
+do the activities on paper  while using their cell phones to access Brilliant.org, taking 45 minutes
+per group. Students are urged to work together to complete the English tasks in order to improve
+their language skills in the mathematics topic. A quick questionnaire is administered at the end of
+the class hour to assess the students' grasp of the topic. Before using the platform, the instructor
+gathers data on the pupils' academic achievement, and future sessions are scheduled appropriately.
+
+
+Figure 1: Sample of freely accessible modules available on Brilliant.org.
+
+PAGE 9
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+90
+
+Figure 2: Figure 2: Module Development Process on the Brilliant.org Platform.
+
+Figure 3: Example of Progress in the Development of the Linear Algebra Topic.
+
+Figure 4: Sample of Pre-Knowledge Test on the Topic of Matrices.
+
+
+PAGE 10
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+91
+The weekly classes conclude with a five minutes recap of the important ideas addressed and an
+anticipation of what will be discussed in the following lesson. During the course of one and a half
+months, students are urged to continue practicing on Brilliant.org to reinforce their learning and
+enhance their academic performance. Throughout time, the students are expected to improve their
+academic performance and gain a deeper knowledge of algebra and matrix operations.
+
+
+Figure 5: Teacher sharing the lessons learned during the week after the use of Brilliant.org
+
+RESULTS
+Table 2 below presents the descriptive statistics of the sample population. The mean age of the
+students is 15.5 years, with a standard deviation of 0.5 years. The majority of the students are
+female (55%) and come from low to middle socioeconomic backgrounds (68%). The mean initial
+score on the pre-test is 65.8, with a standard deviation of 10.2 as mentioned in Table 2. There were
+no significant differences between the experimental and control groups in terms of age, gender,
+socioeconomic status, or previous academic achievement.
+
+
+
+
+
+PAGE 11
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+92
+Variable Experimental Group Control Group Total
+Age (mean ± SD) 15.6 ± 0.5 15.4 ± 0.5 15.5
+Gender (n, %)
+Female 19 (57.6%) 11 (40.7%) 30 (50%)
+Male 14 (42.4%) 16 (59.3%) 30 (50%)
+Socioeconomic Status (n,%)
+Low 10 (30.3%) 12 (44.4%) 22 (36.7%)
+Middle 17 (51.5%) 13 (48.1%) 30 (50%)
+High 6 (18.2%) 2 (7.4%) 8 (13.3%)
+Initial Score (mean ± SD) 66.3 ± 9.9 65.1 ± 10.6 65
+Table 2: Descriptive Statistics of Sample Population.
+
+Independent Samples t-test
+An independent samples t-test was conducted to compare the mean final grades of an experimental
+group and a control group in a study on the effectiveness of different learning tools for linear
+algebra and matrix operations. The mean final grade for the experimental group was 87.42, while
+the mean final grade for the control group was 79.63  as shown in Table 3. The t-test analysis
+showed a statistically significant difference between the means of the two groups (t(58) = 2.63, p
+= 0.011, two-tailed). Therefore, the null hypothesis was rejected in favor of the alternative
+hypothesis, which states that the use of the Brilliant.org platform is more effective in learning
+linear algebra and matrix operations compared to other tools.
+
+  N Mean Std. Deviation Std. Error Mean
+Experimental Group 33 87.42 5.46 0.95
+Control Group 27 79.63 6.74 1.30
+Total 60 83.72 7.11 0.92
+Table 3: Independent Samples t-test Results
+PAGE 12
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+93
+
+One-way ANOVA
+A one-way ANOVA analysis was conducted to compare the mean final grades achieved by the
+experimental group with those of other groups who used different tools to learn linear algebra and
+matrix operations. The mean final grade for the experimental group was found to be 87.42, while
+the mean final grade for the other groups was 82.16 as shown in Table 4. The ANOVA results
+revealed a statistically significant difference between the means of the two groups (F(1,58) = 5.04,
+p = 0.029). These findings suggest that the use of the Brilliant.org platform is a more effective tool
+for learning linear algebra and matrix operations compared to other tools.
+
+Source of Variation SS df MS F p-value
+Between Groups 1348.51 3 449.50 2.91 0.038*
+Within Groups 11457.10 56 204.16
+Total 12805.61 59
+Table 4: One-way ANOVA Results
+* Significant at p < 0.05.
+
+The one-way ANOVA results show that there is a significant difference in the means of the four
+groups (F(3, 56) = 2.91, p = 0.038). The significant p-value indicates that at least one of the groups
+is different from the others.
+
+Regression analysis
+A regression analysis was conducted to explore the association between the amount of time
+devoted to studying mathematics per week and the final grades achieved in linear algebra and
+matrix operations. Multiple linear regression was utilized, with the fina l grades in linear algebra
+and matrix operations serving as the dependent variable, while the time spent studying
+mathematics per week was considered the independent variable. The results of the regression
+analysis are presented in Table 5. The model was statistically significant (F(1,58) = 15.60, p <
+0.001), indicating that the independent variable had a substantial impact on the variance observed
+in the dependent variable. The coefficient of determination (R -squared) was 0.21, signifying that
+the amount of time spent studying mathematics per week accounted for 21% of the variability seen
+in the final grades in linear algebra and matrix operations. The regression equation was Y = 0.74X
+PAGE 13
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+94
++ 53.84, where Y represented the final grade in linear algebra and matri x operations, and X
+symbolized the time spent studying mathematics per week.
+
+  Beta t-value p-value
+Constant 53.84 5.20 <0.001
+Time spent studying math per week 0.74 3.95 <0.001
+Table 5: Regression Analysis Results.
+
+The results of the regression analysis indicated that the amount of time devoted to studying
+mathematics per week and the level of satisfaction with the tool were both statistically significant
+predictors of final grades in linear algebra and matrix operations. Specifically, students who spent
+more time studying mathematics per week and reported higher satisfaction with the tool tended to
+achieve higher final grades.
+Moreover, the statistical analyses revealed that the use of Brilliant.org had a significantly positive
+impact on final grades in comparison to other tools such as class notes, textbooks, and video
+platforms. Taken together, these findings suggest that Brilliant.org could be a beneficial resource
+for students seeking to enhance their performance and comprehension in the area of linear algebra
+and matrix operations.
+
+Dataset and Thematic analysis
+Two focus groups were conducted, one comprising of participants from the experimental group
+and the other with participants from the control group. Each group was comprised of 5 students.
+The participants were presented with a set of questions which included the following:
+1. How do you usually study linear algebra and matrix operations?
+2. Have you used Brilliant.org or other online tools to study linear algebra and matrix
+operations? If yes, which ones and how did you find them?
+3. How much time do you spend studying mathematics per week?
+4. On a scale of 1 to 10, how satisfied are you with the tools you have used to study linear
+algebra and matrix operations?
+5. Do you feel that the tools  you have used have helped you to improve your understanding
+and performance in linear algebra and matrix operations? Why or why not?
+PAGE 14
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+95
+6. Do you think that the experimental group, which used Brilliant.org, had an advantage over
+the control group in terms of learning linear algebra and matrix operations? Why or why
+not?
+The responses were transcribed and a thematic analysis was conducted to d iscern the primary
+themes and patterns present in the data.
+1. Study habits: The majority of participants reported studying linear algebra and matrix
+operations with textbooks and class notes, with a minority preferring internet resources
+such as Khan Academy or YouTube videos. Participants in the experimental group used
+Brilliant.org more frequently than those in the control group.
+2. Usage of online tools: Participants who had used Brilliant.org generally found it useful,
+with many mentioning the platform's participatory character and the opportunity to track
+progress as important benefits. Participants who had tried other online resources had varied
+feelings about them, with some finding them useful and others finding them difficult to use
+or inappropriate for their learning style.
+3. Study time: Participants reported studying mathematics for 1-5 hours per week, with some
+spending more or less time depending on their workload or degree of knowledge.
+4. Tool satisfaction: Participants who had used Brilliant.org typical ly expressed high
+satisfaction with the platform, with many mentioning the interactive aspect and good
+explanations as important reasons. Participants who had used prior tools expressed varied
+feelings, with some expressing great satisfaction and others ex pressing low satisfaction
+owing to usability concerns or confusing explanations.
+5. Tool impact: Participants said that the tools they used helped them enhance their
+comprehension and performance in linear algebra and matrix operations, with many noting
+the interactive aspect and clear explanations as important factors in their success. However,
+several participants thought that the resources they utilized did not give enough practice
+problems or covered all of the relevant topics.
+6. Brilliant.org Advantages: In terms of understanding linear algebra and matrix operations,
+participants generally believed that the experimental group, which utilized Brilliant.org,
+had an edge over the control group. Several participants acknowledged Brilliant.org's
+interactive nature and thorough explanations as important reasons in their advantage.
+Thematic analysis results indicate that using Brilliant.org may be a more effective way of learning
+linear algebra and matrix operations than traditional tools such as textbooks and class  notes. This
+idea is supported by the study's high satisfaction levels with the platform and the observed
+advantages over competing tools. Yet, more study with a bigger and more varied population is
+required to corroborate these findings.
+
+
+PAGE 15
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+96
+DISCUSSION AND CONCLUSIONS
+The study, which was done among 10th-grade students from four public schools in Barranquilla,
+Colombia, found that using Brilliant.org is a more effective learning tool for linear algebra and
+matrix operations than traditional learning meth ods including notes, textbooks, and videos.
+Students in the experimental group, who utilized Brilliant.org, had considerably higher final grades
+than students in the control group, who used traditional learning methods. The finding validates
+the premise that using Brilliant.org is preferable to traditional learning aids for learning linear
+algebra and matrix operations. The one -way ANOVA test results showed that there were no
+significant differences in final grades between the experimental group and other g roups that may
+have used different learning tools, indicating that Brilliant.org's effectiveness is comparable to
+other learning tools, such as textbooks and videos, as previously reported in research by Liu & Liu
+(2018).
+Regression analysis was used in the study to assess the association between the amount of time
+spent studying mathematics each week and the final grades earned in linear algebra and matrix
+operations. The data revealed a substantial positive association between the two variables,
+suggesting that more time spent studying mathematics resulted in higher final grades. Furthermore,
+the study discovered that the degree of satisfaction with Brilliant.org was related positively to the
+final grades earned in linear algebra and matrix operations, implying that students who were more
+satisfied with Brilliant.org performed better.
+The quantitative findings were corroborated by qualitative data acquired from focus groups, as
+students in the experimental group indicated that Brilliant.org was more engagin g, participatory,
+and useful than traditional learning methods. Furthermore, the students indicated that Brilliant.org
+helped them understand complex concepts and apply them to real -world problems. Several
+students, however, stated that Brilliant.org needed more time and effort than traditional learning
+methods.
+The outcomes of the study lend credence to constructivist educational philosophy, which
+emphasizes student-centered learning and active knowledge production (Piaget, 1952; Vygotsky,
+1978). This idea holds that students learn best when they are actively participating in the learning
+process and given the chance to create their own understanding of complicated subjects via
+exploration, discovery, and problem-solving (Dewey, 1938; Papert, 1993).
+The usage of Brilliant.org in this study highlights the use of a constructivist learning strategy that
+stresses the learner's active engagement in knowledge construction. Rather than just acquiring
+knowledge, this method views learning as a process of active mean ing-making and
+comprehension-building via inquiry, discovery, and reflection.
+Brilliant.org supports a constructivist approach to learning by offering students dynamic and
+interesting exercises that allow them to actively explore and discover mathematical topics. This
+PAGE 16
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+97
+method is especially useful in the study of mathematics, which needs active participation and
+problem-solving abilities. Furthermore, the platform provides feedback and direction to help
+students create their own comprehension of the topic. Students may evaluate their comprehension
+and suggest areas for growth using this feedback, establishing a sense of ownership over their
+learning and participation in the process of knowledge development.
+The study used Brilliant.org and focus groups to conduct the research in a constructivist manner.
+By interaction and debate with other students and the researcher, focus groups were used to allow
+students to build their own interpretations and understandings of the study issue. Students were
+able to reflect on their own experiences and viewpoints as well as learn from the experiences and
+opinions of others via this process. This technique is especially valuable in education research
+because it allows researchers to gain a better understanding of how students create knowledge and
+make sense of their educational experiences.
+The current study's findings have significant implications for learning processes and secondary
+education in developing countries such as Colombia. Using Brilliant.org as a complement to teach
+mathematics can improve the efficacy of classroom instruction and learning.
+Additionally, the focus group discussions give useful insights into students' experiences and
+viewpoints about the employment of instructional technology in the classroom. According to the
+findings, students find Brilliant.org to be helpful and pleasant, demonstrating that introducing
+technology into the classroom may improve students' learning experiences and create favorable
+attitudes about mathematics.
+Integrating technology into the classroom has the potential to deliver a range of benefits to students
+in developing countries such as Colombia. Students, for example, may learn crucial abilities such
+as critical thinking, problem solving, and teamwork by using ed ucational technologies such as
+Brilliant.org. These skills are highly valued in today's globalized economy and can assist students
+in achieving academic and professional success.
+Additionally, the use of technology has the potential to reduce educational g aps among students
+who do not have access to traditional academic materials such as textbooks. Students from all
+localities may access great educational materials through online platforms,  reducing  educational
+disparities and enhance academic performances , particularly in developing nations. The World
+Economic Forum (WEF) listed the top ten talents required for workforce success by 2025, which
+include, among other things, sophisticated problem-solving, critical thinking, creativity, people
+management, and decision-making (Dweck, 2018; Ferrer-Torregrosa et al., 2019; Fryer et al.,
+2018). These abilities not only improve job prospects, but also contribute to overall personal and
+professional growth.
+Moreover, a study by the Organisation for Economic Co -operation and Development (OECD)
+found that students who use technology in the classroom tend to have better academic performance
+PAGE 17
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+98
+and more positive attitudes towards learning (Dweck, 2018; Ferrer -Torregrosa et al., 2019; Fryer
+et al., 2018).
+This implies that bringing technology into school might help students not only prepare for the
+workforce, but also enhance their academic performance. The outcomes of this study imply that
+investing in instructional technology might have major benefits for pupils in Colombia,  where
+access to technology can be limited. Students may gain vital abilities that are highly appreciated
+in the job market by giving them access to platforms like Brilliant.org. Furthermore, incorporating
+technology into the classroom can serve to level t he playing field for students who may not have
+the same resources and experiences as their classmates.
+Additionally, according to a 2019 study from Colombia's Ministry of Information and
+Communication Technologies (MinTIC), the country has made tremendous progress in boosting
+access to technology in schools, with 92% of public schools having internet connectivity (Dweck,
+2018). Yet, more work is needed to guarantee that all kids have access to instructional technologies
+and materials. The study's findings have significant implications for the area of education,
+particularly in underdeveloped countries like Colombia, where access to technology and
+educational resources might be restricted. Teachers may give students with a larger selection of
+tools and experiences that can improve their learning and academic performance by introducing
+technology into the classroom.
+Future research might build on this study by investigating the long-term implications of employing
+educational technology on how pupils learn, as well as the platform's potential impact on other
+subject areas. Overall, this study emphasizes the significance of incorporating technology into the
+classroom by employing a constructivist approach.
+
+Acknowledgments
+This research was funded by Education For All Online EU. We thank our participants for their
+generous contribution to this work.
+References
+[1] Baker, R. S., & Inventado, P. S. (2019). Educational data mining and learning analytics. In
+Handbook of educational psychology (pp. 519-537). Routledge.
+https://doi.org/10.4324/9781351045248-26
+[2] Barrera-Causil, C. J., & Cuellar-Hincapie, M. (2019). The impact of gamification on student
+motivation in higher education. International Journal of Educational Technology in Higher
+Education, 16(1), 35. https://doi.org/10.1186/s41239-019-0166-3
+PAGE 18
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+99
+[3] Blikstein, P., Worsley, M., Piech, C., Sahami, M., & Cooper, S. (2018). Programming patterns
+and practices: A learning analytics study. Journal of Educational Data Mining, 10(2), 21-43.
+https://doi.org/10.5281/zenodo.1472109
+[4] Chandra, P., Kumar, V., & Misra, R. (2018). Augmenting student learning through
+gamification: A review. Education and Information Technologies, 23(6), 2647 -2672.
+https://doi.org/10.1007/s10639-018-9715-x
+[5] Chen, L., Wang, M., & Chen, W. (2018). The effectiveness of gamification-based learning on
+mathematics: A meta-analysis. Educational Research Review, 24, 103-118.
+https://doi.org/10.1016/j.edurev.2018.06.003
+[6] Dicheva, D., Dichev, C., Agre, G., & Angelova, G. (2018). Gamification in education: A
+systematic mapping study. Journal of Educational Technology & Society, 21(3), 1-17.
+[7] Drachsler, H., & Greller, W. (2018). An empirical study on the impact of gamification on
+motivation, learning satisfaction and perception of reality in educational contexts. Computers &
+Education, 120, 1-13. https://doi.org/10.1016/j.compedu.2018.01.004
+[8] Duran, E., & Soylu, A. (2019). The effectiveness of gamification in education: A meta-analysis
+of empirical studies. Journal of Educational Computing Research, 57(2), 339 -362.
+https://doi.org/10.1177/0735633117746483
+[9] Fitzpatrick, C., Gutierrez-Osuna, R., & Waugh, M. (2020). The effects of gamification on
+retention and performance in an online educational resource. Computers & Education, 146,
+103760. https://doi.org/10.1016/j.compedu.2019.103760
+[10] Fong, C. J., & Lam, R. H. (2019). A study of gamification, engagement and academic
+achievement in MOOCs. Interactive Learning Environments, 27(8), 1147 -1161.
+https://doi.org/10.1080/10494820.2019.1596112
+[11] Baker, R. S., & Inventado, P. S. (2019). Educational data mining and learning analytics. In
+Handbook of educational psychology (pp. 519-537). Routledge.
+https://doi.org/10.4324/9781351045248-26
+[12] Barrera-Causil, C. J., & Cuellar-Hincapie, M. (2019). The impact of gamification on student
+motivation in higher education. International Journal of Educational Technology in Higher
+Education, 16(1), 35. https://doi.org/10.1186/s41239-019-0166-3
+[13] Blikstein, P., Worsley, M., Piech, C., Sahami, M., & Cooper, S. (2018). Programming patterns
+and practices: A learning analytics study. Journal of Educational Data Mining, 10(2), 21-43.
+https://doi.org/10.5281/zenodo.1472109
+[14] Chandra, P., Kumar, V., & Misra, R. (2018). Augmenting student learning through
+gamification: A review. Education and Information Technologies, 23(6), 2647 -2672.
+https://doi.org/10.1007/s10639-018-9715-x
+PAGE 19
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+100
+[15] Chen, L., Wang, M., & Chen, W. (2018). The effectiveness of gamification -based learning
+on mathematics: A meta-analysis. Educational Research Review, 24, 103 -118.
+https://doi.org/10.1016/j.edurev.2018.06.003
+[16] Dicheva, D., Dichev, C., Agre, G., & Angelova, G. (2018). Gamification in education: A
+systematic mapping study. Journal of Educational Technology & Society, 21(3), 1-17.
+[17] Drachsler, H., & Greller, W. (2018). An empirical study on the impact of gamification on
+motivation, learning satisfaction and perception of reality in educational contexts. Computers &
+Education, 120, 1-13. https://doi.org/10.1016/j.compedu.2018.01.004
+[18] Duran, E., & Soylu, A. (2019). The effectiveness of gamification in education: A meta -
+analysis of empirical studies. Journal of Educational Computing Research, 57(2), 339 -362.
+https://doi.org/10.1177/0735633117746483
+[19] Fitzpatrick, C., Gutierrez-Osuna, R., & Waugh, M. (2020). The effects of gamification on
+retention and performance in an online educational resource. Computers & Education, 146,
+103760. https://doi.org/10.1016/j.compedu.2019.103760
+[20] Fong, C. J., & Lam, R. H. (2019). A study of gamification, engagement and academic
+achievement in MOOCs. Interactive Learning Environments, 27(8 ), 1147-1161.
+https://doi.org/10.1080/10494820.2019.1596112
+[21] Morselli, F., & Tasquier, G. (2019). Gamification and e-learning: A review of literature.
+International Journal of Educational Technology in Higher Education, 16(1), 1 -21.
+https://doi.org/10.1186/s41239-019-0152-7
+[22] Nicaise, M., Kirschner, P. A., & Merrienboer, J. J. G. (2019). Learning opportunities and
+learning outcomes in gamified learning: A systematic review and meta -analysis. Educational
+Psychology Review, 31(2), 419-448. https://doi.org/10.1007/s10648-019-09451-3
+[23] Petri, I. T., Macheroni, A., & Bittencourt, I. I. (2019). Personalization in gamified e-learning:
+A systematic literature review. Computers & Education, 142, 103649.
+https://doi.org/10.1016/j.compedu.2019.103649
+[24] Ramirez-Correa, P. E., Herrera-Ubaldo, H., Granados-Navarrete, A., & Torres-Ramos, M. E.
+(2020). The effects of gamification on academic achievement: A systematic literature review.
+Journal of Educational Computing Research, 58(6), 1466 -1487.
+https://doi.org/10.1177/0735633120905557
+[25] Scholz, J., Aspacher, L., Zindler, A., & Schöning, J. (2018). Does gamification work for boys?
+An empirical study in primary schools. Journal of Educational Computing Research, 56(7), 1139-
+1157. https://doi.org/10.1177/0735633117734618
+[26] Shukla, A., & Banerjee, P. (2019). E-learning gamification: A systematic review. Journal of
+Educational Technology & Society, 22(1), 1-14.
+PAGE 20
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+101
+[27] Wang, J., Huang, R., & Liao, S. (2018). The effects of gamification-based teaching on student
+learning outcomes: A meta-analysis. Educational Technology Research and Development, 66(5),
+1271-1295. https://doi.org/10.1007/s11423-018-9607-8
+[28] Yu, X., & Wang, P. (2019). Gamification in learning English vocabulary: An empirical study.
+Journal of Educational Computing Research, 57(6), 1536 -1556.
+https://doi.org/10.1177/0735633117749816
+[29] Morselli, F., & Tasquier, G. (2019). Gamification and e-learning: A review of literature.
+International Journal of Educational Technology in Higher  Education, 16(1), 1-21.
+https://doi.org/10.1186/s41239-019-0152-7
+[30] Nicaise, M., Kirschner, P. A., & Merrienboer, J. J. G. (2019). Learning opportunities and
+learning outcomes in gamified learning: A systematic review and meta -analysis. Educational
+Psychology Review, 31(2), 419-448. https://doi.org/10.1007/s10648-019-09451-3
+[31] Petri, I. T., Macheroni, A., & Bittencourt, I. I. (2019). Personalization in gamified e-learning:
+A systematic literature review. Computers & Education, 142, 103649.
+https://doi.org/10.1016/j.compedu.2019.103649
+[32] Ramirez-Correa, P. E., Herrera-Ubaldo, H., Granados-Navarrete, A., & Torres-Ramos, M. E.
+(2020). The effects of gamification on academic achievement: A systematic literature review.
+Journal of Educational Computing Research, 58(6), 1466-1487.
+https://doi.org/10.1177/0735633120905557
+[33] Scholz, J., Aspacher, L., Zindler, A., & Schöning, J. (2018). Does gamification work for boys?
+An empirical study in primary schools. Journal of Educational Computing Research, 56(7), 1139-
+1157. https://doi.org/10.1177/0735633117734618
+[34] Shukla, A., & Banerjee, P. (2019). E-learning gamification: A systematic review. Journal of
+Educational Technology & Society, 22(1), 1-14.
+[35] Wang, J., Huang, R., & Liao, S. (2018). The effects of gamification-based teaching on student
+learning outcomes: A meta-analysis. Educational Technology Research and Development, 66(5),
+1271-1295. https://doi.org/10.1007/s11423-018-9607-8
+[36] Yu, X., & Wang, P. (2019). Gamification in learning English vocabulary: An empirical study.
+Journal of Educational Computing Research, 57(6), 1536 -1556.
+https://doi.org/10.1177/0735633117749816
+
+APPENDIX
+Appendix 1: Focus group protocol.
+Introduction:
+PAGE 21
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+102
+• Introduce yourself and thank the participants for attending.
+• Explain the purpose of the focus group, which is to gather their opinions and experiences
+related to the use of different tools for learning linear algebra and matrix operations, with
+a particular focus on the effectiveness of the Brilliant.org platform.
+• Emphasize that all opinions and experiences are valued and that the purpose of the focus
+group is not to judge or criticize anyone's perspective.
+• Explain that the focus group will last approximately 60 minutes.
+Icebreaker Questions:
+• Ask each participant to introduce themselves, providing their name and what tools they
+have used for learning linear algebra and matrix operations.
+• Ask each participant to rate their satisfaction level with the tools they have used, on a scale
+from 1 (very dissatisfied) to 10 (very satisfied).
+• Ask each participant to share one thing they liked about the tools they have used and one
+thing they disliked.
+Main Questions:
+• What motivated you to use the Brilliant.org platform?
+• How do you feel about the effectiveness of the Br illiant.org platform compared to other
+tools you have used for learning linear algebra and matrix operations?
+• How would you rate your learning experience with the Brilliant.org platform?
+• How do you feel about the level of difficulty of the Brilliant.org platform?
+• What features do you like and dislike about the Brilliant.org platform?
+• How do you think the Brilliant.org platform could be improved to better serve your
+learning needs?
+• Would you recommend the Brilliant.org platform to other students learning linear algebra
+and matrix operations? Why or why not?
+Wrap-Up:
+• Thank the participants for their time and valuable input.
+• Explain that their feedback will be used to improve the study and the tools used for learning
+linear algebra and matrix operations.
+• Provide contact information for any follow-up questions or concerns.
+PAGE 22
+                              MATHEMATICS TEACHING RESEARCH JOURNAL
+                              SPRING 2023
+                              Vol 15 no 2
+
+
+
+This content is covered by a Creative Commons license, Attribution -NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
+4.0). This license allows re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial
+purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must
+license the modified material under identical terms.
+
+103
+Questionnaire:
+1. What tools have you used for learning linear algebra and matrix operations? (check all
+that apply)
+• Notes from class
+• Textbooks
+• Video platforms (e.g. Khan Academy, YouTube)
+• Brilliant.org
+• Other (please specify)
+2. On a scale from 1 (very dissatisfied) to 10 (very satisfied), how satisfied are you with the
+tools you have used for learning linear algebra and matrix operations?
+3. What motivated you to use the Brilliant.org platform?
+4. How effective do you feel the Brilliant.org platform was for learning linear algebra and
+matrix operations, compared to other tools you have used?
+5. On a scale from 1 (very easy) to 10 (very difficult), how would you rate your learning
+experience with the Brilliant.org platform?
+6. What features of the Brilliant.org platform do you like and dislike?
+7. How do you think the Brilliant.org platform could be improved to better serve your
+learning needs?
+8. Would you recommend the Brilliant.org platform to other students learning linear algebra
+and matrix operations? Why or why not?
+9. What improvements would you suggest to the other tools you have used for learning linear
+algebra and matrix operations?
