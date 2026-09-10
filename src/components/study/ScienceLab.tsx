@@ -36,13 +36,15 @@ function Predict({question,options,answer,onDone}:{question:string;options:strin
   </div>;
 }
 
-const step=(label:string,value:number,set:(n:number)=>void,min:number,max:number)=>
+/** `set` takes an updater, so two quick clicks compose instead of both reading
+ *  the value captured when this rendered. */
+const step=(label:string,value:number,set:(next:(v:number)=>number)=>void,min:number,max:number)=>
   <div className="lab-stepper" key={label}>
     <span id={`lab-${label.replace(/\W+/g,'-')}`}>{label}</span>
     <div>
-      <button type="button" aria-label={`Decrease ${label.toLowerCase()}`} disabled={value<=min} onClick={()=>set(Math.max(min,value-1))}>−</button>
+      <button type="button" aria-label={`Decrease ${label.toLowerCase()}`} disabled={value<=min} onClick={()=>set(v=>Math.max(min,v-1))}>−</button>
       <output aria-live="off">{value}</output>
-      <button type="button" aria-label={`Increase ${label.toLowerCase()}`} disabled={value>=max} onClick={()=>set(Math.min(max,value+1))}>+</button>
+      <button type="button" aria-label={`Increase ${label.toLowerCase()}`} disabled={value>=max} onClick={()=>set(v=>Math.min(max,v+1))}>+</button>
     </div>
   </div>;
 
@@ -53,7 +55,7 @@ function BalanceLab({state}:{state?:Recovery}){
   // are about the same chemistry. The reserve below keeps it out of the check.
   const e=EQUATIONS[(state?.topic==='balancing'?state.serial:0)%EQUATIONS.length];
   const [coefficients,setCoefficients]=useState(()=>e.species.map(()=>1));
-  const set=(i:number,n:number)=>setCoefficients(xs=>xs.map((x,j)=>i===j?n:x));
+  const set=(i:number,next:(v:number)=>number)=>setCoefficients(xs=>xs.map((x,j)=>i===j?next(x):x));
   const elements=[...new Set(e.species.flatMap(sp=>Object.keys(sp.parts)))];
   const count=(from:number,to:number,el:string)=>e.species.slice(from,to).reduce((sum,sp,i)=>sum+(sp.parts[el]??0)*coefficients[from+i],0);
   const left=(el:string)=>count(0,e.reactants,el),right=(el:string)=>count(e.reactants,e.species.length,el);
@@ -75,7 +77,7 @@ function BalanceLab({state}:{state?:Recovery}){
       </g>
       <circle cx="160" cy="44" r="5" fill="#0a2a66"/>
     </svg>
-    <div className="lab-steppers">{e.species.map((sp,i)=>step(`${sp.plain}`,coefficients[i],n=>set(i,n),1,12))}</div>
+    <div className="lab-steppers">{e.species.map((sp,i)=>step(`${sp.plain}`,coefficients[i],next=>set(i,next),1,12))}</div>
     <table className="atom-ledger"><caption>Atoms on each side</caption>
       <thead><tr><th scope="col">Element</th><th scope="col">Left</th><th scope="col">Right</th></tr></thead>
       <tbody>{elements.map(el=><tr key={el} data-match={left(el)===right(el)}><th scope="row">{ELEMENT_NAMES[el]}</th><td>{left(el)}</td><td>{right(el)}</td></tr>)}</tbody>

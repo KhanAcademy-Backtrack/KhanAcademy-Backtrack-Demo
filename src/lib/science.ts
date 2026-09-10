@@ -96,6 +96,8 @@ export const EQUATIONS:Equation[]=[
  eq(2,[[SP.H2SO4,1],[SP.KOH,2],[SP.K2SO4,1],[SP.H2O,2]]),
 ];
 
+/** "minus 1 newton", not "minus 1 newtons". */
+const spokenNewtons=(n:number)=>`${n<0?'minus ':''}${Math.abs(n)} newton${Math.abs(n)===1?'':'s'}`;
 /** Render a signed quantity with a typographic minus, never a hyphen. */
 export const signed=(n:number)=>n<0?`−${Math.abs(n)}`:`${n}`;
 const num=(field:string,unit?:string):AnswerField=>({label:field,kind:'number',unit});
@@ -176,7 +178,7 @@ function netForce(v:number,id:string):Problem{
  const size=4+v%12,other=1+Math.floor(v/12)%10,flipped=Math.floor(v/120)%2===1;
  const first=flipped?-size:size,second=flipped?other:-other,net=first+second;
  return {id,expression:`F_{1} = ${signed(first)}\\,\\mathrm{N},\\,F_{2} = ${signed(second)}\\,\\mathrm{N}`,
-  speak:`F 1 equals ${first<0?'minus ':''}${Math.abs(first)} newtons, F 2 equals ${second<0?'minus ':''}${Math.abs(second)} newtons`,
+  speak:`F 1 equals ${spokenNewtons(first)}, F 2 equals ${spokenNewtons(second)}`,
   prompt:`Two forces act on a block along one straight line. Taking right as positive and left as negative, what is the net force?`,
   labels:['Net force'],fields:[num('Net force','N')],expected:[net],
   hint:`Forces on one line combine by addition once each carries its own sign. The sign of the total tells you which way the block is pushed.`,
