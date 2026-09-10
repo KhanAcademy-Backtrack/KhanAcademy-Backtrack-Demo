@@ -13,7 +13,8 @@ export function noteSections(text:string):NoteSection[]{
 }
 export function suggestedTopics(sections:NoteSection[]):Topic[]{
   const text=sections.map(s=>s.text).join(' ').toLowerCase();
-  const words:Record<Topic,RegExp>={quadratics:/quadratic|factor(?:ing|isation|ization)|zero.product|x[²2]/,brackets:/parenthes|bracket|distribut|like terms/,fractions:/fraction|denominator|numerator|equivalent/,ratios:/ratio|proportion|unit rate|per (?:item|hour|unit)/,graphs:/graph|coordinate|slope|intercept|function/};
+  // Patterns stay specific on purpose: a loose one mislabels a learner's own notes.
+  const words:Record<Topic,RegExp>={quadratics:/quadratic|factor(?:ing|isation|ization)|zero.product|x[²2]/,brackets:/parenthes|bracket|distribut|like terms/,fractions:/fraction|denominator|numerator|equivalent/,ratios:/ratio|proportion|unit rate|per (?:item|hour|unit)/,graphs:/graph|coordinate|slope|intercept|function/,moles:/\bmoles?\b|molar mass|formula mass|avogadro|relative atomic mass/,balancing:/balanc\w*\s+(?:a\s+|the\s+)?(?:chemical\s+)?equation|chemical equation|reactants?\b|stoichiometr/,motion:/velocity|kinematic|final speed|metres per second|m\/s|km\/h/,forces:/\bnewton|net force|free.body|f\s*=\s*ma|friction|resultant force/};
   return (Object.keys(words) as Topic[]).filter(topic=>words[topic].test(text));
 }
 export function cardsFromNotes(sections:NoteSection[],source:string):StudyCard[]{

@@ -1,6 +1,8 @@
+import {scienceProblem} from './science.ts';
 /** A transparent, deterministic routing policy. Evidence is task-specific, never a placement decision. */
-export type Topic = 'quadratics' | 'brackets' | 'fractions' | 'ratios' | 'graphs';
-export type Skill = 'multiply' | 'equivalent' | 'same_denominator' | 'unit_rate' | 'coordinates' | 'substitute' | 'terms' | 'expand' | 'distribute' | 'factor' | 'zero' | 'linear' | 'goal';
+export type Topic = 'quadratics' | 'brackets' | 'fractions' | 'ratios' | 'graphs' | 'moles' | 'balancing' | 'motion' | 'forces';
+export type Subject = 'maths' | 'chemistry' | 'physics';
+export type Skill = 'multiply' | 'equivalent' | 'same_denominator' | 'unit_rate' | 'coordinates' | 'substitute' | 'terms' | 'expand' | 'distribute' | 'factor' | 'zero' | 'linear' | 'atom_count' | 'formula_mass' | 'unit_convert' | 'net_force' | 'goal';
 export type Confidence = 'know' | 'unsure' | 'forgot' | 'never';
 export type Phase = 'setup' | 'check' | 'feedback' | 'learn' | 'moment' | 'pause' | 'complete' | 'return' | 'support';
 export type Attempt = { id: string; skill: Skill; answer: string[]; correct: boolean; assisted: boolean; confidence: Confidence; at: number; purpose: 'route' | 'return' | 'next';problemVersion?:1|2 };
@@ -27,24 +29,37 @@ export type Recovery = {
 export const LABELS: Record<Skill, string> = {
   multiply:'Multiply numbers',equivalent:'Equivalent fractions',same_denominator:'Add equal-sized parts',unit_rate:'Find the amount for one',coordinates:'Read coordinates',substitute:'Use a value in a rule',
   terms: 'Like terms', expand: 'Expand brackets', distribute: 'Multiply brackets',
-  factor: 'Find the factors', zero: 'Set each factor to zero', linear: 'Undo multiplication', goal: 'Your destination',
+  factor: 'Find the factors', zero: 'Set each factor to zero', linear: 'Undo multiplication',
+  atom_count: 'Atoms in a formula', formula_mass: 'Formula mass', unit_convert: 'Unit conversion', net_force: 'Forces on a line',
+  goal: 'Your destination',
 };
-export const TOPICS = {
-  quadratics: { label: 'Quadratic equations', goal: 'Solve a quadratic', example: 'x² + 7x + 12 = 0', description: 'Find the factors. Find both solutions.', path: ['factor', 'zero', 'goal'] as Skill[] },
-  brackets: { label: 'Equations with brackets', goal: 'Solve an equation with brackets', example: '3(x + 2) + 2x = 31', description: 'Open the brackets. Bring the equation together.', path: ['expand', 'linear', 'goal'] as Skill[] },
-  fractions: {label:'Adding fractions',goal:'Add fractions with different denominators',example:'\\frac{2}{3} + \\frac{1}{4}',description:'Make the parts match. Add what you have.',path:['equivalent','same_denominator','goal'] as Skill[]},
-  ratios: {label:'Ratios and unit rates',goal:'Solve a proportion',example:'3 : 24 = 5 : x',description:'Find the amount for one. Scale it up.',path:['unit_rate','goal'] as Skill[]},
-  graphs: {label:'Reading linear graphs',goal:'Read a value from a graph',example:'y = 2x + 3',description:'Find the point. Connect the graph to its rule.',path:['coordinates','substitute','goal'] as Skill[]},
+export type TopicMeta = {label:string;goal:string;example:string;description:string;path:Skill[];subject:Subject;speak?:string};
+/** Typing the record makes TypeScript keep the Topic union and this table in step. */
+export const TOPICS:Record<Topic,TopicMeta> = {
+  quadratics: { label: 'Quadratic equations', goal: 'Solve a quadratic', example: 'x² + 7x + 12 = 0', description: 'Find the factors. Find both solutions.', path: ['factor', 'zero', 'goal'] as Skill[],subject:'maths' },
+  brackets: { label: 'Equations with brackets', goal: 'Solve an equation with brackets', example: '3(x + 2) + 2x = 31', description: 'Open the brackets. Bring the equation together.', path: ['expand', 'linear', 'goal'] as Skill[],subject:'maths' },
+  fractions: {label:'Adding fractions',goal:'Add fractions with different denominators',example:'\\frac{2}{3} + \\frac{1}{4}',description:'Make the parts match. Add what you have.',path:['equivalent','same_denominator','goal'] as Skill[],subject:'maths'},
+  ratios: {label:'Ratios and unit rates',goal:'Solve a proportion',example:'3 : 24 = 5 : x',description:'Find the amount for one. Scale it up.',path:['unit_rate','goal'] as Skill[],subject:'maths'},
+  graphs: {label:'Reading linear graphs',goal:'Read a value from a graph',example:'y = 2x + 3',description:'Find the point. Connect the graph to its rule.',path:['coordinates','substitute','goal'] as Skill[],subject:'maths'},
+  moles: {label:'Moles and mass',goal:'Find an amount in moles',example:'n = \\frac{m}{M}',description:'Count what a formula holds. Turn grams into moles.',path:['formula_mass','goal'] as Skill[],subject:'chemistry',speak:'n equals m over M'},
+  balancing: {label:'Balancing equations',goal:'Balance a chemical equation',example:'\\mathrm{CH_{4}} + 2\\,\\mathrm{O_{2}} → \\mathrm{CO_{2}} + 2\\,\\mathrm{H_{2}O}',description:'Keep every atom accounted for on both sides.',path:['atom_count','goal'] as Skill[],subject:'chemistry',speak:'C H 4 plus 2 O 2 yields C O 2 plus 2 H 2 O'},
+  motion: {label:'Motion and speed',goal:'Find a final speed',example:'v = u + at',description:'Read the units. Add what the acceleration builds up.',path:['unit_convert','substitute','goal'] as Skill[],subject:'physics',speak:'v equals u plus a t'},
+  forces: {label:'Forces and acceleration',goal:'Use F = ma in either direction',example:'F = ma',description:'Combine the forces. Rearrange for what is missing.',path:['net_force','substitute','goal'] as Skill[],subject:'physics',speak:'F equals m a'},
 };
+export const subjectOf=(t:Topic):Subject=>TOPICS[t].subject;
 export function initialRecovery(topic: Topic = 'quadratics'): Recovery {
   return { version: 1, problemVersion:2, exposedPairs:[], topic, mode: 'self', budget: 15, phase: 'setup', active: 'goal', planned: [...TOPICS[topic].path], passed: [], learned: [], suspected: [], evidence: [], events: [], serial: 0, assisted: false, correct: null, message: '', next: 'check', nextSkill: 'goal', startedAt: 0, updatedAt: 0, blockCount: 0, blockLimit: 3, goalPassed: false, goalWasBlocked: false, returnCheck: false, extension: false };
 }
-export const skillDependencies = (skill: Skill, topic: Topic): Skill[] => skill === 'goal' ? TOPICS[topic].path.filter(x => x !== 'goal') : skill === 'factor' ? ['distribute'] : skill === 'distribute' || skill === 'expand' ? ['terms'] : ['equivalent','unit_rate','substitute'].includes(skill)?['multiply']:[];
+export const skillDependencies = (skill: Skill, topic: Topic): Skill[] => skill === 'goal' ? TOPICS[topic].path.filter(x => x !== 'goal') : skill === 'factor' ? ['distribute'] : skill === 'distribute' || skill === 'expand' ? ['terms'] : skill === 'formula_mass' ? ['atom_count'] : ['equivalent','unit_rate','substitute','unit_convert'].includes(skill)?['multiply']:[];
 const deps=skillDependencies;
-export const ORDER: Skill[] = ['multiply','equivalent','same_denominator','unit_rate','coordinates','substitute','terms', 'expand', 'distribute', 'factor', 'zero', 'linear', 'goal'];
-export const NEXT_SKILL:Record<Topic,Skill>={quadratics:'factor',brackets:'expand',fractions:'equivalent',ratios:'unit_rate',graphs:'substitute'};
+export const ORDER: Skill[] = ['multiply','equivalent','same_denominator','unit_rate','coordinates','substitute','terms', 'expand', 'distribute', 'factor', 'zero', 'linear', 'atom_count','formula_mass','unit_convert','net_force', 'goal'];
+export const NEXT_SKILL:Record<Topic,Skill>={quadratics:'factor',brackets:'expand',fractions:'equivalent',ratios:'unit_rate',graphs:'substitute',moles:'formula_mass',balancing:'atom_count',motion:'unit_convert',forces:'net_force'};
 export type GraphData={kind:'point'|'line';x:number;y?:number;slope?:number;intercept?:number};
-export type Problem = { id: string; expression: string; prompt: string; labels: string[]; expected: number[]; unordered?: boolean; format?:'fraction'; graph?:GraphData; hint: string; explanation: string; widget?: 'factors' | 'area'; factorPair?:[number,number]; zeroFactor?:number };
+/** Units live in the label and beside the input, never inside the answer box. A choice field submits its option index, so every answer stays numeric. */
+export type AnswerField = { label: string; kind?: 'number' | 'choice'; unit?: string; options?: string[] };
+export type Problem = { id: string; expression: string; prompt: string; labels: string[]; expected: number[]; unordered?: boolean; format?:'fraction'; graph?:GraphData; hint: string; explanation: string; widget?: 'factors' | 'area'; factorPair?:[number,number]; zeroFactor?:number;
+  /** Aligns index-for-index with labels and expected. Absent means every field is a plain number. */
+  fields?: AnswerField[]; tolerance?: number; decimals?: number; speak?: string };
 export function signedTerm(n:number,variable=''){return n===0?'':` ${n<0?'−':'+'} ${Math.abs(n)===1&&variable?'':Math.abs(n)}${variable}`;}
 export function factorText(n:number){return `(x${signedTerm(n)})`;}
 export function quadraticText(p:number,q:number){return `x²${signedTerm(p+q,'x')}${signedTerm(p*q)}`;}
@@ -64,6 +79,8 @@ export function problemFor(s: Recovery): Problem {
   // Serial is monotonic across the entire route, so exposed problems are never reused as fresh evidence.
   const a = 2 + (v % 5), b = 7 + Math.floor(v / 5);
   const id = `${s.topic}:${s.active}:${v}`;
+  const science=scienceProblem(s.topic,s.active,v,id);
+  if(science)return science;
   let [p,q]=s.problemVersion===2?quadraticPair(v):[a,b];
   const firstClue=s.problemVersion===2&&s.routeClue?.serial===v-1&&s.routeClue?.skill===s.active;
   if(s.active==='factor'&&firstClue){p=4;q=5;}
@@ -103,6 +120,8 @@ export function isCorrect(p: Problem, answers: string[]): boolean {
     const n=exact(normalized[0]),d=exact(normalized[1]);
     return d.n!==BigInt(0)&&n.n*d.d*BigInt(expected[1])===d.n*n.d*BigInt(expected[0]);
   }
+  // A declared tolerance accepts an answer within one unit of the last required decimal place.
+  if(p.tolerance!==undefined&&!p.unordered)return values.every((x,i)=>Math.abs(x-expected[i])<=p.tolerance!+1e-9);
   if (p.unordered) { values.sort((a,b)=>a-b); expected.sort((a,b)=>a-b); }
   return values.every((x,i)=>x===expected[i]);
 }
