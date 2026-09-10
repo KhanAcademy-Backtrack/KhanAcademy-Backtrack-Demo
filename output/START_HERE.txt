@@ -10,9 +10,9 @@ Homepage: https://backtrack-learning.vercel.app/
 
 Slide 7 has a clickable button, visible link, and clickable QR leading to the demo.
 
-01 Submit these: seven separate answer PDFs, combined submission copy, and submission checklist.
+01 Submissions: seven separate answer PDFs, combined submission copy, and submission checklist.
 02 Plans and evidence: pilot, evaluation, budget, sources, Q&A, and judge review. DECK_BUILD_NOTES.pdf is a slide script, not the presentation to submit.
-03 Editable sources: source archive, fonts, and licenses.
+03 Fonts: source archive, fonts, and licenses.
 
 Repository: https://github.com/KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo
 
