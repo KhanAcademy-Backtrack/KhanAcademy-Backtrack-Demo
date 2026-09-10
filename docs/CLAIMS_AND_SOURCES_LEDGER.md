@@ -83,3 +83,16 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 ## Design references
 
 Khan Academy’s rendered homepage informed readable surfaces and typography. The user subsequently selected green #14BF96, white #FFFFFF and navy #0A2A66. The original recovery engine supplied mathematical typesetting and route geometry. Nicky Case informed explanation through interaction. No third-party result or customer story is reproduced as evidence for Dunlo.
+
+
+## September 11 release and application refresh
+
+The current code release includes original mathematical models, bounded recovery probes, a mascot introduction/spotlight tour, independent structural families, mixed rehearsal, spaced review and confirmed scope receipts. Verification is engineering evidence: 83 unit tests, 19 browser journeys and a 30-route build. No learner-effect size has been observed. See RELEASE_2026_09_11.md and research/2026-09-11/LEARNING_DESIGN_DECISIONS.md.
+
+The seven application drafts in submission.json were rewritten for this release. Word counts stay below 300; the live application field rules remain authoritative. The earlier 300-character executive-field finding is identified as an earlier inspection rather than a current verified constraint.
+
+Needs facts rechecked September 11: OECD, PISA 2022, 16% of assessed Philippine students at least Level 2 in mathematics: https://gpseducation.oecd.org/CountryProfile?plotter=h5&primaryCountry=PHL&topic=PI&treshold=5 . PSA, 2024 NICTHS, 48.8% of households with internet access at home: https://psa.gov.ph/content/percentage-households-internet-connection-increased-488-percent-2024-two-every-three . These have different denominators and do not describe Dunlo participants. Neither is presented as the latest result of all assessments or as a causal explanation for individual errors.
+
+Budget assumptions preserved: PHP 100,000 total; allocations 24,000 + 18,000 + 18,000 + 16,000 + 8,000 + 8,000 + 3,000 + 5,000. Proposed 80–120 enrollees imply approximately PHP 833–1,250 per enrollee including setup, not cost per active learner or per learning outcome. Proposed pilot, school access, funding and outcomes remain unconfirmed except UP Manila endorsement supplied by the team.
+
+The new slide plan must cite claims visibly in the submitted PDF and embed source hyperlinks. Presenter notes alone do not survive as evidence in a PDF. No competitor comparisons, private editor URLs or unverified efficacy claims belong in the presentation.
