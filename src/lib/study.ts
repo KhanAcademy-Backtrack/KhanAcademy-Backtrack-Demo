@@ -9,6 +9,8 @@ export const PACKS:Pack[]=[
   {id:'algebra-quiz',name:'This week’s algebra',description:'Brackets, factors, and quadratic solutions. Learn the steps or prepare for a quiz.',topics:['brackets','quadratics']},
   {id:'everyday-maths',name:'Everyday numbers',description:'Fractions and ratios that make sense beyond a worksheet.',topics:['fractions','ratios']},
   {id:'graph-reader',name:'Make graphs make sense',description:'Coordinates, rules, and the story a line tells.',topics:['graphs']},
+  {id:'chemistry-counting',name:'Counting in chemistry',description:'What a formula holds, what a balanced equation keeps, and how grams become moles.',topics:['balancing','moles']},
+  {id:'motion-and-forces',name:'Motion and forces',description:'Units that behave, speed that builds up, and the push that is actually left over.',topics:['motion','forces']},
 ];
 export type RoundMode='learn'|'review'|'challenge';
 export type KhanFeedback='completed'|'difficulty'|'access';
