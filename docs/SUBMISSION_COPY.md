@@ -14,7 +14,7 @@ Copy only the paragraphs under each field heading. Counts use whitespace-separat
 
 ## Executive Summary
 
-Word count: 248
+Word count: 247
 
 Being told to review does not tell a learner where to start. A short study break can disappear into searching broad lessons when the obstacle is one earlier skill. BACKTRACK uses the current task and the learner’s answer to find a useful starting check, offer a focused Khan repair, and test the return.
 
@@ -24,7 +24,7 @@ The public demo includes quadratic equations, equations with brackets, adding fr
 
 For November 2026 through March 2027, we propose 80–120 learners across two or three school cohorts, subject to agreements, permissions, and access. Teachers will confirm destinations, assign relevant Khan practice, and supervise separate return assessments. Our signature outcome is retained reentry: initially blocked learners who pass a fresh destination task and still pass a parallel task 7–14 days later.
 
-The University of the Philippines Manila team will measure learning, repeated relevant Khan use, teacher effort, and actual costs. The pilot will leave another educator with a practical kit for running and measuring the same recovery routine.
+With UP Manila’s endorsement, our team will measure learning, repeated relevant Khan use, teacher effort, and actual costs. The pilot will leave another educator with a practical kit for running and measuring the same recovery routine.
 
 ## Needs Assessment
 

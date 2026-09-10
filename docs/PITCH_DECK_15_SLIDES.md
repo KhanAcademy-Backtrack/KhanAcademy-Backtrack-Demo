@@ -2,7 +2,7 @@
 
 The opening states the problem and shows the response: check today’s task, practice a missing skill with Khan Academy, and return with a fresh check. The GPS route connects those actions. The first three slides explain the proposal without depending on a live demo.
 
-The native Canva design is authoritative. This script follows its current PDF export. The 15-slide PDF and editable PowerPoint backup use DM Sans regular and bold. Smooth vector routes, separate editable labels and stops, native comparison cards, and clear separators establish the visual order. Slide 7 is entirely a clickable demo invitation.
+The native Canva design is authoritative. This script follows its current PDF export. The 15-slide PDF and editable PowerPoint backup use DM Sans regular and bold. Smooth blue routes, green destination pins, native cards, and clear separators establish the visual order. An original green BACKTRACK return-route logo and the official UP Manila logo appear on all slides. The shared map background and logos can be ungrouped; text and diagram labels remain independently editable. Slide 7 is entirely a clickable demo invitation.
 
 ## Slide 1: Find the missing skill. Get back to today’s lesson.
 
@@ -10,7 +10,6 @@ Explain the learner problem and the complete BACKTRACK response on the opening s
 
 ### On-slide copy
 
-- backtrack.
 - Find the missing skill.
 - Get back to today’s lesson.
 - THE PROBLEM
@@ -266,7 +265,6 @@ Resolve the opening problem and identify the team.
 
 ### On-slide copy
 
-- backtrack.
 - A route back to
 - today’s lesson.
 - University of the Philippines Manila

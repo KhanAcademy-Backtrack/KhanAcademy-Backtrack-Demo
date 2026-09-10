@@ -12,7 +12,7 @@ The clickable product link is https://backtrack-learning.vercel.app/demo . The h
 - Coach: Justin Mesias. Confirm his faculty-adviser eligibility, official position, department, email, and phone.
 - Students: Matthew Labrador, Paul Recio, Harry Gomez. Enter their confirmed programs, year levels, emails, and required contact details.
 - Confirm campus exclusivity and no adviser/student overlap with the separate early-stage track.
-- Obtain faculty review, institutional authorization, and the team’s consent to submit.
+- UP Manila endorsement has been confirmed by the team. Complete faculty review and the team's final consent to submit.
 - Recheck the live form and organizer announcements immediately before submission.
 
 ## The executive-summary form issue

@@ -18,7 +18,11 @@ YouTube documents the start and end parameters here: https://developers.google.c
 
 ## Presentation assets
 
-White paper texture: Paper001 by ambientCG / Lennart Demes, CC0, from https://commons.wikimedia.org/wiki/File:Paper001_4K_Color.png . The deck uses this as a background. Its text, route diagrams, and budget table remain editable. The QR code encodes the professional demo URL in docs/deployment.json.
+The current deck uses an original abstract street-map background, blue route graphics, and a green BACKTRACK return-route monogram. These are BACKTRACK-authored vectors. The mark draws a lowercase b as a route that turns back toward an earlier step. Its wordmark uses outlined DM Sans Bold. The map is illustrative and does not depict a real campus or Google Maps data. The QR code encodes the professional demo URL in docs/deployment.json.
+
+The UP Manila logo is the institution's original horizontal artwork, unchanged in colour and aspect ratio. Source: https://www.upm.edu.ph/wp-content/themes/University%20of%20the%20Philippines%20Manila/images/home/logo-black.png . The team confirmed UP Manila endorsement and requested the logo on all slides. This does not imply a Khan Academy or Google partnership.
+
+The earlier Paper001 texture by ambientCG / Lennart Demes, CC0, from https://commons.wikimedia.org/wiki/File:Paper001_4K_Color.png remains in underlying imported layers and earlier source assets. It is covered by the current map background.
 
 The current Canva deck uses DM Sans. Its editable PowerPoint backup embeds DM Sans regular and bold using PowerPoint font parts. Editable font permissions are fsType 0. Original TTF files and the OFL license accompany the Drive package.
 

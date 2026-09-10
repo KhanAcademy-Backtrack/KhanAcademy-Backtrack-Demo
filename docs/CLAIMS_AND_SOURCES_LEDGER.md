@@ -54,7 +54,9 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 
 ## BACKTRACK-specific facts
 
-**Team:** University of the Philippines Manila, coach Justin Mesias, students Matthew Labrador, Paul Recio, Harry Gomez. **Source:** Matthew’s explicit message in this work session. **Limit:** formal adviser eligibility, institutional authorization, academic/contact fields, and partner-school status are not established by those names.
+**Team:** University of the Philippines Manila, coach Justin Mesias, students Matthew Labrador, Paul Recio, Harry Gomez. **Source:** Matthew’s explicit message in this work session. **Limit:** formal adviser eligibility, academic/contact fields, and partner-school status are not established by those names.
+
+**UP Manila endorsement:** confirmed by Matthew in this session when requesting the official UP Manila logo on every slide. This is a team-supplied fact. Institutional endorsement does not establish school enrollment, a completed pilot, funding, or learning outcomes.
 
 **Pilot reach:** 80–120 learners across two or three cohorts. **Status:** planning target conditional on access. No learners enrolled or outcomes claimed.
 

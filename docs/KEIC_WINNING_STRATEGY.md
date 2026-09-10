@@ -6,7 +6,7 @@ BACKTRACK gives a learner a new route to a current learning goal: investigate th
 
 ## The strongest version
 
-The product vision remains broad: a recovery navigator for classroom learning and self-study, eventually across many curriculum destinations. The first proof is deliberately bounded to secondary mathematics. Two working destination families show the architecture: equations with brackets and quadratic equations. Neither a grade level nor a single chapter defines the long-term product.
+The product vision is a recovery navigator for classroom learning and self-study across many curriculum destinations. The current demo supplies five mathematics routes: quadratic equations, equations with brackets, fractions, ratios, and reading linear graphs. The pitch follows one quadratic example so a judge can understand the complete recovery routine without learning the whole product.
 
 The competitive advantage to build is a repeatable recovery workflow, not a supposedly novel adaptive algorithm. A teacher confirms the destination once. A learner sees why a prerequisite is being checked. Evidence removes review or inserts a deeper check. Khan provides the lesson and practice. Fresh destination tasks supply the return evidence. A later check tests whether the recovery holds. Another educator should be able to run this using the same destination kit.
 
@@ -39,9 +39,9 @@ Khan integration carries 25% at application. The proposed teacher assignment and
 
 ## Hostile scoring rehearsal
 
-These are internal readiness judgments, not organizer scores or a forecast of winning. On a 0–10 scale, assessed before field validation: needs 5, business 6, innovation 6, Khan integration 7, scale 6, impact 6. Applying the official application weights gives 61/100. Polished software cannot substitute for school access and evidence of need.
+The current review focuses on whether the need, mechanism, and potential are visible in the proposal. The opening explains the learner's difficulty and the complete response. The two-wrong-answers example demonstrates why different help is useful. A focused Khan stop, fresh return task, and later check give the idea a complete learning purpose. These are internal assessments of the entry, not organizer scores or a prediction of rank.
 
-The first review exposed four controllable weaknesses: overly broad novelty claims, weak evidence thresholds, a missing mathematical prerequisite, and confusion between clicks and learning. The revised product and plans address those. The second review leaves three principal external weaknesses: no documented learner interviews yet, no confirmed partner school, and no measured learning outcome. Those must remain visible until real evidence replaces them.
+The first review exposed four controllable weaknesses: overly broad novelty claims, weak evidence thresholds, a missing mathematical prerequisite, and confusion between clicks and learning. The revised product addresses those and adds wrong-answer clues, focused in-app repairs, five destinations, and a replayable comparison. The team has now confirmed UP Manila endorsement. Pilot enrollment and learning outcomes remain proposed; institutional endorsement is distinct from completed school implementation.
 
 ## Why this might not win
 

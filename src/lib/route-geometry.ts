@@ -197,9 +197,7 @@ export const SAMPLES = 96;
 /** Every hero state has the same path command count, allowing a real morph. */
 export function heroRoutePath(answer: 'right' | 'gap' | null): string {
   const points: Pt[] = answer === 'right'
-    ? [[45,265],[505,105],[660,105]]
-    : answer === 'gap'
-      ? [[45,265],[265,370],[505,105],[660,105]]
-      : [[45,265],[335,225],[505,105],[660,105]];
+    ? [[64,60],[576,60],[612,60]]
+    : [[64,60],[320,150],[576,60],[612,60]];
   return polylinePath(resample(buildCubics(points, 'horizontal'), SAMPLES));
 }
