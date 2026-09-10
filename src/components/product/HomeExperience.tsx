@@ -20,12 +20,12 @@ export function HomeExperience(){
     return ()=>controls.stop();
   },[choice,d,reduce,controls]);
   return <section className="home-stage">
-    <div className="home-copy"><p className="eyebrow">Your GPS for learning</p><h1><span>Stuck on a problem?</span><em>Find what’s missing.</em></h1><p className="home-sub">You can find a whole lesson and still not know which part you need. BACKTRACK starts from your answer, finds a useful check, and brings you a focused Khan repair.</p><Link className="button-primary" href="/demo">Try the demo <span aria-hidden="true">↗</span></Link><Link className="home-topic-link" href="/start">Choose your own topic ↗</Link><p className="fine-print">Free to try. No account needed.</p></div>
+    <div className="home-copy"><p className="eyebrow">Your GPS for learning</p><h1><span>Stuck on a problem?</span><em>Find what’s missing.</em></h1><p className="home-sub">You can study a whole lesson and still miss what is stopping you. Check the step, see why it breaks, then practise with Khan and try again.</p><Link className="button-primary" href="/demo">Try the demo <span aria-hidden="true">↗</span></Link><Link className="home-topic-link" href="/start">Choose your own topic ↗</Link><p className="fine-print">Free to try. No account needed.</p></div>
     <div className="home-map">
       <div className="home-destination"><span className="eyebrow">Today’s goal</span><p>Quadratic equations</p><MathText size="lg">x² + 7x + 12 = 0</MathText></div>
       <div className="hero-question"><p className="eyebrow">Start with one small check</p><p>Which pair multiplies to <strong>12</strong> and adds to <strong>7</strong>?</p><div className="hero-options"><button onClick={()=>{setAnswer('gap');setChoice('pair');}} aria-pressed={choice==='pair'}>2 & 6</button><button onClick={()=>{setAnswer('right');setChoice('right');}} aria-pressed={choice==='right'}>3 & 4</button><button onClick={()=>{setAnswer('gap');setChoice('unsure');}} aria-pressed={choice==='unsure'}>I’m unsure</button></div></div>
       <figure className="hero-journey" data-direct={answer==='right'}>
-        <figcaption className="eyebrow">Your next steps</figcaption>
+        <figcaption className="eyebrow">Route preview</figcaption>
         <div className="hero-directions">
           <svg viewBox="0 0 640 230" preserveAspectRatio="none" aria-hidden="true">
             <path d={d} className="hero-road-case"/>
@@ -33,12 +33,12 @@ export function HomeExperience(){
           </svg>
           <ol className="hero-stops">
             <li><span className="hero-stop-number">1</span><strong>Check factors</strong><small>This question</small></li>
-            <li>{answer==='right'?<><span className="hero-skip">✓</span><strong>Review skipped</strong></>:<><span className="hero-stop-number">2</span><strong>Review factors</strong><small>{answer==='gap'?'A focused Khan stop':'Only if needed'}</small></>}</li>
+            <li>{answer==='right'?<><span className="hero-skip">✓</span><strong>Possible shortcut</strong><small>Confirm with a fresh check</small></>:<><span className="hero-stop-number">2</span><strong>Review factors</strong><small>{answer==='gap'?'A focused Khan stop':'Only if needed'}</small></>}</li>
             <li><span className="hero-stop-number">{answer==='right'?'2':'3'}</span><strong>Try the equation</strong><small>The next task</small></li>
           </ol>
         </div>
       </figure>
-      <div className="hero-response" role="status">{answer==='right'?<><strong>3 × 4 = 12. 3 + 4 = 7.</strong><span>You can skip factor review and try the equation next.</span></>:answer==='gap'?<><strong>{choice==='unsure'?'Start with a short factor review.':'2 × 6 = 12, but 2 + 6 = 8.'}</strong><span>Review this step, then come back to the equation.</span></>:<span>Choose an answer above to see the route change.</span>}</div>
+      <div className="hero-response" role="status">{answer==='right'?<><strong>3 × 4 = 12. 3 + 4 = 7.</strong><span>One fresh check can help confirm whether you need this review.</span></>:answer==='gap'?<><strong>{choice==='unsure'?'Start with a short factor review.':'2 × 6 = 12, but 2 + 6 = 8.'}</strong><span>Check this possible gap, then get the explanation you need.</span></>:<span>Choose an answer above to see the route change.</span>}</div>{answer&&<Link className="hero-next-link" href={answer==='right'?'/try/factors':'/demo?turn=factors'}>{answer==='right'?'Try a fresh check ↗':'Show me the next step ↗'}</Link>}
     </div>
     <div className="home-bottom"><span>BACKTRACK finds the next step.</span><a className="khan-attribution" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer"><span>Learning resources from</span><img src="/khan-academy.svg" alt="Khan Academy" width="176" height="28"/></a><Link href="/how-it-works">See the loop ↗</Link></div>
   </section>;

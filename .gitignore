@@ -38,3 +38,10 @@ tsconfig.tsbuildinfo
 # Private execution notes
 docs/WORK_LOG.md
 output/BACKTRACK_SOURCE.zip
+
+# Generated locally from the pinned PDF.js dependency
+public/pdf.worker.min.mjs
+
+# Python build-script caches
+__pycache__/
+*.pyc

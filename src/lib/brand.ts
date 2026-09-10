@@ -1,0 +1,1 @@
+export const BRAND={name:'Dunlo',engine:'BACKTRACK',description:'A study companion that helps you start, understand the difficult step, and remember what needs another look.',color:'#14BF96',navy:'#0A2A66',white:'#FFFFFF'};

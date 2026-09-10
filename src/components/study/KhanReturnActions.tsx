@@ -1,0 +1,11 @@
+'use client';
+import Link from 'next/link';
+import {KHAN_ENTRIES} from '@/lib/khan-entry';
+import {useStudy} from './StudyProvider';
+import {recordKhanFeedback,packFromKhan,planSession,beginSession,type KhanReturn,type KhanFeedback} from '@/lib/study';
+export function KhanReturnActions({activity,onReport,onFresh,onSupport,isolated=false}:{activity:KhanReturn;onReport?:(response:KhanFeedback,at:number)=>void;onFresh?:()=>void;onSupport?:()=>void;isolated?:boolean}){
+  const {state,update}=useStudy();const pending=state.pendingKhan;const feedback=!isolated&&pending?.url===activity.url?pending.feedback:activity.feedback;
+  function report(value:KhanFeedback){const now=Date.now();if(!isolated)update(s=>recordKhanFeedback(s,activity,value,now));onReport?.(value,now);if(value!=='completed')onSupport?.();}
+  function prepareReturn(){if(isolated)return;const entry=KHAN_ENTRIES.find(e=>e.topic===activity.topic&&e.skill===activity.skill);if(!entry)return;const pack=packFromKhan(entry);update(s=>beginSession({...s,packs:[...s.packs.filter(p=>p.id!==pack.id),pack]},planSession(s,pack,5,feedback==='completed'?'challenge':'learn',Date.now()),Date.now()));}
+  return <div className="khan-return-actions"><h4>How did Khan practice go?</h4><div className="khan-return-choices"><button type="button" aria-pressed={feedback==='completed'} onClick={()=>report('completed')}>I completed it</button><button type="button" aria-pressed={feedback==='difficulty'} onClick={()=>report('difficulty')}>Still difficult</button><button type="button" aria-pressed={feedback==='access'} onClick={()=>report('access')}>Couldn’t access it</button></div>{feedback&&<p role="status">Your report: {feedback==='completed'?'completed. A fresh check comes next.':feedback==='difficulty'?'still difficult. Let’s try another explanation.':'access problem. You can use the explanation here.'}</p>}{feedback&&!(feedback!=='completed'&&onSupport)&&(feedback==='completed'&&onFresh?<button className="button-primary" type="button" onClick={onFresh}>Try a fresh check ↗</button>:<Link className="button-primary" onClick={prepareReturn} href={activity.returnPath}>{feedback==='completed'?'Try a fresh check ↗':'Work through the idea ↗'}</Link>)}</div>;
+}

@@ -1,4 +1,4 @@
-import { SKILLS, type KhanResource } from './curriculum';
+import { SKILLS, type KhanResource } from './curriculum.ts';
 import type { Recovery } from './recovery';
 const ROOT='https://www.khanacademy.org';
 const BASICS=ROOT+'/math/algebra-basics';
@@ -12,11 +12,11 @@ export function khanMaterial(s:Recovery):KhanMaterial{
     multiply:[{kind:'exercise',title:'Multiply with arrays',url:ROOT+'/math/cc-third-grade-math/intro-to-multiplication/multiplication-with-arrays/e/multiplying-with-arrays'}],
     equivalent:[{kind:'exercise',title:'Equivalent fractions',url:ROOT+'/exercise/equivalent-fraction'}],
     same_denominator:[{kind:'exercise',title:'Add fractions with common denominators',url:ROOT+'/exercise/adding_fractions_with_common_denominators'}],
-    unit_rate:[{kind:'exercise',title:'Unit rates',url:ROOT+'/math/algebra-functions/unit-rates'}],
+    unit_rate:[{kind:'exercise',title:'Unit rates',url:ROOT+'/exercise/unit-rates'}],
     coordinates:[{kind:'article',title:'Read and plot coordinates',url:ROOT+'/math/cc-fifth-grade-math/imp-geometry-3/imp-intro-to-the-coordinate-plane/a/graph-points-review'},{kind:'exercise',title:'Graph points',url:ROOT+'/exercise/graphing_points'}],
     substitute:[{kind:'article',title:'Evaluating expressions with one variable',url:ROOT+'/math/algebra-home/alg-intro-to-algebra/a/evaluating-expressions-with-one-variable'},{kind:'exercise',title:'Evaluate expressions',url:ROOT+'/math/algebra/x2f8bb11595b61c86:foundation-algebra/x2f8bb11595b61c86:intro-variables/e/evaluating_expressions_1'}],
     fractions:[{kind:'exercise',title:'Add fractions with unlike denominators',url:ROOT+'/math/arithmetic-home/arith-review-fractions/add-sub-fractions/e/adding_fractions'}],
-    ratios:[{kind:'exercise',title:'Unit rates',url:ROOT+'/math/algebra-functions/unit-rates'}],
+    ratios:[{kind:'exercise',title:'Unit rates',url:ROOT+'/exercise/unit-rates'}],
     graphs:[{kind:'exercise',title:'Evaluate functions from a graph',url:ROOT+'/math/algebra/x2f8bb11595b61c86:functions/x2f8bb11595b61c86:evaluating-functions/e/evaluate-functions-from-their-graph'}]
   };
   const matched=extra[s.active==='goal'?s.topic:s.active];

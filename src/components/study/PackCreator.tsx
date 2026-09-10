@@ -1,0 +1,30 @@
+'use client';
+import {useEffect,useState} from 'react';
+import Link from 'next/link';
+import {useRouter,useSearchParams} from 'next/navigation';
+import {useStudy} from './StudyProvider';
+import {allPacks,type Pack} from '@/lib/study';
+import {cardsFromNotes,noteSections,suggestedTopics,type StudyCard,type NoteSection} from '@/lib/study-cards';
+import {extractNotes} from '@/lib/extract-notes';
+import {TOPICS,type Topic} from '@/lib/recovery';
+export function PackCreator(){
+  const {state,ready,update}=useStudy(),router=useRouter(),query=useSearchParams();
+  const [name,setName]=useState(''),[topics,setTopics]=useState<Topic[]>([]),[cards,setCards]=useState<StudyCard[]>([]),[notes,setNotes]=useState(''),[source,setSource]=useState('My notes'),[status,setStatus]=useState(''),[busy,setBusy]=useState(false),[loaded,setLoaded]=useState(false);
+  const existing=allPacks(state).find(p=>p.id===query.get('pack'));
+  useEffect(()=>{if(ready&&!loaded){if(existing){setName(existing.name);setTopics(existing.topics);setCards(existing.cards??[]);}setLoaded(true);}},[ready,loaded,existing]);
+  function makeDraft(sections:NoteSection[],origin:string){
+    if(!sections.length){setStatus('Add a definition, worked step, or explanation to turn into a card.');return;}
+    setCards(old=>[...old,...cardsFromNotes(sections,origin)].slice(0,40));
+    const matches=suggestedTopics(sections);setTopics(old=>[...new Set([...old,...matches])]);
+    setStatus('Draft cards added. Edit the questions and notes, then mark the ones you want to keep.');
+  }
+  function edit(id:string,change:Partial<StudyCard>){setCards(old=>old.map(c=>c.id===id?{...c,...change,reviewed:change.reviewed??false}:c));}
+  function save(){
+    const selected=cards.filter(c=>c.reviewed&&c.prompt.trim()&&c.answer.trim());
+    if(!name.trim()||!topics.length){setStatus('Name the pack and choose at least one practice topic.');return;}
+    if(cards.length&&!selected.length){setStatus('Check at least one card to keep it, or remove the drafts.');return;}
+    const pack:Pack={...existing,id:existing?.id??`notes-${Date.now()}`,name:name.trim(),description:selected.length?`${selected.length} personal note cards with a connected practice scope.`:'A pack built around your current work.',topics,khanId:existing&&topics.join('.')===existing.topics.join('.')?existing.khanId:undefined,cards:selected,custom:existing?.custom??true};
+    update(s=>({...s,packs:[...s.packs.filter(p=>p.id!==pack.id),pack],activePack:pack.id,updatedAt:Date.now()}));router.push('/packs');
+  }
+  return <div className="study-space creator-page"><div className="study-page-heading"><div><p className="eyebrow">Bring your current work</p><h1>{existing?'Shape this study pack.':'Turn notes into a useful pack.'}</h1></div><Link className="button-text" href="/packs">Back to my packs</Link></div><p className="creator-intro">Keep the ideas you need, connect them to practice, and bring them back next time.</p><section className="creator-source"><h2>1. Start with your notes</h2><label>Pack name<input value={name} onChange={e=>setName(e.target.value)} maxLength={60} placeholder="Friday’s algebra quiz"/></label><div className="notes-input-grid"><div><label>Paste a useful section<textarea value={notes} onChange={e=>setNotes(e.target.value)} maxLength={20000} placeholder="A definition, a worked step, or notes from class…"/></label><label>Source name<input value={source} onChange={e=>setSource(e.target.value)} maxLength={160}/></label><button className="button-secondary" onClick={()=>makeDraft(noteSections(notes),source)} disabled={!notes.trim()}>Draft cards from this text</button></div><label className="notes-file">Or open your notes<strong>PDF · TXT · Markdown</strong><span>Text is read in this browser.</span><input type="file" accept=".pdf,.txt,.md" disabled={busy} onChange={async e=>{const file=e.target.files?.[0];e.currentTarget.value='';if(!file)return;setBusy(true);setStatus('Reading your notes…');try{makeDraft(await extractNotes(file),file.name);}catch(error){setStatus(error instanceof Error?error.message:'Could not read that file. Try pasting the text.');}finally{setBusy(false);}}}/></label></div></section><p role="status" className="study-notice">{status||'You can also write your own card below.'}</p><section className="creator-cards"><div className="creator-section-heading"><h2>2. Make the cards yours</h2><button className="button-secondary" onClick={()=>setCards(old=>[...old,{id:`manual-${Date.now()}`,prompt:'',answer:'',source:'My own card',locator:'Written here',reviewed:false}])} disabled={cards.length>=40}>Write a card +</button></div>{cards.map((card,i)=><article key={card.id}><div className="review-card-top"><span>Card {i+1} · {card.reviewed?'Checked by you':'Draft'}</span><button className="button-text" onClick={()=>setCards(old=>old.filter(c=>c.id!==card.id))}>Remove</button></div><label>Question<input value={card.prompt} onChange={e=>edit(card.id,{prompt:e.target.value})} maxLength={300}/></label><label>Your explanation<textarea value={card.answer} onChange={e=>edit(card.id,{answer:e.target.value})} maxLength={1600}/></label><p className="note-source">Source: {card.source} · {card.locator}</p><label className="keep-card"><input type="checkbox" checked={card.reviewed} disabled={!card.prompt.trim()||!card.answer.trim()} onChange={e=>edit(card.id,{reviewed:e.target.checked})}/> I checked this card. Keep it in my pack.</label></article>)}</section><section className="creator-topics"><h2>3. Connect a practice scope</h2><p>These topics connect to reviewed checks and Khan activities. Your cards remain your own notes.</p><fieldset><legend>Choose the topics that fit</legend>{Object.entries(TOPICS).map(([id,t])=><label key={id}><input type="checkbox" checked={topics.includes(id as Topic)} onChange={e=>setTopics(old=>e.target.checked?[...old,id as Topic]:old.filter(x=>x!==id))}/>{t.label}</label>)}</fieldset><button className="button-primary" disabled={!ready||busy||!name.trim()||!topics.length} onClick={save}>Save this study pack ↗</button></section></div>;
+}

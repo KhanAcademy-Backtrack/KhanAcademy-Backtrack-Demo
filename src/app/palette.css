@@ -1,0 +1,51 @@
+/* User-selected Khan palette. Navy text keeps the bright green accessible. */
+:root {
+  --brand-green: #14bf96;
+  --brand-navy: #0a2a66;
+  --brand-white: #ffffff;
+  --brand-mint: #e7f9f3;
+  --brand-ink-soft: #475e7c;
+  --bg: var(--brand-white);
+  --text: var(--brand-navy);
+  --accent: var(--brand-navy);
+  --muted: var(--brand-ink-soft);
+}
+html, body { color: var(--brand-navy); background: var(--brand-white); }
+.study-root, .study-root.tone-sky, .study-root.tone-peach {
+  --study-accent: var(--brand-navy);
+  --study-soft: var(--brand-mint);
+  --study-line: #c4e6db;
+}
+.study-root.tone-sky { --study-soft: #eef3fa; --study-line: #cedaeb; }
+.study-root.tone-peach { --study-soft: #ffffff; --study-line: #97d7c5; }
+.study-space p, .today-buddy p, .study-space label { color: var(--brand-ink-soft); }
+.today-focus { border-top: 4px solid var(--brand-green); }
+.today-focus + .study-pack-grid { margin-top: 28px; }
+.study-space .button-primary, .session-complete .button-primary,
+.study-empty-page .button-primary, .source-challenge .button-primary,
+.learning-stage .button-primary {
+  color: var(--brand-navy);
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  font-weight: 700;
+}
+.study-space .button-primary:hover, .session-complete .button-primary:hover,
+.study-empty-page .button-primary:hover, .learning-stage .button-primary:hover { background: #10ae88; border-color: #10ae88; }
+.map-goal h3 { font-size: 23px; line-height: 1.4; margin-top: 12px; }
+.study-space .button-secondary:hover { background: var(--brand-mint); }
+.study-time button[aria-pressed=true], .study-modes button[aria-pressed=true] {
+  background: var(--brand-navy); border-color: var(--brand-navy); color: white;
+}
+.study-pack-grid article[data-selected=true] { box-shadow: inset 0 3px 0 var(--brand-green); border-color: #67cbb0; }
+.goal-progress progress, .study-overview progress, .together-round>progress { accent-color: var(--brand-green); }
+.goal-progress progress::-webkit-progress-value { background: var(--brand-green); }
+.goal-progress progress::-moz-progress-bar { background: var(--brand-green); }
+.node-active { fill: var(--brand-green); }
+.node-active + .node-number { fill: var(--brand-navy); }
+.learning-stage, .learning-map, .home-map { --text: var(--brand-navy); --accent: var(--brand-navy); }
+.mobile-study-nav a[aria-current=page] { box-shadow: inset 0 -3px 0 var(--brand-green); }
+.fraction-strip>span[data-filled=true] { background: var(--brand-green); }
+.fraction-strip.second>span[data-filled=true] { background: var(--brand-navy); }
+.fraction-strip.second>span { border-color: #94a9c8; }
+::selection { background: #b8eee0; color: var(--brand-navy); }
+.about-university-logo { display:block; max-width:100%; height:auto; width:360px; margin:24px 0; }
