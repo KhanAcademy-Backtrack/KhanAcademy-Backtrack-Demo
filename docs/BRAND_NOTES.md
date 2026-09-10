@@ -1,11 +1,34 @@
-# BACKTRACK brand assets
+# Dunlo brand system
 
-The green mark draws a lowercase b as a return route. The turn back represents checking an earlier skill before continuing with today's task. The open shape remains simple enough for a browser icon. The wordmark uses DM Sans Bold, with adjusted spacing and outlined letters for consistent rendering.
+Dunlo is the public study-companion identity; BACKTRACK remains the recovery engine. Keep the existing repository, saved-data compatibility and professional live URL.
 
-Use the complete `backtrack-route-logo.svg` on white or a light surface. Use `backtrack-route-mark.svg` for small square spaces. Preserve its proportions and keep at least half the mark's width clear around the lockup. Green is #087e70. Navigation routes may use #1a73e8; violet #5753fa remains the action accent. Use DM Sans regular and bold for slide text.
+## Mark and meaning
 
-The deck places the BACKTRACK and official UP Manila logos on a consistent header rail. Both logos and the map background are a three-element Canva group; ungroup to adjust their positions. The BACKTRACK wordmark is an outlined vector graphic. Replace it from the supplied source if changing the wordmark itself. Slide titles, explanations, cards, labels, and the budget table remain editable elements.
+The original green bookmark companion represents keeping a useful place in your learning. Its folded corner makes the object recognizable; the simple face makes returning feel welcoming. The wordmark is navy DM Sans Bold. It is an outlined vector for consistent display; the supplied font remains available for editable slide text.
 
-The UP Manila artwork is unchanged from the official source cited in THIRD_PARTY_MATERIALS. Preserve its colours and aspect ratio. The team's institutional endorsement was confirmed by Matthew. Keep the university artwork separate from Khan's material attribution.
+The coined working name draws on dunong and a learning loop. It is short enough for a tab title and distinct from the name of a single recovery feature. Basic web and app-store searches in September 2026 did not surface an obvious study app called Dunlo in the inspected results. Dunlo is also a place name in Pennsylvania. Domain, handle and trademark availability have not been established; these searches are not registration or legal clearance.
 
-Rebuild the original logo assets with `python scripts/build-brand.py`. Source font and license files are in output/Fonts. The map and route SVGs are in output/deck-assets. The older orange route remains a backup source; the current deck uses gps-route-maps.svg.
+## User-selected palette
+
+- Green: #14BF96 — companion, progress, highlights and major actions.
+- White: #FFFFFF — reading surfaces and breathing room.
+- Navy: #0A2A66 — headings, mathematics, body emphasis and labels on bright green.
+- Related supporting tints: #E7F9F3 mint, #EEF3FA navy mist, #475E7C secondary text.
+
+These exact three primary colors come from the Khan Academy palette reference the user supplied on 10 September 2026. They replace the earlier violet/orange scheme. Keep error feedback distinguishable with text and icons; use warm colors only when their semantic role requires it.
+
+Bright green carries navy labels because white text on that green does not provide enough contrast for ordinary small text. The site keeps a predominantly white base with green emphasis and original mathematics illustrations.
+
+## Type and layout
+
+The site uses Plus Jakarta Sans for interface text and STIX Two Text for mathematics. The editable Canva deck uses DM Sans regular and bold; mathematical expressions may use STIX where needed, never exceeding two families on a slide. Use one unmistakable headline, one explanatory visual or example, and short supporting text. Align the reading order before adding decoration.
+
+The map language belongs where it explains a change of study route. Label every stop with an action; avoid an unexplained curve pretending to be a data graph. Use native editable text and shapes in Canva, with the supplied smooth vector route where appropriate.
+
+## Assets and consistency
+
+Rebuild the owned bookmark and wordmark with scripts/build-companion-brand.py. Current SVGs and icons live in public and output/deck-assets. Keep the old BACKTRACK route mark as the engine identity and preserve old URLs.
+
+The official UP Manila logo remains unaltered, with its original colors and aspect ratio, on every slide. The user confirmed institutional endorsement. Khan Academy attribution remains separate from UP Manila endorsement and from the original product mark. Do not imply Khan sponsorship or copy its identity into the Dunlo logo.
+
+Keep the existing Canva design and its editor link. The editor link is private team working access, never a link to print in the public deck or repository. Exported links point to the public product and sources.

@@ -1,8 +1,22 @@
 # Complete study-companion implementation checklist
 
-Status: planning pause requested by the user, 10 September 2026. The full specification is in PRODUCT_IMPLEMENTATION_PLAN.md. Latest source addendum: Study_Companion_Expansion_Addendum_for_Codex (1).md. It matches the later study-companion addendum, which supersedes narrow remedial-only positioning.
+## Latest release checkpoint — 10 September 2026
+
+The expanded website is live at https://dunlo.vercel.app/. Final follow-up fixes cover pack editor identity, accessible saved backups, Khan practice self-report transfer into route records, clearing an earlier round’s goal-completion flag, and completing supported rounds after unknown answers without awarding learning credit. The current code passed 48 domain tests and a production build with 26 routes. Eight browser acceptance journeys plus visible confidence/unknown routing, desktop card alignment and backup restore/download were checked. Historical unchecked tasks below are planning records, not an assertion that all listed work is absent.
+
+The user has paused presentation design and PDF/Drive refresh for a research/planning pass. Preserve the same Canva design and exactly 15 slides. Current Canva text/branding and application answer sources have partial updates; exported PDFs/Drive files remain older versions. Remaining presentation corrections include an old hyperlink on the demo QR image, numeric-marker contrast and old page titles/presenter notes. Complete the visual/judge review and exports after the strategy pass, without claiming them finished now.
+
+The next handoff belongs directly in chat. Its recipient researches and plans only, then ends with a TLDR for the user and a complete implementation prompt that the user can give another agent manually. Preserve the full product and focus on practical Philippine use. Do not create or contact another conversation.
+
+Status: implementation resumed by explicit user instruction after the completed planning pass, 10 September 2026. The full specification is in PRODUCT_IMPLEMENTATION_PLAN.md. Latest source addendum: Study_Companion_Expansion_Addendum_for_Codex (1).md. It matches the later study-companion addendum, which supersedes narrow remedial-only positioning.
 
 This checklist covers the full intended experience. Build in dependency order and keep all areas visible during review.
+
+## Current verified checkpoint — 10 September, continued implementation
+
+The palette is now the user-selected #14BF96 / #FFFFFF / #0A2A66. Site code and owned illustrations/identity assets have been updated; the Canva palette pass is still pending. The production build passed with 26 routes after the creator tools. There are 44 passing domain tests. A real browser journey on a clean QA origin completed challenge FQ1 → two fresh signed factor checks → session finish → one reviewer item with tomorrow’s date. The ordinary preview remains port 3047; QA runs on 3048, preserving its existing data separately.
+
+Built since the planning scaffold: supported Khan entry/URL recognition, two-way practice feedback, focused clip reuse, finite sessions, global exposure ledger, reviewer scheduling, rehearsal, notes to future self, all 12 challenge entries, same-screen co-op, companion and topic illustrations, mobile navigation, and PDF/TXT/MD note extraction with editable author-reviewed cards. These are implementation checkpoints, not a claim that all browser cases are verified. Newest notes/PDF, teacher-week separation, co-op, mobile and storage failure paths still need full browser checks. Expanded slides/docs/Drive and deployment remain pending.
 
 ## Completed preparation and partial work
 
@@ -19,18 +33,18 @@ This checklist covers the full intended experience. Build in dependency order an
 ## A. Shared learning state and migration
 
 - [ ] Validate every nested stored structure, recovery snapshot, session task, setting, and imported record.
-- [ ] Preserve old question meaning with per-attempt generator versions through migration.
+- [x] Preserve old question meaning with per-attempt generator versions through migration.
 - [ ] Make the global used/exposed-item ledger prevent answer leakage across packs, learning, replays, legacy routes, and later sessions.
 - [ ] Test serial reservations, targeted first checks, assistance flags, and reload behavior together.
-- [ ] Deduplicate skill review across overlapping packs without inventing a universal ability score.
-- [ ] Make ingestion/rewards/session completion idempotent under replay, refresh, and retry.
+- [x] Deduplicate skill review across overlapping packs without inventing a universal ability score.
+- [x] Make ingestion/rewards/session completion idempotent under replay, refresh, and retry.
 - [ ] Preserve recoverable backups for unreadable data and provide a usable export/restore path.
 - [ ] Clear all intended activity in the current tab and other tabs, including the study provider and old routes; preserve unrelated site/app data.
 - [ ] Put local persistence behind a clean adapter for synchronized accounts.
 
 ## B. Packs, preparation, and authoring
 
-- [ ] Finish curated packs using all five supported sample areas.
+- [x] Finish curated packs using all five supported sample areas.
 - [ ] Finish custom topic combinations, editable names, optional test dates, and changing priorities.
 - [ ] Keep curated pack overrides, shared-pack identity, and imported titles stable and safe.
 - [ ] Implement Learn, Review, and mixed Challenge from the same pack/history.
@@ -47,8 +61,8 @@ This checklist covers the full intended experience. Build in dependency order an
 - [ ] Add equally meaningful fraction, ratio, graph, and bracket representations.
 - [ ] Add “That didn't click” choices: visual, another example, and slower steps.
 - [ ] Add structured prediction, error-spotting, explain-the-step, and teach-back tasks.
-- [ ] Keep learning available before failure and support available after difficulty.
-- [ ] Keep the primary clue action as a fresh investigation; explanation remains learner-accessible.
+- [x] Keep learning available before failure and support available after difficulty.
+- [x] Keep the primary clue action as a fresh investigation; explanation remains learner-accessible.
 - [ ] Preserve all original BACKTRACK branches, goal return, confidence handling, equivalent answers, and human-support escalation.
 - [ ] Expand mathematical structure within supported families and verify each variant.
 - [ ] Replace the long-page vertically centered route with a compact sticky desktop context and usable mobile expansion.
@@ -56,16 +70,16 @@ This checklist covers the full intended experience. Build in dependency order an
 
 ## D. Today, rounds, reviewer, and return
 
-- [ ] Build Today from real pack/history/dates rather than sample counts.
-- [ ] Make available time, chosen mode, due review, and current goal affect the session queue.
-- [ ] Make smaller/rebuild/deeper-support actions actually change workload and retain deferred work.
+- [x] Build Today from real pack/history/dates rather than sample counts.
+- [x] Make available time, chosen mode, due review, and current goal affect the session queue.
+- [x] Make smaller/rebuild/deeper-support actions actually change workload and retain deferred work.
 - [ ] Resume the same active session after navigation/reload and an interruption.
 - [ ] Complete finite rounds with varied tasks, independent or supported outcomes, and a clear stop.
 - [ ] Finish automatic reviewer creation, maintenance review, manual saves, and due dates.
-- [ ] Add understandable scheduling controls, early review, pausing, and rescheduling.
+- [x] Add understandable scheduling controls, early review, pausing, and rescheduling.
 - [ ] Make Rematch use fresh items, original goal context, and honest before/after evidence.
 - [ ] Never treat absence alone as forgetting or manufacture delayed outcomes from a clock preview.
-- [ ] Add the factual end-of-session note to future you, with an optional personal note.
+- [x] Add the factual end-of-session note to future you, with an optional personal note.
 
 ## E. Engagement and public identity
 
@@ -79,17 +93,25 @@ This checklist covers the full intended experience. Build in dependency order an
 
 ## F. Sharing, accounts, and circles
 
+User clarification after planning: no backend or accounts are required for this demo. Complete the local learner experience, working pack/challenge sharing, and useful co-op interaction. Real cross-device accounts and live synchronized circles below are future service work, not a blocker or a requested setup step now. Keep technical limitations out of repeated normal-flow copy; never fabricate shared activity.
+
 - [ ] Finish shared scopes and asynchronous challenge links that work before mandatory signup.
-- [ ] Inspect available backend/auth access and actual service requirements; do not provision paid services without authorization.
-- [ ] Implement account linking and cross-device persistence without losing local work.
-- [ ] Implement real invited circle membership, leaving/removal, and expiring invitation handling.
-- [ ] Implement cooperative goals from actual contributions and keep individual misconceptions private.
-- [ ] Implement preset encouragement/reactions with appropriate access control.
-- [ ] Implement optional comparable challenges/duels and server-checked reward events; speed is optional.
-- [ ] Test owner/member/nonmember/removed-member access and concurrent/replayed submissions.
+- [x] Backend access question resolved: no backend/accounts requested. Do not provision or ask again.
+- [ ] Future service work (outside this version): Implement account linking and cross-device persistence without losing local work.
+- [ ] Future service work (outside this version): Implement real invited circle membership, leaving/removal, and expiring invitation handling.
+- [ ] Future service work (outside this version): Implement cooperative goals from actual contributions and keep individual misconceptions private.
+- [ ] Future service work (outside this version): Implement preset encouragement/reactions with appropriate access control.
+- [ ] Future service work (outside this version): Implement optional comparable challenges/duels and server-checked reward events; speed is optional.
+- [ ] Future service work (outside this version): Test owner/member/nonmember/removed-member access and concurrent/replayed submissions.
 - [ ] Keep illustrative data isolated; do not call local or hard-coded activity live group progress.
 
 ## G. Khan and teacher/creator routine
+
+- [x] Add a Khan-origin lesson/activity picker and recognized-URL resolver to supported packs, keeping the selected learning goal explicit.
+- [x] Add two-way Khan return feedback: completed, still difficult, or access problem, all explicitly self-reported and separate from independent checks.
+- [ ] Demonstrate the complete goal → check/help → Khan activity → saved return → fresh application → scheduled review cycle.
+- [ ] Demonstrate both reel-origin and existing-Khan-learner entry converging on those same mapped packs.
+- [x] Keep teacher-confirmed Khan activity manual unless an actual permitted export has been inspected; do not invent an automatic CSV integration.
 
 - [ ] Verify mapped Khan resources and prominent relevance labels across packs and study modes.
 - [ ] Verify the 2:22–3:56 factor segment, replay/continuation, and official-source fallback.
@@ -102,7 +124,7 @@ This checklist covers the full intended experience. Build in dependency order an
 
 ## H. Campaign and product entry
 
-- [ ] Define twelve variants: three skills × two audience framings × two hooks.
+- [x] Define twelve variants: three skills × two audience framings × two hooks.
 - [ ] Write at least three complete scripts/storyboards with original mathematics and clear audience differences.
 - [ ] Adapt the concepts for YouTube Shorts, TikTok, and Facebook Reels.
 - [ ] Verify platform/account link capabilities and provide a short challenge-code fallback.
@@ -131,4 +153,4 @@ This checklist covers the full intended experience. Build in dependency order an
 
 ## Resume point
 
-Planning is the latest active user request. Deliver the full connected plan in the chat with a link to the detailed document. Preserve uncommitted work. On subsequent implementation, begin with the shared-state/migration contract and test harness, then follow the complete sequence; do not finish one feature and lose the remaining product areas.
+The plan was delivered and the user explicitly asked to continue implementation. Begin with the shared-state/migration contract and test harness, then follow the complete sequence; do not finish one feature and lose the remaining product areas.

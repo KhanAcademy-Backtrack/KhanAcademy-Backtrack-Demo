@@ -20,7 +20,7 @@ fonts=root/'.refs'/'fonts'
 if not fonts.exists():fonts=root/'output'/'Fonts'
 for key,name in [('BT','Regular'),('BTBold','Bold'),('BTSemi','SemiBold')]:pdfmetrics.registerFont(TTFont(key,str(fonts/f'PlusJakartaSans-{name}.ttf')))
 pdfmetrics.registerFontFamily('BT',normal='BT',bold='BTBold',italic='BT',boldItalic='BTBold')
-ink=colors.HexColor('#151521');muted=colors.HexColor('#505A6B');blue=colors.HexColor('#5753FA');teal=colors.HexColor('#087E70')
+ink=colors.HexColor('#0A2A66');muted=colors.HexColor('#475E7C');blue=colors.HexColor('#0A2A66');teal=colors.HexColor('#0A2A66')
 styles={
  'title':ParagraphStyle('Title',fontName='BTBold',fontSize=25,leading=32,textColor=ink,spaceAfter=22),
  'h2':ParagraphStyle('H2',fontName='BTBold',fontSize=15,leading=21,textColor=teal,spaceBefore=17,spaceAfter=9,keepWithNext=True),
@@ -33,16 +33,16 @@ styles={
 def clean(t):return t.replace('—',': ').replace('–','-').replace('‑','-').replace('−','-').replace('→',' to ').replace('↗','')
 def inline(t):
     t=html.escape(clean(t))
-    t=re.sub(r'\[([^\]]+)\]\((https?://[^\s)]+)\)',lambda m:f'<link href="{m[2]}" color="#5753FA">{m[1]}</link>',t)
-    t=re.sub(r'(?<!["=])(https?://[^\s<]+)',lambda m:f'<link href="{m[1]}" color="#5753FA">{m[1]}</link>',t)
+    t=re.sub(r'\[([^\]]+)\]\((https?://[^\s)]+)\)',lambda m:f'<link href="{m[2]}" color="#0A2A66">{m[1]}</link>',t)
+    t=re.sub(r'(?<!["=])(https?://[^\s<]+)',lambda m:f'<link href="{m[1]}" color="#0A2A66">{m[1]}</link>',t)
     t=re.sub(r'\*\*(.+?)\*\*',r'<b>\1</b>',t)
     t=re.sub(r'`([^`]+)`',r'\1',t)
     return t
 def footer(c,doc):
     c.setStrokeColor(colors.HexColor('#DFE3EB'));c.line(48,42,A4[0]-48,42)
-    c.setFillColor(muted);c.setFont('BT',8);c.drawString(48,28,'BACKTRACK · KEIC 2026');c.drawRightString(A4[0]-48,28,str(doc.page))
+    c.setFillColor(muted);c.setFont('BT',8);c.drawString(48,28,'Dunlo · KEIC 2026');c.drawRightString(A4[0]-48,28,str(doc.page))
 def write_doc(filename,title,flow):
-    doc=SimpleDocTemplate(str(out/filename),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=50,bottomMargin=58,title=title,author='BACKTRACK · University of the Philippines Manila')
+    doc=SimpleDocTemplate(str(out/filename),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=50,bottomMargin=58,title=title,author='Dunlo · University of the Philippines Manila')
     doc.build(flow,onFirstPage=footer,onLaterPages=footer)
 def markdown_pdf(p):
     lines=p.read_text(encoding='utf-8-sig').splitlines();flow=[];buf=[];title=p.stem
@@ -62,7 +62,7 @@ def markdown_pdf(p):
         else:buf.append(line)
     flush();write_doc(('DECK_BUILD_NOTES' if p.stem=='PITCH_DECK_15_SLIDES' else p.stem)+'.pdf',title,flow)
 
-docs=['SUBMISSION_CHECKLIST','SUBMISSION_COPY','KEIC_WINNING_STRATEGY','COMPETITOR_STRESS_TEST','PITCH_DECK_15_SLIDES','PILOT_IMPLEMENTATION_PLAN','MEASUREMENT_AND_EVALUATION','BUSINESS_AND_SUSTAINABILITY','VALIDATION_BEFORE_SUBMISSION','CLAIMS_AND_SOURCES_LEDGER','PITCH_AND_QA_PREP','THIRD_PARTY_MATERIALS','JUDGE_FINAL_REVIEW']
+docs=['SUBMISSION_CHECKLIST','SUBMISSION_COPY','KEIC_WINNING_STRATEGY','PITCH_DECK_15_SLIDES','PILOT_IMPLEMENTATION_PLAN','MEASUREMENT_AND_EVALUATION','BUSINESS_AND_SUSTAINABILITY','VALIDATION_BEFORE_SUBMISSION','CLAIMS_AND_SOURCES_LEDGER','PITCH_AND_QA_PREP','THIRD_PARTY_MATERIALS','JUDGE_FINAL_REVIEW']
 if args.only and set(args.only)-set(docs):parser.error('Unknown document stem: '+', '.join(sorted(set(args.only)-set(docs))))
 for name in docs:
     if args.only and name not in args.only:continue
@@ -73,14 +73,14 @@ submission=json.loads((root/'docs'/'submission.json').read_text(encoding='utf-8-
 for i,section in enumerate(submission['sections'] if not args.only else []):
     name=re.sub(r'[^A-Za-z0-9]+','_',section['name']).strip('_')
     wc=len(' '.join(section['paragraphs']).split())
-    flow=[Paragraph(inline(section['name']),styles['title']),Paragraph(f'BACKTRACK: Your GPS for Learning<br/>University of the Philippines Manila<br/>{wc} words · Maximum 300 words',styles['note'])]
+    flow=[Paragraph(inline(section['name']),styles['title']),Paragraph(f"{html.escape(submission['title'])}<br/>University of the Philippines Manila<br/>{wc} words · Maximum 300 words",styles['note'])]
     flow += [Paragraph(inline(p),styles['field']) for p in section['paragraphs']]
     write_doc(f'ANSWER_{i+1:02}_{name}.pdf',section['name'],flow)
 
 layout=json.loads((root/'.refs'/'deck-build'/'deck-layout.json').read_text(encoding='utf-8')) if args.include_backup_deck else []
 # The authoritative deck is exported from Canva. Rebuild the local backup only explicitly.
 if layout:
-    deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('BACKTRACK · KEIC 2026');c.setAuthor('University of the Philippines Manila BACKTRACK team')
+    deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('Dunlo · KEIC 2026');c.setAuthor('University of the Philippines Manila BACKTRACK team')
     for slide in layout:
         c.saveState();c.scale(.75,.75)
         for e in slide['elements']:

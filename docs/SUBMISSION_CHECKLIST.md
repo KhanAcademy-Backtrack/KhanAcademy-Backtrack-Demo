@@ -4,7 +4,7 @@
 
 Use the seven answers in SUBMISSION_COPY, or the separate answer PDFs. Each is below 300 words. Upload BACKTRACK_KEIC_2026.pdf as the deck. It has 15 pages including the cover and sources. Do not upload the deck blueprint in place of the deck.
 
-The clickable product link is https://backtrack-learning.vercel.app/demo . The homepage is https://backtrack-learning.vercel.app/ . The earlier comparison site remains at https://backtrack-five.vercel.app/ .
+The clickable product link is https://dunlo.vercel.app/demo . The homepage is https://dunlo.vercel.app/ . The earlier comparison site remains at https://backtrack-five.vercel.app/ .
 
 ## Confirm before pressing Submit
 
@@ -30,7 +30,7 @@ Before application, use the validation script to collect permitted real feedback
 ## Where to find each answer
 
 - What it is and why it could matter: KEIC_WINNING_STRATEGY.
-- What already exists and how to answer objections: COMPETITOR_STRESS_TEST.
+- Pitch questions and answers: PITCH_AND_QA_PREP.
 - What to paste into the form: SUBMISSION_COPY and the seven numbered answer PDFs.
 - What to present: BACKTRACK_KEIC_2026.pdf and editable PPTX.
 - How to run the proposed five-month school work: PILOT_IMPLEMENTATION_PLAN.

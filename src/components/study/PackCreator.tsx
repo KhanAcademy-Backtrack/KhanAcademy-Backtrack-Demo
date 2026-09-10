@@ -7,7 +7,8 @@ import {allPacks,type Pack} from '@/lib/study';
 import {cardsFromNotes,noteSections,suggestedTopics,type StudyCard,type NoteSection} from '@/lib/study-cards';
 import {extractNotes} from '@/lib/extract-notes';
 import {TOPICS,type Topic} from '@/lib/recovery';
-export function PackCreator(){
+export function PackCreator(){const query=useSearchParams();return <PackEditor key={query.get('pack')??'new'}/>;}
+function PackEditor(){
   const {state,ready,update}=useStudy(),router=useRouter(),query=useSearchParams();
   const [name,setName]=useState(''),[topics,setTopics]=useState<Topic[]>([]),[cards,setCards]=useState<StudyCard[]>([]),[notes,setNotes]=useState(''),[source,setSource]=useState('My notes'),[status,setStatus]=useState(''),[busy,setBusy]=useState(false),[loaded,setLoaded]=useState(false);
   const existing=allPacks(state).find(p=>p.id===query.get('pack'));

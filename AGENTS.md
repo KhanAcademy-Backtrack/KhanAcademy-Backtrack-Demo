@@ -1,5 +1,7 @@
 # Project continuity
 
+Latest scope: finish and publish the website fixes, preserving the full feature set. Slide design and PDF/Drive refresh are paused for strategy research. The user wants a manual handoff directly in chat for a researcher/planner, which must end with a plain-language TLDR and a ready-to-paste implementation prompt for a different agent. Never send it to another conversation. Keep competitor research out of public product, application and presentation content. Strengthen Philippine fit without reducing features or adding account/backend setup.
+
 Before continuing substantial work, read these current project records:
 
 1. `docs/PRODUCT_IMPLEMENTATION_PLAN.md` — the complete expanded product, problem framing, implementation sequence, and 15-slide story.

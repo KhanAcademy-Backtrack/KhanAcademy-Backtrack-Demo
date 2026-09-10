@@ -15,7 +15,16 @@ export function loadStudy(storage:StudyStorage,now:number):{state:StudyState;war
 export function readStudyImport(raw:string):StudyState{
   if(raw.length>5_000_000)throw Error('Choose a study-space file smaller than 5 MB.');
   let data;try{data=JSON.parse(raw);}catch{throw Error('This file is not readable study data.');}
+  if(data?.version===1&&data.entries&&typeof data.entries[STUDY_KEY]==='string'){
+    try{data=JSON.parse(data.entries[STUDY_KEY]);}catch{throw Error('The earlier study space in this backup needs repair.');}
+  }
   if(!validStudy(data))throw Error('This is not a supported study-space export.');return data;
+}
+
+export function listStudyBackups(storage:StudyStorage){
+  const backups:{key:string;at:number;kind:'earlier-save'|'before-restore'}[]=[];
+  for(let i=0;i<storage.length;i++){const key=storage.key(i);if(!key||!/^backtrack\.(?:study|restore)\.backup\.\d+$/.test(key))continue;const at=Number(key.split('.').at(-1));if(!Number.isFinite(at)||at>=8.64e15)continue;backups.push({key,at,kind:key.startsWith('backtrack.restore.')?'before-restore':'earlier-save'});}
+  return backups.sort((a,b)=>b.at-a.at).slice(0,5);
 }
 
 /** A restore replaces the whole learning snapshot, including old route caches. */

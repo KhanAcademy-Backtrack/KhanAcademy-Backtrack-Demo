@@ -1,10 +1,12 @@
-# BACKTRACK
+# Dunlo
 
-Stuck on today’s lesson, but unsure what to review? BACKTRACK finds a useful earlier step, connects it to Khan material, and checks the return.
+A study companion for Khan Academy: choose what matters today, work through a useful session, and return to the ideas that need another look. The original recovery engine remains part of this broader experience.
 
-Live product: https://backtrack-learning.vercel.app/
+Live product: https://dunlo.vercel.app/
 
-Earlier comparison site: https://backtrack-five.vercel.app/
+The expanded site includes Today planning, finite sessions, quiz rehearsal, scheduled review, curated/custom packs, note cards with PDF/TXT/Markdown import, shared scope links, same-screen co-op, a bookmark companion and teacher activity sheets. Supported Khan entry, focused video segments, saved returns and independent checks connect the experience. Progress, restore and recovery backups work locally.
+
+Presentation editing and PDF/Drive refresh are paused for strategy review. Existing exported decks and PDFs are earlier versions, not the current website release. The existing native Canva design remains the authoritative 15-slide deck.
 
 ## The product
 
@@ -46,7 +48,7 @@ The public interface stores device-local progress, not a school record. Initial 
 
 ## Deployment
 
-The separate Vercel project is backtrack-learning. Its GitHub integration is connected to this repository. The original backtrack project was verified to have no Git connection and remains a comparison deployment.
+The existing Vercel project is now named dunlo. Its GitHub integration is connected to this repository. The public address is https://dunlo.vercel.app/.
 
 Production follows main.
 

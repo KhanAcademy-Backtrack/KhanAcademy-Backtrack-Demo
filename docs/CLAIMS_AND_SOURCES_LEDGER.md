@@ -38,7 +38,7 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 
 **Gemini:** June 25, 2026 study notebooks describe goal-based diagnostics and adaptive lessons. https://blog.google/innovation-and-ai/products/gemini-app/gemini-study-notebooks/ . Avoid “AI only helps if you already know what to ask.”
 
-**Khanmigo and Brilliant:** established tutoring/interactive learning alternatives. https://www.khanmigo.ai/ and https://brilliant.org/ . Avoid presenting either as a static content directory.
+**Khanmigo:** established tutoring support. https://www.khanmigo.ai/ . Avoid presenting it as a static content directory.
 
 ## Learning and motivation
 
@@ -70,4 +70,4 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 
 ## Design references
 
-Khan Academy’s actual rendered homepage supplied the predominantly white surface, readable Plus Jakarta Sans interface, restrained violet/blue actions, and dark text reference. Original BACKTRACK supplied useful math typesetting, route geometry, and the repaired root parser. Brilliant informed interaction-first math; Nicky Case informed explanation by interaction. Other inspected references included Linear, Lusion, Basement, Active Theory, Lightship, and Immersive Garden. No third-party result or customer story is reproduced as BACKTRACK evidence.
+Khan Academy’s rendered homepage informed readable surfaces and typography. The user subsequently selected green #14BF96, white #FFFFFF and navy #0A2A66. The original recovery engine supplied mathematical typesetting and route geometry. Nicky Case informed explanation through interaction. No third-party result or customer story is reproduced as evidence for Dunlo.

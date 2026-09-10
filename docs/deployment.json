@@ -1,8 +1,12 @@
 {
   "projectId": "prj_wQOHBw50UTNUYzhLHAtFjdt2kMN3",
   "status": "READY",
-  "productUrl": "https://backtrack-learning.vercel.app/demo",
-  "url": "https://backtrack-learning.vercel.app",
+  "productUrl": "https://dunlo.vercel.app/demo",
+  "url": "https://dunlo.vercel.app",
   "originalUrl": "https://backtrack-five.vercel.app",
-  "projectName": "backtrack-learning"
+  "projectName": "dunlo",
+  "commit": "df93f78411491e42e1fab21246e2ccbc026e86a8",
+  "deployment": "https://dunlo-9kj64ie99-m4tyu633s-projects.vercel.app",
+  "verified": "2026-09-10",
+  "verification": "Production build, 45 domain tests, eight earlier browser journeys plus visible confidence/unknown-answer routing and desktop card alignment; live Dunlo address verified with updated labels."
 }

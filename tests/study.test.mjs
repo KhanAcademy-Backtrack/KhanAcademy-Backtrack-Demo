@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {initialStudy,ingestRecovery,planSession,prepareRound,completeStudyTask,smallerSession,validStudy,PACKS,allPacks,parseSharedPack,packFromKhan,recordKhanFeedback,skillKey,DAY,STUDY_KEY} from '../src/lib/study.ts';
+import {initialStudy,ingestRecovery,planSession,prepareRound,completeStudyTask,smallerSession,validStudy,PACKS,allPacks,parseSharedPack,packFromKhan,recordKhanOpen,recordKhanFeedback,skillKey,DAY,STUDY_KEY} from '../src/lib/study.ts';
 import {initialRecovery,recoveryReducer as reduce,problemFor,validRecovery} from '../src/lib/recovery.ts';
 import {KHAN_ENTRIES,resolveKhanUrl} from '../src/lib/khan-entry.ts';
-import {loadStudy,readStudyImport,restoreStudy} from '../src/lib/study-storage.ts';
+import {loadStudy,readStudyImport,restoreStudy,listStudyBackups} from '../src/lib/study-storage.ts';
+import {routeSummary} from '../src/lib/teacher-routine.ts';
 import {cardsFromNotes,noteSections,suggestedTopics,validStudyCard} from '../src/lib/study-cards.ts';
 import {challengeNextStep} from '../src/lib/challenges.ts';
 const now=Date.UTC(2026,8,10,8);let clock=now;
@@ -101,4 +102,23 @@ test('challenge confidence and unknown responses choose useful support without c
  assert.equal(challengeNextStep('know',false,false).mode,'challenge');
  const event={kind:'challenge_attempt',at:now,detail:'FQ1:unknown',confidence:'unsure',response:'unknown'};
  assert.ok(validStudy({...state,events:[event]}));assert.equal(validStudy({...state,events:[{...event,confidence:'genius'}]}),false);
+});
+
+test('Khan return reports stay with the learner record without duplicating resource opens',()=>{
+ const entry=KHAN_ENTRIES[0],pack=packFromKhan(entry),activity={topic:entry.topic,skill:entry.skill,url:entry.practice.url,title:entry.practice.title,returnPath:'/study/session',at:now};
+ let s=recordKhanOpen(initialStudy(),activity);s=recordKhanFeedback(s,activity,'completed',now+10);
+ const task=planSession(s,pack,5,'review',now+20).tasks[0],route=prepareRound(s,task,now+30);
+ assert.equal(routeSummary(route).khan,'learner_reported');assert.equal(route.events.find(e=>e.kind==='khan_feedback').at,now+10);assert.equal(route.evidence.length,0);assert.equal(route.goalPassed,false);
+ const after=ingestRecovery(s,route,now+40);assert.equal(after.events.filter(e=>e.kind==='khan_open').length,1);assert.equal(after.events.filter(e=>e.kind==='khan_feedback').length,1);assert.ok(validStudy(after));
+});
+
+test('a new review round does not display an old goal pass as its own result',()=>{
+ let route=act(initialRecovery(),{type:'start',budget:60,mode:'self'});route=answer(route);route=act(route,{type:'continue'});route=answer(route);assert.equal(route.goalPassed,true);
+ const state=ingestRecovery(initialStudy(),route,clock),next=prepareRound(state,{id:'later-factor',topic:'quadratics',skill:'factor',mode:'review',reason:'A fresh look.'},++clock);
+ assert.equal(next.goalPassed,false);assert.equal(next.evidence.length,route.evidence.length);assert.equal(state.routes.quadratics.goalPassed,true);
+});
+
+test('saved backup files can be found and reopened without exposing unrelated storage',()=>{
+ const original={...initialStudy(),activePack:PACKS[0].id},storage=memory([[STUDY_KEY,JSON.stringify(original)],['unrelated.backup.99','private']]);restoreStudy(storage,initialStudy(),now);
+ const backups=listStudyBackups(storage);assert.equal(backups.length,1);assert.equal(backups[0].kind,'before-restore');assert.equal(readStudyImport(storage.getItem(backups[0].key)).activePack,PACKS[0].id);
 });

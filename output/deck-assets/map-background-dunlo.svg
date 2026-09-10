@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <title>Abstract street-map background for BACKTRACK</title>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <g opacity=".5" fill="#d9f5ec">
+    <path d="M0 0H235L204 91 98 154 0 125Z"/>
+    <path d="M1130 522 1280 482V720H1038L1086 635Z"/>
+    <path d="M0 562 82 527 154 575 110 720H0Z"/>
+  </g>
+  <g fill="none" stroke-linejoin="round" stroke-linecap="round" opacity=".52">
+    <g stroke="#dbe8e5" stroke-width="22">
+      <path d="M-25 184 226 118 390 145 613 75 897 109 1300 36"/>
+      <path d="M-30 490 174 436 365 487 619 425 863 466 1310 358"/>
+      <path d="M185-30 163 120 232 327 180 457 261 747"/>
+      <path d="M1075-20 1051 153 1099 321 1047 493 1116 750"/>
+      <path d="M-30 647 212 604 437 650 697 594 948 631 1310 580"/>
+    </g>
+    <g stroke="#ffffff" stroke-width="16">
+      <path d="M-25 184 226 118 390 145 613 75 897 109 1300 36"/>
+      <path d="M-30 490 174 436 365 487 619 425 863 466 1310 358"/>
+      <path d="M185-30 163 120 232 327 180 457 261 747"/>
+      <path d="M1075-20 1051 153 1099 321 1047 493 1116 750"/>
+      <path d="M-30 647 212 604 437 650 697 594 948 631 1310 580"/>
+    </g>
+    <g stroke="#dbe8e5" stroke-width="3">
+      <path d="M0 284 252 238 457 275 723 194 1039 231 1280 186"/>
+      <path d="M64 0 83 215 48 404 115 720 M359 0 335 197 402 401 367 720"/>
+      <path d="M794 0 827 193 781 431 845 720 M1207 0 1191 229 1230 461 1204 720"/>
+    </g>
+  </g>
+  <rect x="30" y="72" width="1220" height="558" rx="30" fill="#ffffff" opacity=".88"/>
+  <rect width="1280" height="60" fill="#ffffff"/>
+  <path d="M64 59H1216" stroke="#dce5e2"/>
+</svg>

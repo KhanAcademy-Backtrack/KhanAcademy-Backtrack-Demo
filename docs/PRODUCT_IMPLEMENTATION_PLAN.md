@@ -2,6 +2,8 @@
 
 Planning revision: 10 September 2026. Authoritative brief: `Study_Companion_Expansion_Addendum_for_Codex (1).md`. The user explicitly requested a thorough plan before further implementation. Existing work is preserved; this document does not claim the expanded product is already finished or deployed.
 
+Latest design steering: the user selected green **#14BF96**, white **#FFFFFF**, and navy **#0A2A66** from the supplied Khan Academy palette reference. This supersedes earlier palette directions. Use navy for readable text and green for the companion, actions, progress and emphasis; use related tints for surfaces. Apply the palette across the website and the existing 15-slide Canva deck, keeping official logos unchanged.
+
 ## 1. Product decision
 
 Build an everyday study companion that prepares a useful next session, helps a difficult idea click, and remembers what deserves another look. BACKTRACK remains its recovery engine: the current task stays visible while the learner investigates an obstacle, receives appropriate support, and returns with fresh evidence.
