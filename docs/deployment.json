@@ -5,8 +5,8 @@
   "url": "https://dunlo.vercel.app",
   "originalUrl": "https://backtrack-five.vercel.app",
   "projectName": "dunlo",
-  "commit": "df93f78411491e42e1fab21246e2ccbc026e86a8",
-  "deployment": "https://dunlo-9kj64ie99-m4tyu633s-projects.vercel.app",
-  "verified": "2026-09-10",
-  "verification": "Production build, 45 domain tests, eight earlier browser journeys plus visible confidence/unknown-answer routing and desktop card alignment; live Dunlo address verified with updated labels."
+  "commit": "af24d21895dad02972539d7eae7478df3e807950",
+  "deployment": "https://dunlo-yoo2ib8sb-m4tyu633s-projects.vercel.app",
+  "verified": "2026-09-11",
+  "verification": "83 unit tests, 18 browser journeys, typecheck and 30-route static production build. Live root/demo/Khan/study/review/session/shared-scope HTTP checks and live Khan return/reload plus diagnostic-to-visual walkthrough passed. Commit verified through Vercel GitHub deployment metadata. Site and docs only; deck deferred."
 }
