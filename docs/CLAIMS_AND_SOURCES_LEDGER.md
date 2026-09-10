@@ -28,6 +28,18 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 
 **Claim:** Khan Academy Philippines has local curriculum/program activity. **Status:** official website checked; no BACKTRACK partnership verified. **Safe wording:** “Seek alignment and supported opportunities.” **Avoid:** claiming BACKTRACK is DepEd approved or already part of a Khan Philippines program. Source: https://khanacademyphilippines.org/
 
+## Chemistry and physics coverage (added 11 September 2026)
+
+**Claim:** Dunlo supports nine destinations across mathematics, chemistry and physics. **Status:** implementation claim, verified in the browser on 11 September 2026 — nine destinations build and route, and a full physics journey (goal miss → prerequisite → original lab → two fresh unassisted checks → reviewer item with a future due date → Rematch) passes in the acceptance suite. **Safe wording:** “nine destinations across three subjects.” **Avoid:** “full chemistry and physics coverage,” “a science curriculum,” or any grade-level mapping.
+
+**Claim:** Every generated chemistry and physics answer is correct. **Status:** verified by test, not by assertion. `tests/science.test.mjs` recomputes every formula mass from the published atomic-mass table, counts atoms on both sides of every generated equation, and checks every kinematics, F = ma and unit-conversion item against an independent computation. **Safe wording:** “answers are checked against an independently recomputed key in the test suite.” **Avoid:** claiming external curriculum review that has not happened.
+
+**Claim:** Relative atomic masses are the IUPAC abridged standard atomic weights. **Status:** authored from the published abridged values and held in one module with the rounding policy beside them; **not** re-checked against the IUPAC source during this change. **Safe wording:** “a single reviewed constants table with a stated rounding policy.” **Avoid:** citing a specific IUPAC publication year in learner-facing or judge-facing copy until someone has checked the table against the source. This is a live item for the science reviewer.
+
+**Claim:** Science steps connect to matched Khan Academy practice. **Status:** NOT true for the science-specific steps and must not be claimed. No chemistry or physics URL could be opened and title-checked by hand on this machine, so none shipped; those steps are marked unmatched and the interface says so. **Safe wording:** “physics routes reach verified Khan mathematics practice through their prerequisites; chemistry and physics steps have no matched Khan resource yet, and Dunlo says so.” **Avoid:** any wording that implies Khan science content is integrated. See `docs/THIRD_PARTY_MATERIALS.md`.
+
+**Claim:** The curriculum framing suits a particular Philippine grade level. **Status:** NOT established. The research is explicit that a generic “Grade 9 = X” mapping can mislead under the MATATAG transition. **Safe wording:** name the destination, not the grade. **Avoid:** asserting a grade level. Unmatched teacher topics stay visibly unmatched.
+
 ## Competitor overlap
 
 **IXL:** continuously updated diagnostic recommendations. Verified product statement. https://www.ixl.com/diagnostic . Avoid invention-of-adaptive-learning claims.

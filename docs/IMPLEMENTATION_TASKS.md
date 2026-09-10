@@ -44,7 +44,7 @@ Built since the planning scaffold: supported Khan entry/URL recognition, two-way
 
 ## B. Packs, preparation, and authoring
 
-- [x] Finish curated packs using all five supported sample areas.
+- [x] Finish curated packs using all five supported mathematics areas, plus the two science packs added on 11 September 2026.
 - [ ] Finish custom topic combinations, editable names, optional test dates, and changing priorities.
 - [ ] Keep curated pack overrides, shared-pack identity, and imported titles stable and safe.
 - [ ] Implement Learn, Review, and mixed Challenge from the same pack/history.
@@ -150,6 +150,24 @@ User clarification after planning: no backend or accounts are required for this 
 - [ ] Conduct a judge pass followed by actual improvements to the entry.
 - [ ] Commit/push verified project work, verify Vercel deployment, and check the live entry points.
 - [ ] Report actual completed/remaining work. Do not submit the application or invent external commitments/results.
+
+## J. Chemistry and physics (added 11 September 2026)
+
+- [x] Add a subject dimension to `Topic` and type `TOPICS` as `Record<Topic, TopicMeta>` so the union and the table cannot drift apart.
+- [x] Add an optional per-problem answer contract (`fields`, `tolerance`, `decimals`, `speak`) that defaults to the existing behaviour, with one new branch in `isCorrect` and no change to `answerInputIssue`.
+- [x] Add four science destinations — moles and mass, balancing equations, motion and speed, forces and acceleration — on the existing route engine.
+- [x] Wire real prerequisite chains that descend into the existing mathematics: `unit_convert → multiply`, `substitute → multiply`, `formula_mass → atom_count`. Verified by test and in a browser journey.
+- [x] Put every reviewed constant, compound, and balanced skeleton in one module with its rounding and significant-figures policy stated next to it (`src/lib/science.ts`).
+- [x] Build original interactive explanations for all four destinations: predict, manipulate, state the invariant, then solve without the visual (`src/components/study/ScienceLab.tsx`).
+- [x] Reserve every serial a science lab reveals, so an explanation cannot leak the next check.
+- [x] Extend the notation layer for chemical subscripts, upright symbols, thin spaces and the reaction arrow, with the spoken form asserted in tests and the five earlier examples unchanged.
+- [x] Add science packs, start pages, pack-builder groups, teacher goal groups and co-op topics; no new top-level tab.
+- [x] Add science challenge codes (CB1, CB2, PM1, PM2) that lead into a real pack, reviewer and route without a Khan entry.
+- [x] Verify: 70 unit tests pass, type check clean, 30 routes build, 10 browser journeys pass, no horizontal overflow at 360/390px, keyboard-only operation with a visible focus ring, reduced motion and quiet mode respected.
+- [x] Verify that a study space saved by the pre-change build still loads with no backup written and no loss of packs, reviewer or active session.
+- [ ] **Blocked:** attach hand-verified Khan Academy chemistry and physics resources. No browser on this machine could load Khan's application bundle, so no science URL could be checked by hand. The steps are explicitly marked unmatched and say so in the interface; see `docs/THIRD_PARTY_MATERIALS.md` for the exact procedure to add them.
+- [ ] Confirm the curriculum framing with the team's science reviewer rather than asserting a grade level; leave unmatched teacher topics visibly unmatched.
+- [ ] Later deck pass (presentation work stays paused): the "five mathematics areas" framing appears in `docs/KEIC_WINNING_STRATEGY.md`, `docs/PITCH_AND_QA_PREP.md`, `docs/JUDGE_FINAL_REVIEW.md` and `docs/PITCH_DECK_15_SLIDES.md`.
 
 ## Resume point
 

@@ -12,7 +12,9 @@ Presentation editing and PDF/Drive refresh are paused for strategy review. Exist
 
 A learner chooses a destination and a manageable study block. Their answers determine which earlier step to check, what can leave the route, and when to use a matched Khan resource. Common wrong-turn clues can choose a more useful starting check. For example, a matching factor pair entered as positive roots leads to a signs-and-solutions check. Two fresh unassisted checks support each route decision. Progress stays in the browser.
 
-Five sample destinations are available: quadratics, equations with brackets, fractions, ratios, and linear graphs. The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Short guided repairs and practice stay inside BACKTRACK. Official Khan videos are embedded, with four caption-verified focused segments and controls to continue watching. Original Khan exercises are optional links. No live Khan-results API, learner account server, or generative-model call is assumed.
+Nine destinations are available across three subjects. Mathematics: quadratics, equations with brackets, fractions, ratios, and linear graphs. Chemistry: moles and mass, and balancing equations. Physics: motion and speed, and forces and acceleration. Science routes descend into the mathematics already supported here — a failed `F = ma` question can reach the substitution and multiplication skills and their matched Khan practice.
+
+The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Short guided repairs, original interactive explanations, and practice stay inside Dunlo. Official Khan videos are embedded, with four caption-verified focused segments and controls to continue watching. Original Khan exercises are optional links. The chemistry and physics steps have no hand-verified Khan match yet, and the interface says so plainly rather than substituting an unrelated resource. No live Khan-results API, learner account server, or generative-model call is assumed.
 
 The `/demo` page opens a fresh interactive sample with two example mistakes and a Replay control. It does not overwrite the learner’s saved routes.
 
@@ -30,11 +32,14 @@ Use Node 24 or later for the built-in TypeScript test runner.
 ## Where things live
 
 - src/lib/recovery.ts: deterministic routing and fresh question generation.
+- src/lib/science.ts: the reviewed chemistry and physics constants, item families, and the single rounding policy.
+- src/lib/notation.ts: the notation tokeniser and spoken form, including chemical subscripts and units.
+- src/components/study/ScienceLab.tsx: the original chemistry and physics interactive explanations.
 - src/lib/khan-materials.ts and curriculum.ts: matched Khan resources.
 - src/lib/route-geometry.ts: preserved route interpolation utilities.
 - src/components/product: focused learning interface, route, Khan player, and topic entry.
 - src/app: public routes and optional supporting pages.
-- tests: generated mathematics, animation geometry, focused video segments, guided-question exposure across reloads, and routing checks including generated mathematics, evidence boundaries, deeper checks, session blocks, comeback, and local-storage validation.
+- tests: generated mathematics, animation geometry, focused video segments, guided-question exposure across reloads, and routing checks including generated mathematics, evidence boundaries, deeper checks, session blocks, comeback, and local-storage validation. tests/science.test.mjs independently recomputes every chemistry and physics answer, checks that each generated equation balances, and asserts that an earlier saved study space still loads unchanged.
 - docs/SUBMISSION_CHECKLIST.md: the submission package entry point.
 - output/pdf: the 15-page deck, seven individual answer PDFs, and supporting documents.
 - output/BACKTRACK_KEIC_2026.pptx: current Canva export as an editable backup.

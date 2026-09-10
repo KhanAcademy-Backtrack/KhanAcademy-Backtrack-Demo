@@ -85,7 +85,11 @@ Circles and shared challenges belong beside their packs. Settings, cosmetics, so
 
 Each pack contains a stable identifier, title and purpose, topics/current goals, skill relationships, concept cards, question families, accepted answer rules, official Khan resources, and authorship/review provenance. Personal progress is stored separately from the shareable pack definition.
 
-Offer curated packs for the five supported sample areas, and allow combinations such as the Friday quiz pack. Test dates are optional and editable. The UI shows coverage and next actions rather than an invented exam-readiness percentage.
+Offer curated packs for the supported sample areas — five in mathematics, one in chemistry, one in physics — and allow combinations such as the Friday quiz pack. Test dates are optional and editable. The UI shows coverage and next actions rather than an invented exam-readiness percentage.
+
+### The subject dimension
+
+Every destination declares a `subject` (`maths`, `chemistry` or `physics`) in `TOPICS`, which is typed as `Record<Topic, TopicMeta>` so the union and the table cannot drift apart. Subject is a presentation and grouping concept only: it groups the destination list, the pack builder, the class-goal and co-op menus, and the reviewer's manual-save controls. It deliberately does **not** partition the route engine. A physics route descends into the same mathematics skills and the same reviewer keys as a mathematics route, because a failed `F = ma` question genuinely is sometimes a substitution problem. There is no subject filter that hides destinations by default, and no new top-level tab.
 
 ### Preparation modes
 
@@ -226,6 +230,17 @@ Core records:
 - Participation rewards and cosmetic choices, separate from learning evidence.
 - Khan resource events and teacher-entered confirmation.
 - Optional accounts, circle membership, invitations, and shared challenge records.
+
+### The per-problem answer contract
+
+`Problem` carries four optional fields, each defaulting to the behaviour that existed before them, so no earlier question changed meaning:
+
+- `fields` aligns index-for-index with `labels` and `expected`. A field may be a plain number or a `choice`; a choice submits its option index, so every stored answer stays numeric and every existing validator, serialiser and test keeps working. Absent means every field is a plain number.
+- `unit` on a field is rendered beside the input and spoken in its accessible name. A unit is never typed into the answer box: the numeric checker stays authoritative and no free-text unit parsing is attempted anywhere.
+- `decimals` states the required rounding. Whenever it is set, the prompt says so in words.
+- `tolerance` is an absolute numeric tolerance, set to one unit of the last required decimal place. `isCorrect` gains exactly one branch for it; everything else in that function, and all of `answerInputIssue`, is unchanged. An exact-integer answer carries no tolerance and is compared exactly.
+
+Deterministic maths checkers remain authoritative for the supported mathematics. Chemistry and physics use reviewed answer keys with explicit provenance: one constants table, one rounding and significant-figures policy stated beside it, and a test suite that recomputes every generated answer independently and checks that every generated equation actually balances.
 
 Keep persistence behind an adapter so local storage and a synchronized account use the same domain rules. Migrate old BACKTRACK saves without changing what an earlier question meant. When generators change, preserve per-attempt version/provenance. Merge exposure history across packs, learning, recovery, replays, and later sessions. A new route or a new public name must not turn an exposed answer into fresh evidence.
 

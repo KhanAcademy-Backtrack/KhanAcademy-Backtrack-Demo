@@ -10,6 +10,20 @@ Video map: see src/lib/khan-materials.ts. Source URLs were inspected in Khan's p
 
 Interface font: Plus Jakarta Sans, served through next/font from Google Fonts. Math: STIX Two Text. Existing font/package licensing applies. No generated raster artwork, paid image generation, or copied customer/pilot imagery is used.
 
+## Chemistry and physics: no Khan match shipped yet (11 September 2026)
+
+The chemistry and physics steps added on 11 September 2026 ship with **no** matched Khan Academy resource. The standing rule at the top of `src/lib/curriculum.ts` is that every URL is opened by hand in a browser and its page title checked before it ships. Khan Academy is a client-rendered application: an automated fetch returns an empty shell, so it is not verification, and a deep lesson URL must never be pattern-guessed.
+
+On the machine used for this work the in-app browser was blocked from loading Khan's application bundle (`cdn.kastatic.org`, `net::ERR_BLOCKED_BY_CLIENT`) and no second browser was reachable, so no chemistry or physics URL could be verified by hand. Rather than ship a guess, `src/lib/khan-materials.ts` lists these ids explicitly as unmatched:
+
+`atom_count`, `formula_mass`, `unit_convert`, `net_force`, `moles`, `balancing`, `motion`, `forces`
+
+Listing them is deliberate: `khanMaterial` otherwise falls through to the algebra factoring resources, which would silently send a chemistry learner to quadratics. Where a step is unmatched the interface says so in plain words and shows Dunlo's own explanation instead — a missing third-party match never withholds the original lesson.
+
+Physics learners still reach verified Khan practice. `motion` and `forces` route down into the existing `substitute` and `multiply` skills, whose Khan exercises were verified on 10 September 2026 and are unchanged.
+
+To add a Khan science match later: open the candidate lesson and exercise URLs in a browser, check each page title, add them to `khanMaterial`'s `extra` table keyed by the skill or topic id, remove that id from `UNMATCHED`, add a `KHAN_ENTRIES` spec if the activity should be selectable at `/khan`, and record the URL and check date in this file. A focused video clip additionally needs its captions watched before its id and range enter `VERIFIED_CLIPS`.
+
 ## Focused video segments
 
 Four official lessons have caption-verified ranges: factoring D3a8NnpQ2vU at 2:22-3:56, multiplying binomials oOTFGdjhqqM at 1:01-2:51, like terms CLWpkv6ccpA at 1:09-2:16, and distribution Jp25LHI9wII at 0:51-2:19. Continue watching starts at the end of the segment without a stop limit. A learner can also replay the segment or start from the beginning. Other videos retain their full length until their timing is verified.

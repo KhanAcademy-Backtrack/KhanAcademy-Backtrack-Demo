@@ -14,7 +14,7 @@ Copy only the paragraphs under each field heading. Counts use whitespace-separat
 
 ## Executive Summary
 
-Word count: 239
+Word count: 243
 
 A learner can spend time studying and still face three unanswered questions: What should I practise now? Why does this step fail? What should I revisit tomorrow? Dunlo is a study companion for Khan Academy that connects those decisions into a manageable routine.
 
@@ -22,7 +22,7 @@ Learners start from a supported Khan activity, a shared study pack, their quiz t
 
 When a step becomes difficult, Dunlo’s recovery engine investigates a possible obstacle. Interactive explanations make the mathematics visible: changing a factor pair shows why its product can match while its sum fails. Official Khan video segments and matched exercises provide relevant support. Fresh independent problems then check what the learner can apply. A reviewer and note to future self make returning easier.
 
-The demonstration connects five mathematics areas, supported Khan activities, shared pack links, and same-screen study turns. A teacher workspace connects class goals, Khan assignment evidence, and useful follow-up actions.
+The demonstration connects nine destinations across mathematics, chemistry and physics, supported Khan activities, shared pack links, and same-screen study turns. A teacher workspace connects class goals, Khan assignment evidence, and useful follow-up actions.
 
 With UP Manila’s endorsement, we propose a November 2026–March 2027 pilot involving 80–120 learners across 2–3 cohorts. It will test retained success on current tasks, repeated relevant Khan use, voluntary return, teacher effort, and actual costs. The wider ambition is a reusable study routine that educators and learners can carry across reviewed learning goals.
 
@@ -88,11 +88,11 @@ Reels, shared challenges, and existing Khan learners converge on these same pack
 
 ## Potential to Scale
 
-Word count: 261
+Word count: 275
 
 The unit of replication is a reviewed study pack and its teaching routine. A pack connects a current goal, skill relationships, useful checks, explanations, official Khan resources, fresh applications, and review. An educator kit adds assignment instructions, assessment forms, and reporting definitions.
 
-Dunlo’s five mathematics areas demonstrate this structure. Learners can combine supported topics, add quiz dates, and create source-linked personal note cards. Educators can reuse shared scope while each learner receives their own support and reviewer. New graded question families enter through content review and maintained mappings.
+Dunlo’s nine destinations across mathematics, chemistry and physics demonstrate this structure, with science routes descending into the mathematics they rest on. Learners can combine supported topics, add quiz dates, and create source-linked personal note cards. Educators can reuse shared scope while each learner receives their own support and reviewer. New graded question families enter through content review and maintained mappings.
 
 School adoption begins with one current lesson and a recurring study window. We will measure how a second educator sets up the pack, interprets the action sheet, and continues the routine without the student team directing each session. Review time, onboarding effort, and ongoing support are part of the scale model.
 
