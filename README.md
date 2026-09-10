@@ -1,6 +1,6 @@
 # BACKTRACK
 
-A new route to the lesson you need now.
+Stuck on today’s lesson, but unsure what to review? BACKTRACK finds a useful earlier step, connects it to Khan material, and checks the return.
 
 Live product: https://backtrack-learning.vercel.app/
 
@@ -10,7 +10,7 @@ Earlier comparison site: https://backtrack-five.vercel.app/
 
 A learner chooses a destination and a manageable study block. Their answers determine which earlier step to check, what can leave the route, and when to use a matched Khan resource. Two fresh unassisted checks support each route decision. Progress stays in the browser.
 
-Two destination families are available: equations with brackets and quadratics by factoring. The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Official Khan videos are embedded, with links to the original lessons and exercises. No live Khan-results API, learner account server, or generative-model call is assumed.
+Five sample destinations are available: quadratics, equations with brackets, fractions, ratios, and linear graphs. The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Short guided repairs and practice stay inside BACKTRACK. Official Khan videos are embedded, with four caption-verified focused segments and controls to continue watching. Original Khan exercises are optional links. No live Khan-results API, learner account server, or generative-model call is assumed.
 
 ## Run locally
 
@@ -30,7 +30,7 @@ Use Node 24 or later for the built-in TypeScript test runner.
 - src/lib/route-geometry.ts: preserved route interpolation utilities.
 - src/components/product: focused learning interface, route, Khan player, and topic entry.
 - src/app: public routes and optional supporting pages.
-- tests/recovery.test.mjs: fourteen tests including generated mathematics, evidence boundaries, deeper checks, session blocks, comeback, and local-storage validation.
+- tests: generated mathematics, animation geometry, focused video segments, guided-question exposure across reloads, and routing checks including generated mathematics, evidence boundaries, deeper checks, session blocks, comeback, and local-storage validation.
 - docs/SUBMISSION_CHECKLIST.md: the submission package entry point.
 - output/pdf: the 15-page deck, seven individual answer PDFs, and supporting documents.
 - output/BACKTRACK_KEIC_2026.pptx: editable deck.
@@ -49,6 +49,6 @@ The overhaul was developed on HarryDaks. Matthew later explicitly authorized pus
 
 ## Artifact rebuilding
 
-scripts/build-submission.mjs validates the seven word counts and writes the combined copy. The presentation and PDF builders use the bundled Codex artifact runtime, with fonts prepared from the website build. Final deck links come from docs/deployment.json. They are not intended to run as part of the website build.
+scripts/build-submission.mjs validates the seven word counts and writes the combined copy. scripts/build-deck-refined.mjs builds the current deck. scripts/build-deck-blueprint.mjs reads its layout manifest, and scripts/build-pdfs.py generates the matching PDFs. The presentation and PDF builders use the bundled Codex artifact runtime, with fonts prepared from the website build. Final deck links come from docs/deployment.json. They are not intended to run as part of the website build.
 
 Khan materials and logo attribution: docs/THIRD_PARTY_MATERIALS.md.

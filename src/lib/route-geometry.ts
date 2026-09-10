@@ -193,3 +193,13 @@ export function nodeFractions(cs: Cubic[]): number[] {
 }
 
 export const SAMPLES = 96;
+
+/** Every hero state has the same path command count, allowing a real morph. */
+export function heroRoutePath(answer: 'right' | 'gap' | null): string {
+  const points: Pt[] = answer === 'right'
+    ? [[45,265],[505,105],[660,105]]
+    : answer === 'gap'
+      ? [[45,265],[265,370],[505,105],[660,105]]
+      : [[45,265],[335,225],[505,105],[660,105]];
+  return polylinePath(resample(buildCubics(points, 'horizontal'), SAMPLES));
+}

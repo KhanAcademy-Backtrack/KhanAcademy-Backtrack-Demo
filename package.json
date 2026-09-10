@@ -9,7 +9,7 @@
     "start": "node scripts/serve-static.mjs",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/recovery.test.mjs"
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "motion": "^12.23.12",
