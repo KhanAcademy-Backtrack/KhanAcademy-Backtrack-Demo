@@ -36,5 +36,24 @@ try{for(const [topic,skill,selector,action] of cases){const context=await browse
  if(topic==='moles'&&skill==='formula_mass'){const slider=page.getByRole('slider');await slider.focus();await slider.press('ArrowRight');assert.match(await page.locator('.lab-equation').innerText(),/m/);}
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow');const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);assert.equal(saved.evidence.length,0,'Exploration must not create graded attempts');assert.equal(saved.passed.length,0);assert.deepEqual(errors,[]);await page.screenshot({path:`${dir}/${topic}-${skill}.png`,fullPage:true});results.push({topic,skill,passed:true});console.log(`PASS ${topic}/${skill}`);
  }catch(e){results.push({topic,skill,passed:false,error:e.message});await page.screenshot({path:`${dir}/${topic}-${skill}-failed.png`,fullPage:true});console.log(`FAIL ${topic}/${skill}: ${e.message}`);}finally{await context.close();}}
+
+ /* A scene's own static view must stop the companion's decorative loops too,
+    not only the mathematical motion. Global quiet and reduced motion are
+    covered by the living-scene suite. */
+ {const name='per-scene static view stills the companion';const context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
+  const key='backtrack.route.v1.brackets',route={...initialRecovery('brackets'),active:'expand',phase:'learn',serial:3,startedAt:Date.now(),updatedAt:Date.now()};
+  await context.addInitScript(({key,route})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(route));},{key,route});
+  const loops=()=>page.evaluate(async()=>{const seen=el=>el.getAttribute('style')||'';const eye=document.querySelector('.lesson-companion .buddy-eye'),breath=document.querySelector('.lesson-companion .buddy-breath'),e=new Set(),b=new Set();
+   for(let i=0;i<40;i++){e.add(seen(eye));b.add(seen(breath));await new Promise(r=>requestAnimationFrame(r));}return {eye:e.size,breath:b.size};});
+  try{await page.goto(origin+'/start/brackets');await page.locator('.learn-stage').waitFor();
+   await page.locator('.math-prediction').getByRole('button',{name:'Show me an example first',exact:true}).click();
+   await page.locator('.lesson-companion .buddy-eye').first().waitFor();
+   const moving=await loops();assert.ok(moving.eye>1||moving.breath>1,`the companion should be alive before static view: ${JSON.stringify(moving)}`);
+   await page.getByRole('checkbox',{name:'Static view',exact:true}).check();await page.waitForTimeout(250);
+   const stilled=await loops();assert.deepEqual(stilled,{eye:1,breath:1},`static view must stop the companion: ${JSON.stringify(stilled)}`);
+   await page.getByRole('checkbox',{name:'Static view',exact:true}).uncheck();await page.waitForTimeout(250);
+   const revived=await loops();assert.ok(revived.eye>1||revived.breath>1,'clearing static view should bring the companion back');
+   assert.deepEqual(errors,[]);results.push({topic:'companion',skill:'static',passed:true});console.log('PASS '+name);
+  }catch(e){results.push({topic:'companion',skill:'static',passed:false,error:e.message});await page.screenshot({path:`${dir}/companion-static-failed.png`,fullPage:true});console.log(`FAIL ${name}: ${e.message}`);}finally{await context.close();}}
 }finally{await browser.close();server.kill();await fs.writeFile(`${dir}/results.json`,JSON.stringify(results,null,2));}
 if(results.some(r=>!r.passed))process.exitCode=1;

@@ -24,7 +24,7 @@ export function FillingScene({autoplay=false,compact=false,staticMode=false,save
  const isPlaying=running&&!off&&visible;
  const pose=reading.time>4.7?'aha':running?'point':'curious';
  return <div ref={stage} className={`filling-scene ${compact?'scene-compact':''}`} data-running={running&&!off&&visible}>
-  <div className="scene-heading"><div><span className="scene-eyebrow">An idea you can move</span><h3>Watch a graph fill up.</h3></div><div className="scene-buddy"><Companion size={96} pose={pose}/></div></div>
+  <div className="scene-heading"><div><span className="scene-eyebrow">An idea you can move</span><h3>Watch a graph fill up.</h3></div><div className="scene-buddy"><Companion size={96} pose={pose} still={off}/></div></div>
   <div className="scene-formula"><MathText size="lg">{`V = ${initial} + ${rate}t`}</MathText><span>starts at {initial} L · adds {rate} L/min</span></div>
   <svg ref={svg} className="filling-drawing" viewBox="0 0 700 370" role="img" aria-label={`A linked graph and container. Initially ${initial} litres, adding ${rate} litres per minute. The moving point and water level represent the same amount.`} onPointerMove={drag} onPointerUp={()=>{dragging.current=false;onChange?.({rate,start:initial,time:Math.round(time.get()*10)/10});}} onPointerCancel={()=>{dragging.current=false;}}>
    <defs><linearGradient id={`water-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#14bf96"/><stop offset="1" stopColor="#b0eee0"/></linearGradient><clipPath id={`tank-${id}`}><path d="M500 48H626V302Q626 310 618 310H508Q500 310 500 302Z"/></clipPath></defs>
