@@ -20,7 +20,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ```bash
 npm test          # node --test, currently 70 tests
 npm run typecheck # tsc --noEmit
-npm run build     # static export, currently 30 routes
+npm run build     # static export, currently 28 routes (27 pages plus 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
 npm start         # serve the static build on http://127.0.0.1:3047
 ```

@@ -163,7 +163,7 @@ User clarification after planning: no backend or accounts are required for this 
 - [x] Extend the notation layer for chemical subscripts, upright symbols, thin spaces and the reaction arrow, with the spoken form asserted in tests and the five earlier examples unchanged.
 - [x] Add science packs, start pages, pack-builder groups, teacher goal groups and co-op topics; no new top-level tab.
 - [x] Add science challenge codes (CB1, CB2, PM1, PM2) that lead into a real pack, reviewer and route without a Khan entry.
-- [x] Verify: 70 unit tests pass, type check clean, 30 routes build, 10 browser journeys pass, no horizontal overflow at 360/390px, keyboard-only operation with a visible focus ring, reduced motion and quiet mode respected.
+- [x] Verify: 70 unit tests pass, type check clean, 28 routes build, 10 browser journeys pass, no horizontal overflow at 360/390px, keyboard-only operation with a visible focus ring, reduced motion and quiet mode respected.
 - [x] Verify that a study space saved by the pre-change build still loads with no backup written and no loss of packs, reviewer or active session.
 - [ ] **Blocked:** attach hand-verified Khan Academy chemistry and physics resources. No browser on this machine could load Khan's application bundle, so no science URL could be checked by hand. The steps are explicitly marked unmatched and say so in the interface; see `docs/THIRD_PARTY_MATERIALS.md` for the exact procedure to add them.
 - [ ] Confirm the curriculum framing with the team's science reviewer rather than asserting a grade level; leave unmatched teacher topics visibly unmatched.

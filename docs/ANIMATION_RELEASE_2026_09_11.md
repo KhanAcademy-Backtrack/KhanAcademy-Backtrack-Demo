@@ -41,7 +41,7 @@ The written rule travels with the drawing. Changing the rate moved the water, li
 
 ## Validation
 
-The production build exports 30 routes, and the type check and 86 unit tests pass. The added unit checks verify that every current destination and declared prerequisite has a visual route, that foundation checks select the correct concept, and that a saved trace phase is restored while an impossible one is rejected.
+The production build exports 28 routes — 27 pages plus the 404 — and the type check and 86 unit tests pass. Earlier notes said 30; the export has produced 28 for this whole route set, including on the deployed commit, so the number is corrected rather than repeated. The added unit checks verify that every current destination and declared prerequisite has a visual route, that foundation checks select the correct concept, and that a saved trace phase is restored while an impossible one is rejected.
 
 Browser validation is 50 cases: 10 existing journeys, 9 release journeys, 28 lesson/skill visual cases and 4 living-scene cases. The tests include typing negative values naturally, touch/narrow screens, model actions and ensuring exploration adds no graded attempt. The lesson-scene suite now fails a scene on any console error, not only an uncaught exception, which is what caught the undefined path data. New cases sample the companion's blink and breath across frames to confirm a static scene stops them and a cleared one revives them; drive a science stepper, reload and require the same arrangement back with the prediction not re-asked; trace a coordinate point and reload; and sample the written coefficient against the drawn slope on the same frames through a rate change.
 
