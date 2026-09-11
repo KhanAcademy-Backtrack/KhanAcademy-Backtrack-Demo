@@ -37,6 +37,34 @@ try{for(const [topic,skill,selector,action] of cases){const context=await browse
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow');const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);assert.equal(saved.evidence.length,0,'Exploration must not create graded attempts');assert.equal(saved.passed.length,0);assert.deepEqual(errors,[]);await page.screenshot({path:`${dir}/${topic}-${skill}.png`,fullPage:true});results.push({topic,skill,passed:true});console.log(`PASS ${topic}/${skill}`);
  }catch(e){results.push({topic,skill,passed:false,error:e.message});await page.screenshot({path:`${dir}/${topic}-${skill}-failed.png`,fullPage:true});console.log(`FAIL ${topic}/${skill}: ${e.message}`);}finally{await context.close();}}
 
+ /* A science guide is part of the route too. Coming back should show the
+    arrangement the learner built, not the worked example's defaults — and the
+    prediction gate should not be asked a second time. */
+ for(const [topic,readout] of [['forces','.forces-figure'],['motion','.track-figure'],['balancing','.element-comparison']]){
+  const name=`${topic} lab controls survive a reload`;const context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
+  const key=`backtrack.route.v1.${topic}`,route={...initialRecovery(topic),active:'goal',phase:'learn',serial:3,startedAt:Date.now(),updatedAt:Date.now()};
+  await context.addInitScript(({key,route})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(route));},{key,route});
+  /* The guide reaches saved storage through the route reducer, so wait for the
+     value to actually land rather than reloading into the middle of that. */
+  const stored=(k,topic)=>page.waitForFunction(([k,topic])=>{const r=JSON.parse(localStorage.getItem(k)||'null');return r&&r.labs&&r.labs[topic]&&Object.keys(r.labs[topic].values).length>1;},[k,topic]);
+  try{await page.goto(origin+'/start/'+topic);await page.locator('.learn-stage').waitFor();
+   await page.locator('.lab-predict').getByRole('button',{name:'Show me an example first',exact:true}).click();
+   await page.locator(readout).waitFor();
+   const raise=page.locator('.lab-steppers button[aria-label^="Increase"]').first();
+   await raise.click();await raise.click();
+   await stored(key,topic);
+   const before=await page.locator('.lab-steppers').innerText();
+   await page.reload();await page.locator('.learn-stage').waitFor();
+   assert.equal(await page.locator('.lab-predict').count(),0,'the prediction should not be asked again');
+   await page.locator(readout).waitFor();
+   const after=await page.locator('.lab-steppers').innerText();assert.equal(after,before,`the controls should come back as they were: ${JSON.stringify(before)} vs ${JSON.stringify(after)}`);
+   const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);
+   assert.equal(saved.labs[topic].values.shown,1);
+   assert.equal(saved.evidence.length,0,'a guide must not create graded attempts');
+   assert.equal(saved.passed.length,0);
+   assert.deepEqual(errors,[]);results.push({topic,skill:'lab-reload',passed:true});console.log('PASS '+name);
+  }catch(e){results.push({topic,skill:'lab-reload',passed:false,error:e.message});await page.screenshot({path:`${dir}/${topic}-lab-reload-failed.png`,fullPage:true});console.log(`FAIL ${name}: ${e.message}`);}finally{await context.close();}}
+
  /* The coordinate trace is part of the saved guide. Reloading should show the leg
     the learner reached rather than an untraced grid. */
  {const name='coordinate trace survives a reload';const context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));

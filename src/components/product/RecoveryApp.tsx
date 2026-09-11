@@ -20,6 +20,7 @@ import {useStudy} from '@/components/study/StudyProvider';
 import {KhanReturnActions} from '@/components/study/KhanReturnActions';
 import {recordKhanOpen,type KhanFeedback} from '@/lib/study';
 import {ConceptLab} from '@/components/study/ConceptLab';
+import {validLab,type LabSave} from '@/lib/visual-maths';
 import {visualKind} from '@/lib/concept-labs';
 import {AnswerFields} from './AnswerFields';
 
@@ -39,6 +40,10 @@ export function RecoveryApp({topic='quadratics',sample=false,quick=false,launch,
      either hop, losing the answer the learner had already typed. These refs hold
      the newest values synchronously so the page can be flushed on its way out. */
   const latest=useRef(s);latest.current=s;const pendingDraft=useRef<Recovery['draft']>(undefined);
+  /* A guide's controls travel the same two hops — the scene's own effect raises a
+     lab-save, and the route is written by another. The newest one is held here so
+     leaving the page cannot lose the arrangement a learner just built. */
+  const pendingLab=useRef<{key:string;value:LabSave}|undefined>(undefined);
   const [clearMessage,setClearMessage]=useState('');
   const store=`backtrack.route.v1.${topic}${launch?`.study.${launch.id}`:quick?'.quick':''}`;
   useEffect(()=>{
@@ -53,7 +58,8 @@ export function RecoveryApp({topic='quadratics',sample=false,quick=false,launch,
   },[store,topic,sample,quick,launch?.id,study.ready]);
   useEffect(()=>{if(!ready||sample)return;try{localStorage.setItem(store,JSON.stringify(s));setSaved(true);}catch{setSaved(false);}},[s,store,ready,sample]);
   useEffect(()=>{if(!ready||sample)return;
-    const flush=()=>{try{localStorage.setItem(store,JSON.stringify({...latest.current,draft:pendingDraft.current??latest.current.draft}));}catch{}};
+    const flush=()=>{try{const held=pendingLab.current,labs=held&&validLab(held.value)?{...latest.current.labs,[held.key]:held.value}:latest.current.labs;
+      localStorage.setItem(store,JSON.stringify({...latest.current,labs,draft:pendingDraft.current??latest.current.draft}));}catch{}};
     const hidden=()=>{if(document.visibilityState==='hidden')flush();};
     window.addEventListener('pagehide',flush);document.addEventListener('visibilitychange',hidden);
     return()=>{window.removeEventListener('pagehide',flush);document.removeEventListener('visibilitychange',hidden);};
@@ -73,7 +79,7 @@ export function RecoveryApp({topic='quadratics',sample=false,quick=false,launch,
     {!saved&&<p className="service-note">This browser cannot save your route. Download it before leaving.</p>}
     <div className={`learning-layout ${s.phase==='setup'?'setup-layout':''} ${rehearsal?'rehearsal-layout':''}`}>
       <div className="learning-stage" ref={stage}>
-        <div className="stage-content">{sample&&s.evidence.length>0&&<button className="compare-other" onClick={compareOther}>Compare the other answer ⇄</button>}{quick&&s.evidence.length===0&&<p className="quick-entry-note">New numbers. Try the idea you just saw.</p>}{rehearsal&&onRoundComplete&&['feedback','moment'].includes(s.phase)?<div className="round-moment"><p className="eyebrow">Rehearsal</p><h2>{rehearsalAnswers>=rehearsalLimit?'This part is recorded.':'Answer saved.'}</h2><p>{rehearsalAnswers>=rehearsalLimit?'Your results will shape the next useful review.':'A fresh question comes next. Explanations are available after this round.'}</p><button className="button-primary" onClick={()=>rehearsalAnswers>=rehearsalLimit?onRoundComplete(s):send({type:'rehearsal-next',now:Date.now()})}>{rehearsalAnswers>=rehearsalLimit?'Continue my session ↗':'Next question ↗'}</button></div>:onRoundComplete&&s.phase==='moment'&&s.active===roundSkill?<div className="round-moment"><p className="eyebrow">Fresh checks passed</p><h2>You used the step<br/>without a hint.</h2><p>{LABELS[s.active]} · Two different problems in this round.</p><button className="button-primary" onClick={()=>onRoundComplete(s)}>Continue my session ↗</button><Link className="button-text" href="/">Done for now</Link></div>:<Stage s={s} send={send} sample={sample} rehearsal={rehearsal} onDraft={d=>{pendingDraft.current=d;}}/>} {onRoundComplete&&['learn','support'].includes(s.phase)&&new Set(s.evidence.filter(e=>e.at>=(roundStartedAt??Infinity)).map(e=>e.id)).size>=2&&<div className="supported-round"><button className="button-text" onClick={()=>onRoundComplete(s)}>Keep this step for next time</button><small>This step stays in your reviewer for another look.</small></div>}{s.phase!=='setup'&&s.evidence.length>0&&<ReturnTicket state={s} sample={sample} onDownload={exportRoute}/>}</div>
+        <div className="stage-content">{sample&&s.evidence.length>0&&<button className="compare-other" onClick={compareOther}>Compare the other answer ⇄</button>}{quick&&s.evidence.length===0&&<p className="quick-entry-note">New numbers. Try the idea you just saw.</p>}{rehearsal&&onRoundComplete&&['feedback','moment'].includes(s.phase)?<div className="round-moment"><p className="eyebrow">Rehearsal</p><h2>{rehearsalAnswers>=rehearsalLimit?'This part is recorded.':'Answer saved.'}</h2><p>{rehearsalAnswers>=rehearsalLimit?'Your results will shape the next useful review.':'A fresh question comes next. Explanations are available after this round.'}</p><button className="button-primary" onClick={()=>rehearsalAnswers>=rehearsalLimit?onRoundComplete(s):send({type:'rehearsal-next',now:Date.now()})}>{rehearsalAnswers>=rehearsalLimit?'Continue my session ↗':'Next question ↗'}</button></div>:onRoundComplete&&s.phase==='moment'&&s.active===roundSkill?<div className="round-moment"><p className="eyebrow">Fresh checks passed</p><h2>You used the step<br/>without a hint.</h2><p>{LABELS[s.active]} · Two different problems in this round.</p><button className="button-primary" onClick={()=>onRoundComplete(s)}>Continue my session ↗</button><Link className="button-text" href="/">Done for now</Link></div>:<Stage s={s} send={send} sample={sample} rehearsal={rehearsal} onDraft={d=>{pendingDraft.current=d;}} onLab={(key,value)=>{pendingLab.current={key,value};}}/>} {onRoundComplete&&['learn','support'].includes(s.phase)&&new Set(s.evidence.filter(e=>e.at>=(roundStartedAt??Infinity)).map(e=>e.id)).size>=2&&<div className="supported-round"><button className="button-text" onClick={()=>onRoundComplete(s)}>Keep this step for next time</button><small>This step stays in your reviewer for another look.</small></div>}{s.phase!=='setup'&&s.evidence.length>0&&<ReturnTicket state={s} sample={sample} onDownload={exportRoute}/>}</div>
       </div>
       <aside id="learner-route-map" className={`learning-map ${mapOpen?'map-expanded':''}`} aria-label="Your route"><div className="route-context"><div className="map-goal"><span className="eyebrow">{launch?"What we’re working toward":"The destination stays."}</span>{launch?<h3>{s.goalTitle??TOPICS[topic].label}</h3>:<MathText size="lg" speak={s.goalExpression?undefined:TOPICS[topic].speak}>{s.goalExpression??TOPICS[topic].example}</MathText>}</div><RouteCanvas state={s}/><div className="map-foot"><span>{s.goalPassed?'Two fresh goal checks passed':s.passed.filter(x=>x!==(s.destinationSkill??'goal')).length?`${s.passed.filter(x=>x!==(s.destinationSkill??'goal')).length} earlier steps checked`:'Fresh answers guide your next step'}</span><button onClick={()=>setHistoryOpen(!historyOpen)} aria-expanded={historyOpen}>Evidence {historyOpen?'−':'+'}</button></div>{historyOpen&&<div className="evidence-drawer"><h3>Your route history</h3>{s.evidence.length===0?<p>No checks yet. Your answers will appear here.</p>:<ol>{s.evidence.slice(-12).map(e=><li key={e.id}><span>{LABELS[e.skill]}</span><small>{e.correct?'Correct':'Needs another look'}{e.family==='diagnostic'?' · Routing check':e.classification==='later-retrieval'?' · Later independent retrieval':e.assisted?' · With support':' · Fresh independent'} · {e.confidence}</small></li>)}</ol>}<p>{s.events.filter(e=>e.kind==='khan_open').length} Khan resource opens. Opens do not verify practice completion.</p><button className="button-text" onClick={exportRoute}>Download route record ↗</button></div>}</div></aside>
     </div>
@@ -82,11 +88,11 @@ export function RecoveryApp({topic='quadratics',sample=false,quick=false,launch,
   </div>;
 }
 
-function Stage({s,send,sample=false,rehearsal=false,onDraft}:{s:Recovery;send:Send;sample?:boolean;rehearsal?:boolean;onDraft?:(d:Recovery['draft'])=>void}){
+function Stage({s,send,sample=false,rehearsal=false,onDraft,onLab}:{s:Recovery;send:Send;sample?:boolean;rehearsal?:boolean;onDraft?:(d:Recovery['draft'])=>void;onLab?:(key:string,value:LabSave)=>void}){
   const now=()=>Date.now();
   if(s.phase==='setup')return <Setup s={s} send={send}/>;
   if(s.phase==='check')return <Question key={`${s.active}:${s.serial}`} s={s} send={send} sample={sample} rehearsal={rehearsal} onDraft={onDraft}/>;
-  if(s.phase==='learn')return <Learn key={s.active} s={s} send={send} isolated={sample}/>;
+  if(s.phase==='learn')return <Learn key={s.active} s={s} send={send} isolated={sample} onLab={onLab}/>;
   if(s.phase==='feedback'||s.phase==='moment'){
     const prev=problemFor({...s,serial:s.serial-1});
     const clue=!s.correct&&s.routeClue?.serial===s.serial-1?s.routeClue:undefined;
@@ -117,7 +123,7 @@ function Question({s,send,sample=false,rehearsal=false,onDraft}:{s:Recovery;send
       <ConfidenceChoices value={confidence} onChange={c=>{setConfidence(c);onDraft?.({id:p.id,answers:values,confidence:c});}}/>
       <div className="question-actions"><button className="button-primary" type="submit" disabled={values.some(x=>!x.trim())}>Check my answer ↗</button><button className="button-text" type="button" onClick={()=>submit(p.labels.map(()=>''))}>I don’t know yet</button></div></form>{!rehearsal&&<div className="hint-row"><button onClick={()=>send({type:'hint',now:now()})} disabled={s.assisted}>Show one hint {s.assisted?'✓':'+'}</button><button onClick={()=>send({type:'learn',now:now()})}>Show me an example first</button></div>}{s.assisted&&<p className="hint-note">{p.hint} <span>We’ll use fresh numbers for your next independent check.</span></p>}</div>;
 }
-function Learn({s,send,isolated=false}:{s:Recovery;send:Send;isolated?:boolean}){
+function Learn({s,send,isolated=false,onLab}:{s:Recovery;send:Send;isolated?:boolean;onLab?:(key:string,value:LabSave)=>void}){
   const study=useStudy();
   const model=replayModel(s),visual=visualKind(s);
   const [mode,setMode]=useState<'replay'|'repair'|'watch'|'visual'>(model?'replay':visual?'visual':'repair');
@@ -131,8 +137,8 @@ function Learn({s,send,isolated=false}:{s:Recovery;send:Send;isolated?:boolean})
     <p className="eyebrow accent">Explore a step toward your goal</p>
     <h2>{s.active==='goal'?TOPICS[s.topic].goal:LABELS[s.active]}</h2>
     <div className="repair-modes">{visual&&<button type="button" aria-pressed={mode==='visual'} onClick={()=>setMode('visual')}>See it visually</button>}{model&&<button type="button" aria-pressed={mode==='replay'} onClick={()=>setMode('replay')}>Explore the mistake</button>}<button type="button" aria-pressed={mode==='repair'} onClick={()=>setMode('repair')}>Read & try</button>{material.id&&<button type="button" aria-pressed={mode==='watch'} onClick={()=>setMode('watch')}>Khan explanation{clip?` · ${clipTime(clip.end-clip.start)}`:''}</button>}</div>
-    {mode==='replay'&&model&&<ErrorReplay initial={s.labs?.[model.kind]} onSave={value=>send({type:'lab-save',key:model.kind,value,now:Date.now()})} onEvent={(kind,detail)=>send({type:'learning-event',kind,detail,now:Date.now()})} model={model} onExpose={pair=>send({type:'expose-pair',pair,now:Date.now()})} onContinue={()=>ready('interactive-replay')}/>}
-    {mode==='visual'&&visual&&<ConceptLab onSave={value=>send({type:'lab-save',key:visual,value,now:Date.now()})} onEvent={(kind,detail)=>send({type:'learning-event',kind,detail,now:Date.now()})} kind={visual} state={s} onExpose={serial=>send({type:'expose',serial,now:Date.now()})} onContinue={()=>ready('visual-guide')}/>}
+    {mode==='replay'&&model&&<ErrorReplay initial={s.labs?.[model.kind]} onSave={value=>{onLab?.(model.kind,value);send({type:'lab-save',key:model.kind,value,now:Date.now()});}} onEvent={(kind,detail)=>send({type:'learning-event',kind,detail,now:Date.now()})} model={model} onExpose={pair=>send({type:'expose-pair',pair,now:Date.now()})} onContinue={()=>ready('interactive-replay')}/>}
+    {mode==='visual'&&visual&&<ConceptLab onSave={value=>{onLab?.(visual,value);send({type:'lab-save',key:visual,value,now:Date.now()});}} onEvent={(kind,detail)=>send({type:'learning-event',kind,detail,now:Date.now()})} kind={visual} state={s} onExpose={serial=>send({type:'expose',serial,now:Date.now()})} onContinue={()=>ready('visual-guide')}/>}
     {mode==='repair'&&<GuidedRepair state={s} source={material.source} onExpose={()=>send({type:'expose',serial:s.serial+1,now:Date.now()})} onReady={()=>ready('guided-repair')}/>}
     {mode==='watch'&&<><img className="learn-logo" src="/khan-academy.svg" alt="Khan Academy" width="176" height="28"/><h3 className="khan-relevance">{watchTitle}</h3><KhanPlayer id={material.id} title={material.title} source={material.source} onOpen={()=>send({type:'khan',detail:'embedded-video',now:Date.now()})}/><button className="button-secondary" onClick={()=>setMode(model?'replay':'repair')}>Try the step yourself</button></>}
     {practice&&<section className="khan-practice-stop"><img src="/khan-academy.svg" alt="Khan Academy" width="145" height="25"/><h3>Practise this step on Khan Academy</h3><p>{practice.title}. Return here for a fresh problem when you finish.</p><a className="button-secondary" href={practice.url} target="_blank" rel="noopener noreferrer" onClick={()=>{const now=Date.now(),detail=`exercise:${practice.title}`;if(!isolated&&activity)study.update(st=>recordKhanOpen(st,{...activity,at:now},detail));send({type:'khan',detail,now});}}>Open matched Khan practice ↗</a>{s.mode==='class'&&<p className="fine-print">Use the exercise your teacher assigned in your Khan class.</p>}{activity&&<KhanReturnActions activity={activity} isolated={isolated} onReport={(response,now)=>send({type:'khan-feedback',response,now})} onFresh={()=>ready('after-khan-report')} onSupport={()=>setMode(model?'replay':visual?'visual':'repair')}/>}</section>}
