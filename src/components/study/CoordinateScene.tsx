@@ -1,0 +1,18 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import {motion,useReducedMotion} from 'motion/react';
+import {useStudy} from './StudyProvider';
+import {Companion} from './Companion';
+import {MathText} from '@/components/math/Math';
+import {freshLab,type LabSave} from '@/lib/visual-maths';
+export function CoordinateScene({initial,onSave,onContinue}:{initial?:LabSave;onSave?:(s:LabSave)=>void;onContinue:()=>void}){
+ const [s,set]=useState(initial??freshLab),[phase,setPhase]=useState(0),reduced=useReducedMotion(),{state}=useStudy(),save=useRef(onSave);save.current=onSave;
+ const x=Math.max(0,Math.min(6,s.values.x??2)),y=Math.max(0,Math.min(8,s.values.y??5)),off=!!reduced||state.settings.quiet||s.static;
+ useEffect(()=>{save.current?.(s);},[s]);useEffect(()=>{if(phase!==1)return;const timer=setTimeout(()=>setPhase(2),off?0:700);return()=>clearTimeout(timer);},[phase,off]);
+ const change=(key:string,n:number)=>{setPhase(0);set(v=>({...v,values:{...v.values,[key]:n}}));};
+ return <section className="concept-lab coordinate-scene"><div className="scene-heading"><div><span className="scene-eyebrow">Dunlo visual guide</span><h3>Across first. Then up.</h3></div><Companion size={90} pose={phase===2?'aha':'point'}/></div><p>The first coordinate tells you how far across. The second gives the height.</p><MathText size="lg">{`P = (${x}, ${y})`}</MathText><svg className="coordinate-drawing" viewBox="0 0 500 370" role="img" aria-label={`Point P has x coordinate ${x} and y coordinate ${y}. Read horizontally to ${x}, then vertically to ${y}.`}>
+  {[0,1,2,3,4,5,6].map(n=><g key={`x${n}`}><path d={`M${65+n*60} 50V315`} stroke="#e3eceb"/><text x={65+n*60} y="340" textAnchor="middle">{n}</text></g>)}{[0,1,2,3,4,5,6,7,8].map(n=><g key={`y${n}`}><path d={`M65 ${315-n*32}H430`} stroke="#e3eceb"/><text x="45" y={322-n*32} textAnchor="end">{n}</text></g>)}<path d="M65 38V315H442M60 45l5-7 5 7M435 310l7 5-7 5" stroke="#0a2a66" strokeWidth="2" fill="none"/><text x="35" y="26">y</text><text x="453" y="322">x</text>
+  <motion.path initial={false} animate={{pathLength:phase?1:0,opacity:phase?1:0}} transition={{duration:off?0:.6}} d={`M65 315H${65+x*60}`} stroke="#14bf96" strokeWidth="4" fill="none"/><motion.path initial={false} animate={{pathLength:phase===2?1:0,opacity:phase===2?1:0}} transition={{duration:off?0:.6}} d={`M${65+x*60} 315V${315-y*32}`} stroke="#14bf96" strokeWidth="4" fill="none"/>
+  <motion.circle initial={false} animate={{cx:65+x*60,cy:315-y*32}} transition={{duration:off?0:.35}} r="8" fill="#0a2a66"/><text x={80+x*60} y={303-y*32}>P</text><motion.circle initial={false} animate={{cx:phase?65+x*60:65,cy:phase===2?315-y*32:315,opacity:phase?1:0}} transition={{duration:off?0:.6}} r="7" fill="#14bf96" stroke="#0a2a66"/>
+ </svg><div className="coordinate-controls"><label>Across: x<input aria-label="Across coordinate x" type="range" min="0" max="6" value={x} onChange={e=>change('x',Number(e.target.value))}/></label><label>Up: y<input aria-label="Up coordinate y" type="range" min="0" max="8" value={y} onChange={e=>change('y',Number(e.target.value))}/></label></div><button className="button-secondary" onClick={()=>setPhase(off?2:1)}>Follow x, then y</button><p role="status">{phase===1?`Across to ${x}.`:phase===2?`Then up to ${y}. The point is (${x}, ${y}), in that order.`:'Move either coordinate. Notice which direction the point changes.'}</p><label><input type="checkbox" checked={s.static} onChange={e=>set(v=>({...v,static:e.target.checked}))}/> Static view</label><button className="button-primary" onClick={onContinue}>Try without the visual ↗</button></section>;
+}

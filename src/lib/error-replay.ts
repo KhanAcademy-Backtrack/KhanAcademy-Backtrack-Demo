@@ -3,8 +3,8 @@ import {problemFor,type Recovery,type Skill} from './recovery.ts';
 export type ReplayModel={kind:'factors'|'solutions';pair:[number,number];attempt:[number,number];fromAttempt:boolean};
 /** Replay an actual earlier goal/skill attempt; exploratory changes never score. */
 export function replayModel(s:Recovery):ReplayModel|undefined{
-  if(s.topic!=='quadratics'||!['factor','zero','goal'].includes(s.active))return;
-  const kind=s.active==='factor'?'factors':'solutions';
+  if(s.topic!=='quadratics'||!['factor','zero','goal','distribute'].includes(s.active))return;
+  const kind=['factor','distribute'].includes(s.active)?'factors':'solutions';
   const candidate=[...s.evidence].reverse().find(e=>e.family!=='diagnostic'&&!e.correct&&e.answer.length===2&&e.answer.every(x=>/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(x.replace(/[−–－]/g,'-')))&&
     (e.skill===s.active||e.skill==='goal'));
   if(candidate){

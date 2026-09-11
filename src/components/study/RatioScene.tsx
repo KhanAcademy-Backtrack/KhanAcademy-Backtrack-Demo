@@ -1,0 +1,12 @@
+'use client';
+import {AnimatePresence,motion,useReducedMotion} from 'motion/react';
+import {useStudy} from './StudyProvider';
+import {mixture} from '@/lib/visual-maths';
+export function RatioMixture({a,b,label,staticMode=false}:{a:number;b:number;label:string;staticMode?:boolean}){
+ const reduced=useReducedMotion(),{state}=useStudy(),off=staticMode||!!reduced||state.settings.quiet,m=mixture(a,b);
+ return <div className="mixture animated-mixture"><strong>{label}: {a} : {b}</strong><div className="mixture-parts" aria-label={`${a} round parts and ${b} square parts`}><AnimatePresence initial={false}>{Array.from({length:a},(_,i)=><motion.i layout key={`a${i}`} initial={off?false:{opacity:0,scale:.4,y:-8}} animate={{opacity:1,scale:1,y:0}} exit={{opacity:0,scale:.3}} transition={{duration:off?0:.35}}>●</motion.i>)}{Array.from({length:b},(_,i)=><motion.b layout key={`b${i}`} initial={off?false:{opacity:0,scale:.4,y:-8}} animate={{opacity:1,scale:1,y:0}} exit={{opacity:0,scale:.3}} transition={{duration:off?0:.35}}>■</motion.b>)}</AnimatePresence></div><svg className="share-strip" viewBox="0 0 480 18" role="img" aria-label={`The round parts make ${a} out of ${m.total} parts.`}><rect width="480" height="12" rx="6" fill="#e2ebf4"/><motion.rect initial={false} animate={{width:480*m.share}} transition={{duration:off?0:.5}} height="12" rx="6" fill="#14bf96"/></svg><p>First-part share: {a}/{m.total}{a===4&&b===6?' = 2/5':''} · Total {m.total}</p></div>;
+}
+export function RatioNumberLines({scale,staticMode=false}:{scale:number;staticMode?:boolean}){const reduced=useReducedMotion(),{state}=useStudy(),off=staticMode||!!reduced||state.settings.quiet;return <svg className="ratio-number-lines" viewBox="0 0 560 140" role="img" aria-label={`The same multiplier ${scale} gives ${2*scale} round parts and ${3*scale} square parts.`}>
+ {[0,1].map(row=><g key={row}><path d={`M45 ${35+row*65}H515`} stroke="#0a2a66"/>{[0,1,2,3,4,5,6].map(k=><g key={k}><path d={`M${45+k*76} ${30+row*65}v10`} stroke="#0a2a66"/><text x={45+k*76} y={22+row*65} textAnchor="middle">{k*(row?3:2)}</text></g>)}</g>)}
+ <motion.g initial={false} animate={{x:45+scale*76}} transition={{duration:off?0:.6,ease:[.22,1,.36,1]}}><path d="M0 35V100" stroke="#649d91" strokeDasharray="4 4"/><circle cy="35" r="7" fill="#14bf96" stroke="#0a2a66"/><rect x="-6" y="94" width="12" height="12" rx="2" fill="#0a2a66"/></motion.g><text x="280" y="134" textAnchor="middle" style={{fontSize:14}}>Both amounts use the same multiplier.</text>
+ </svg>;}

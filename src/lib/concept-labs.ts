@@ -1,6 +1,9 @@
 import {subjectOf,type Recovery} from './recovery.ts';
-export type ConceptKind='fractions'|'ratios'|'graphs'|'brackets'|'balancing'|'moles'|'motion'|'forces';
+export type ConceptKind='atoms'|'basics'|'coordinates'|'fractions'|'ratios'|'graphs'|'brackets'|'balancing'|'moles'|'motion'|'forces';
 export function visualKind(s:Recovery):ConceptKind|undefined{
+ if(s.active==='atom_count')return 'atoms';
+ if(['multiply','terms','linear','substitute','unit_convert'].includes(s.active))return 'basics';
+ if(s.active==='coordinates')return 'coordinates';
  if(s.topic==='fractions'&&['goal','equivalent','same_denominator'].includes(s.active))return 'fractions';
  if(s.topic==='ratios'&&['goal','unit_rate'].includes(s.active))return 'ratios';
  if(s.topic==='graphs'&&['goal','coordinates','substitute'].includes(s.active))return 'graphs';
@@ -12,7 +15,7 @@ export function visualKind(s:Recovery):ConceptKind|undefined{
 }
 /** The serials a lab reveals, reserved so an explanation never leaks the next check. */
 export function visualReserveThrough(s:Recovery,kind:ConceptKind){
- if(s.problemVersion===3&&!isScienceKind(kind))return Math.max(s.serial+2,kind==='fractions'?8:kind==='ratios'?7:2);
+ if(s.problemVersion===3&&!isScienceKind(kind))return Math.max(s.serial+2,kind==='fractions'?8:kind==='ratios'?7:kind==='graphs'?23:kind==='coordinates'?9:kind==='atoms'?47:2);
  if(kind==='graphs'&&s.active==='coordinates')return Math.floor(s.serial/5)*5+4;
  if(kind==='graphs'&&s.serial===0)return 7;
  if(kind==='ratios'){const size=s.active==='unit_rate'?5:4;return Math.floor(s.serial/size)*size+size-1;}

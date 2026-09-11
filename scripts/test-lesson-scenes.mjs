@@ -1,0 +1,40 @@
+import {chromium} from 'playwright';
+import {spawn} from 'node:child_process';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {initialRecovery} from '../src/lib/recovery.ts';
+const dir='.refs/lesson-scenes',origin='http://127.0.0.1:3054';await fs.mkdir(dir,{recursive:true});
+const server=spawn(process.execPath,['scripts/serve-static.mjs'],{env:{...process.env,BACKTRACK_PORT:'3054'},windowsHide:true,stdio:'pipe'});await new Promise((r,j)=>{server.stdout.once('data',r);server.once('error',j);});
+const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
+const cases=[
+ ['brackets','expand','.distribution-scene','Collect the groups'],
+ ['quadratics','factor','.assembled-factor','3 Join the middle terms'],
+ ['quadratics','distribute','.assembled-factor','3 Join the middle terms'],
+ ['quadratics','zero','.maths-lab','Try x = -3'],
+ ['fractions','equivalent','.fraction-amount','4 Count equal-sized pieces'],
+ ['fractions','same_denominator','.fraction-amount','4 Count equal-sized pieces'],
+ ['fractions','goal','.fraction-amount','4 Count equal-sized pieces'],
+ ['ratios','unit_rate','.animated-mixture','4 Build a target mixture'],
+ ['ratios','goal','.animated-mixture','4 Build a target mixture'],
+ ['graphs','coordinates','.coordinate-drawing','Follow x, then y'],
+ ['graphs','goal','.filling-scene','Pause filling animation'],
+ ['quadratics','multiply','.basic-skill-scene','Collect and count'],
+ ['quadratics','terms','.basic-skill-scene','Combine the like terms'],
+ ['brackets','linear','.basic-skill-scene','Split both sides by 5'],
+ ['graphs','substitute','.operation-chain','Follow the input through the rule'],
+ ['motion','unit_convert','.unit-equivalence','Describe the same quantity in the new unit'],
+ ['moles','atom_count','.formula-units','Add a formula unit'],
+ ['moles','formula_mass','.formula-mass-parts',null],
+ ['moles','goal','.moles-figure',null],
+ ['balancing','goal','.element-comparison',null],
+ ['motion','goal','.science-cart','Increase seconds'],
+ ['forces','net_force','.forces-figure','Increase force left'],
+ ['forces','goal','.forces-figure','Increase mass']
+];
+try{for(const [topic,skill,selector,action] of cases){const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));const key=`backtrack.route.v1.${topic}`,route={...initialRecovery(topic),active:skill,phase:'learn',serial:3,startedAt:Date.now(),updatedAt:Date.now()};await context.addInitScript(({key,route})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(route));},{key,route});try{await page.goto(origin+'/start/'+topic);await page.locator('.learn-stage').waitFor();if(await page.locator('.math-prediction').count())await page.locator('.math-prediction').getByRole('button',{name:'Show me an example first',exact:true}).click();if(await page.locator('.lab-predict').count())await page.locator('.lab-predict').getByRole('button',{name:'Show me an example first',exact:true}).click();await page.locator(selector).first().waitFor();if(action)await page.getByRole('button',{name:action,exact:true}).click();
+ if(skill==='zero'){const x=page.getByRole('spinbutton',{name:'Value of x',exact:true});await x.focus();await x.press('ControlOrMeta+A');await x.pressSequentially('-4');assert.equal(await x.inputValue(),'-4');}
+ if(topic==='moles'&&skill==='formula_mass'){const slider=page.getByRole('slider');await slider.focus();await slider.press('ArrowRight');assert.match(await page.locator('.lab-equation').innerText(),/m/);}
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow');const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);assert.equal(saved.evidence.length,0,'Exploration must not create graded attempts');assert.equal(saved.passed.length,0);assert.deepEqual(errors,[]);await page.screenshot({path:`${dir}/${topic}-${skill}.png`,fullPage:true});results.push({topic,skill,passed:true});console.log(`PASS ${topic}/${skill}`);
+ }catch(e){results.push({topic,skill,passed:false,error:e.message});await page.screenshot({path:`${dir}/${topic}-${skill}-failed.png`,fullPage:true});console.log(`FAIL ${topic}/${skill}: ${e.message}`);}finally{await context.close();}}
+}finally{await browser.close();server.kill();await fs.writeFile(`${dir}/results.json`,JSON.stringify(results,null,2));}
+if(results.some(r=>!r.passed))process.exitCode=1;

@@ -21,7 +21,7 @@
    ========================================================================== */
 
 const SUP: Record<string, string> = { '²': '2', '³': '3' };
-const OPS = new Set(['+', '−', '-', '=', '×', '·', '÷', '<', '>', '≤', '≥', '±', '≠', '→', ':']);
+const OPS = new Set(['+', '−', '-', '=', '×', '·', '÷', '<', '>', '≤', '≥', '±', '≠', '→', ':', '≈']);
 
 const SPOKEN: Record<string, string> = {
   '+': 'plus',
@@ -41,6 +41,7 @@ const SPOKEN: Record<string, string> = {
   '→': 'yields',
   '/': 'over',
   ':': 'to',
+  '≈': 'approximately equals',
   '≤': 'is less than or equal to',
   '≥': 'is greater than or equal to',
   ',': ',',

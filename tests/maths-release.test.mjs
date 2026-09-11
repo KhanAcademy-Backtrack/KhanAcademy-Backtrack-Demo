@@ -1,3 +1,6 @@
+import {visualKind} from '../src/lib/concept-labs.ts';
+import {replayModel} from '../src/lib/error-replay.ts';
+import {skillDependencies} from '../src/lib/recovery.ts';
 import {parse,speakMath} from '../src/lib/notation.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -62,3 +65,6 @@ test('a one-question rehearsal can finish without forced failure loops or help',
 test('math notation keeps scripts, proper minus, ratio speech and upright units',()=>{assert.equal(speakMath('x² - 3x ≤ 4'),'x squared minus 3 x is less than or equal to 4');assert.equal(speakMath('2 : 3'),'2 to 3');assert.ok(parse('x-2').some(n=>n.t==='op'&&n.v==='−'));assert.ok(parse('\\mathrm{PHP}').every(n=>n.t!=='var'));assert.equal(parse('\\frac{2}{3}')[0].t,'frac');assert.equal(parse('H_{2}')[1].t,'sub');});
 
 test('distribution checks grouping before choosing arithmetic support',()=>{let route={...start('brackets'),active:'expand',serial:0};route=reduce(route,{type:'submit',answers:['2','3'],confidence:'unsure',now:1000});assert.equal(route.nextSkill,'expand');route=reduce(route,{type:'continue',now:1001});assert.equal(problemFor(route).family,'diagnostic');route=reduce(route,{type:'submit',answers:['0'],confidence:'unsure',now:1002});assert.equal(route.nextSkill,'multiply');assert.equal(route.next,'learn');assert.equal(route.passed.length,0);});
+
+test('every current destination and prerequisite has a relevant interactive guide',()=>{for(const topic of Object.keys(TOPICS)){const skills=new Set();const visit=skill=>{if(skills.has(skill))return;skills.add(skill);for(const child of skillDependencies(skill,topic))visit(child);};visit('goal');for(const active of skills){const s={...initialRecovery(topic),active,phase:'learn'};assert.ok(visualKind(s)||replayModel(s),`${topic}/${active} lacks a visual route`);}}});
+test('foundational routes select the relevant concept rather than a harder topic model',()=>{assert.equal(visualKind({...initialRecovery('motion'),active:'unit_convert'}),'basics');assert.equal(visualKind({...initialRecovery('graphs'),active:'coordinates'}),'coordinates');assert.equal(visualKind({...initialRecovery('moles'),active:'atom_count'}),'atoms');assert.equal(replayModel({...initialRecovery('quadratics'),active:'distribute'}).kind,'factors');});

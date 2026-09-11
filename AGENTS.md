@@ -44,3 +44,6 @@ Visual-learning release (11 September 2026): see docs/RELEASE_2026_09_11.md and 
 Latest scope: edit only site and documentation for now. Do not edit the Canva presentation or exports until requested again. Keep learning claims provisional until real learner and retention evidence exists.
 
 Latest ordered authorization: finish site quality and learning research, then the seven application narratives, then a sourced PDF-first 15-slide plan, then implement that plan in the same Canva design. The final submission format is PDF. This supersedes the earlier presentation pause, but does not authorize external application submission or contacting others.
+
+
+Current animation handoff (11 September): see docs/ANIMATION_RELEASE_2026_09_11.md. The owner rejected subtle/hidden animation as insufficient; the next pass makes original teaching motion visible on Today and uses distinct scenes throughout the current lessons. Keep the folded-bookmark identity, clean composition and meaningful synchronized motion. All existing subjects and learning evidence rules remain mandatory. NEVER consume any usage-reset credit under any circumstances. The latest manual handoff is .refs/CONTINUE_DUNLO.md; it is private and must not be staged. No automatic cross-chat delegation or messaging.

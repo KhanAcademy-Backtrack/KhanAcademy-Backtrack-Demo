@@ -104,17 +104,14 @@ try{
    assert.equal(await page.locator('.question-meta .eyebrow').innerText(),'UNIT CONVERSION','the goal miss opens the unit-conversion prerequisite');
    await overflow(page);
 
-   // The original Dunlo lab: predict first, then the visual, then a fresh check.
+   // A unit-conversion difficulty gets a unit model, not an acceleration lesson.
    await page.getByRole('button',{name:'Show me an example first'}).click();
    await page.getByRole('button',{name:'See it visually'}).click();
-   await page.getByRole('radio',{name:/the 4 m\/s it already had still counts/}).check();
-   await page.getByRole('button',{name:'Now show me'}).click();
-   await page.getByRole('heading',{name:'Acceleration is speed added, second by second.'}).waitFor();
-   await page.getByRole('button',{name:'Increase seconds'}).click();
-   assert.match(await page.locator('.concept-invariant').innerText(),/final speed is/);
-   assert.equal(await page.locator('.science-lab .track-figure').getAttribute('role'),'img');
-   await page.screenshot({path:path.join(root,'.refs/browser-review/science-lab.png'),fullPage:true});
-   await page.getByRole('button',{name:'Use the idea on a fresh check'}).click();
+   await page.getByRole('button',{name:'Describe the same quantity in the new unit'}).click();
+   await page.locator('.unit-equivalence').waitFor();
+   assert.match(await page.locator('.basic-skill-scene').innerText(),/same quantity/);
+   await page.screenshot({path:path.join(root,'.refs/browser-review/science-unit-guide.png'),fullPage:true});
+   await page.getByRole('button',{name:'I’m ready for a fresh check'}).click();
 
    // Two fresh, unassisted answers on problems the lab never showed.
    const seen=new Set();

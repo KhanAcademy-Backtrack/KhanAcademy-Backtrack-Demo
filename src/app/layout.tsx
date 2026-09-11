@@ -4,6 +4,7 @@ import './globals.css';
 import './study.css';
 import './palette.css';
 import './maths-labs.css';
+import './living-scenes.css';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import {StudyProvider} from '@/components/study/StudyProvider';
