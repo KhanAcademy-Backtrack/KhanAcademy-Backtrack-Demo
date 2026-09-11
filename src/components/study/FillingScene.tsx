@@ -8,11 +8,18 @@ import {MathText} from '@/components/math/Math';
 /** A continuous mathematical model, shared by the original drawing and graph. */
 export function FillingScene({autoplay=false,compact=false,staticMode=false,saved,onChange}:{autoplay?:boolean;compact?:boolean;staticMode?:boolean;saved?:{rate?:number;start?:number;time?:number};onChange?:(values:{rate:number;start:number;time:number})=>void}){
  const {state}=useStudy(),reduced=useReducedMotion(),off=staticMode||!!reduced||state.settings.quiet;
- const [rate,setRate]=useState(saved?.rate??2),[initial,setInitial]=useState(saved?.start??6),[running,setRunning]=useState(false),[visible,setVisible]=useState(false),[reading,setReading]=useState({time:saved?.time??0,volume:(saved?.start??6)+(saved?.rate??2)*(saved?.time??0)});
+ /* The drawing, the graph and the readout all follow the tween when a rate or a
+    starting value changes. The written rule has to follow it too: showing the
+    target coefficient straight away left the equation disagreeing with every
+    other representation for the length of the change. */
+ const fmt=(n:number)=>{const v=Math.round(n*10)/10;return Number.isInteger(v)?String(v):v.toFixed(1);};
+ const [rate,setRate]=useState(saved?.rate??2),[initial,setInitial]=useState(saved?.start??6),[live,setLive]=useState({rate:saved?.rate??2,start:saved?.start??6}),[running,setRunning]=useState(false),[visible,setVisible]=useState(false),[reading,setReading]=useState({time:saved?.time??0,volume:(saved?.start??6)+(saved?.rate??2)*(saved?.time??0)});
  const time=useMotionValue(saved?.time??0),flow=useMotionValue(saved?.rate??2),start=useMotionValue(saved?.start??6),playback=useRef<AnimationPlaybackControls|undefined>(undefined),stage=useRef<HTMLDivElement>(null),svg=useRef<SVGSVGElement>(null),dragging=useRef(false),autoStarted=useRef(false);
  const id=useId().replace(/:/g,''),volume=useTransform(()=>start.get()+flow.get()*time.get()),dotX=useTransform(time,t=>58+t*62),dotY=useTransform(volume,v=>310-v*8),waterY=useTransform(volume,v=>310-v*8),waterH=useTransform(volume,v=>v*8),lineStart=useTransform(start,n=>310-n*8),lineEnd=useTransform(()=>310-(start.get()+5*flow.get())*8);
  function read(){const t=Math.round(time.get()*10)/10,v=Math.round((start.get()+flow.get()*t)*10)/10;setReading(old=>old.time===t&&old.volume===v?old:{time:t,volume:v});}
+ function readRule(){const r=Math.round(flow.get()*10)/10,b=Math.round(start.get()*10)/10;setLive(old=>old.rate===r&&old.start===b?old:{rate:r,start:b});}
  useMotionValueEvent(volume,'change',read);useMotionValueEvent(time,'change',read);
+ useMotionValueEvent(flow,'change',readRule);useMotionValueEvent(start,'change',readRule);
  useEffect(()=>{const observer=new IntersectionObserver(([entry])=>setVisible(entry.isIntersecting),{threshold:.25});if(stage.current)observer.observe(stage.current);return()=>observer.disconnect();},[]);
  useEffect(()=>{if(!autoStarted.current&&autoplay&&visible&&!off&&(!compact||(state.settings.tourDone??false))){autoStarted.current=true;setRunning(true);}},[autoplay,visible,off,state.settings.tourDone,compact]);
  useEffect(()=>{playback.current?.stop();if(!running||off||!visible)return;time.set(0);const p=animate(time,5,{duration:7.5,repeat:Infinity,repeatDelay:1.6,ease:'linear'});playback.current=p;return()=>p.stop();},[running,off,visible,time]);
@@ -25,7 +32,7 @@ export function FillingScene({autoplay=false,compact=false,staticMode=false,save
  const pose=reading.time>4.7?'aha':running?'point':'curious';
  return <div ref={stage} className={`filling-scene ${compact?'scene-compact':''}`} data-running={running&&!off&&visible}>
   <div className="scene-heading"><div><span className="scene-eyebrow">An idea you can move</span><h3>Watch a graph fill up.</h3></div><div className="scene-buddy"><Companion size={96} pose={pose} still={off}/></div></div>
-  <div className="scene-formula"><MathText size="lg">{`V = ${initial} + ${rate}t`}</MathText><span>starts at {initial} L · adds {rate} L/min</span></div>
+  <div className="scene-formula"><MathText size="lg" speak={`V equals ${initial} plus ${rate} t`}>{`V = ${fmt(live.start)} + ${fmt(live.rate)}t`}</MathText><span>starts at {fmt(live.start)} L · adds {fmt(live.rate)} L/min</span></div>
   <svg ref={svg} className="filling-drawing" viewBox="0 0 700 370" role="img" aria-label={`A linked graph and container. Initially ${initial} litres, adding ${rate} litres per minute. The moving point and water level represent the same amount.`} onPointerMove={drag} onPointerUp={()=>{dragging.current=false;onChange?.({rate,start:initial,time:Math.round(time.get()*10)/10});}} onPointerCancel={()=>{dragging.current=false;}}>
    <defs><linearGradient id={`water-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#14bf96"/><stop offset="1" stopColor="#b0eee0"/></linearGradient><clipPath id={`tank-${id}`}><path d="M500 48H626V302Q626 310 618 310H508Q500 310 500 302Z"/></clipPath></defs>
    {[0,5,10,15,20,25,30].map(n=><g key={n}><path d={`M58 ${310-n*8}H380`} stroke="#e6ecf0"/><text x="43" y={317-n*8} textAnchor="end">{n}</text></g>)}

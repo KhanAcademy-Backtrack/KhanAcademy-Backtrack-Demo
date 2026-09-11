@@ -11,6 +11,37 @@ const geometry=page=>page.evaluate(()=>{const svg=document.querySelector('.filli
 try{
  await run('visible synchronized motion',async page=>{await open(page);await page.locator('.filling-scene[data-running=true]').waitFor();await page.waitForFunction(()=>Number(document.querySelector('.flow-point')?.getAttribute('cx'))>95);const before=await geometry(page);await page.locator('.welcome-world').screenshot({path:`${dir}/motion-before.png`});await page.waitForFunction(x=>Number(document.querySelector('.flow-point')?.getAttribute('cx'))>x+55,before.x);const after=await geometry(page);await page.locator('.welcome-world').screenshot({path:`${dir}/motion-after.png`});assert.ok(after.x>before.x+40);assert.ok(after.waterH>before.waterH);assert.ok(Math.abs(after.y-after.waterY)<.1);assert.ok(Math.abs(after.waterY+after.waterH-310)<.1);const t=(after.x-58)/62,v=(310-after.y)/8;assert.ok(Math.abs(v-(6+2*t))<.08,'water and graph follow the same equation');await page.getByRole('button',{name:'Pause filling animation',exact:true}).click();const paused=await geometry(page);await new Promise(r=>setTimeout(r,300));assert.ok(Math.abs((await geometry(page)).x-paused.x)<.1);await page.getByRole('button',{name:'4 L/min',exact:true}).click();await page.waitForFunction(()=>Math.abs(Number(document.querySelector('.flow-rule')?.getAttribute('y2'))-102)<.1);await page.locator('.welcome-world').screenshot({path:`${dir}/changed-rate.png`});await page.getByRole('button',{name:'Play filling animation',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.scene-buddy .expressive-buddy')?.getAttribute('data-pose')==='aha');await page.screenshot({path:`${dir}/mascot-aha.png`});});
  await run('static control and mobile clarity',async page=>{await open(page);assert.equal(await page.getByRole('button',{name:'Play filling animation',exact:true}).isDisabled(),true);await page.getByRole('slider',{name:'Time in the filling model'}).focus();await page.keyboard.press('ArrowRight');await page.waitForFunction(()=>Number(document.querySelector('.flow-point')?.getAttribute('cx'))>58);const g=await geometry(page);assert.ok(Math.abs(g.y-g.waterY)<.01);await page.getByRole('button',{name:'4 L/min',exact:true}).click();await page.locator('.welcome-world').screenshot({path:`${dir}/mobile-static.png`});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));},{viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+ /* Changing a parameter moves the drawing, the graph and the readout together over
+    about half a second. The written rule must travel with them: a coefficient that
+    jumps straight to its target leaves the equation contradicting every other
+    representation for the whole of the change. */
+ await run('the written rule travels with the drawing',async page=>{await open(page);
+  await page.locator('.filling-scene[data-running=true]').waitFor();
+  await page.getByRole('button',{name:'Pause filling animation',exact:true}).click();
+  const samples=page.evaluate(async()=>{
+   const out=[];
+   for(let i=0;i<45;i++){
+    const rule=document.querySelector('.flow-rule'),written=document.querySelector('.scene-formula .math')?.textContent??'';
+    const m=written.replace(/\s+/g,'').match(/V=(-?[\d.]+)\+(-?[\d.]+)t/);
+    out.push({shown:m?Number(m[2]):null,drawn:(Number(rule.getAttribute('y1'))-Number(rule.getAttribute('y2')))/40});
+    await new Promise(r=>requestAnimationFrame(r));
+   }
+   return out;
+  });
+  await page.getByRole('button',{name:'4 L/min',exact:true}).click();
+  const frames=await samples;
+  const read=frames.filter(f=>f.shown!==null);
+  assert.ok(read.length>30,'the written rule should stay readable throughout');
+  /* The drawing is written straight to the attribute and the text needs a render,
+     so the rule trails it by a frame. Half a litre per minute allows that; a
+     coefficient that jumped to its target would be a whole 2 out. */
+  for(const f of read)assert.ok(Math.abs(f.shown-f.drawn)<=.5,`the written rate ${f.shown} should follow the drawn slope ${f.drawn.toFixed(2)}`);
+  assert.ok(read.some(f=>f.shown>2.05&&f.shown<3.95),'the coefficient should travel rather than jump');
+  await page.waitForFunction(()=>/V=6\+4t/.test((document.querySelector('.scene-formula .math')?.textContent??'').replace(/\s+/g,'')));
+  const settled=await page.locator('.scene-formula').innerText();
+  assert.match(settled,/adds 4 L\/min/,'the caption should settle on the whole number');
+  await page.locator('.welcome-world').screenshot({path:`${dir}/rule-follows-drawing.png`});
+ });
  await run('quiet presentation visibly explains motion setting',async page=>{await open(page);await page.getByRole('button',{name:'My study space',exact:true}).click();await page.getByRole('checkbox',{name:'Quiet presentation',exact:true}).check();await page.getByText('Quiet presentation is on.',{exact:false}).waitFor();assert.equal(await page.getByRole('button',{name:'Play filling animation',exact:true}).isDisabled(),true);await page.getByRole('checkbox',{name:'Quiet presentation',exact:true}).uncheck();await page.locator('.filling-scene').scrollIntoViewIfNeeded();await page.locator('.filling-scene[data-running=true]').waitFor();});
 }finally{await browser.close();server.kill();await fs.writeFile(`${dir}/results.json`,JSON.stringify(results,null,2));}
 if(results.some(r=>!r.passed))process.exitCode=1;
