@@ -6,10 +6,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {initialRecovery,problemFor,recoveryReducer as reduce,isCorrect,validRecovery,TOPICS,ORDER,nextFreshSerial,pairKey} from '../src/lib/recovery.ts';
 import {initialStudy,ingestRecovery,validStudy,prepareRound,planRehearsal,PACKS,parseSharedPack,beginSession,completeStudyTask} from '../src/lib/study.ts';
-import {distribution,partition,mixture,lineValue,freshLab} from '../src/lib/visual-maths.ts';
+import {distribution,partition,mixture,lineValue,freshLab,validLab} from '../src/lib/visual-maths.ts';
 import {scopeCoverage,validScope} from '../src/lib/scope-coverage.ts';
 const act=(s,a)=>reduce(s,{now:1000,...a});
 const start=topic=>act(initialRecovery(topic),{type:'start',budget:60,mode:'self'});
+test('a saved lab keeps its trace phase and rejects an impossible one',()=>{
+ const traced={...freshLab(),values:{x:4,y:5,phase:2}};
+ assert.ok(validLab(traced));
+ assert.ok(validLab({...freshLab(),values:{phase:0}}));
+ assert.equal(validLab({...freshLab(),values:{phase:3}}),false);
+ assert.equal(validLab({...freshLab(),values:{phase:1.5}}),false);
+ let s=act(start('graphs'),{type:'learn',skill:'coordinates'});
+ s=act(s,{type:'lab-save',key:'coordinates',value:traced});
+ const reopened=JSON.parse(JSON.stringify(s));
+ assert.ok(validRecovery(reopened));
+ assert.equal(reopened.labs.coordinates.values.phase,2);
+ assert.deepEqual(reopened.evidence,[]);assert.deepEqual(reopened.passed,[]);
+});
 test('v3 mathematical models preserve amounts and signs',()=>{
  assert.deepEqual(distribution(3,4,2),{coefficient:3,constant:12,original:18,incomplete:10});
  assert.deepEqual([distribution(-2,-3,0).coefficient,distribution(-2,-3,0).constant],[-2,6]);

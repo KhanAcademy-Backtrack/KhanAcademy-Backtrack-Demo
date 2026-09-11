@@ -6,7 +6,10 @@ import {Companion} from './Companion';
 import {MathText} from '@/components/math/Math';
 import {freshLab,type LabSave} from '@/lib/visual-maths';
 export function CoordinateScene({initial,onSave,onContinue}:{initial?:LabSave;onSave?:(s:LabSave)=>void;onContinue:()=>void}){
- const [s,set]=useState(initial??freshLab),[phase,setPhase]=useState(0),reduced=useReducedMotion(),{state}=useStudy(),save=useRef(onSave);save.current=onSave;
+ const [s,set]=useState(initial??freshLab),reduced=useReducedMotion(),{state}=useStudy(),save=useRef(onSave);save.current=onSave;
+ /* The trace is part of the saved guide, not a transient flourish: coming back to
+    this scene should show the leg the learner had reached, not a blank grid. */
+ const phase=Math.max(0,Math.min(2,s.values.phase??0)),setPhase=(n:number)=>set(v=>({...v,values:{...v.values,phase:n}}));
  const x=Math.max(0,Math.min(6,s.values.x??2)),y=Math.max(0,Math.min(8,s.values.y??5)),off=!!reduced||state.settings.quiet||s.static;
  useEffect(()=>{save.current?.(s);},[s]);useEffect(()=>{if(phase!==1)return;const timer=setTimeout(()=>setPhase(2),off?0:700);return()=>clearTimeout(timer);},[phase,off]);
  const change=(key:string,n:number)=>{setPhase(0);set(v=>({...v,values:{...v.values,[key]:n}}));};

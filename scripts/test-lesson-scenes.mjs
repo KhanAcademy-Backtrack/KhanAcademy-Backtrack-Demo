@@ -37,6 +37,23 @@ try{for(const [topic,skill,selector,action] of cases){const context=await browse
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow');const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);assert.equal(saved.evidence.length,0,'Exploration must not create graded attempts');assert.equal(saved.passed.length,0);assert.deepEqual(errors,[]);await page.screenshot({path:`${dir}/${topic}-${skill}.png`,fullPage:true});results.push({topic,skill,passed:true});console.log(`PASS ${topic}/${skill}`);
  }catch(e){results.push({topic,skill,passed:false,error:e.message});await page.screenshot({path:`${dir}/${topic}-${skill}-failed.png`,fullPage:true});console.log(`FAIL ${topic}/${skill}: ${e.message}`);}finally{await context.close();}}
 
+ /* The coordinate trace is part of the saved guide. Reloading should show the leg
+    the learner reached rather than an untraced grid. */
+ {const name='coordinate trace survives a reload';const context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
+  const key='backtrack.route.v1.graphs',route={...initialRecovery('graphs'),active:'coordinates',phase:'learn',serial:3,startedAt:Date.now(),updatedAt:Date.now()};
+  await context.addInitScript(({key,route})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(route));},{key,route});
+  try{await page.goto(origin+'/start/graphs');await page.locator('.coordinate-drawing').waitFor();
+   await page.getByRole('slider',{name:'Across coordinate x'}).fill('4');
+   await page.getByRole('button',{name:'Follow x, then y',exact:true}).click();
+   await page.getByText('The point is (4, 5), in that order.',{exact:false}).waitFor();
+   await page.reload();await page.locator('.coordinate-drawing').waitFor();
+   await page.getByText('The point is (4, 5), in that order.',{exact:false}).waitFor();
+   const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);
+   assert.equal(saved.labs.coordinates.values.phase,2,'the finished trace should be saved');
+   assert.equal(saved.evidence.length,0);assert.deepEqual(errors,[]);
+   results.push({topic:'coordinates',skill:'trace-reload',passed:true});console.log('PASS '+name);
+  }catch(e){results.push({topic:'coordinates',skill:'trace-reload',passed:false,error:e.message});await page.screenshot({path:`${dir}/coordinate-trace-failed.png`,fullPage:true});console.log(`FAIL ${name}: ${e.message}`);}finally{await context.close();}}
+
  /* A scene's own static view must stop the companion's decorative loops too,
     not only the mathematical motion. Global quiet and reduced motion are
     covered by the living-scene suite. */
