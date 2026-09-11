@@ -165,8 +165,11 @@ function ForcesLab({store}:{store:Store}){
   const right=store.value('fright',12,0,16),left=store.value('fleft',5,0,16),mass=store.value('kg',4,1,8);
   const setRight=(next:(v:number)=>number)=>store.put('fright',next,12),setLeft=(next:(v:number)=>number)=>store.put('fleft',next,5),setMass=(next:(v:number)=>number)=>store.put('kg',next,4);
   const net=right-left,accel=round(net/mass,2);
-  const arrow=(x:number,size:number,direction:1|-1,colour:string)=>size===0?null:
-    <motion.path initial={false} animate={{d:`M${x} 46h${direction*size*5}m0 0l${-direction*9} -6m${direction*9} 6l${-direction*9} 6`}} transition={move} stroke={colour} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"/>;
+  /* The shape has to be present on the very first render: a motion path with only an
+     animated `d` is briefly written as d="undefined", which the browser rejects. */
+  const arrow=(x:number,size:number,direction:1|-1,colour:string)=>{if(size===0)return null;
+    const d=`M${x} 46h${direction*size*5}m0 0l${-direction*9} -6m${direction*9} 6l${-direction*9} 6`;
+    return <motion.path d={d} initial={false} animate={{d}} transition={move} stroke={colour} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"/>;};
   return <>
     <h3>Forces do not act one at a time.</h3>
     <p>Both pushes are there at once. What the block actually does is set by what is left over after they combine — and by how much block there is to move.</p>
