@@ -1,50 +1,41 @@
-# Dunlo: final 15-slide story
+# Dunlo: 15-page submission deck
 
-The same Canva design is the editable source. The submission is a 15-page PDF, with a problem hook, labelled product views and a complete learning journey. The main call to action and QR open https://dunlo.vercel.app/.
+This deck is designed to be read independently for top-30 selection, without a spoken pitch. The same Canva design remains the editable source. Page 1 presents only the problem; page 14 closes the story and page 15 provides learning research.
 
-## Slide 1: You watched it. Can you use it?
+## Slide 1: The lesson makes sense. The next question doesn’t.
 
-- You watched it.
-- Can you use it?
-- Dunlo connects discovery to practice with Khan Academy.
-- University of the Philippines Manila
-- Explore / an idea
+- The lesson makes sense.
+- The next question doesn’t.
+
+## Slide 2: Dunlo turns discovery into practice
+
+- Dunlo turns discovery into practice
+- A short-form learning feed with a clear path into Khan Academy.
+- Easy to start
+- Young learners can start with one idea / in a familiar, scrollable feed.
+- Try an interactive model or Khan clip. / Make a prediction and see why.
+- The familiar feed opens the door. Connected practice gives that curiosity somewhere to go.
+- Clear to continue
+- Each idea points to a matching / Khan Academy exercise.
+- Return to Dunlo for a fresh question. / Save the idea to revisit later.
+
+## Slide 3: How one discovery becomes a learning session
+
+- How one discovery becomes a learning session
+- Choose one / short idea
+- Predict, then / see why
 - Practise with / Khan Academy
-- Return for / a fresh question
+- Answer a fresh / question in Dunlo
+- One topic stays connected across the feed, Khan practice and later review. / Learning design: IES practice guide (2007).
 
-## Slide 2: Starting is only the first step
+## Slide 4: Short-form content. Active learning.
 
-- Starting is only the first step
-- An interesting explanation needs a useful continuation.
-- Where do I begin?
-- Choose an approachable idea.
-- Play with it. Follow your curiosity.
-- KEIC focus: reach, meaningful engagement and lasting impact
-- What comes next?
-- Find the relevant practice.
-- Get help, then return to the idea.
-
-## Slide 3: The learning journey
-
-- The learning journey
-- 1
-- Discover / an idea
-- 2
-- Understand / what changes
-- 3
-- Practise with / Khan Academy
-- 4
-- Return and / try it again
-- Useful support keeps the original learning goal within reach.
-
-## Slide 4: Explore a short learning feed
-
-- Explore a short learning feed
-- One idea at a time. A clear way to keep going.
-- Play with the model
-- Change a quantity. / See the relationship.
-- Save, share or follow the idea / Open a relevant Khan activity.
-- Open Explore · dunlo.vercel.app/explore
+- Short-form content. Active learning.
+- For learners used to mobile feeds, / Dunlo makes one idea easy to start.
+- Scroll. Try. Keep going.
+- Move a slider or watch a focused Khan clip. / Make a prediction and get an explanation.
+- Follow the idea into a matching Khan exercise. / Save it for a fresh question later.
+- Explore the working feed · dunlo.vercel.app/explore
 
 ## Slide 5: Make the relationship visible
 
@@ -58,28 +49,25 @@ The same Canva design is the editable source. The submission is a 15-page PDF, w
 - RESULT
 - x² + 7x + 12
 - Then try a different question.
-- Original Dunlo interactive · Explore the factor model
-- Separate the pieces. Put the idea together.
+- Original Dunlo interactive · Learning design: Chi & Wylie (2014), ICAP framework
+- Example: move the four areas to see why the middle terms combine.
 
 ## Slide 6: Khan Academy, right in the feed
 
 - Khan Academy, right in the feed
 - FACTORING · 1 MIN 34 SEC
-- Watch the original. / Then try the idea.
-- A focused explanation, / with a useful next step.
+- One focused clip. / A clear next step.
+- The original Khan video plays in the feed. / Learners can open the full lesson, / then practise the same skill on Khan.
 - Source: Khan Academy · Factoring quadratics · 2:22–3:56
 
 ## Slide 7: Useful help when a step is difficult
 
 - Useful help when a step is difficult
-- 1
-- A fresh check / clarifies the difficulty
-- 2
-- An explanation / works through the step
-- 3
-- A new question / returns to the goal
-- The learner can also choose to learn first.
-- The existing recovery engine connects the support and return.
+- A short question / finds the missing step
+- A worked example / explains that step
+- A new question / checks independent use
+- Learners can choose “learn first” or check what they already know.
+- Worked examples guide the attempt; a different question checks what the learner can do next.
 - See the recovery example
 
 ## Slide 8: Try the complete journey
@@ -115,8 +103,8 @@ The same Canva design is the editable source. The submission is a 15-page PDF, w
 - Save a discovery. / Use it on a fresh question.
 - Later
 - Revisit the idea. / Try it in another situation.
-- Your place and your learning tools stay together
-- Learning basis: retrieval practice
+- Saved ideas and later questions turn a quick visit into a path back.
+- Learning design: recalling an idea and spacing practice · Carpenter, Pan & Butler (2022)
 
 ## Slide 11: Start with public access
 
@@ -125,22 +113,22 @@ The same Canva design is the editable source. The submission is a 15-page PDF, w
 - NO DUNLO ACCOUNT NEEDED
 - Open an idea
 - Share an idea
-- A direct link into the experience
-- A useful starting point for someone else
-- Public demonstrations
-- Topic pages and challenge links
-- School and community use can extend the public model.
+- Public topic links will let learners / open an idea without a Dunlo account.
+- Save and share a specific challenge / to give someone a useful starting point.
+- Launch with short demo posts
+- Link each post to the matching idea
+- Start online through public sharing; future school or community use can extend this model.
 
-## Slide 12: Grow through reviewed learning paths
+## Slide 12: A practical launch and growth plan
 
-- Grow through reviewed learning paths
-- More subjects
-- Filipino content
-- Access options
-- A reusable content sequence
-- Interactive idea + Khan mapping + useful support + fresh practice
-- Next: review new content and localization before release.
-- Original offline mini-packs are a later extension.
+- A practical launch and growth plan
+- NOV 2026 / Review content / and launch publicly
+- DEC 2026–FEB 2027 / Gather feedback / and refine the flow
+- MAR 2027 / Evaluate use / and plan continuation
+- Expand through reviewed learning sequences
+- Each new topic will include an interactive or clip, a matching Khan activity, / worked support and fresh questions.
+- Track which ideas learners open, where they stop and how fresh answers change.
+- Next extensions: more subjects, reviewed Filipino content and original offline mini-packs.
 
 ## Slide 13: Free learning. A plan for continuity.
 
@@ -171,24 +159,24 @@ The same Canva design is the editable source. The submission is a 15-page PDF, w
 - 100,000
 - Implementation budget · Planning allocations; funding not secured
 
-## Slide 14: The implementation journey
+## Slide 14: Turn curiosity into progress.
 
-- The implementation journey
-- NOVEMBER 2026 / Prepare and launch
-- DECEMBER–FEBRUARY / Gather feedback and refine
-- MARCH 2027 / Evaluate and plan continuation
-
-## Slide 15: Keep the learning going
-
-- Keep the learning going
-- Relevant Khan practice / A useful activity for the same idea.
-- Independent application / Fresh questions after the explanation.
-- Learning evidence: retrieval research
-- KEIC 2026: challenge and mechanics
-- Khan Academy: content and attribution
-- Later review / A clear reason to return.
+- Turn curiosity into progress.
+- Dunlo uses short-form discovery to bring learners into Khan practice, / then helps them apply the idea and return to it.
+- Explore Dunlo · dunlo.vercel.app
 - Matthew Labrador · Paul Recio · Harry Gomez / Coach: Justin Mesias · University of the Philippines Manila
+
+## Slide 15: Research behind the learning design
+
+- Research behind the learning design
+- Dunlosky et al. (2013) / Improving students’ learning with effective / learning techniques. PSPI, 14(1).
+- Carpenter, Pan & Butler (2022) / The science of effective learning with spacing / and retrieval practice. Nature Reviews Psychology.
+- Tversky, Morrison & Bétrancourt (2002) / Animation: can it facilitate? / International Journal of / Human-Computer Studies, 57(4).
+- Atkinson, Renkl & Merrill (2003) / Transitioning from studying examples / to solving problems. / Journal of Educational Psychology, 95(4).
+- Chi & Wylie (2014) / The ICAP framework: linking cognitive / engagement to active learning outcomes. / Educational Psychologist, 49(4).
+- Yang et al. (2021) / Testing (quizzing) boosts classroom learning: / a systematic and meta-analytic review. / Psychological Bulletin, 147(4).
+- Szpunar, Khan & Schacter (2013) · Interpolated memory tests reduce mind wandering / and improve learning of online lectures. PNAS, 110(16).
 
 ## Export checks
 
-Exactly 15 pages. Preserve the official UP Manila logo on every page. QR pixels, QR image link, Try Dunlo button and printed URL all point to the main site: https://dunlo.vercel.app/. The recovery-example link on slide 7 remains a specific example. Source links stay visible and clickable. The PDF explains the journey without requiring playback. The budget totals PHP 100,000 and matches the written application.
+Exactly 15 pages with descriptive PDF bookmarks. Preserve the official UP Manila logo on every page. The phone mockup keeps all app controls visible. QR pixels, QR image link, Try Dunlo button and printed URL open https://dunlo.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.

@@ -1,6 +1,6 @@
 DUNLO: READY-TO-SUBMIT FILES
 
-1. Upload Dunlo_KEIC_2026.pdf as the pitch deck. It contains exactly 15 slides.
+1. Upload Dunlo_KEIC_2026.pdf as the submission deck for top-30 selection. Its 15 pages explain the project without a spoken pitch or script.
 2. Copy the seven current project answers from PROJECT_ANSWERS.txt or the existing answer PDFs. Use the short executive fallback if the form enforces 300 characters.
 3. Keep your already-completed institution and team fields, review the application and submit it yourself.
 
