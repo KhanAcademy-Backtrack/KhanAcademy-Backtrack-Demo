@@ -2,10 +2,11 @@
 
 This deck is designed to be read independently for top-30 selection, without a spoken pitch. The same Canva design remains the editable source. Page 1 presents only the problem; page 14 closes the story and page 15 provides learning research.
 
-## Slide 1: The lesson makes sense. The next question doesn’t.
+## Slide 1: 79% below basic math proficiency
 
-- The lesson makes sense.
-- The next question doesn’t.
+- 79%
+- of Filipino 15-year-old students scored below basic proficiency in mathematics.
+- Source: [OECD, PISA 2025 Philippines country note (2026)](https://www.oecd.org/en/publications/pisa-2025-results-volume-i-country-notes_2d4ff9ea-en/philippines_3699b9d5-en.html). The OECD reports 21% at or above Level 2; the complement is 79% below that threshold.
 
 ## Slide 2: Dunlo turns discovery into practice
 
@@ -179,4 +180,4 @@ This deck is designed to be read independently for top-30 selection, without a s
 
 ## Export checks
 
-Exactly 15 pages with descriptive PDF bookmarks. Preserve the official UP Manila logo on every page. The phone mockup keeps all app controls visible. QR pixels, QR image link, Try Dunlo button and printed URL open https://dunlo.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.
+Exactly 15 pages with descriptive PDF bookmarks. Preserve the UP Manila seal and university name on every page, with the Health Sciences Center tagline removed as requested. The native iPhone mockup uses a fresh app capture with status-area spacing; the camera cutout clears the controls and the navigation sits within the rounded display. QR pixels, QR image link, Try Dunlo button and printed URL open https://dunlo.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.

@@ -96,3 +96,11 @@ Needs facts rechecked September 11: OECD, PISA 2022, 16% of assessed Philippine 
 Budget assumptions preserved: PHP 100,000 total; allocations 24,000 + 18,000 + 18,000 + 16,000 + 8,000 + 8,000 + 3,000 + 5,000. Proposed 80–120 enrollees imply approximately PHP 833–1,250 per enrollee including setup, not cost per active learner or per learning outcome. Proposed pilot, school access, funding and outcomes remain unconfirmed except UP Manila endorsement supplied by the team.
 
 The new slide plan must cite claims visibly in the submitted PDF and embed source hyperlinks. Presenter notes alone do not survive as evidence in a PDF. No competitor comparisons, private editor URLs or unverified efficacy claims belong in the presentation.
+
+## September 13 submission opening
+
+The current deck opens with 79% of Filipino 15-year-old students below baseline mathematics proficiency. The OECD's PISA 2025 Philippines country note, published 8 September 2026 and checked 13 September, reports 21% at or above Level 2. The opening uses the complement, 100% minus 21%. It describes school students represented by PISA and supplies national needs context; it is not a Dunlo outcome or an explanation of any individual learner's difficulties.
+
+Source: https://www.oecd.org/en/publications/pisa-2025-results-volume-i-country-notes_2d4ff9ea-en/philippines_3699b9d5-en.html
+
+The September 11 budget and pilot figures above are historical. Current submission allocations and the public-launch model are in output/submission/PROJECT_ANSWERS.txt and docs/BUSINESS_AND_SUSTAINABILITY.md. No classroom access is required for the initial launch.
