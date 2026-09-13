@@ -12,6 +12,7 @@ from pypdf import PdfReader
 
 parser=argparse.ArgumentParser(description='Build support PDFs while preserving the Canva deck.')
 parser.add_argument('--only',nargs='+',help='Build only these document stems, such as PITCH_AND_QA_PREP.')
+parser.add_argument('--answers',action='store_true',help='Also rebuild the seven individual application answer PDFs with --only.')
 parser.add_argument('--include-backup-deck',action='store_true',help='Explicitly replace the Canva PDF with the older local backup design.')
 args=parser.parse_args()
 
@@ -70,7 +71,7 @@ for name in docs:
     if p.exists():markdown_pdf(p)
 
 submission=json.loads((root/'docs'/'submission.json').read_text(encoding='utf-8-sig'))
-for i,section in enumerate(submission['sections'] if not args.only else []):
+for i,section in enumerate(submission['sections'] if not args.only or args.answers else []):
     name=re.sub(r'[^A-Za-z0-9]+','_',section['name']).strip('_')
     wc=len(' '.join(section['paragraphs']).split())
     flow=[Paragraph(inline(section['name']),styles['title']),Paragraph(f"{html.escape(submission['title'])}<br/>University of the Philippines Manila<br/>{wc} words · Maximum 300 words",styles['note'])]

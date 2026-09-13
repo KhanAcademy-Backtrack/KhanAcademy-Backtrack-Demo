@@ -2,7 +2,7 @@
 
 Implementation window: November 1, 2026 to March 31, 2027.
 
-This replaces the earlier fixed school-cohort plan. Initial access is public and self-service. No recruited audience or partner institution is assumed.
+Initial access is public and self-service.
 
 ## November: prepare and open
 
@@ -27,5 +27,3 @@ Close evaluation in time to review results. Publish reach, engagement and learni
 ## Delivery responsibilities
 
 The student team will allocate responsibility for product operations, content and resource review, distribution, evaluation and finance. The adviser supports institutional review. Specific collaborators, learners and institutions are recorded only after agreement.
-
-The current browser-local history supports personal continuity. It is not a population analytics system; voluntary evaluation collection must be set up separately. The public site and Khan resources need connectivity, while original content can remain usable within an already-open page.

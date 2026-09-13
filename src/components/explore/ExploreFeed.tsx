@@ -7,6 +7,7 @@ import {useStudy} from '@/components/study/StudyProvider';
 import {KhanReturnActions} from '@/components/study/KhanReturnActions';
 import {KhanPlayer} from '@/components/product/KhanPlayer';
 import {Companion} from '@/components/study/Companion';
+import {ExploreTour} from './ExploreTour';
 import {ExploreScene} from './ExploreScene';
 import {EXPLORE_ITEMS,exploreItem,exploreMaterial,savedExplore,type ExploreGroup,type ExploreItem} from '@/lib/explore';
 import {answerExplore,exposeExplore,saveExplore,startExploreSession} from '@/lib/explore-learning';
@@ -18,6 +19,7 @@ const FILTERS:[Filter,string][]=[['all','All ideas'],['numbers','Everyday number
 export function ExploreFeed(){
  const {state,ready,update,storageIssue}=useStudy(),params=useSearchParams(),reduced=useReducedMotion();
  const [filter,setFilter]=useState<Filter>('all'),[active,setActive]=useState(EXPLORE_ITEMS[0].id),[still,setStill]=useState(false),[notice,setNotice]=useState('');
+ const tourReturn=useRef<{filter:Filter;active:string}|undefined>(undefined);
  const root=useRef<HTMLDivElement>(null),initialized=useRef(false),history=savedExplore(state.explore);
  const items=useMemo(()=>EXPLORE_ITEMS.filter(item=>filter==='all'||(filter==='saved'?history.saved.includes(item.id):item.group===filter)),[filter,history.saved.join('|')]);
  const quiet=still||state.settings.quiet||!!reduced;
@@ -39,11 +41,13 @@ export function ExploreFeed(){
  useEffect(()=>{const back=()=>{const id=new URLSearchParams(location.search).get('item');if(exploreItem(id)){setFilter('all');requestAnimationFrame(()=>go(id!,'instant'));}};window.addEventListener('popstate',back);return()=>window.removeEventListener('popstate',back);},[]);
  function chooseFilter(value:Filter){setFilter(value);setNotice('');const first=EXPLORE_ITEMS.find(x=>value==='all'||(value==='saved'?history.saved.includes(x.id):x.group===value));if(first){setActive(first.id);requestAnimationFrame(()=>go(first.id,'instant'));}}
  async function share(item:ExploreItem){const url=new URL('/explore',location.origin);url.searchParams.set('item',item.id);try{await navigator.clipboard.writeText(url.href);setNotice('Link copied. It opens this idea, without your answers.');}catch{setNotice(url.href);}}
+ function startTour(){tourReturn.current={filter,active};setFilter('all');requestAnimationFrame(()=>window.dispatchEvent(new Event('dunlo:explore-tour')));}
+ function endTour(){const old=tourReturn.current;if(!old)return;setFilter(old.filter);setActive(old.active);requestAnimationFrame(()=>go(old.active,'instant'));}
  const index=Math.max(0,items.findIndex(i=>i.id===active));
  if(!ready)return <div className="study-loading" role="status">Opening Explore…</div>;
- return <div className="explore-world" ref={root}>
+ return <div className="explore-world" ref={root}><ExploreTour onClose={endTour}/>
   <header className="explore-intro"><div><p className="eyebrow">Dunlo Explore</p><h1>Explore something new.</h1><p>Play with an idea. Learn with Khan Academy. Try it yourself.</p></div><div className="explore-intro-links"><img src="/khan-academy.svg" alt="Khan Academy" width="160" height="30"/><Link href={state.activeSession&&!state.activeSession.complete?'/study/session':'/'}>{state.activeSession&&!state.activeSession.complete?'Resume your study session':'Go to Today'} ↗</Link></div></header>
-  <div className="explore-toolbar"><div className="explore-filters" role="group" aria-label="Explore topics">{FILTERS.map(([id,label])=><button key={id} type="button" aria-pressed={filter===id} onClick={()=>chooseFilter(id)}>{label}{id==='saved'&&history.saved.length>0?` (${history.saved.length})`:''}</button>)}</div><button type="button" className="explore-motion" aria-pressed={quiet} onClick={()=>setStill(!still)} disabled={state.settings.quiet||!!reduced}>{quiet?'Still view':'Motion on'}</button>{!!items.length&&<nav className="explore-stepper" aria-label="Move between ideas"><button type="button" disabled={index===0} onClick={()=>go(items[index-1].id)}>↑ Previous</button><span>{index+1} / {items.length}</span><button type="button" disabled={index===items.length-1} onClick={()=>go(items[index+1].id)}>Next ↓</button></nav>}</div>
+  <div className="explore-toolbar"><div className="explore-filters" role="group" aria-label="Explore topics">{FILTERS.map(([id,label])=><button key={id} type="button" aria-pressed={filter===id} onClick={()=>chooseFilter(id)}>{label}{id==='saved'&&history.saved.length>0?` (${history.saved.length})`:''}</button>)}</div><button type="button" className="explore-motion" aria-pressed={quiet} onClick={()=>setStill(!still)} disabled={state.settings.quiet||!!reduced}>{quiet?'Still view':'Motion on'}</button>{!!items.length&&<nav className="explore-stepper" aria-label="Move between ideas"><button type="button" disabled={index===0} onClick={()=>go(items[index-1].id)}>↑ Previous</button><span>{index+1} / {items.length}</span><button type="button" onClick={startTour}>Quick tour</button><button type="button" disabled={index===items.length-1} onClick={()=>go(items[index+1].id)}>Next ↓</button></nav>}</div>
   {(notice||storageIssue)&&<div className="explore-notice" role="status">{storageIssue||notice}</div>}
   <div className="explore-body"><aside className="explore-index" aria-label="In this collection"><Link className="explore-back" href="/">← Today &amp; your study space</Link><p>IN THIS COLLECTION</p>{items.map((item,i)=><button type="button" key={item.id} aria-current={active===item.id?'step':undefined} onClick={()=>go(item.id)}><span>{String(i+1).padStart(2,'0')}</span><span>{item.title}<small>{item.format==='khan'?'Khan Academy clip':'Play with the idea'}</small></span></button>)}<Link href="/khan">Find a Khan activity ↗</Link></aside>
    <div className="explore-stream">{!items.length?<section className="explore-empty"><Companion size={110} pose="curious" still={quiet}/><h2>Keep an idea for later.</h2><p>Tap Save on any idea. You can find it here whenever you return.</p><button className="explore-action" onClick={()=>chooseFilter('all')}>Explore the collection</button></section>:items.map((item,i)=><IdeaCard key={item.id} item={item} number={i+1} total={items.length} active={active===item.id} still={quiet} onShare={()=>share(item)}/>)}

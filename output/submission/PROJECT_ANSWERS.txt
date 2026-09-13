@@ -1,20 +1,10 @@
-# Dunlo: ready-to-paste submission copy
+DUNLO - PROJECT ANSWERS
 
 Project title: Dunlo: Explore, Learn and Return with Khan Academy
 
-Subtitle: A little curiosity. A useful next step.
+Copy the paragraphs into their matching fields. Keep your completed institution and team fields.
 
-Institution: University of the Philippines Manila
-
-Coach: Justin Mesias
-
-Students: Matthew Labrador, Paul Recio, Harry Gomez
-
-Copy only the paragraphs under each field heading. Counts use whitespace-separated words; the live portal remains authoritative. All narratives stay below 300 words.
-
-## Executive Summary
-
-Word count: 214
+EXECUTIVE SUMMARY (214 words)
 
 Dunlo turns a moment of curiosity into a useful learning journey with Khan Academy. Learners explore short interactive ideas, follow a topic that interests them and continue into relevant lessons and practice. It is free to use and needs no Dunlo account.
 
@@ -26,9 +16,7 @@ When a step is difficult, Dunlo’s recovery engine uses short follow-up checks 
 
 From November 2026 to March 2027, we will develop the public launch, expand reviewed content and evaluate continued Khan use, independent application, later recall and access barriers. The project can begin through direct public access and shareable challenges, with future school and community use as additional routes to growth.
 
-## Needs Assessment
-
-Word count: 210
+NEEDS ASSESSMENT (210 words)
 
 A learner may have access to excellent material and still face three everyday difficulties: choosing where to start, understanding a missing step and remembering what to revisit. Dunlo connects these moments so that discovering an interesting explanation can lead to continued learning.
 
@@ -40,9 +28,7 @@ Access also shapes the experience. The site supports phone layouts, keyboard con
 
 During the public launch, voluntary feedback will help us understand where learners hesitate, lose their place or encounter access problems. We will use that feedback to improve the most useful paths before expanding the content library.
 
-## Business Principles & Financials
-
-Word count: 212
+BUSINESS PRINCIPLES & FINANCIALS (212 words)
 
 Dunlo creates value by connecting an engaging first moment to useful Khan practice and a reason to return. Its reusable assets are reviewed interactive sequences, resource mappings, authored support and fresh-question routes. Learner access stays free.
 
@@ -54,9 +40,7 @@ The current static deployment and device-local progress keep infrastructure mana
 
 A named maintenance owner, documented recurring budget and reusable publishing process will support continuation. We will track actual expenditure and volunteer effort, then relate costs to observed participation and learning activity. Funding has not yet been secured.
 
-## Innovation
-
-Word count: 205
+INNOVATION (205 words)
 
 Dunlo connects a playable discovery feed to a continuing learning journey. A short interactive idea can become a saved interest, a Khan activity, a useful support route and a later opportunity to apply the concept.
 
@@ -68,9 +52,7 @@ The innovation lies in this connected experience around Khan Academy. The first 
 
 The system keeps exploration separate from independent assessment and reserves exposed examples before fresh checks. We will evaluate whether connecting these experiences helps learners continue useful Khan practice and apply what they have studied.
 
-## Meaningful Khan Academy Integration
-
-Word count: 218
+MEANINGFUL KHAN ACADEMY INTEGRATION (218 words)
 
 Khan Academy is part of the feed and the learning path. Every item in the initial Explore collection has a reviewed Khan mapping, a visible source and a relevant exercise link.
 
@@ -84,9 +66,7 @@ We will measure repeated relevant Khan activity and continued participation, dis
 
 Dunlo is an independent project. Official Khan material is clearly attributed, original Dunlo activities are labelled separately, and all Khan Academy content remains freely available on Khan Academy.
 
-## Potential to Scale
-
-Word count: 201
+POTENTIAL TO SCALE (201 words)
 
 Dunlo can reach learners through a public, self-service experience. A shared link opens a specific interactive idea, which can lead into relevant Khan learning and a saved study path. The initial launch does not depend on classroom setup.
 
@@ -100,9 +80,7 @@ Teachers and community groups could also reuse the links and existing activity s
 
 A documented review and publishing process will help additional contributors maintain the library. We will track content maintenance, support effort and recurring costs so that growth remains sustainable.
 
-## Potential Positive Impact
-
-Word count: 202
+POTENTIAL POSITIVE IMPACT (202 words)
 
 Dunlo aims to help learners begin useful Khan Academy work, continue when a step becomes difficult and return to ideas worth remembering. Its intended outcomes are sustained relevant practice, independent application and later recall.
 
@@ -116,12 +94,6 @@ Browser-local progress keeps the learner’s journey connected. The implementati
 
 By March 2027, we aim to deliver a usable public learning pathway, a reviewed content library and evidence that guides future improvements and expansion.
 
-## Executive Summary: character-limit fallback
-
-The public form definition checked on September 13, 2026 still sets max_length 300 despite a 300-word label. Respect the live validation. Use the full summary if the portal permits it. Otherwise this concise fallback is 253 characters and 36 words:
+EXECUTIVE SUMMARY: SHORT FIELD FALLBACK (253 characters)
 
 Dunlo is a free independent learning project. Explore playable ideas and focused Khan Academy clips, continue into relevant practice, and return for fresh questions. Saved discoveries, useful support and later review keep the learning journey connected.
-
-## Your completed team fields
-
-The owner confirmed the institution, adviser and student fields are already filled in. Keep those completed fields. Replace the project narratives and upload the final PDF after your final review. The confirmed deadline is September 18, 2026 at 11:59 PM Philippine time. This package does not submit the application.

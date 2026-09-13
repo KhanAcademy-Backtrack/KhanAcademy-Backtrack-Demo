@@ -8,7 +8,7 @@ The expanded site includes Today planning, finite sessions, quiz rehearsal, sche
 
 Explore: https://dunlo.vercel.app/explore
 
-The September 13 discovery release adds six original interactive ideas and four reviewed Khan segments, with saved interests, direct item links and a preserved Khan return. The same native Canva design is being refreshed as the 15-slide submission deck. See docs/DISCOVERY_EXECUTION_PLAN_2026_09_13.md for the release scope.
+The September 13 discovery release adds six original interactive ideas and four reviewed Khan segments, with saved interests, direct item links and a preserved Khan return. The same native Canva design now has the final 15-slide submission story, opening with “You watched it. Can you use it?”. The main QR and call to action open the homepage. See docs/DISCOVERY_EXECUTION_PLAN_2026_09_13.md for the release scope.
 
 ## The product
 
@@ -43,9 +43,10 @@ Use Node 24 or later for the built-in TypeScript test runner.
 - src/app: public routes and optional supporting pages.
 - tests: generated mathematics, animation geometry, focused video segments, guided-question exposure across reloads, and routing checks including generated mathematics, evidence boundaries, deeper checks, session blocks, comeback, and local-storage validation. tests/science.test.mjs independently recomputes every chemistry and physics answer, checks that each generated equation balances, and asserts that an earlier saved study space still loads unchanged.
 - docs/SUBMISSION_CHECKLIST.md: the submission package entry point.
-- output/pdf: the 15-page deck, seven individual answer PDFs, and supporting documents.
-- output/BACKTRACK_KEIC_2026.pptx: current Canva export as an editable backup.
-- output/BACKTRACK_KEIC_2026_Embedded.pptx: the same backup with embedded DM Sans regular and bold.
+- output/submission: final submission PDF, editable Canva export, copy-paste project answers and short instructions.
+- output/pdf: seven individual answer PDFs and finished supporting documents.
+- output/submission/Dunlo_KEIC_2026_Editable.pptx: current editable Canva backup.
+Earlier standalone backups are historical; use output/submission for the current deck.
 
 ## Evidence boundaries
 

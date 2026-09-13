@@ -16,3 +16,5 @@
 .explore-buddy>.study-companion{width:58px!important;height:auto!important;flex:none}.explore-ending>.study-companion,.explore-empty>.study-companion{width:90px;height:auto;flex:none}.explore-world .explore-index .explore-back{margin:0 0 16px;font-size:13px}.idea-thinking{align-self:center}
 
 .explore-toolbar{flex-wrap:wrap}.explore-stepper{position:static;transform:none;border:0;padding:0;gap:9px;background:transparent;flex:none}.explore-stepper button{padding-inline:9px}.explore-stepper span{color:#b7ccdf}.explore-card{scroll-margin-top:88px}@media(max-width:780px){.explore-toolbar{padding-bottom:5px}.explore-stepper{order:3;width:100%;max-width:none;justify-content:space-between;border-top:1px solid #284266;margin-top:3px}.explore-stepper button{min-height:35px}.explore-card{scroll-margin-top:150px}}
+
+.explore-stepper button{white-space:nowrap}.welcome-world-copy>.study-settings-button+.study-settings-button{margin-left:14px}@media(max-width:780px){.explore-stepper button{min-height:44px;padding-inline:7px}}

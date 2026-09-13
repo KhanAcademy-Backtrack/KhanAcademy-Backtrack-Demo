@@ -4,10 +4,6 @@
 
 Dunlo turns a little curiosity into a useful learning journey with Khan Academy. Open an interactive idea, change something, follow the explanation and try it yourself. Your next step stays within reach when you return.
 
-## Five-minute story
-
-Explain the problem in everyday terms. Show one complete discovery-to-Khan journey with labelled static states. Explain how support and review carry the learner forward. Finish with public distribution, content reuse, budget, the November–March implementation and the outcomes to examine.
-
 ## Likely questions
 
 **Why does Khan Academy need Dunlo?** Dunlo provides an additional interactive entrance and keeps a useful continuation around a Khan goal. The evaluation will test whether this helps people continue relevant practice.

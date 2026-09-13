@@ -1,0 +1,12 @@
+DUNLO: READY-TO-SUBMIT FILES
+
+1. Upload Dunlo_KEIC_2026.pdf as the pitch deck. It contains exactly 15 slides.
+2. Copy the seven current project answers from PROJECT_ANSWERS.txt or the existing answer PDFs. Use the short executive fallback if the form enforces 300 characters.
+3. Keep your already-completed institution and team fields, review the application and submit it yourself.
+
+The editable PPTX is a backup, not the requested submission format.
+
+Site and QR: https://dunlo.vercel.app/
+Explore: https://dunlo.vercel.app/explore
+Application: https://form.typeform.com/to/bJw9THj3
+Deadline: September 18, 2026, 11:59 PM Philippine time.

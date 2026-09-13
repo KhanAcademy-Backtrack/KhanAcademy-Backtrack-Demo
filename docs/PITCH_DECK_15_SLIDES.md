@@ -1,12 +1,12 @@
 # Dunlo: final 15-slide story
 
-The same Canva deck is the editable source. The submission export is PDF, exactly 15 pages. Page numbers and PDF bookmarks make the document easy to navigate. The presentation explains the full journey without relying on playback or a speaker.
+The same Canva design is the editable source. The submission is a 15-page PDF, with a problem hook, labelled product views and a complete learning journey. The main call to action and QR open https://dunlo.vercel.app/.
 
-## Slide 1: Follow a little curiosity. Keep learning with Khan Academy.
+## Slide 1: You watched it. Can you use it?
 
-- Follow a little curiosity.
-- Keep learning with Khan Academy.
-- Playable ideas, useful support, fresh practice.
+- You watched it.
+- Can you use it?
+- Dunlo connects discovery to practice with Khan Academy.
 - University of the Philippines Manila
 - Explore / an idea
 - Practise with / Khan Academy
@@ -43,8 +43,7 @@ The same Canva deck is the editable source. The submission export is PDF, exactl
 - One idea at a time. A clear way to keep going.
 - Play with the model
 - Change a quantity. / See the relationship.
-- Save or share an idea
-- Open a relevant / Khan activity.
+- Save, share or follow the idea / Open a relevant Khan activity.
 - Open Explore · dunlo.vercel.app/explore
 
 ## Slide 5: Make the relationship visible
@@ -88,7 +87,7 @@ The same Canva deck is the editable source. The submission export is PDF, exactl
 - Try the complete journey
 - Explore an idea, open Khan practice, / and return for a fresh question.
 - Try Dunlo
-- dunlo.vercel.app/demo
+- dunlo.vercel.app
 - Scan to explore
 - Explore freely, or bring your current learning goal.
 
@@ -128,8 +127,8 @@ The same Canva deck is the editable source. The submission export is PDF, exactl
 - Share an idea
 - A direct link into the experience
 - A useful starting point for someone else
-- Introduce it through public demonstrations
-- Topic pages and challenge links support discovery.
+- Public demonstrations
+- Topic pages and challenge links
 - School and community use can extend the public model.
 
 ## Slide 12: Grow through reviewed learning paths
@@ -179,17 +178,17 @@ The same Canva deck is the editable source. The submission export is PDF, exactl
 - DECEMBER–FEBRUARY / Gather feedback and refine
 - MARCH 2027 / Evaluate and plan continuation
 
-## Slide 15: What success would mean
+## Slide 15: Keep the learning going
 
-- What success would mean
-- Relevant Khan practice / People continue useful activity.
-- Independent application / They can use the idea themselves.
+- Keep the learning going
+- Relevant Khan practice / A useful activity for the same idea.
+- Independent application / Fresh questions after the explanation.
 - Learning evidence: retrieval research
 - KEIC 2026: challenge and mechanics
 - Khan Academy: content and attribution
-- Later recall / They can return and still use it.
+- Later review / A clear reason to return.
 - Matthew Labrador · Paul Recio · Harry Gomez / Coach: Justin Mesias · University of the Philippines Manila
 
-## Production checks
+## Export checks
 
-Preserve the unchanged UP Manila logo on each page. Use actual product captures on slides 4–6. Keep source hyperlinks visible on the relevant pages. The demo button, QR pixels, QR image hyperlink and readable URL all point to https://dunlo.vercel.app/demo. Full source links appear on slide 15. Budget amounts total PHP 100,000 and match the application. Rollout is described in the implementation section; the learner-facing product does not carry repeated proposal notices.
+Exactly 15 pages. Preserve the official UP Manila logo on every page. QR pixels, QR image link, Try Dunlo button and printed URL all point to the main site: https://dunlo.vercel.app/. The recovery-example link on slide 7 remains a specific example. Source links stay visible and clickable. The PDF explains the journey without requiring playback. The budget totals PHP 100,000 and matches the written application.
