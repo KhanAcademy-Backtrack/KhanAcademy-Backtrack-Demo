@@ -1,95 +1,195 @@
-# Dunlo: PDF-first plan for the same 15-slide presentation
+# Dunlo: final 15-slide story
 
-This is the implementation storyboard for the existing Canva design. Keep exactly 15 pages, the official UP Manila logo unchanged on every page, and the Dunlo identity. The submitted PDF must communicate the whole case without animations, presenter notes, internet access or a successful live demo. The live link is an optional extension. This plan replaces the earlier BACKTRACK-only deck script.
+The same Canva deck is the editable source. The submission export is PDF, exactly 15 pages. Page numbers and PDF bookmarks make the document easy to navigate. The presentation explains the full journey without relying on playback or a speaker.
 
-## The presentation case
+## Slide 1: Follow a little curiosity. Keep learning with Khan Academy.
 
-Make the judges see a specific learner need and a working response, then show how the team will test educational value and sustain free access. The product welcomes learning ahead and quiz preparation as well as recovery. Its strongest proof is one clear mathematical sequence plus the learner’s return to an unfamiliar question. Do not claim efficacy from the software test suite or promise a competition placing.
+- Follow a little curiosity.
+- Keep learning with Khan Academy.
+- Playable ideas, useful support, fresh practice.
+- University of the Philippines Manila
+- Explore / an idea
+- Practise with / Khan Academy
+- Return for / a fresh question
 
-The research checkpoint recorded application weights of needs 15%, business/financials 15%, innovation 15%, meaningful Khan integration 25%, scale 15% and potential impact 15%. The later pitch rubric differs. Use that emphasis to give Khan integration a clear mechanism and teacher routine, not a logo-only mention. Recheck the issued brief before submission. The official challenge page could not be reopened through the web tool on September 11, so current portal details are not newly verified. [Official competition page](https://enactus.ph/2026-national-competition), [challenge page](https://enactus.ph/2026-national-competition/khan-academy-challenge).
+## Slide 2: Starting is only the first step
 
-## Visual system and reading order
+- Starting is only the first step
+- An interesting explanation needs a useful continuation.
+- Where do I begin?
+- Choose an approachable idea.
+- Play with it. Follow your curiosity.
+- KEIC focus: reach, meaningful engagement and lasting impact
+- What comes next?
+- Find the relevant practice.
+- Get help, then return to the idea.
 
-Use the existing widescreen canvas. Base the slide grid on a 56px outer safe margin on a 960×540 coordinate system, with a consistent footer baseline. Keep required logos proportionate and separate from narrative graphics. Use green #14BF96 for emphasis, navy #0A2A66 for readable text and white for mathematical workspaces. Use a few navy chapter pages to vary rhythm. Small white text must not sit on bright green.
+## Slide 3: The learning journey
 
-Keep at most two font families. Retain the deck’s established interface family and use the site’s mathematical rendering or a compatible mathematical face for equations. Establish three levels: titles approximately 36–44pt, main statements or equations 26–34pt, explanatory labels 18–22pt. Source labels may use 14–16pt when still legible at the intended viewing size. Remove copy before reducing font size. The opening title can be larger.
+- The learning journey
+- 1
+- Discover / an idea
+- 2
+- Understand / what changes
+- 3
+- Practise with / Khan Academy
+- 4
+- Return and / try it again
+- Useful support keeps the original learning goal within reach.
 
-Each slide has one dominant element taking roughly 55–70% of the useful area: a sentence, equation, relevant screenshot or a simple evidence diagram. The supporting text explains that element. No collage of full-page website screenshots and no repeated dashboard-card template. Crop actual screenshots to the relevant controls or model, preserving the labels needed to understand them. Export the capture at sufficient resolution for its final size. Never turn a screenshot of an unreadable dashboard into the main evidence.
+## Slide 4: Explore a short learning feed
 
-Use a calm, friendly bookmark expression at meaningful points in the story. It can introduce Dunlo, point to a term or mark a saved return. In the PDF, the chosen pose must communicate by itself. Do not depend on a wave, hover, tooltip or transition. The official UP Manila logo is never recolored or distorted.
+- Explore a short learning feed
+- One idea at a time. A clear way to keep going.
+- Play with the model
+- Change a quantity. / See the relationship.
+- Save or share an idea
+- Open a relevant / Khan activity.
+- Open Explore · dunlo.vercel.app/explore
 
-For every mathematical frame, keep the variable, sign, exponent, fraction bar and unit readable. Use real minus signs. Distinguish factor constants 3 and 4 from roots −3 and −4. Fractions retain equal-sized wholes. Signed contributions do not become negative physical lengths. Labels sit beside their mathematical referents.
+## Slide 5: Make the relationship visible
 
-## Slide 1 — Studying takes effort. Knowing the next step shouldn’t.
+- Make the relationship visible
+- FOUR AREAS
+- x² + 3x + 4x + 12
+- Each part keeps its meaning.
+- COMBINE
+- 3x + 4x = 7x
+- The middle terms belong together.
+- RESULT
+- x² + 7x + 12
+- Then try a different question.
+- Original Dunlo interactive · Explore the factor model
+- Separate the pieces. Put the idea together.
 
-18 seconds. The title is the focal point, left aligned across about two thirds of the page. Put the Dunlo mark and a quiet, welcoming bookmark on the remaining side. Beneath the title, use the three short learner questions from the brief: “What should I work on today?”, “Why does this step work?” and “Will I remember it?” Keep these subordinate, not three competing headline cards. Preserve both required logos. The reader should understand the need before hearing a pitch.
+## Slide 6: Khan Academy, right in the feed
 
-## Slide 2 — A quiz is coming. The next step is still unclear.
+- Khan Academy, right in the feed
+- FACTORING · 1 MIN 34 SEC
+- Watch the original. / Then try the idea.
+- A focused explanation, / with a useful next step.
+- Source: Khan Academy · Factoring quadratics · 2:22–3:56
 
-22 seconds. Show one illustrative scene: Mika’s teacher-set topic list, a ten-minute study window and a graph step that needs explanation. Label the scene “Illustrative learner journey.” Use the actual pack/scope language and the original bookmark rather than a fabricated photo or interview. The topic list is the focal object; the time and learner question are smaller annotations. End with one sentence: “Time spent studying can still leave the next problem uncertain.” No invented quote.
+## Slide 7: Useful help when a step is difficult
 
-## Slide 3 — Make limited study time count
+- Useful help when a step is difficult
+- 1
+- A fresh check / clarifies the difficulty
+- 2
+- An explanation / works through the step
+- 3
+- A new question / returns to the goal
+- The learner can also choose to learn first.
+- The existing recovery engine connects the support and return.
+- See the recovery example
 
-22 seconds. Give “16%” large visual weight, paired immediately with its denominator: “of assessed Philippine students reached at least Level 2 in mathematics in PISA 2022.” Do not omit the year or present this as a measure of Dunlo users. Underneath, a short line connects the need to clear steps and useful practice. Keep the page otherwise sparse. Embed the source link in a visible “OECD, PISA 2022” label. [OECD country profile](https://gpseducation.oecd.org/CountryProfile?plotter=h5&primaryCountry=PHL&topic=PI&treshold=5).
+## Slide 8: Try the complete journey
 
-## Slide 4 — One companion, three useful starts
+- Try the complete journey
+- Explore an idea, open Khan practice, / and return for a fresh question.
+- Try Dunlo
+- dunlo.vercel.app/demo
+- Scan to explore
+- Explore freely, or bring your current learning goal.
 
-18 seconds. Use one large crop of the delivered Today intent choices. The reader must be able to read “Learn something new”, “Prepare for a quiz” and “Work through a step”. Include the mascot introduction as a small adjacent pose or crop, not a second full-screen modal competing with the entry choices. Put “Free to use. No account needed.” in a clear secondary line. The point is that failure is not required to enter. Link a small “Working site” label to the public root.
+## Slide 9: Khan learning has a clear continuation
 
-## Slide 5 — A plan you can change
+- Khan learning has a clear continuation
+- The same idea connects discovery, practice and review.
+- IDEA
+- Discover or bring / a learning goal
+- LEARN
+- Open a Khan clip / or explanation
+- KHAN
+- Practise the / relevant exercise
+- TRY
+- Return to a fresh / independent question
+- REVISIT
+- Keep the idea for / a later session
+- Your place is saved when you open Khan practice.
+- Khan sources are labelled. Completion reports and fresh answers stay separate.
 
-18 seconds. Use the delivered Today/pack UI with one primary next action. If showing an interrupted session, use the actual “Resume saved work” state; otherwise show “Start this session”. Beside it, enlarge the scope receipt’s supported topic and one gap. The gap must remain visible in the PDF, not hidden in a closed disclosure. The caption explains that the learner confirms scope and can make the session smaller. Give the plan 60% of the frame, the receipt 30%, and the remaining space to breathing room.
+## Slide 10: A useful reason to return
 
-## Slide 6 — BACKTRACK checks a clue before choosing support
+- A useful reason to return
+- Today
+- Save a discovery. / Use it on a fresh question.
+- Later
+- Revisit the idea. / Try it in another situation.
+- Your place and your learning tools stay together
+- Learning basis: retrieval practice
 
-25 seconds. Place x² + 7x + 12 = 0 at the top as the shared goal. Below it, compare two compact illustrative attempts. “2 and 6” leads to the separate sum/product check. “3 and 4” leads to x + 3 = 0. Show the next useful support for each, with a directional connector and a short rationale. Label this as example routing, not measured learner behavior. Keep the two branches aligned and the shared goal dominant. Do not assign confidence percentages or imply mind-reading.
+## Slide 11: Start with public access
 
-## Slide 7 — See why the mathematics works
+- Start with public access
+- PUBLIC LAUNCH
+- NO DUNLO ACCOUNT NEEDED
+- Open an idea
+- Share an idea
+- A direct link into the experience
+- A useful starting point for someone else
+- Introduce it through public demonstrations
+- Topic pages and challenge links support discovery.
+- School and community use can extend the public model.
 
-25 seconds. This is the visual centerpiece. Use the actual new factor-area graphic at large scale. Show the initial pair 2 and 6 with Product 12 / Sum 8, then a clearly labelled corrected state for 3 and 4 with Product 12 / Sum 7. Prefer one large area diagram and one compact comparison strip over two tiny full screenshots. Keep the middle contributions 3x and 4x visually linked to 7x. Small labels identify “Predict”, “Manipulate” and “Explain”; no animation is needed to understand the relation. State that this is a Dunlo visual guide. A short counterfactual caption can ask: “What would make 2 and 6 correct? x² + 8x + 12.”
+## Slide 12: Grow through reviewed learning paths
 
-## Slide 8 — Khan learning with a saved return
+- Grow through reviewed learning paths
+- More subjects
+- Filipino content
+- Access options
+- A reusable content sequence
+- Interactive idea + Khan mapping + useful support + fresh practice
+- Next: review new content and localization before release.
+- Original offline mini-packs are a later extension.
 
-22 seconds. Show one relevant official Khan explanation and matched practice option alongside the saved Dunlo return. Clearly label the official resource and the original guide. Show “2:22–3:56” on the factoring clip only; the PDF must not imply that it will play inline. A compact route connects Khan practice to the next independent question. Keep the resource title readable and embed its actual verified link. Resource opening and learner-reported completion do not prove Khan mastery. Use the exact mappings in src/lib/khan-entry.ts and src/lib/khan-materials.ts, not a guessed URL.
+## Slide 13: Free learning. A plan for continuity.
 
-## Slide 9 — A different problem without the guide
+- Free learning. A plan for continuity.
+- PHP 100,000
+- 60%
+- Content review, / access and evaluation
+- Seek support for free delivery and maintenance.
+- Allocation
+- PHP
+- Content review
+- 30,000
+- Access & usability
+- 18,000
+- Evaluation
+- 12,000
+- Operations & hosting
+- 12,000
+- Interactive production
+- 12,000
+- Localization review
+- 8,000
+- Launch materials
+- 3,000
+- Contingency
+- 5,000
+- Total
+- 100,000
+- Implementation budget · Planning allocations; funding not secured
 
-20 seconds. The dominant object is an uncued task, for example x² + 9x + 20 = 0, with blank answer fields. A small earlier-guide thumbnail gives context but should be visibly subordinate. Caption: “Fresh independent work gives us better evidence.” Do not show a fictional learner’s correct result. A compact research citation explains the design basis without claiming Dunlo’s effectiveness. Link the visible “Yang et al., 2021” source label. [Classroom retrieval meta-analysis](https://pubmed.ncbi.nlm.nih.gov/33683913/).
+## Slide 14: The implementation journey
 
-## Slide 10 — Return to what matters
+- The implementation journey
+- NOVEMBER 2026 / Prepare and launch
+- DECEMBER–FEBRUARY / Gather feedback and refine
+- MARCH 2027 / Evaluate and plan continuation
 
-17 seconds. Use a single review item as the focal object, with a next-day or next-week date and a fresh question. Beside it, show the sequence “Attempt recall”, “Reveal your note”, “Reflect” using three short labelled positions rather than a screenshot with a hidden note. A bookmark points at the return date. One caption explains that review dates are editable and missed days do not erase work. Cite the general retrieval/spacing basis, not the exact intervals as optimized science. [Dunlosky et al., 2013](https://www.psychologicalscience.org/journals/pspi/1529100612453266/).
+## Slide 15: What success would mean
 
-## Slide 11 — Designed around real access constraints
+- What success would mean
+- Relevant Khan practice / People continue useful activity.
+- Independent application / They can use the idea themselves.
+- Learning evidence: retrieval research
+- KEIC 2026: challenge and mechanics
+- Khan Academy: content and attribution
+- Later recall / They can return and still use it.
+- Matthew Labrador · Paul Recio · Harry Gomez / Coach: Justin Mesias · University of the Philippines Manila
 
-20 seconds. Make one readable phone crop the main object: the current narrow-screen lesson with visible controls and a static option. Use a short supporting line for optional video and saved progress. If including the national access figure, write “48.8% of households had internet access at home in 2024” and embed the PSA link beside it. Do not imply device ownership or national performance from a desktop emulation. Do not show Filipino localization or offline-download features as delivered. [PSA, 2024 NICTHS](https://psa.gov.ph/content/percentage-households-internet-connection-increased-488-percent-2024-two-every-three).
+## Production checks
 
-## Slide 12 — One routine for classmates and teachers
-
-18 seconds. Use one horizontal scene showing shared scope, Predictor/Explainer roles, then different individual exits. A small teacher-sheet extract sits at the endpoint as the handover, not a dashboard wall. Caption: “Shared work and individual evidence stay separate.” Keep the teacher’s action understandable in one glance. If using names, label the people as illustrative. Link to the working teacher page and preserve the distinction between learner reports and actual authorized teacher confirmation.
-
-## Slide 13 — A free service needs a sustainable model
-
-22 seconds. Make the planning total “PHP 100,000” the dominant number with an immediately visible “Proposed allocation” label. Use a readable budget breakdown or carefully grouped cost bands from the application, preserving the eight exact amounts in an accessible appendix-free layout. State the funding hypothesis beneath it: institutional or philanthropic support for content review, access, maintenance and teacher support. “Funding not secured” belongs with that statement. The per-enrollee estimate PHP 833–1,250 is optional and must include the assumption of 80–120 enrollees and setup costs. Do not call it cost per active learner. Link the budget source to the repository submission document rather than inventing external confirmation.
-
-## Slide 14 — Try Dunlo
-
-18 seconds. Use one large clickable demo button with a matching QR and readable fallback “dunlo.vercel.app/demo”. All three must target https://dunlo.vercel.app/demo. Keep the mathematical value visible in a short prompt: choose a starting point, explore a step, try a fresh problem. A single development note reads “Working prototype · Nine destinations · Progress saved in this browser.” The PDF must already have shown the whole mechanism on slides 6–10, so the link is an invitation, not missing evidence. Verify QR pixels and the QR image’s hyperlink separately.
-
-## Slide 15 — More useful study. More meaningful Khan learning.
-
-15 seconds. Close on the intended benefit and the next evidence to collect. Use a strong final sentence with four clearly subordinate measures: unfamiliar independent answers, delayed retention, relevant Khan activity and teacher effort. Mark these “Proposed pilot measures”. State the ambition to widen free access across Filipino communities without implying current nationwide coverage. Preserve the logos and one small public-site link. Do not ask the judges to award a prize and do not show imagined results.
-
-## Evidence and hyperlink production rules
-
-A source label on the relevant page must have an embedded hyperlink in the exported PDF. Preserve the source title or publisher and year so the page remains intelligible on paper. Full provenance can stay in presenter notes and the repository, but visible claims cannot rely on notes that the PDF reader will never see. Use exact official resource URLs from the reviewed source ledger. Do not add competitor references to any slide, note or application field.
-
-Product screenshots come from the delivered site. Crop the mathematical workspace or relevant controls directly from the browser, not from a scaled collage. Keep simulated interactions labelled as illustrative. The source screenshots are in .refs/maths-release/ and .refs/browser-review/; capture fresh states if labels or layout have changed. Local QA filenames and private editor links never enter the slide copy.
-
-## PDF acceptance checks
-
-Exactly 15 pages, with no hidden extra pages or appended reference slide. Reopen the final export and inspect every page at a consistent viewing size. Check first-glance hierarchy, readable text, correct mathematical symbols, logo proportions, clipping and contrast. Confirm that every teaching transformation has enough labelled static states to stand alone.
-
-Test the demo button, visible URL and QR. Scan the QR pixels and inspect the QR hyperlink separately. Inspect source annotations to confirm actual hyperlink targets, including Khan and national-data citations. Check text extraction and font embedding where possible. Keep a short full-reference document with the team, but do not make the submitted PDF depend on it.
-
-The proposed speaking times sum to 300 seconds. Rehearse to test pacing, but write the PDF so a judge can understand each slide without the speaker. The exactly-15-page instruction and PDF-only submission come from the owner; confirm any additional portal technical restrictions before submission. Do not submit the application automatically.
+Preserve the unchanged UP Manila logo on each page. Use actual product captures on slides 4–6. Keep source hyperlinks visible on the relevant pages. The demo button, QR pixels, QR image hyperlink and readable URL all point to https://dunlo.vercel.app/demo. Full source links appear on slide 15. Budget amounts total PHP 100,000 and match the application. Rollout is described in the implementation section; the learner-facing product does not carry repeated proposal notices.

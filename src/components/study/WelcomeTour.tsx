@@ -4,14 +4,14 @@ import {createPortal} from 'react-dom';
 import {Companion} from './Companion';
 import {useStudy} from './StudyProvider';
 const STEPS=[
- {selector:'.intent-choices',title:'Choose what would help today.',body:'Start with something new, prepare your quiz scope, or work through one step. You can use Dunlo before you get stuck.'},
+ {selector:'.intent-choices',title:'Follow an idea.',body:'Explore short interactive ideas and Khan Academy lessons. Or go straight to your study session. Your saved work stays here.'},
  {selector:'a[href="/packs"]',title:'Keep your topics in a pack.',body:'My packs keeps your topics, quiz date and source notes together. Check the coverage receipt so missing topics stay visible.'},
  {selector:'a[href="/review"]',title:'Come back for a fresh question.',body:'Review keeps useful steps for another look. Your place is saved in this browser; a missed day does not erase your work.'}
 ];
 export function WelcomeTour(){const {ready,state,update}=useStudy();const [step,setStep]=useState(-2),[rect,setRect]=useState<{x:number;y:number;w:number;h:number}>(),[size,setSize]=useState({w:typeof window==='undefined'?390:window.innerWidth,h:typeof window==='undefined'?844:window.innerHeight}),[tipHeight,setTipHeight]=useState(350);const dialog=useRef<HTMLDivElement>(null),target=useRef<HTMLElement|null>(null),previous=useRef<HTMLElement|null>(null);
  const active=step>=-1;
  function close(){setStep(-2);const url=new URL(window.location.href);if(url.searchParams.has('tour')){url.searchParams.delete('tour');history.replaceState(history.state,'',url.href);}update(s=>({...s,settings:{...s.settings,tourDone:true},updatedAt:Date.now()}));previous.current?.focus();}
- useEffect(()=>{if(ready&&(!state.settings.tourDone||new URLSearchParams(window.location.search).get('tour')==='1')){previous.current=document.activeElement as HTMLElement;setStep(-1);}const replay=()=>{previous.current=document.activeElement as HTMLElement;setStep(-1);};window.addEventListener('dunlo:tour',replay);return()=>window.removeEventListener('dunlo:tour',replay);},[ready]);
+ useEffect(()=>{if(ready&&new URLSearchParams(window.location.search).get('tour')==='1'){previous.current=document.activeElement as HTMLElement;setStep(-1);}const replay=()=>{previous.current=document.activeElement as HTMLElement;setStep(-1);};window.addEventListener('dunlo:tour',replay);return()=>window.removeEventListener('dunlo:tour',replay);},[ready]);
  useEffect(()=>{if(!active)return;
   const measure=()=>{if(dialog.current)setTipHeight(dialog.current.getBoundingClientRect().height);setSize({w:innerWidth,h:innerHeight});const el=step>=0?Array.from(document.querySelectorAll<HTMLElement>(STEPS[step].selector)).find(el=>el.getBoundingClientRect().width>0):undefined;target.current=el??null;const r=el?.getBoundingClientRect();setRect(r?{x:Math.max(5,r.x-8),y:Math.max(5,r.y-8),w:Math.min(innerWidth-10,r.width+16),h:r.height+16}:undefined);};
   if(step>=0){const el=Array.from(document.querySelectorAll<HTMLElement>(STEPS[step].selector)).find(el=>el.getBoundingClientRect().width>0);el?.scrollIntoView({block:'center',behavior:'instant'});}measure();dialog.current?.querySelector<HTMLButtonElement>('button')?.focus({preventScroll:true});

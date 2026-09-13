@@ -35,7 +35,7 @@ async function answerCurrent(page,topic){
 }
 try{
  await scenario('mobile palette and navigation',async page=>{
-   await page.goto(origin);await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('heading',{name:'What would help you learn today?'}).waitFor();await overflow(page);
+   await page.goto(origin);if(await page.getByRole('button',{name:'Explore on my own'}).isVisible())await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('heading',{name:'Follow your curiosity.'}).waitFor();await overflow(page);
    assert.equal(await page.locator('.study-space .button-primary').first().evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(20, 191, 150)');
    assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(10, 42, 102)');
    await page.screenshot({path:path.join(root,'.refs/browser-review/mobile-home.png'),fullPage:true});
@@ -49,7 +49,7 @@ try{
    await page.getByRole('button',{name:'Continue my session'}).click();
    await page.getByRole('heading',{name:'You used it on fresh problems.'}).waitFor();await page.getByRole('textbox',{name:'Note to future you'}).fill('Check both the sum and the product.');await page.getByRole('button',{name:'Save my note'}).click();
    const before=await saved(page);assert.equal(before.xp,10);assert.equal(Object.keys(before.review).length,1);assert.ok(before.review['skill:factor'].dueAt>Date.now());
-   await page.goto(origin);await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('link',{name:'Choose another topic'}).waitFor();await page.getByRole('button',{name:'I don’t recall yet'}).click();await page.getByText('Check both the sum and the product.',{exact:true}).waitFor();await page.reload();
+   await page.goto(origin);if(await page.getByRole('button',{name:'Explore on my own'}).isVisible())await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('link',{name:'Choose another topic'}).waitFor();await page.getByRole('button',{name:'I don’t recall yet'}).click();await page.getByText('Check both the sum and the product.',{exact:true}).waitFor();await page.reload();
    await page.getByRole('link',{name:'Choose another topic'}).waitFor();assert.equal((await saved(page)).xp,10);await page.screenshot({path:path.join(root,'.refs/browser-review/returning-home.png'),fullPage:true});
  });
  await scenario('personal notes draft edit save and recall',async page=>{

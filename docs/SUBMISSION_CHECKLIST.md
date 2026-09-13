@@ -1,60 +1,31 @@
-# BACKTRACK: start here
+# Dunlo: submission package
 
-## What to submit
+## What to use
 
-Use the seven answers in SUBMISSION_COPY, or the separate answer PDFs. Each is below 300 words. Upload BACKTRACK_KEIC_2026.pdf as the deck. It has 15 pages including the cover and sources. Do not upload the deck blueprint in place of the deck.
+Upload **Dunlo_KEIC_2026.pdf** as the pitch deck. It must contain exactly 15 pages. Copy the seven project answers from **PROJECT_ANSWERS.txt** or docs/SUBMISSION_COPY.md into their corresponding fields. Do not upload a storyboard or developer document as the deck.
 
-The clickable product link is https://dunlo.vercel.app/demo . The homepage is https://dunlo.vercel.app/ . The earlier comparison site remains at https://backtrack-five.vercel.app/ .
+The owner confirmed the institution, adviser and student fields are already filled. Keep those fields and review the new project content before submitting.
 
-## Confirm before pressing Submit
+## Links
 
-- Institution: University of the Philippines Manila. Confirm the exact campus wording and NCR region.
-- Coach: Justin Mesias. Confirm his faculty-adviser eligibility, official position, department, email, and phone.
-- Students: Matthew Labrador, Paul Recio, Harry Gomez. Enter their confirmed programs, year levels, emails, and required contact details.
-- Confirm campus exclusivity and no adviser/student overlap with the separate early-stage track.
-- UP Manila endorsement has been confirmed by the team. Complete faculty review and the team's final consent to submit.
-- Recheck the live form and organizer announcements immediately before submission.
+- Product: https://dunlo.vercel.app/
+- Explore: https://dunlo.vercel.app/explore
+- Deck demo button and QR: https://dunlo.vercel.app/demo
+- Application: https://form.typeform.com/to/bJw9THj3
 
-## The executive-summary form issue
+The demo retains the original recovery example and offers a clear entrance to Explore.
 
-The official wording allows 300 words, but the live executive-summary field configuration contains max_length 300. The package includes a 216-character fallback. Ask the organizer to clarify or use the full answer if the field accepts it. Do not bypass form validation.
+## Form limits
 
-The verified application deadline date is September 18, 2026. The exact 11:59 PM PHT time appears in the inherited handoff but was not independently displayed in this inspection. Confirm the time and submit early.
+Seven narratives: 300 words or fewer each. The executive field still has max_length 300 in the public definition checked September 13, 2026. Use the included character-limit fallback if the field enforces it. PDF deck: no more than 15 slides; this deck uses 15.
 
-## What is ready, and what is still evidence to earn
+Deadline: **September 18, 2026, 11:59 PM Philippine time**, confirmed in Khan Academy Philippines’ official announcement. The competition application itself is not submitted by this build process.
 
-The public product, written proposal, financial scenario, evaluation design, and reusable planning material are deliverables. The package does not claim completed interviews, partner-school commitments, an implemented pilot, or improved learning scores.
+## Final checks
 
-Before application, use the validation script to collect permitted real feedback if possible. Before nationals, prioritize actual school access and an educator’s review of the mathematics. Before implementation, approve assessment forms, permissions, reporting access, and the school routine.
+- Use the final exported PDF, open all 15 pages and check the demo link.
+- Keep the completed team fields and review the declarations in the portal.
+- Paste each narrative in the matching field and use the executive fallback if needed.
+- Upload the deck, submit personally, and retain the receipt.
 
-## Where to find each answer
-
-- What it is and why it could matter: KEIC_WINNING_STRATEGY.
-- Pitch questions and answers: PITCH_AND_QA_PREP.
-- What to paste into the form: SUBMISSION_COPY and the seven numbered answer PDFs.
-- What to present: BACKTRACK_KEIC_2026.pdf and editable PPTX.
-- How to run the proposed five-month school work: PILOT_IMPLEMENTATION_PLAN.
-- How to know whether it helped: MEASUREMENT_AND_EVALUATION.
-- What it could cost and who might support continuation: BUSINESS_AND_SUSTAINABILITY.
-- What to ask students and teachers before submission: VALIDATION_BEFORE_SUBMISSION.
-- Which claims have sources and which remain proposals: CLAIMS_AND_SOURCES_LEDGER.
-- How to rehearse and answer difficult questions: PITCH_AND_QA_PREP.
-- Final strengths and remaining weaknesses: JUDGE_FINAL_REVIEW.
-
-## A few terms in plain language
-
-**Destination:** the lesson or task the learner wants to understand now.
-
-**Prerequisite:** an earlier skill that helps with that task.
-
-**Reentry:** being able to return to the task that was difficult.
-
-**Retained reentry:** being able to do it after practice and again later.
-
-**Comparison group:** learners using a realistic alternative, so ordinary teaching or extra practice is not mistaken for a BACKTRACK effect.
-
-**Denominator:** everyone included when reporting a rate. The learners who miss follow-up still need to be accounted for.
-
-## Submission boundary
-
-This package prepares the application. It does not submit it or make the institution’s declarations. An authorized team member must enter personal details, review consent terms, confirm the final answers, upload the deck, and retain the submission receipt.
+Official guidelines: https://enactus.ph/2026-national-competition/khan-academy-challenge

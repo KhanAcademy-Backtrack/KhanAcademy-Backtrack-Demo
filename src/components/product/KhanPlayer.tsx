@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import {VERIFIED_CLIPS,videoSource,clipTime,type ClipMode} from '@/lib/video-clips';
-export function KhanPlayer({id,title,source,onOpen}:{id:string;title:string;source:string;onOpen:()=>void}){
-  const [loaded,setLoaded]=useState(false),[mode,setMode]=useState<ClipMode>('focus');const clip=VERIFIED_CLIPS[id];
+export function KhanPlayer({id,title,source,onOpen,initiallyLoaded=false}:{id:string;title:string;source:string;onOpen:()=>void;initiallyLoaded?:boolean}){
+  const [loaded,setLoaded]=useState(initiallyLoaded),[mode,setMode]=useState<ClipMode>('focus');const clip=VERIFIED_CLIPS[id];
   return <div className="khan-player">{loaded?<iframe key={mode} src={videoSource(id,window.location.origin,mode,clip)} title={`Khan Academy: ${title}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/>:<button className="khan-player-cover" onClick={()=>{setLoaded(true);onOpen();}}><span className="play-circle" aria-hidden="true">▶</span><strong>{clip?clip.label:title}</strong><span className="fine-print">Khan Academy{clip?` · ${clipTime(clip.end-clip.start)} focused segment`:''}</span></button>}<div className="khan-player-caption"><span>{clip&&mode==='focus'?`${clipTime(clip.start)}–${clipTime(clip.end)} · ${clip.label}`:'Khan Academy lesson'}</span><a href={source} target="_blank" rel="noopener noreferrer">Original lesson ↗</a></div>{loaded&&clip&&<div className="clip-actions">{mode==='focus'&&<button type="button" onClick={()=>setMode('continue')}>Continue watching</button>}<button type="button" onClick={()=>setMode(mode==='focus'?'full':'focus')}>{mode==='focus'?'Watch from the start':'Replay focused segment'}</button></div>}</div>;
 }

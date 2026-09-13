@@ -1,12 +1,14 @@
 # Dunlo
 
-A study companion for Khan Academy: choose what matters today, work through a useful session, and return to the ideas that need another look. The original recovery engine remains part of this broader experience.
+Explore playable ideas and focused Khan Academy lessons, continue into relevant practice, and return for a fresh question. Dunlo is a free independent learning project. The broader study companion and recovery engine remain available.
 
 Live product: https://dunlo.vercel.app/
 
 The expanded site includes Today planning, finite sessions, quiz rehearsal, scheduled review, curated/custom packs, note cards with PDF/TXT/Markdown import, shared scope links, same-screen co-op, a bookmark companion and teacher activity sheets. Supported Khan entry, focused video segments, saved returns and independent checks connect the experience. Progress, restore and recovery backups work locally.
 
-Presentation editing and PDF/Drive refresh are paused for strategy review. Existing exported decks and PDFs are earlier versions, not the current website release. The existing native Canva design remains the authoritative 15-slide deck.
+Explore: https://dunlo.vercel.app/explore
+
+The September 13 discovery release adds six original interactive ideas and four reviewed Khan segments, with saved interests, direct item links and a preserved Khan return. The same native Canva design is being refreshed as the 15-slide submission deck. See docs/DISCOVERY_EXECUTION_PLAN_2026_09_13.md for the release scope.
 
 ## The product
 
@@ -47,7 +49,7 @@ Use Node 24 or later for the built-in TypeScript test runner.
 
 ## Evidence boundaries
 
-The interactive build demonstrates software behavior. The school implementation, learning outcomes, costs, and continuation model are proposals to test. Resource opens, self-reported practice, and BACKTRACK answers are separate records. The optional evidence pages and documents explain the evaluation design.
+The interactive build demonstrates software behavior. The public launch, evaluation, budget and continuation plan describe future implementation. Resource opens, self-reported practice, and BACKTRACK answers are separate records. The optional evidence pages and documents explain the evaluation design.
 
 The public interface stores device-local progress, not a school record. Initial page loading and Khan material require connectivity. Shared-device controls clear a destination's saved route. The video player includes an original-Khan fallback for networks or embedded browsers that block playback.
 
