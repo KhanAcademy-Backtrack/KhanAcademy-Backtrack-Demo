@@ -1,12 +1,14 @@
 {
   "projectId": "prj_wQOHBw50UTNUYzhLHAtFjdt2kMN3",
   "status": "READY",
-  "productUrl": "https://dunlo.vercel.app/demo",
-  "url": "https://dunlo.vercel.app",
+  "productUrl": "https://dunlo.vercel.app/",
+  "url": "https://dunlo.vercel.app/",
   "originalUrl": "https://backtrack-five.vercel.app",
   "projectName": "dunlo",
-  "commit": "af24d21895dad02972539d7eae7478df3e807950",
-  "deployment": "https://dunlo-yoo2ib8sb-m4tyu633s-projects.vercel.app",
-  "verified": "2026-09-11",
-  "verification": "83 unit tests, 18 browser journeys, typecheck and 30-route static production build. Live root/demo/Khan/study/review/session/shared-scope HTTP checks and live Khan return/reload plus diagnostic-to-visual walkthrough passed. Commit verified through Vercel GitHub deployment metadata. Site and docs only; deck deferred."
+  "commit": "f0fe2b90b71cd425b0228809578de0244664c7f5",
+  "deployment": "https://dunlo-4dqfcf8nt-m4tyu633s-projects.vercel.app",
+  "verified": "2026-09-13",
+  "verification": "Verified the code/artifact release through the matching successful Vercel GitHub status and production deployment. Live Explore and the six-step tutorial rendered correctly; the filling model ended at five minutes with zero stream elements. Typecheck/build, 92 unit tests and 61 browser checks passed. Final deck: 15 pages, 15 bookmarks, unchanged UP Manila logos, source links and main-site QR checked. Existing Drive deliverables replaced in place.",
+  "exploreUrl": "https://dunlo.vercel.app/explore",
+  "recoveryExampleUrl": "https://dunlo.vercel.app/demo"
 }
