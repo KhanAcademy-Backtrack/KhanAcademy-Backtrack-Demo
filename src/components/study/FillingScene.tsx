@@ -22,7 +22,7 @@ export function FillingScene({autoplay=false,compact=false,staticMode=false,save
  useMotionValueEvent(volume,'change',read);useMotionValueEvent(time,'change',read);
  useMotionValueEvent(flow,'change',readRule);useMotionValueEvent(start,'change',readRule);
  useEffect(()=>{const observer=new IntersectionObserver(([entry])=>setVisible(entry.isIntersecting),{threshold:.25});if(stage.current)observer.observe(stage.current);return()=>observer.disconnect();},[]);
- useEffect(()=>{if(!autoStarted.current&&autoplay&&visible&&!off&&(!compact||state.settings.tourDone||!new URLSearchParams(window.location.search).has('tour'))){autoStarted.current=true;setRunning(true);}},[autoplay,visible,off,state.settings.tourDone,compact]);
+ useEffect(()=>{if(!autoStarted.current&&autoplay&&visible&&!off&&(!compact||state.settings.tourDone)){autoStarted.current=true;setRunning(true);}},[autoplay,visible,off,state.settings.tourDone,compact]);
  useEffect(()=>{playback.current?.stop();if(!running||off||!visible)return;if(time.get()>=5)time.set(0);const p=animate(time,5,{duration:(5-time.get())*1.5,ease:'linear',onComplete:()=>{setRunning(false);onChange?.({rate:flow.get(),start:start.get(),time:5});}});playback.current=p;return()=>p.stop();},[running,off,visible,time,replayVersion]);
  function replay(){playback.current?.stop();time.set(0);setRunning(!off);setReplayVersion(v=>v+1);onChange?.({rate,start:initial,time:0});}
  function pause(){playback.current?.stop();setRunning(false);onChange?.({rate,start:initial,time:Math.round(time.get()*10)/10});}
