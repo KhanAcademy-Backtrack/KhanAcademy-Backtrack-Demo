@@ -56,3 +56,11 @@ The guided repair used for the foundation skills still starts at its first step 
 Scaffolding depth, unfamiliar application and delayed retrieval remain open lines of work rather than finished ones.
 
 Offline mini-packs, reviewed Filipino localization and a real consented usability/retention pilot remain outstanding. A working interface and passing software tests do not establish better learning outcomes.
+
+## Recipe feed animation, 13 September
+
+The Explore recipe card previously changed numbers while its animated rectangle always targeted the same height. It now uses equal-scale measuring containers. A batch change moves the syrup and water levels together over 0.8 seconds; their heights and displayed quantities follow the same animated values, preserving the 2:3 recipe throughout. The central multiplier and total-part readouts make the increase in volume visible.
+
+A 1.6-second fill plays on first visibility and can be replayed. It finishes at the chosen amount, stops offscreen, and respects Still view, quiet presentation and reduced motion. Replay does not change the stored batch or award learning evidence. The original proportion-only caption was replaced with the explicit shared volume scale.
+
+Validation: 92 unit tests and the production build pass. Browser checks sampled changing levels during scaling and Replay, verified a 2/5 syrup share across sampled frames, observed the first-view fill end, checked offscreen stopping and Still view, reloaded the saved batch, and checked labels and overflow at a 390px viewport.

@@ -1,5 +1,6 @@
 'use client';
 import {motion,useReducedMotion} from 'motion/react';
+import {MixtureScene} from './MixtureScene';
 import {Companion} from '@/components/study/Companion';
 import {useStudy} from '@/components/study/StudyProvider';
 import {exploreValue,type ExploreItem,type ExploreState} from '@/lib/explore';
@@ -11,11 +12,8 @@ export function ExploreScene({item,history,onValue,active,still}:{item:ExploreIt
  const change=(n:number)=>onValue(item.id,n);
  const isToggle=item.scene==='distribution'||item.scene==='factors';
  return <div className={`explore-scene scene-${item.scene}`}>
-  <div className="explore-buddy"><Companion size={58} pose={value!==initial?'aha':'curious'} still={off}/><span>{item.scene==='roots'?'Find where a factor is zero.':isToggle?'The pieces keep their meaning.':'Change it. Watch what stays true.'}</span></div>
-  {item.scene==='mixture'&&<svg viewBox="0 0 540 270" role="img" aria-label={`The first recipe has 2 parts syrup and 3 parts water. The bigger batch has ${2*value} and ${3*value} parts. Both are two fifths syrup. The glasses show proportions, not total volume.`}>
-   {[1,value].map((scale,i)=><g key={i} transform={`translate(${i?310:55},30)`}><text x="78" y="0" textAnchor="middle">{i?'Your batch':'Original recipe'}</text><path d="M5 28L20 205H136L151 28" fill="#effaf7" stroke="#0a2a66" strokeWidth="3"/><motion.rect x="22" y="139" width="112" height="64" rx="4" fill="#14bf96" initial={false} animate={{height:64}} transition={transition}/><path d="M22 139H134" stroke="#0a2a66" strokeDasharray="4 4"/><text x="78" y="86" textAnchor="middle">{3*scale} water</text><text x="78" y="177" textAnchor="middle">{2*scale} syrup</text><text x="78" y="239" textAnchor="middle">{2*scale}/{5*scale} syrup</text></g>)}
-   <text x="270" y="150" textAnchor="middle" className="scene-large">=</text>
-  </svg>}
+  <div className="explore-buddy"><Companion size={58} pose={value!==initial?'aha':'curious'} still={off}/><span>{item.scene==='roots'?'Find where a factor is zero.':isToggle?'The pieces keep their meaning.':item.scene==='mixture'?'Scale both ingredients together.':'Change it. Watch what stays true.'}</span></div>
+  {item.scene==='mixture'&&<MixtureScene value={value} active={active} still={still||state.settings.quiet||!!reduced}/>}
   {item.scene==='fractions'&&<svg viewBox="0 0 540 270" role="img" aria-label={`The same whole is divided into ${2*value} equal pieces. ${value} are shaded: one half.`}>
    <text x="270" y="38" textAnchor="middle">One whole. The same shaded half.</text><rect x="30" y="72" width="480" height="120" rx="8" fill="#eef3f9"/><rect x="30" y="72" width="240" height="120" rx="8" fill="#14bf96"/>
    {Array.from({length:2*value-1},(_,i)=><motion.path key={`${value}-${i}`} initial={off?false:{pathLength:0}} animate={{pathLength:1}} transition={transition} d={`M${30+(i+1)*480/(2*value)} 72V192`} stroke="#0a2a66" strokeWidth="2"/>)}<rect x="30" y="72" width="480" height="120" rx="8" fill="none" stroke="#0a2a66" strokeWidth="3"/>
@@ -43,6 +41,6 @@ export function ExploreScene({item,history,onValue,active,still}:{item:ExploreIt
    <motion.g initial={false} animate={{x:55+value*58,y:235-(6+2*value)*11}} transition={transition}><circle r="9" fill="#14bf96" stroke="#0a2a66"/></motion.g>
    <rect x="401" y="49" width="88" height="187" rx="8" fill="#eef8f5" stroke="#0a2a66" strokeWidth="2"/><motion.rect initial={false} animate={{y:233-(6+2*value)*10,height:(6+2*value)*10}} transition={transition} x="404" width="82" rx="5" fill="#14bf96"/><text x="445" y="268" textAnchor="middle">{6+2*value} L</text>
   </svg>}
-  {item.scene==='factors'&&<p className="explore-proportion-note">The picture uses x = 5.</p>}{item.scene==='mixture'&&<p className="explore-proportion-note">Each glass shows the mix, not the total volume.</p>}<div className="explore-scene-controls">{isToggle?<button type="button" className="explore-action" aria-pressed={!!value} onClick={()=>change(value?0:1)}>{item.scene==='factors'?(value?'Bring the pieces together':'Separate the four pieces'):(value?'Put them back in groups':'Open and regroup')}</button>:<label>{label} <strong>{value}{item.scene==='mixture'?'×':item.scene==='graph'?' min':''}</strong><input type="range" min={min} max={max} step="1" value={value} onChange={e=>change(Number(e.target.value))}/></label>}</div>
+  {item.scene==='factors'&&<p className="explore-proportion-note">The picture uses x = 5.</p>}<div className="explore-scene-controls">{isToggle?<button type="button" className="explore-action" aria-pressed={!!value} onClick={()=>change(value?0:1)}>{item.scene==='factors'?(value?'Bring the pieces together':'Separate the four pieces'):(value?'Put them back in groups':'Open and regroup')}</button>:<label>{label} <strong>{value}{item.scene==='mixture'?'×':item.scene==='graph'?' min':''}</strong><input type="range" min={min} max={max} step="1" value={value} onChange={e=>change(Number(e.target.value))}/></label>}</div>
  </div>;
 }
