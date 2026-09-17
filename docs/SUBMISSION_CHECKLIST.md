@@ -8,9 +8,9 @@ The owner confirmed the institution, adviser and student fields are already fill
 
 ## Links
 
-- Product: https://dunlo.vercel.app/
-- Explore: https://dunlo.vercel.app/explore
-- Deck main button and QR: https://dunlo.vercel.app/
+- Product: https://khanpanion.vercel.app/
+- Explore: https://khanpanion.vercel.app/explore
+- Deck main button and QR: https://khanpanion.vercel.app/
 - Application: https://form.typeform.com/to/bJw9THj3
 
 The demo retains the original recovery example and offers a clear entrance to Explore.

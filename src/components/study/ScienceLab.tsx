@@ -202,7 +202,7 @@ export function ScienceLab({kind,onContinue,state,onExpose,reserve,initial,onSav
     :kind==='motion'?{question:'A cart already moving at 4 m/s accelerates at 2 m/s² for 3 s. Is its final speed 6 m/s?',options:['Yes — 2 × 3 = 6','No — the 4 m/s it already had still counts','Only if it started from rest'],answer:1}
     :{question:'A block is pushed with 10 N right and 10 N left. Is it accelerating?',options:['Yes — two forces are acting','No — the forces cancel, so there is no net force','Only if the block is light'],answer:1};
   return <section className="concept-lab science-lab">
-    <div className="repair-kicker"><span>Dunlo visual guide</span></div>
+    <div className="repair-kicker"><span>Khanpanion visual guide</span></div>
     {shown?<>
       {kind==='balancing'?<BalanceLab state={state} store={store}/>:kind==='moles'?<MolesLab state={state} store={store}/>:kind==='motion'?<MotionLab store={store}/>:<ForcesLab store={store}/>}
       <button className="button-primary" type="button" onClick={onContinue}>Use the idea on a fresh check ↗</button>

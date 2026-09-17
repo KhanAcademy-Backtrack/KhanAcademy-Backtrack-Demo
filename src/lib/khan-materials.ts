@@ -5,7 +5,7 @@ const BASICS=ROOT+'/math/algebra-basics';
 const EXPRESSIONS=BASICS+'/alg-basics-algebraic-expressions/alg-basics-distributive-property';
 const EQUATIONS=BASICS+'/alg-basics-linear-equations-and-inequalities';
 /** `matched:false` means no reviewed Khan resource exists for this step yet. The
- *  learner is told so plainly; the original Dunlo explanation is never withheld
+ *  learner is told so plainly; the original Khanpanion explanation is never withheld
  *  because a third-party match is missing. */
 export type KhanMaterial={id:string;title:string;source:string;resources:KhanResource[];matched:boolean};
 /** Chemistry and physics steps have no hand-verified Khan URL yet. Listing them

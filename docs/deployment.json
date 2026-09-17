@@ -1,8 +1,9 @@
 {
   "projectId": "prj_wQOHBw50UTNUYzhLHAtFjdt2kMN3",
   "status": "READY",
-  "productUrl": "https://dunlo.vercel.app/",
-  "url": "https://dunlo.vercel.app/",
+  "productUrl": "https://khanpanion.vercel.app/",
+  "url": "https://khanpanion.vercel.app/",
+  "legacyUrl": "https://dunlo.vercel.app/",
   "originalUrl": "https://backtrack-five.vercel.app",
   "publicName": "Khanpanion",
   "projectName": "dunlo",
@@ -10,6 +11,6 @@
   "deployment": "https://dunlo-4dqfcf8nt-m4tyu633s-projects.vercel.app",
   "verified": "2026-09-13",
   "verification": "Verified the code/artifact release through the matching successful Vercel GitHub status and production deployment. Live Explore and the six-step tutorial rendered correctly; the filling model ended at five minutes with zero stream elements. Typecheck/build, 92 unit tests and 61 browser checks passed. Final deck: 15 pages, 15 bookmarks, unchanged UP Manila logos, source links and main-site QR checked. Existing Drive deliverables replaced in place.",
-  "exploreUrl": "https://dunlo.vercel.app/explore",
-  "recoveryExampleUrl": "https://dunlo.vercel.app/demo"
+  "exploreUrl": "https://khanpanion.vercel.app/explore",
+  "recoveryExampleUrl": "https://khanpanion.vercel.app/demo"
 }

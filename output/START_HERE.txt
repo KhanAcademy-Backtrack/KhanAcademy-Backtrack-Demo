@@ -4,9 +4,9 @@ Start with BACKTRACK_KEIC_2026.pdf: the current 15-slide deck exported from Canv
 The native Canva deck is the main editable design. Use the Canva link supplied with the private Drive package.
 BACKTRACK_KEIC_2026_Editable.pptx is the current backup exported from Canva with embedded DM Sans regular and bold.
 
-Interactive demo: https://dunlo.vercel.app/demo
-Full learner routes: https://dunlo.vercel.app/start
-Homepage: https://dunlo.vercel.app/
+Interactive demo: https://khanpanion.vercel.app/demo
+Full learner routes: https://khanpanion.vercel.app/start
+Homepage: https://khanpanion.vercel.app/
 
 Slide 7 has a clickable button, visible link, and clickable QR leading to the demo.
 

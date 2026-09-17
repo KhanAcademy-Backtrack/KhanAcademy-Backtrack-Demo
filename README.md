@@ -2,11 +2,11 @@
 
 Explore playable ideas and focused Khan Academy lessons, continue into relevant practice, and return for a fresh question. Khanpanion is a free independent learning project. The broader study companion and recovery engine remain available.
 
-Live product: https://dunlo.vercel.app/
+Live product: https://khanpanion.vercel.app/
 
 The expanded site includes Today planning, finite sessions, quiz rehearsal, scheduled review, curated/custom packs, note cards with PDF/TXT/Markdown import, shared scope links, same-screen co-op, a bookmark companion and teacher activity sheets. Supported Khan entry, focused video segments, saved returns and independent checks connect the experience. Progress, restore and recovery backups work locally.
 
-Explore: https://dunlo.vercel.app/explore
+Explore: https://khanpanion.vercel.app/explore
 
 The September 13 discovery release adds six original interactive ideas and four reviewed Khan segments, with saved interests, direct item links and a preserved Khan return. The same native Canva design now has the final 15-slide submission story, opening with “You watched it. Can you use it?”. The main QR and call to action open the homepage. See docs/DISCOVERY_EXECUTION_PLAN_2026_09_13.md for the release scope.
 
@@ -56,7 +56,7 @@ The public interface stores device-local progress, not a school record. Initial 
 
 ## Deployment
 
-The existing Vercel project is now named dunlo. Its GitHub integration is connected to this repository. The public address is https://dunlo.vercel.app/.
+The existing Vercel project is now named dunlo. Its GitHub integration is connected to this repository. The public address is https://khanpanion.vercel.app/. The earlier https://dunlo.vercel.app/ address stays attached as a legacy alias.
 
 Production follows main.
 

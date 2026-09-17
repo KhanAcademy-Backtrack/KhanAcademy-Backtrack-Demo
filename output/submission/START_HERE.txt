@@ -6,7 +6,7 @@ KHANPANION: READY-TO-SUBMIT FILES
 
 The editable PPTX is a backup, not the requested submission format.
 
-Site and QR: https://dunlo.vercel.app/
-Explore: https://dunlo.vercel.app/explore
+Site and QR: https://khanpanion.vercel.app/
+Explore: https://khanpanion.vercel.app/explore
 Application: https://form.typeform.com/to/bJw9THj3
 Deadline: September 18, 2026, 11:59 PM Philippine time.

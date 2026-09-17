@@ -1,7 +1,7 @@
 # Khanpanion — working notes for Claude
 
 Public product: **Khanpanion**. Recovery engine: **BACKTRACK**. Use Khanpanion in all learner-facing copy.
-Live address: https://dunlo.vercel.app/ · The current Vercel project/domain identifier remains dunlo until the rename is completed. Static export, device-local storage, no backend.
+Live address: https://khanpanion.vercel.app/ · https://dunlo.vercel.app/ stays attached as a legacy alias, and the Vercel project identifier remains dunlo. Static export, device-local storage, no backend.
 
 ## Attribution — do not get this wrong
 

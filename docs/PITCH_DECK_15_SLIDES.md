@@ -36,7 +36,7 @@ This deck is designed to be read independently for top-30 selection, without a s
 - Scroll. Try. Keep going.
 - Move a slider or watch a focused Khan clip. / Make a prediction and get an explanation.
 - Follow the idea into a matching Khan exercise. / Save it for a fresh question later.
-- Explore the working feed · dunlo.vercel.app/explore
+- Explore the working feed · khanpanion.vercel.app/explore
 
 ## Slide 5: Make the relationship visible
 
@@ -76,7 +76,7 @@ This deck is designed to be read independently for top-30 selection, without a s
 - Try the complete journey
 - Explore an idea, open Khan practice, / and return for a fresh question.
 - Try Khanpanion
-- dunlo.vercel.app
+- khanpanion.vercel.app
 - Scan to explore
 - Explore freely, or bring your current learning goal.
 
@@ -164,7 +164,7 @@ This deck is designed to be read independently for top-30 selection, without a s
 
 - Turn curiosity into progress.
 - Khanpanion uses short-form discovery to bring learners into Khan practice, / then helps them apply the idea and return to it.
-- Explore Khanpanion · dunlo.vercel.app
+- Explore Khanpanion · khanpanion.vercel.app
 - Matthew Labrador · Paul Recio · Harry Gomez / Coach: Justin Mesias · University of the Philippines Manila
 
 ## Slide 15: Research behind the learning design
@@ -180,4 +180,4 @@ This deck is designed to be read independently for top-30 selection, without a s
 
 ## Export checks
 
-Exactly 15 pages with descriptive PDF bookmarks. Preserve the UP Manila seal and university name on every page, with the Health Sciences Center tagline removed as requested. The native iPhone mockup uses a fresh app capture with status-area spacing; the camera cutout clears the controls and the navigation sits within the rounded display. QR pixels, QR image link, Try Khanpanion button and printed URL open https://dunlo.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.
+Exactly 15 pages with descriptive PDF bookmarks. Preserve the UP Manila seal and university name on every page, with the Health Sciences Center tagline removed as requested. The native iPhone mockup uses a fresh app capture with status-area spacing; the camera cutout clears the controls and the navigation sits within the rounded display. QR pixels, QR image link, Try Khanpanion button and printed URL open https://khanpanion.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.
