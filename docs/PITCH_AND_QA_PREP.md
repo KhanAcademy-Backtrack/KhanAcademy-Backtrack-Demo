@@ -1,12 +1,12 @@
-# Dunlo: pitch and questions
+# Khanpanion: pitch and questions
 
 ## Opening
 
-Dunlo turns a little curiosity into a useful learning journey with Khan Academy. Open an interactive idea, change something, follow the explanation and try it yourself. Your next step stays within reach when you return.
+Khanpanion turns a little curiosity into a useful learning journey with Khan Academy. Open an interactive idea, change something, follow the explanation and try it yourself. Your next step stays within reach when you return.
 
 ## Likely questions
 
-**Why does Khan Academy need Dunlo?** Dunlo provides an additional interactive entrance and keeps a useful continuation around a Khan goal. The evaluation will test whether this helps people continue relevant practice.
+**Why does Khan Academy need Khanpanion?** Khanpanion provides an additional interactive entrance and keeps a useful continuation around a Khan goal. The evaluation will test whether this helps people continue relevant practice.
 
 **Is this just short video?** The feed includes original interactions and focused Khan segments. It connects to authored help, real Khan exercises, fresh questions and later review.
 
@@ -20,7 +20,7 @@ Dunlo turns a little curiosity into a useful learning journey with Khan Academy.
 
 **Is it free?** Yes. The proposed support model funds development, review and maintenance without charging for Khan material. The illustrative implementation budget is PHP 100,000.
 
-**Are you affiliated with Khan Academy?** Dunlo is an independent project prepared for KEIC. Original Khan material is visibly attributed and remains available free on Khan Academy.
+**Are you affiliated with Khan Academy?** Khanpanion is an independent project prepared for KEIC. Original Khan material is visibly attributed and remains available free on Khan Academy.
 
 **Where is AI used?** AI assisted research, writing, coding and design. The current learner experience uses authored content and deterministic checks; it does not run a hosted AI tutor.
 

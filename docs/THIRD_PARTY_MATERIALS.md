@@ -18,7 +18,7 @@ On the machine used for this work the in-app browser was blocked from loading Kh
 
 `atom_count`, `formula_mass`, `unit_convert`, `net_force`, `moles`, `balancing`, `motion`, `forces`
 
-Listing them is deliberate: `khanMaterial` otherwise falls through to the algebra factoring resources, which would silently send a chemistry learner to quadratics. Where a step is unmatched the interface says so in plain words and shows Dunlo's own explanation instead — a missing third-party match never withholds the original lesson.
+Listing them is deliberate: `khanMaterial` otherwise falls through to the algebra factoring resources, which would silently send a chemistry learner to quadratics. Where a step is unmatched the interface says so in plain words and shows Khanpanion's own explanation instead — a missing third-party match never withholds the original lesson.
 
 Physics learners still reach verified Khan practice. `motion` and `forces` route down into the existing `substitute` and `multiply` skills, whose Khan exercises were verified on 10 September 2026 and are unchanged.
 

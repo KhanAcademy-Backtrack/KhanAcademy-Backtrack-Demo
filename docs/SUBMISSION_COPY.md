@@ -1,6 +1,6 @@
-# Dunlo: ready-to-paste submission copy
+# Khanpanion: ready-to-paste submission copy
 
-Project title: Dunlo: Explore, Learn and Return with Khan Academy
+Project title: Khanpanion: Explore, Learn and Return with Khan Academy
 
 Subtitle: A little curiosity. A useful next step.
 
@@ -16,13 +16,13 @@ Copy only the paragraphs under each field heading. Counts use whitespace-separat
 
 Word count: 214
 
-Dunlo turns a moment of curiosity into a useful learning journey with Khan Academy. Learners explore short interactive ideas, follow a topic that interests them and continue into relevant lessons and practice. It is free to use and needs no Dunlo account.
+Khanpanion turns a moment of curiosity into a useful learning journey with Khan Academy. Learners explore short interactive ideas, follow a topic that interests them and continue into relevant lessons and practice. It is free to use and needs no Khanpanion account.
 
 Explore combines six original interactives with four focused Khan Academy segments. Learners can scale a recipe, repartition a fraction, regroup algebra tiles or connect a graph to a filling tank. They can make a prediction, change the model, watch an explanation, save the idea or share it with someone else.
 
 Every item in the collection connects to a reviewed Khan activity. The original Khan player and source remain visible, and the learner’s place is saved when they open practice. A fresh question then gives them a chance to use the idea themselves.
 
-When a step is difficult, Dunlo’s recovery engine uses short follow-up checks to select useful support. Study packs, quiz preparation, personal notes and later review keep the wider learning journey connected.
+When a step is difficult, Khanpanion’s recovery engine uses short follow-up checks to select useful support. Study packs, quiz preparation, personal notes and later review keep the wider learning journey connected.
 
 From November 2026 to March 2027, we will develop the public launch, expand reviewed content and evaluate continued Khan use, independent application, later recall and access barriers. The project can begin through direct public access and shareable challenges, with future school and community use as additional routes to growth.
 
@@ -30,7 +30,7 @@ From November 2026 to March 2027, we will develop the public launch, expand revi
 
 Word count: 210
 
-A learner may have access to excellent material and still face three everyday difficulties: choosing where to start, understanding a missing step and remembering what to revisit. Dunlo connects these moments so that discovering an interesting explanation can lead to continued learning.
+A learner may have access to excellent material and still face three everyday difficulties: choosing where to start, understanding a missing step and remembering what to revisit. Khanpanion connects these moments so that discovering an interesting explanation can lead to continued learning.
 
 The intended users are Filipino learners who want an approachable way to explore a topic or keep studying. They can arrive through a shared challenge, a current learning goal or an existing Khan Academy activity. Someone who is curious can begin immediately; someone preparing for a quiz can go straight to the study tools.
 
@@ -44,7 +44,7 @@ During the public launch, voluntary feedback will help us understand where learn
 
 Word count: 212
 
-Dunlo creates value by connecting an engaging first moment to useful Khan practice and a reason to return. Its reusable assets are reviewed interactive sequences, resource mappings, authored support and fresh-question routes. Learner access stays free.
+Khanpanion creates value by connecting an engaging first moment to useful Khan practice and a reason to return. Its reusable assets are reviewed interactive sequences, resource mappings, authored support and fresh-question routes. Learner access stays free.
 
 The PHP 100,000 implementation budget allocates PHP 30,000 to content and subject review, PHP 18,000 to access and usability testing, PHP 12,000 to evaluation, PHP 12,000 to accessible product operations and hosting, PHP 12,000 to original interactive production, PHP 8,000 to localization review, PHP 3,000 to public launch materials and PHP 5,000 to contingency. These planning allocations will be refined against approved grant expenses and actual costs.
 
@@ -58,7 +58,7 @@ A named maintenance owner, documented recurring budget and reusable publishing p
 
 Word count: 205
 
-Dunlo connects a playable discovery feed to a continuing learning journey. A short interactive idea can become a saved interest, a Khan activity, a useful support route and a later opportunity to apply the concept.
+Khanpanion connects a playable discovery feed to a continuing learning journey. A short interactive idea can become a saved interest, a Khan activity, a useful support route and a later opportunity to apply the concept.
 
 The feed mixes original visual experiences with authentic Khan Academy segments. Learners change quantities and watch the relationships: a recipe keeps the same proportions, a fraction keeps the same amount, and algebra pieces keep their meaning as they move. Predictions invite thought before the explanation.
 
@@ -76,19 +76,19 @@ Khan Academy is part of the feed and the learning path. Every item in the initia
 
 Four items present focused segments from original Khan Academy lessons on distribution, binomial multiplication, like terms and factoring. Their reviewed start and end times include the factoring explanation at 2:22–3:56. Learners press Play, retain the original player and can continue watching or open the full lesson.
 
-Original Dunlo interactions prepare learners for the related Khan concept. A recipe comparison leads toward rates; algebra pieces lead toward distribution and factoring. Learners can open practice and return to the same discovery, then try a fresh question or request further help.
+Original Khanpanion interactions prepare learners for the related Khan concept. A recipe comparison leads toward rates; algebra pieces lead toward distribution and factoring. Learners can open practice and return to the same discovery, then try a fresh question or request further help.
 
-Learners can also bring a supported Khan activity directly into Dunlo and build a study session around it. Saved packs and later review keep that learning goal available when they return.
+Learners can also bring a supported Khan activity directly into Khanpanion and build a study session around it. Saved packs and later review keep that learning goal available when they return.
 
-We will measure repeated relevant Khan activity and continued participation, distinguishing resource opens, learner reports and authorized platform records where available. Dunlo does not automatically synchronize Khan scores. The broader science tools remain usable while additional Khan mappings are reviewed.
+We will measure repeated relevant Khan activity and continued participation, distinguishing resource opens, learner reports and authorized platform records where available. Khanpanion does not automatically synchronize Khan scores. The broader science tools remain usable while additional Khan mappings are reviewed.
 
-Dunlo is an independent project. Official Khan material is clearly attributed, original Dunlo activities are labelled separately, and all Khan Academy content remains freely available on Khan Academy.
+Khanpanion is an independent project. Official Khan material is clearly attributed, original Khanpanion activities are labelled separately, and all Khan Academy content remains freely available on Khan Academy.
 
 ## Potential to Scale
 
 Word count: 201
 
-Dunlo can reach learners through a public, self-service experience. A shared link opens a specific interactive idea, which can lead into relevant Khan learning and a saved study path. The initial launch does not depend on classroom setup.
+Khanpanion can reach learners through a public, self-service experience. A shared link opens a specific interactive idea, which can lead into relevant Khan learning and a saved study path. The initial launch does not depend on classroom setup.
 
 We will introduce the service through public demonstrations, searchable topic pages and shareable challenges. Each link gives a new learner a concrete starting point, while saved interests and later review support return visits.
 
@@ -104,13 +104,13 @@ A documented review and publishing process will help additional contributors mai
 
 Word count: 202
 
-Dunlo aims to help learners begin useful Khan Academy work, continue when a step becomes difficult and return to ideas worth remembering. Its intended outcomes are sustained relevant practice, independent application and later recall.
+Khanpanion aims to help learners begin useful Khan Academy work, continue when a step becomes difficult and return to ideas worth remembering. Its intended outcomes are sustained relevant practice, independent application and later recall.
 
 Implementation will run from November 2026 to March 2027. We will prepare the public launch and reviewed content, gather voluntary usability and access feedback, refine the experience, evaluate continued use and publish findings with a continuation plan.
 
 The evaluation will distinguish discovery interactions, Khan resource opens, learner-reported activity, authorized platform records where available, independent answers and later recall. This allows us to see whether an engaging entrance leads to useful learning activity beyond the feed.
 
-A voluntary learning evaluation will use unfamiliar immediate questions and later follow-ups, with suitable consent and any required school or parent or guardian permissions. It will report non-completion and access barriers as well as successful outcomes. Where feasible, a comparison with direct Khan use can help assess the contribution of Dunlo’s connected journey.
+A voluntary learning evaluation will use unfamiliar immediate questions and later follow-ups, with suitable consent and any required school or parent or guardian permissions. It will report non-completion and access barriers as well as successful outcomes. Where feasible, a comparison with direct Khan use can help assess the contribution of Khanpanion’s connected journey.
 
 Browser-local progress keeps the learner’s journey connected. The implementation will establish a separate voluntary evaluation process.
 
@@ -118,9 +118,9 @@ By March 2027, we aim to deliver a usable public learning pathway, a reviewed co
 
 ## Executive Summary: character-limit fallback
 
-The public form definition checked on September 13, 2026 still sets max_length 300 despite a 300-word label. Respect the live validation. Use the full summary if the portal permits it. Otherwise this concise fallback is 253 characters and 36 words:
+The public form definition checked on September 13, 2026 still sets max_length 300 despite a 300-word label. Respect the live validation. Use the full summary if the portal permits it. Otherwise this concise fallback is 258 characters and 36 words:
 
-Dunlo is a free independent learning project. Explore playable ideas and focused Khan Academy clips, continue into relevant practice, and return for fresh questions. Saved discoveries, useful support and later review keep the learning journey connected.
+Khanpanion is a free independent learning project. Explore playable ideas and focused Khan Academy clips, continue into relevant practice, and return for fresh questions. Saved discoveries, useful support and later review keep the learning journey connected.
 
 ## Your completed team fields
 

@@ -1,4 +1,4 @@
-# BACKTRACK: claims and sources ledger
+# Khanpanion: claims and sources ledger
 
 All sources below were checked on September 10, 2026 unless stated otherwise. “Verified” describes the source statement, not BACKTRACK’s effectiveness. Proposed designs and targets are labeled separately.
 
@@ -30,13 +30,13 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 
 ## Chemistry and physics coverage (added 11 September 2026)
 
-**Claim:** Dunlo supports nine destinations across mathematics, chemistry and physics. **Status:** implementation claim, verified in the browser on 11 September 2026 — nine destinations build and route, and a full physics journey (goal miss → prerequisite → original lab → two fresh unassisted checks → reviewer item with a future due date → Rematch) passes in the acceptance suite. **Safe wording:** “nine destinations across three subjects.” **Avoid:** “full chemistry and physics coverage,” “a science curriculum,” or any grade-level mapping.
+**Claim:** Khanpanion supports nine destinations across mathematics, chemistry and physics. **Status:** implementation claim, verified in the browser on 11 September 2026 — nine destinations build and route, and a full physics journey (goal miss → prerequisite → original lab → two fresh unassisted checks → reviewer item with a future due date → Rematch) passes in the acceptance suite. **Safe wording:** “nine destinations across three subjects.” **Avoid:** “full chemistry and physics coverage,” “a science curriculum,” or any grade-level mapping.
 
 **Claim:** Every generated chemistry and physics answer is correct. **Status:** verified by test, not by assertion. `tests/science.test.mjs` recomputes every formula mass from the published atomic-mass table, counts atoms on both sides of every generated equation, and checks every kinematics, F = ma and unit-conversion item against an independent computation. **Safe wording:** “answers are checked against an independently recomputed key in the test suite.” **Avoid:** claiming external curriculum review that has not happened.
 
 **Claim:** Relative atomic masses are the IUPAC abridged standard atomic weights. **Status:** authored from the published abridged values and held in one module with the rounding policy beside them; **not** re-checked against the IUPAC source during this change. **Safe wording:** “a single reviewed constants table with a stated rounding policy.” **Avoid:** citing a specific IUPAC publication year in learner-facing or judge-facing copy until someone has checked the table against the source. This is a live item for the science reviewer.
 
-**Claim:** Science steps connect to matched Khan Academy practice. **Status:** NOT true for the science-specific steps and must not be claimed. No chemistry or physics URL could be opened and title-checked by hand on this machine, so none shipped; those steps are marked unmatched and the interface says so. **Safe wording:** “physics routes reach verified Khan mathematics practice through their prerequisites; chemistry and physics steps have no matched Khan resource yet, and Dunlo says so.” **Avoid:** any wording that implies Khan science content is integrated. See `docs/THIRD_PARTY_MATERIALS.md`.
+**Claim:** Science steps connect to matched Khan Academy practice. **Status:** NOT true for the science-specific steps and must not be claimed. No chemistry or physics URL could be opened and title-checked by hand on this machine, so none shipped; those steps are marked unmatched and the interface says so. **Safe wording:** “physics routes reach verified Khan mathematics practice through their prerequisites; chemistry and physics steps have no matched Khan resource yet, and Khanpanion says so.” **Avoid:** any wording that implies Khan science content is integrated. See `docs/THIRD_PARTY_MATERIALS.md`.
 
 **Claim:** The curriculum framing suits a particular Philippine grade level. **Status:** NOT established. The research is explicit that a generic “Grade 9 = X” mapping can mislead under the MATATAG transition. **Safe wording:** name the destination, not the grade. **Avoid:** asserting a grade level. Unmatched teacher topics stay visibly unmatched.
 
@@ -82,7 +82,7 @@ All sources below were checked on September 10, 2026 unless stated otherwise. �
 
 ## Design references
 
-Khan Academy’s rendered homepage informed readable surfaces and typography. The user subsequently selected green #14BF96, white #FFFFFF and navy #0A2A66. The original recovery engine supplied mathematical typesetting and route geometry. Nicky Case informed explanation through interaction. No third-party result or customer story is reproduced as evidence for Dunlo.
+Khan Academy’s rendered homepage informed readable surfaces and typography. The user subsequently selected green #14BF96, white #FFFFFF and navy #0A2A66. The original recovery engine supplied mathematical typesetting and route geometry. Nicky Case informed explanation through interaction. No third-party result or customer story is reproduced as evidence for Khanpanion.
 
 
 ## September 11 release and application refresh
@@ -91,7 +91,7 @@ The current code release includes original mathematical models, bounded recovery
 
 The seven application drafts in submission.json were rewritten for this release. Word counts stay below 300; the live application field rules remain authoritative. The earlier 300-character executive-field finding is identified as an earlier inspection rather than a current verified constraint.
 
-Needs facts rechecked September 11: OECD, PISA 2022, 16% of assessed Philippine students at least Level 2 in mathematics: https://gpseducation.oecd.org/CountryProfile?plotter=h5&primaryCountry=PHL&topic=PI&treshold=5 . PSA, 2024 NICTHS, 48.8% of households with internet access at home: https://psa.gov.ph/content/percentage-households-internet-connection-increased-488-percent-2024-two-every-three . These have different denominators and do not describe Dunlo participants. Neither is presented as the latest result of all assessments or as a causal explanation for individual errors.
+Needs facts rechecked September 11: OECD, PISA 2022, 16% of assessed Philippine students at least Level 2 in mathematics: https://gpseducation.oecd.org/CountryProfile?plotter=h5&primaryCountry=PHL&topic=PI&treshold=5 . PSA, 2024 NICTHS, 48.8% of households with internet access at home: https://psa.gov.ph/content/percentage-households-internet-connection-increased-488-percent-2024-two-every-three . These have different denominators and do not describe Khanpanion participants. Neither is presented as the latest result of all assessments or as a causal explanation for individual errors.
 
 Budget assumptions preserved: PHP 100,000 total; allocations 24,000 + 18,000 + 18,000 + 16,000 + 8,000 + 8,000 + 3,000 + 5,000. Proposed 80–120 enrollees imply approximately PHP 833–1,250 per enrollee including setup, not cost per active learner or per learning outcome. Proposed pilot, school access, funding and outcomes remain unconfirmed except UP Manila endorsement supplied by the team.
 
@@ -99,7 +99,7 @@ The new slide plan must cite claims visibly in the submitted PDF and embed sourc
 
 ## September 13 submission opening
 
-The current deck opens with 79% of Filipino 15-year-old students below baseline mathematics proficiency. The OECD's PISA 2025 Philippines country note, published 8 September 2026 and checked 13 September, reports 21% at or above Level 2. The opening uses the complement, 100% minus 21%. It describes school students represented by PISA and supplies national needs context; it is not a Dunlo outcome or an explanation of any individual learner's difficulties.
+The current deck opens with 79% of Filipino 15-year-old students below baseline mathematics proficiency. The OECD's PISA 2025 Philippines country note, published 8 September 2026 and checked 13 September, reports 21% at or above Level 2. The opening uses the complement, 100% minus 21%. It describes school students represented by PISA and supplies national needs context; it is not a Khanpanion outcome or an explanation of any individual learner's difficulties.
 
 Source: https://www.oecd.org/en/publications/pisa-2025-results-volume-i-country-notes_2d4ff9ea-en/philippines_3699b9d5-en.html
 

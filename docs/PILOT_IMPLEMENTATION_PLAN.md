@@ -1,4 +1,4 @@
-# Dunlo: public launch and evaluation plan
+# Khanpanion: public launch and evaluation plan
 
 Implementation window: November 1, 2026 to March 31, 2027.
 

@@ -1,12 +1,12 @@
-BACKTRACK - KEIC 2026 PACKAGE
+KHANPANION - KEIC 2026 PACKAGE
 
-Start with BACKTRACK_KEIC_2026.pdf: the current 15-slide deck exported from Canva.
+Start with BACKTRACK_KEIC_2026.pdf: the current 15-slide deck exported from Canva. The slides are still being edited by the team; the written product documents use the Khanpanion name.
 The native Canva deck is the main editable design. Use the Canva link supplied with the private Drive package.
 BACKTRACK_KEIC_2026_Editable.pptx is the current backup exported from Canva with embedded DM Sans regular and bold.
 
-Interactive demo: https://backtrack-learning.vercel.app/demo
-Full learner routes: https://backtrack-learning.vercel.app/start
-Homepage: https://backtrack-learning.vercel.app/
+Interactive demo: https://dunlo.vercel.app/demo
+Full learner routes: https://dunlo.vercel.app/start
+Homepage: https://dunlo.vercel.app/
 
 Slide 7 has a clickable button, visible link, and clickable QR leading to the demo.
 

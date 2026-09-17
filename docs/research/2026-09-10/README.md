@@ -1,10 +1,10 @@
-# Dunlo research checkpoint — 10 September 2026
+# Khanpanion research checkpoint — 10 September 2026
 
 The full research and supporting source files are published with explicit user authorization. The implementation prompt remains outside this repository and is supplied directly in chat for manual transfer.
 
 ## Contents
 
-- [Research, critique and product direction](BRILLIANT_RESEARCH_AND_DUNLO_DIRECTION.md): current competitive research, source limitations, Philippine fit, original graphics/animation recommendations, stronger BACKTRACK behavior, additional opportunities and competition relevance.
+- [Research, critique and product direction](BRILLIANT_RESEARCH_AND_KHANPANION_DIRECTION.md): current competitive research, source limitations, Philippine fit, original graphics/animation recommendations, stronger BACKTRACK behavior, additional opportunities and competition relevance.
 - [Source paper](brilliant-linear-algebra-source.pdf): the complete published 2023 paper examined when evaluating learning-effectiveness claims.
 - [Extracted source text](brilliant-linear-algebra-source.txt): searchable extraction of that paper; PDF page markers use one-based PDF page numbers, not printed journal page numbers. Extraction may contain font/OCR artifacts; consult the PDF for authoritative layout.
 - [Printed page 93](source-page-93.png): a rendered source-page detail used to visually verify the ANOVA reporting discrepancy discussed in the report.

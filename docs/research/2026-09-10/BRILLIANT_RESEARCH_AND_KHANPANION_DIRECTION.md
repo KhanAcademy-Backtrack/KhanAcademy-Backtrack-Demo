@@ -1,32 +1,32 @@
-# Dunlo: what to learn from Brilliant and what to improve
+# Khanpanion: what to learn from Brilliant and what to improve
 
-Planning research checked 10 September 2026. The user explicitly authorized publication of the full research in this public repository. Keep competitor names, reviews, pricing and comparisons out of Dunlo’s learner-facing website, deck and application. Repository publication does not change that product/presentation boundary. The separate implementation prompt is intentionally excluded from Git.
+Planning research checked 10 September 2026. The user explicitly authorized publication of the full research in this public repository. Keep competitor names, reviews, pricing and comparisons out of Khanpanion’s learner-facing website, deck and application. Repository publication does not change that product/presentation boundary. The separate implementation prompt is intentionally excluded from Git.
 
 ## Plain-language TLDR
 
-Dunlo does not need to invent a new category. Borrow Brilliant’s useful interaction patterns freely: linked diagrams and equations, small challenges, immediate feedback, guided progression, adaptive practice, a companion that helps at the right moment, and motivating returns. Build original Dunlo lessons and graphics around those patterns.
+Khanpanion does not need to invent a new category. Borrow Brilliant’s useful interaction patterns freely: linked diagrams and equations, small challenges, immediate feedback, guided progression, adaptive practice, a companion that helps at the right moment, and motivating returns. Build original Khanpanion lessons and graphics around those patterns.
 
 The strongest opportunity is to make those mechanics work together around a Filipino learner’s actual learning goal: **“Help me understand this topic, prepare for my quiz, and remember it when I need it.”** That includes curious students learning ahead, students refreshing old material, and students who get stuck.
 
-Brilliant is good at making abstract ideas approachable and making people want to continue. The evidence does **not** support saying it cannot teach. Its weak spots are uneven explanations and difficulty, learners mistaking guided success for independent ability, interruptions from gamification or tutoring, and practical access or curriculum mismatches. Several old complaints have been partly addressed. Dunlo must compete with the current product.
+Brilliant is good at making abstract ideas approachable and making people want to continue. The evidence does **not** support saying it cannot teach. Its weak spots are uneven explanations and difficulty, learners mistaking guided success for independent ability, interruptions from gamification or tutoring, and practical access or curriculum mismatches. Several old complaints have been partly addressed. Khanpanion must compete with the current product.
 
-My honest verdict: Dunlo is a promising working companion, but there is not enough learner evidence to call it a top-three contender yet. The live factoring exploration has a useful mathematical mechanism; the brackets explanation is much closer to an answer reveal. The next improvement should make that depth consistent, connect it to quiz planning and review, and test whether learners can solve unfamiliar problems afterward. More features alone will not establish impact. Keep the features; improve the connections and teaching.
+My honest verdict: Khanpanion is a promising working companion, but there is not enough learner evidence to call it a top-three contender yet. The live factoring exploration has a useful mathematical mechanism; the brackets explanation is much closer to an answer reveal. The next improvement should make that depth consistent, connect it to quiz planning and review, and test whether learners can solve unfamiliar problems afterward. More features alone will not establish impact. Keep the features; improve the connections and teaching.
 
 Recommended combination: **interactive explanations with gradually removed support + quiz-scope planning + useful return sessions**, delivered through accessible phone controls, optional language support and a small teacher/peer routine. This is one connected experience, not six unrelated new product tabs.
 
-The next implementation session should put **original instructional graphics/animations and a stronger BACKTRACK engine first**. Free learner access is a product commitment. Reaching all Filipinos is the ambition; current subject, language and connection coverage must still be stated accurately. Khan belongs wherever a reviewed resource helps; a missing match must not prevent an otherwise useful original Dunlo lesson.
+The next implementation session should put **original instructional graphics/animations and a stronger BACKTRACK engine first**. Free learner access is a product commitment. Reaching all Filipinos is the ambition; current subject, language and connection coverage must still be stated accurately. Khan belongs wherever a reviewed resource helps; a missing match must not prevent an otherwise useful original Khanpanion lesson.
 
 ## What was actually inspected
 
 - Current public Brilliant homepage animation sequences, onboarding entry, regional subscription page, current feature/help pages, curriculum and educator documentation.
-- Dunlo’s live Today, Study, study-session and recovery demo. Created a disposable local study session through the UI and tested the factoring replay. No project code, deck, deployment or accounts were changed. Existing documentation and slides were excluded as requested. The stated release commit `4d49755` was supplied by the user, not independently matched to the deployment.
+- Khanpanion’s live Today, Study, study-session and recovery demo. Created a disposable local study session through the UI and tested the factoring replay. No project code, deck, deployment or accounts were changed. Existing documentation and slides were excluded as requested. The stated release commit `4d49755` was supplied by the user, not independently matched to the deployment.
 - Original Reddit discussions from 2022–2026, Philippine App Store reviews, Google Play reviews, Trustpilot customer accounts, commercial editorial reviews and educator commentary. This is purposive qualitative research, not a representative survey. Repeated comments or cross-posts are not independent corroboration.
 - Philippine government statistics and curriculum resources, local language/peer-learning studies and broader learning research.
 - The official competition page, as a secondary constraint check. Its public text was readable through the browser. No application was submitted.
 
 Brilliant’s homepage demonstrations are promotional recordings, not hands-on trials of all paid lessons. They establish visible design patterns, not measured teaching effectiveness. Main-course onboarding was inspected only up to its initial preferences. No subscription or paid trial was started, and Koji’s correctness was not independently stress-tested.
 
-## Brilliant’s current capabilities: the baseline Dunlo should learn from
+## Brilliant’s current capabilities: the baseline Khanpanion should learn from
 
 **Visual instruction and feedback.** Brilliant combines manipulable representations with questions, expression entry and feedback. Its current help explicitly covers a math keyboard and negative-number tiles. The article acknowledges that some gestures and cursor behavior confuse users. This is an especially useful lesson: powerful interactions still need obvious controls. [Official interactive controls guide, updated 10 August 2026](https://brilliant.org/help/features/how-do-i-use-interactives-on-brilliant/).
 
@@ -34,7 +34,7 @@ Brilliant’s homepage demonstrations are promotional recordings, not hands-on t
 
 **Contextual tutoring.** Koji can respond to the current lesson and manipulate its interactive environment. Most foundational math/coding courses are covered, with a limited free preview and full Premium access. Muting suppresses speech bubbles apart from brief correctness feedback. These are vendor-described capabilities; the claimed accuracy is not an independent evaluation. [Koji help, updated 1 September 2026](https://brilliant.org/help/features/how-does-koji-work/).
 
-**Question-to-lesson routing.** Web users can describe a mathematics need from Home and receive a relevant lesson or practice recommendation. Dunlo should learn from this low-friction entry even if its current version implements a transparent, reviewed topic matcher. [Ask Koji, updated 11 August 2026](https://brilliant.org/help/features/ask-koji-a-math-question-and-find-the-right-lesson/).
+**Question-to-lesson routing.** Web users can describe a mathematics need from Home and receive a relevant lesson or practice recommendation. Khanpanion should learn from this low-friction entry even if its current version implements a transparent, reviewed topic matcher. [Ask Koji, updated 11 August 2026](https://brilliant.org/help/features/ask-koji-a-math-question-and-find-the-right-lesson/).
 
 **Motivation and progress.** XP, weekly leagues, streaks, streak protection, parent progress reporting and lesson/level redos exist. These should be evaluated separately: activity rewards encourage returns; they do not by themselves establish understanding. Older “cannot redo” complaints are partly superseded by September’s documented level-reset option. [Features index](https://brilliant.org/help/features/), [current redo/reset instructions](https://brilliant.org/help/features/can-i-reset-course-progress/).
 
@@ -52,19 +52,19 @@ The free educator programme prioritizes eligible K–12 classroom teachers in un
 
 Current Brilliant lessons require internet access; its help says they cannot be downloaded for offline study. This contradicts some recently retitled third-party reviews. [Official offline policy, updated 29 October 2025](https://brilliant.org/help/using-brilliant/can-i-download-brilliant-lessons-or-use-them-offline/).
 
-For Dunlo, affordability means keeping the present no-account core useful without a subscription, making data use controllable, and reducing preparation work. It does not justify promising permanent free hosting, universal device access or free human tutoring.
+For Khanpanion, affordability means keeping the present no-account core useful without a subscription, making data use controllable, and reducing preparation work. It does not justify promising permanent free hosting, universal device access or free human tutoring.
 
 ## What the strongest visual patterns do well
 
 These are representative examples observed on the current homepage or documented in current help, not a ranking of every Brilliant lesson. [Observed Brilliant demonstrations](https://brilliant.org/).
 
-1. **One event, two representations.** In a homepage sequence, marbles enter a vessel while points track volume against marble count. The concrete event explains the graph; the graph quantifies the event. Dunlo should similarly couple a changing situation, a table and an equation.
-2. **Corresponding motion.** Another sequence links circular motion with a trigonometric curve. Its transferable idea is maintaining correspondence while representations change. Dunlo can use this for linear slope and intercept before adding new subject areas.
+1. **One event, two representations.** In a homepage sequence, marbles enter a vessel while points track volume against marble count. The concrete event explains the graph; the graph quantifies the event. Khanpanion should similarly couple a changing situation, a table and an equation.
+2. **Corresponding motion.** Another sequence links circular motion with a trigonometric curve. Its transferable idea is maintaining correspondence while representations change. Khanpanion can use this for linear slope and intercept before adding new subject areas.
 3. **Local mathematical attention.** The algebra demonstration links selected terms of a product to the expression being assembled. Attention follows the operation, instead of a mascot bouncing independently of the maths.
 4. **Visible cancellation.** Official negative-tile help describes positive/negative pairs summing to zero. This reveals an invariant rather than merely decorating arithmetic.
 5. **Progressive explanation.** The useful design pattern is a sequence of manageable decisions with responsive support. The full derivation should remain available for learners who need it.
 
-The typography and polish matter because they make the representation easy to read, but the deeper value is **semantic continuity**: the learner can follow what changed and why. Dunlo should produce its own lesson scripts, visual assets and code using these general principles.
+The typography and polish matter because they make the representation easy to read, but the deeper value is **semantic continuity**: the learner can follow what changed and why. Khanpanion should produce its own lesson scripts, visual assets and code using these general principles.
 
 An animation earns its place only if it helps the learner answer a mathematical question. A slider is worthwhile when students first predict its effect, compare outcomes, explain an invariant and later work without it. A slider moved until an indicator turns green is weak evidence of understanding.
 
@@ -72,7 +72,7 @@ An animation earns its place only if it helps the learner answer a mathematical 
 
 Dates below belong to the cited posts or named comments. Where only a relative comment date was available, that limitation is retained. Storefront location does not establish a reviewer’s nationality.
 
-**Philippine App Store, 27 December 2025 — Charles-kun, paying non-STEM college learner.** Enthusiastic about game-like review and recovering forgotten fundamentals, but requests more challenging review and a course exam. This is unusually relevant to Dunlo: enjoyment and demand for stronger assessment coexist in the same review. **21 January 2025 — `<ID>`, paying user:** praises courses while criticizing zoom/font controls. Current device-level reproducibility was not tested. [Original PH App Store feedback](https://apps.apple.com/ph/app/brilliant-learn-math-coding/id913335252?platform=iphone&see-all=reviews).
+**Philippine App Store, 27 December 2025 — Charles-kun, paying non-STEM college learner.** Enthusiastic about game-like review and recovering forgotten fundamentals, but requests more challenging review and a course exam. This is unusually relevant to Khanpanion: enjoyment and demand for stronger assessment coexist in the same review. **21 January 2025 — `<ID>`, paying user:** praises courses while criticizing zoom/font controls. Current device-level reproducibility was not tested. [Original PH App Store feedback](https://apps.apple.com/ph/app/brilliant-learn-math-coding/id913335252?platform=iphone&see-all=reviews).
 
 **Google Play, 7 May 2025 — Dakota Leitow, returning algebra learner.** Reports renewed enjoyment and easier conceptual understanding. **12 April 2026 — Zachey Mczachface, casual learner:** likes the pace and thinking required, dislikes the small free daily allowance. **7 August 2025 — RJ P, seven-month user:** strongly values points and streak rewards. All are self-reports; none measures independent retention. [Original Google Play reviews](https://play.google.com/store/apps/details?id=org.brilliant.android).
 
@@ -104,7 +104,7 @@ Daniel | Tech & Data’s review is titled 2026 but was published **1 May 2025** 
 
 Recurring positive themes: enjoyable engagement, visual intuition, approachable foundations, useful refreshers and habit formation. Recurring mixed/negative themes: difficult transitions into unfamiliar material, insufficient depth for some goals, wanting more independent practice, interruptions, disrupted continuity after course changes, and price/renewal frustration.
 
-These themes recur within the reviewed material; their population frequency is unknown. Many negative examples involve calculus, advanced STEM or adult preferences, while Dunlo currently supports five foundational mathematics areas. Older “no questions,” “no adaptation,” “no teacher tools,” “no free access” and “no redos” descriptions cannot be carried forward as current facts.
+These themes recur within the reviewed material; their population frequency is unknown. Many negative examples involve calculus, advanced STEM or adult preferences, while Khanpanion currently supports five foundational mathematics areas. Older “no questions,” “no adaptation,” “no teacher tools,” “no free access” and “no redos” descriptions cannot be carried forward as current facts.
 
 ## Does Brilliant fail to teach? The evidence supports a narrower conclusion
 
@@ -117,27 +117,27 @@ A published 2023 study examined 60 Grade 10 learners from four public schools in
 General learning research offers stronger design guidance, although it does not prove either product works:
 
 - ICAP distinguishes manipulating information from generating explanations and jointly developing understanding. Clicking an “interactive” screen does not automatically produce the deepest engagement. [Chi and Wylie, 2014](https://csi.asu.edu/wp-content/uploads/2018/01/ChiWylie2014ICAP.pdf).
-- A meta-analysis of 164 studies favors explicit instruction over unassisted discovery, while supported discovery benefits from feedback, scaffolds, worked examples and explanations. Therefore, Dunlo should offer help before failure and gradually remove it. [Alfieri et al., 2011](https://openresearch.surrey.ac.uk/esploro/outputs/journalArticle/Does-Discovery-Based-Instruction-Enhance-Learning/99515521902346).
-- Practice testing and distributed practice received high utility ratings in a broad review. This supports fresh independent checks and scheduled returns, not one universal interval or mastery threshold. [Dunlosky et al., 2013, publisher summary](https://www.psychologicalscience.org/news/releases/which-study-strategies-make-the-grade.html).
+- A meta-analysis of 164 studies favors explicit instruction over unassisted discovery, while supported discovery benefits from feedback, scaffolds, worked examples and explanations. Therefore, Khanpanion should offer help before failure and gradually remove it. [Alfieri et al., 2011](https://openresearch.surrey.ac.uk/esploro/outputs/journalArticle/Does-Discovery-Based-Instruction-Enhance-Learning/99515521902346).
+- Practice testing and distributed practice received high utility ratings in a broad review. This supports fresh independent checks and scheduled returns, not one universal interval or mastery threshold. [Khanpanionsky et al., 2013, publisher summary](https://www.psychologicalscience.org/news/releases/which-study-strategies-make-the-grade.html).
 - Animation research emphasizes representing the right concept at a perceivable pace. Motion can obscure relationships when it is too fast or complex. Pause, step and static alternatives matter. [Tversky, Morrison and Bétrancourt, 2002](https://doi.org/10.1006/ijhc.2002.1017).
 
 ## Philippine usefulness: supported opportunities and limits
 
 **Curriculum and quiz scope.** The live DepEd Grade 9 MATATAG budget of work begins with geometry and then functions/linear graphs, whereas the older Grade 9 portal lists quadratics. The transition makes school-year and curriculum version important. A generic “Grade 9 = quadratics” pack could mislead. Let the actual teacher’s scope drive the plan, attach specific reviewed competency references, and leave unsupported topics visibly unmatched. [Current Grade 9 budget of work](https://www.deped.gov.ph/wp-content/uploads/BOW-Math-9.pdf), [older Grade 9 guide](https://lrmds.deped.gov.ph/detail/15900), [MATATAG implementation FAQ](https://www.deped.gov.ph/wp-content/uploads/FAQs-ON-THE-MATATAG-CURRICULUM.pdf).
 
-**Need without overclaiming.** In PISA 2022, 16% of assessed Philippine students reached at least Level 2 in mathematics. That establishes a national challenge among the assessed population; it does not identify Dunlo users’ gaps or prove that poor study planning caused the result. [OECD country note](https://www.oecd.org/en/publications/pisa-2022-results-volume-i-and-ii-country-notes_ed6fbcc5-en/philippines_a0882a2d-en.html).
+**Need without overclaiming.** In PISA 2022, 16% of assessed Philippine students reached at least Level 2 in mathematics. That establishes a national challenge among the assessed population; it does not identify Khanpanion users’ gaps or prove that poor study planning caused the result. [OECD country note](https://www.oecd.org/en/publications/pisa-2022-results-volume-i-and-ii-country-notes_ed6fbcc5-en/philippines_a0882a2d-en.html).
 
 **Devices and connectivity.** PSA’s 2024 survey reports home internet access for 48.8% of households. Its individual infographic reports cellphone use among 98.8% of internet users aged 10+. These are different denominators. They support phone-first, data-conscious design; they do not say half of students have no internet or that every learner owns a smartphone. [PSA household release, 21 July 2025](https://psa.gov.ph/content/percentage-households-internet-connection-increased-488-percent-2024-two-every-three?vcode=50), [national individual-use infographic](https://psa.gov.ph/sites/default/files/infographics/2024_NICTHS%20INFOGRAPHICS_Individual.pdf).
 
 **Language.** A 2026 study of 60 Grade 8 learners at a laboratory high school found no statistically significant achievement difference between code-mixed and English-only word problems. Earlier small studies describe communication benefits from code-switching, but are not nationwide preference surveys. Offer optional plain-language Filipino support while retaining English mathematical vocabulary and original notation; do not force Tagalog nationally or promise gains from translation. [Cañaveral, Necesito and Pineda, 2026](https://neustgijem.com/index.php/pub/article/view/36), [2020 classroom code-switching research record](https://eric.ed.gov/?id=EJ1245827).
 
-**Teacher workload.** EDCOM II/IDinsight’s March 2025 brief reports approximately 52 self-reported working hours weekly, with 45% spent teaching. A new reporting system is a real cost. Dunlo should reuse scope links and printable sheets, with a brief optional evidence hand-in rather than daily manual dashboards. [Workload brief](https://edcom2.gov.ph/media/2025/03/EDCOM2_Policy-Brief_Ancillary-Workload.pdf).
+**Teacher workload.** EDCOM II/IDinsight’s March 2025 brief reports approximately 52 self-reported working hours weekly, with 45% spent teaching. A new reporting system is a real cost. Khanpanion should reuse scope links and printable sheets, with a brief optional evidence hand-in rather than daily manual dashboards. [Workload brief](https://edcom2.gov.ph/media/2025/03/EDCOM2_Policy-Brief_Ancillary-Workload.pdf).
 
 **Peer study.** Project Math BUDDIES, published 27 October 2023, studied 22 Grade 7/8 learners in Lipa and reported promising peer-teaching outcomes alongside confidence/dependency difficulties. It supports testing structured explanation roles, not assuming all Philippine peer study is effective or common. Same-screen co-op should alternate who predicts, explains and solves, then give each learner a different independent exit item. [Original study](https://journal.whioce.com/index.php/eir/article/view/251).
 
-**Affordability and interruptions.** Prepaid-data use, shared devices, short study windows and transport interruptions are plausible design scenarios, not facts established for a Dunlo cohort. Validate them directly before turning them into audience-wide claims. Offer predictable low-data behavior, resume, paper alternatives and optional portable saves. Khan video/practice still needs a working connection.
+**Affordability and interruptions.** Prepaid-data use, shared devices, short study windows and transport interruptions are plausible design scenarios, not facts established for a Khanpanion cohort. Validate them directly before turning them into audience-wide claims. Offer predictable low-data behavior, resume, paper alternatives and optional portable saves. Khan video/practice still needs a working connection.
 
-## Honest critique of Dunlo, then the improved direction
+## Honest critique of Khanpanion, then the improved direction
 
 **Usefulness:** the live product already answers “what today?” through packs, time choices and a resumable plan. Its value depends on whether the recommended round is appropriate. Generic copy such as “work toward the topics in this pack” should state the actual reason for a recommendation.
 
@@ -185,7 +185,7 @@ The strongest immediate combination is 1 + 2 + 3. Improvements 4 and 6 shape the
 
 ### Design tests from the specific r/math thread
 
-The user-selected [25 April 2024 discussion](https://www.reddit.com/r/math/comments/1ccphrg/how_effective_is_brilliantorg_really/) is useful beyond its age. Old-Pianist-599 describes abrupt jumps; Fickle_Industry5219 says explanations repeat answers; Air_Awear describes over-condensed text; other replies question depth and practice. Positive replies value conceptual anchors and getting started. Tutor tomtomtomo reports benefits with human help. These are self-reports, not controlled comparisons. Whether Brilliant subsequently fixed a behavior does not remove the requirement to prevent it in Dunlo.
+The user-selected [25 April 2024 discussion](https://www.reddit.com/r/math/comments/1ccphrg/how_effective_is_brilliantorg_really/) is useful beyond its age. Old-Pianist-599 describes abrupt jumps; Fickle_Industry5219 says explanations repeat answers; Air_Awear describes over-condensed text; other replies question depth and practice. Positive replies value conceptual anchors and getting started. Tutor tomtomtomo reports benefits with human help. These are self-reports, not controlled comparisons. Whether Brilliant subsequently fixed a behavior does not remove the requirement to prevent it in Khanpanion.
 
 The following are original product responses to those failure modes:
 
@@ -200,7 +200,7 @@ The following are original product responses to those failure modes:
 9. **Make history useful.** Notes, attempts, solved variants and remaining questions stay findable. A shared challenge can ask classmates to explain a different approach, without adding a public forum or exposing private scores. This improves return value using existing features.
 10. **Prove useful learning instead of attractive activity.** Measure independent unfamiliar-item performance, delayed retention, return from an appropriately matched Khan resource and teacher effort. Keep animation completion, assisted answers and weekly session counts as separate activity signals. This connects the product work to the tournament’s needs, impact, integration and sustainability criteria.
 
-Do not implement a literal “100 times more lessons” demand from a comment. Solve its underlying concern through a complete, reviewed progression and enough varied practice. Do not accept the thread’s unsupported claims about company motives, all animations being marketing, or difficult learning needing to feel unpleasant. Dunlo should be enjoyable and intellectually demanding.
+Do not implement a literal “100 times more lessons” demand from a comment. Solve its underlying concern through a complete, reviewed progression and enough varied practice. Do not accept the thread’s unsupported claims about company motives, all animations being marketing, or difficult learning needing to feel unpleasant. Khanpanion should be enjoyable and intellectually demanding.
 
 BACKTRACK should be more than a wrong-answer redirect. Its output should be the smallest justified, useful next learning step, followed by a return to the learner’s goal. A wrong answer is a clue, not a diagnosis.
 
@@ -216,9 +216,9 @@ The implementation prompt specifies separate evidence for prediction, assisted w
 
 The following are useful additions, not claims that nobody else has built them. Features not found in this research are marked as such rather than asserted absent.
 
-**Verified access gap: downloadable original mini-lessons.** Brilliant’s current help explicitly excludes offline lessons. Dunlo can offer an offline-capable pack of its own graphics, text, checks and saved state, with optional Khan resources queued for the next connection. This is a concrete access improvement if tested after a disconnected reload; caching claims alone are insufficient.
+**Verified access gap: downloadable original mini-lessons.** Brilliant’s current help explicitly excludes offline lessons. Khanpanion can offer an offline-capable pack of its own graphics, text, checks and saved state, with optional Khan resources queued for the next connection. This is a concrete access improvement if tested after a disconnected reload; caching claims alone are insufficient.
 
-**Not verified in Brilliant: a teacher-scope coverage receipt.** A learner imports quiz topics and sees which are supported, which map to reviewed Khan lessons, and which still require classroom material. The receipt prevents a polished plan from silently giving false confidence about full quiz coverage. It extends Dunlo’s existing packs and imports rather than replacing them.
+**Not verified in Brilliant: a teacher-scope coverage receipt.** A learner imports quiz topics and sees which are supported, which map to reviewed Khan lessons, and which still require classroom material. The receipt prevents a polished plan from silently giving false confidence about full quiz coverage. It extends Khanpanion’s existing packs and imports rather than replacing them.
 
 **Not verified in Brilliant: a portable, account-free learning passport.** A small user-controlled file carries local progress and future-self notes between a shared phone and school computer. Import previews show exactly what will transfer. Scope sharing remains separate and excludes private answers. No automatic cloud sync or account backend is required.
 
@@ -232,11 +232,11 @@ Prioritize the coverage receipt and counterfactual explanation alongside BACKTRA
 
 ## A learner journey to test, not a fabricated case study
 
-Mika is an illustrative learner preparing for a teacher-set quiz on linear graphs. She has a shared scope link and ten minutes. She chooses “Learn something” because slope is new; Dunlo does not require her to fail first.
+Mika is an illustrative learner preparing for a teacher-set quiz on linear graphs. She has a shared scope link and ten minutes. She chooses “Learn something” because slope is new; Khanpanion does not require her to fail first.
 
 The session asks what will happen to a graph when the rate changes. Mika makes a prediction, changes the rate in a labelled model, and sees the table, graph and equation respond together. She asks for a plain-language explanation of “starting value”, then chooses the matched Khan explanation. Her return point is saved.
 
-Back in Dunlo, a fresh graph question has no model or answer-color cues. If it is still difficult, the app offers a smaller step. If she demonstrates understanding, it lets her move on. The next day she gets one short retrieval item; before the quiz, a mixed rehearsal includes topics from the confirmed scope. A classmate can join co-op, but each student’s independent check stays separate.
+Back in Khanpanion, a fresh graph question has no model or answer-color cues. If it is still difficult, the app offers a smaller step. If she demonstrates understanding, it lets her move on. The next day she gets one short retrieval item; before the quiz, a mixed rehearsal includes topics from the confirmed scope. A classmate can join co-op, but each student’s independent check stays separate.
 
 The consequences addressed are wasted planning time, brittle guided understanding and forgotten material. Whether the journey improves those outcomes is a pilot question, not a current result.
 
@@ -250,6 +250,6 @@ The 15-slide maximum was not visible in the public page inspected. Preserve the 
 
 Use a small, consented usability pilot first, clearly separated from an efficacy study. Test new learners, refreshers and confident learners; include actual phone and connection constraints. Ask learners to choose a useful next step, complete a supported route, return from Khan, solve a different item and come back later. Record task completion, explanation quality, independent answers, delayed answers, actual access failures and teacher preparation time.
 
-Do not infer Khan scores from an opened link or browser focus. Record resource opens, self-reports, teacher confirmation and independent answers separately. Any pre/post improvement without a suitable comparison is preliminary, not proof of Dunlo’s causal effect. Keep dropout denominators, baseline ability, assisted attempts and device constraints visible in the private evaluation.
+Do not infer Khan scores from an opened link or browser focus. Record resource opens, self-reports, teacher confirmation and independent answers separately. Any pre/post improvement without a suitable comparison is preliminary, not proof of Khanpanion’s causal effect. Keep dropout denominators, baseline ability, assisted attempts and device constraints visible in the private evaluation.
 
 This research does not implement product or deck changes or refresh presentation exports. The separate implementation prompt translates it into concrete future work and is supplied directly in chat, outside this repository.

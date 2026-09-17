@@ -1,4 +1,4 @@
-# Dunlo discovery release: execution plan
+# Khanpanion discovery release: execution plan
 
 Status: planned before implementation. Owner request: plan thoroughly, then update the site and the existing 15-slide Canva deck. No recruited audience, school access, or partner commitment is assumed.
 
@@ -6,7 +6,7 @@ Status: planned before implementation. Owner request: plan thoroughly, then upda
 
 Explore an idea. Try it yourself. Keep learning with Khan Academy.
 
-Dunlo is a free independent learning project. Short interactive experiences make a useful first step; reviewed Khan explanations and practice provide depth; the existing recovery and review tools preserve continuity. The feed is an additional entrance, not a replacement for deliberate study.
+Khanpanion is a free independent learning project. Short interactive experiences make a useful first step; reviewed Khan explanations and practice provide depth; the existing recovery and review tools preserve continuity. The feed is an additional entrance, not a replacement for deliberate study.
 
 ## Sequence and acceptance gates
 
@@ -25,14 +25,14 @@ Use a coherent, finite collection spanning the existing reviewed mathematics map
 
 ## Slide story (15 pages, PDF first)
 
-1. Dunlo: explore an idea, keep learning with Khan Academy.
+1. Khanpanion: explore an idea, keep learning with Khan Academy.
 2. The proposed problem: finding a useful start and keeping going.
 3. One clear journey: discover, understand, practise, return.
 4. Explore: an actual interactive feed view.
 5. An idea you can change: labelled before/after mathematical states.
 6. Khan in the feed: authentic focused segments, clear source and deeper lesson.
 7. Help when a step is difficult: a simple contrasting route example.
-8. Try Dunlo: clickable demo, correct QR and readable fallback URL.
+8. Try Khanpanion: clickable demo, correct QR and readable fallback URL.
 9. Meaningful Khan use: discovery connects to specific learning and exercises.
 10. Return and remember: fresh questions and later review, with evidence types separated.
 11. A public launch: direct access and shareable items, no partner dependency.
@@ -50,4 +50,4 @@ Sources verified September 13, 2026:
 - Application: https://form.typeform.com/to/bJw9THj3
 - Khan reuse and attribution: https://support.khanacademy.org/hc/en-us/articles/202262954-Can-I-use-Khan-Academy-s-videos-name-materials-links-in-my-project
 
-Khan attribution must distinguish original Dunlo material from official Khan material and must not imply endorsement. Include the required notice that all Khan Academy content is freely available at khanacademy.org. No downloading, recutting, rehosting or obscuring the original video player is planned.
+Khan attribution must distinguish original Khanpanion material from official Khan material and must not imply endorsement. Include the required notice that all Khan Academy content is freely available at khanacademy.org. No downloading, recutting, rehosting or obscuring the original video player is planned.

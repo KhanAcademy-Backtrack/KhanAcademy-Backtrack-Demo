@@ -1,6 +1,6 @@
-# Dunlo: final entry review
+# Khanpanion: final entry review
 
-The current story connects interactive discovery to continued Khan learning. The demonstration should make three things immediately clear: the learner can act on an idea, Khan provides the next learning or practice activity, and Dunlo preserves a useful continuation.
+The current story connects interactive discovery to continued Khan learning. The demonstration should make three things immediately clear: the learner can act on an idea, Khan provides the next learning or practice activity, and Khanpanion preserves a useful continuation.
 
 The PDF must carry that mechanism without relying on live playback. Use real product images, readable labels and a concise example. Keep the official UP Manila mark on all 15 pages and leave the demo button, QR pixels, QR image link and fallback URL pointing to the same destination.
 

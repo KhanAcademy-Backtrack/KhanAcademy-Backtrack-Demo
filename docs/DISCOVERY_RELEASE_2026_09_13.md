@@ -1,4 +1,4 @@
-# Dunlo discovery release
+# Khanpanion discovery release
 
 ## Delivered site changes
 
@@ -6,7 +6,7 @@ Explore adds a ten-item collection: six original playable mathematics experience
 
 Discovery position, controls, predictions and saves are included in the current local study export. Older histories remain valid. Discovery activity grants neither independent evidence nor points; exposed examples are reserved before subsequent assessment. Khan opens, self-reports and independent answers remain distinct.
 
-The navigation includes Explore on desktop and mobile. The optional Today tutorial covers five steps; Explore has a six-step Quick tour covering navigation, controls, saving/sharing, Khan clips, practice/return and Review. Closing Explore’s tutorial restores the prior topic. Original Dunlo and Khan content are clearly labelled, and Khan video loads only after learner choice. Moving to another item removes the playing iframe.
+The navigation includes Explore on desktop and mobile. The optional Today tutorial covers five steps; Explore has a six-step Quick tour covering navigation, controls, saving/sharing, Khan clips, practice/return and Review. Closing Explore’s tutorial restores the prior topic. Original Khanpanion and Khan content are clearly labelled, and Khan video loads only after learner choice. Moving to another item removes the playing iframe.
 
 ## Animation correction
 

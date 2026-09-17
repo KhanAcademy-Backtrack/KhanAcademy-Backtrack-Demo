@@ -10,7 +10,7 @@ Build an everyday study companion that prepares a useful next session, helps a d
 
 The whole product must welcome three starting conditions: learning something new, keeping up or preparing ahead, and getting unstuck. Failure is one useful signal, not the entrance requirement.
 
-The working public-name direction is **Dunlo**, with a bookmark companion and a predominantly white, readable interface. The name is a coined working direction inspired by learning and returning to useful work. Basic searches have not surfaced an obvious study app using it in the inspected results; this is not proof of domain, social-handle, or trademark availability. Tandio has clear existing app collisions. Finish focused name/domain/social checks before applying the identity everywhere. Keep the existing repository, hosting account, URLs, and storage compatibility.
+The working public-name direction is **Khanpanion**, with a bookmark companion and a predominantly white, readable interface. The name is a coined working direction inspired by learning and returning to useful work. Basic searches have not surfaced an obvious study app using it in the inspected results; this is not proof of domain, social-handle, or trademark availability. Tandio has clear existing app collisions. Finish focused name/domain/social checks before applying the identity everywhere. Keep the existing repository, hosting account, URLs, and storage compatibility.
 
 ### What makes the product coherent
 
@@ -32,7 +32,7 @@ Proposed opening headline: **“Studying should leave you with a clearer next st
 
 Problem sentence: **“Students can spend time studying and still not know what to work on, why a step fails, or what to revisit tomorrow.”**
 
-Product sentence: **“Dunlo turns your current topics into a useful session, helps the difficult step click, and brings the right ideas back when you return.”**
+Product sentence: **“Khanpanion turns your current topics into a useful session, helps the difficult step click, and brings the right ideas back when you return.”**
 
 The specific quadratic example is the proof of this promise, not a detour from it. Two wrong answers to the same task lead to different questions and explanations. The next session then remembers the relevant skill rather than restarting the entire process.
 

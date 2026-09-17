@@ -1,10 +1,10 @@
-# Learning design decisions for Dunlo
+# Learning design decisions for Khanpanion
 
-This implementation note connects research checked on 11 September 2026 to concrete engineering decisions. It does not claim that Dunlo has demonstrated learning gains. The relevant test is successful independent application and later retrieval, with assistance, participation and self-report kept separate.
+This implementation note connects research checked on 11 September 2026 to concrete engineering decisions. It does not claim that Khanpanion has demonstrated learning gains. The relevant test is successful independent application and later retrieval, with assistance, participation and self-report kept separate.
 
 ## Retrieval with corrective support
 
-Yang, Luo, Vadillo, Yu and Shanks (2021) synthesized 222 independent classroom studies involving 48,478 students. Their reported average effect favoured quizzing, with substantial variation related to feedback, repetitions, format, comparison condition and study design. This supports including retrieval in instruction, not replacing teaching with repeated failure or assigning Dunlo the pooled effect size. [Original meta-analysis abstract and publication record](https://pubmed.ncbi.nlm.nih.gov/33683913/).
+Yang, Luo, Vadillo, Yu and Shanks (2021) synthesized 222 independent classroom studies involving 48,478 students. Their reported average effect favoured quizzing, with substantial variation related to feedback, repetitions, format, comparison condition and study design. This supports including retrieval in instruction, not replacing teaching with repeated failure or assigning Khanpanion the pooled effect size. [Original meta-analysis abstract and publication record](https://pubmed.ncbi.nlm.nih.gov/33683913/).
 
 Implementation: fresh production questions after a lesson, an editable reviewer, and a recall invitation before revealing a future-self note. Corrections and analogous explanations remain available. Imported notes are sources; a learner's reflection is not automatically scored. Opening a resource remains a separate event.
 
@@ -22,7 +22,7 @@ Decision: use mixed rehearsal after an introduction so the learner has to choose
 
 ## Space the return; do not manufacture retention
 
-Dunlosky and colleagues' review rates practice testing and distributed practice as broadly useful while describing conditions and limitations across learners, materials and outcomes. [Original review publication](https://www.psychologicalscience.org/journals/pspi/1529100612453266/).
+Khanpanionsky and colleagues' review rates practice testing and distributed practice as broadly useful while describing conditions and limitations across learners, materials and outcomes. [Original review publication](https://www.psychologicalscience.org/journals/pspi/1529100612453266/).
 
 Implementation: editable initial intervals of one day, one week and two weeks for new settings. Existing preferences remain intact. The schedule advances after successful work separated by time; repeated practice in one sitting cannot repeatedly advance it. A delayed independent answer is recorded separately from immediate practice. These exact intervals and the one-day eligibility threshold are transparent product heuristics, not experimentally optimized values. Quiz preparation can justify additional practice today without implying durable mastery tomorrow.
 

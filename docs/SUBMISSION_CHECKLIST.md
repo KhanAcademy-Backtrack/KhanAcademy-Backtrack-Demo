@@ -1,8 +1,8 @@
-# Dunlo: submission package
+# Khanpanion: submission package
 
 ## What to use
 
-Upload **Dunlo_KEIC_2026.pdf** as the pitch deck. It must contain exactly 15 pages. Copy the seven project answers from **PROJECT_ANSWERS.txt** or docs/SUBMISSION_COPY.md into their corresponding fields. Do not upload a storyboard or developer document as the deck.
+Upload **Khanpanion_KEIC_2026.pdf** as the pitch deck. It must contain exactly 15 pages. Copy the seven project answers from **PROJECT_ANSWERS.txt** or docs/SUBMISSION_COPY.md into their corresponding fields. Do not upload a storyboard or developer document as the deck.
 
 The owner confirmed the institution, adviser and student fields are already filled. Keep those fields and review the new project content before submitting.
 

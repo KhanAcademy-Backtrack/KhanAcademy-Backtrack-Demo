@@ -1,7 +1,7 @@
-# Dunlo — working notes for Claude
+# Khanpanion — working notes for Claude
 
-Public product: **Dunlo**. Recovery engine: **BACKTRACK**. Use Dunlo in all learner-facing copy.
-Live: https://dunlo.vercel.app/ · Static export, device-local storage, no backend.
+Public product: **Khanpanion**. Recovery engine: **BACKTRACK**. Use Khanpanion in all learner-facing copy.
+Live address: https://dunlo.vercel.app/ · The current Vercel project/domain identifier remains dunlo until the rename is completed. Static export, device-local storage, no backend.
 
 ## Attribution — do not get this wrong
 
@@ -12,7 +12,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Read first
 
 1. `AGENTS.md` — project continuity and the user's standing instructions. These override defaults.
-2. `docs/research/2026-09-10/README.md` and `BRILLIANT_RESEARCH_AND_DUNLO_DIRECTION.md` — current strategy.
+2. `docs/research/2026-09-10/README.md` and `BRILLIANT_RESEARCH_AND_KHANPANION_DIRECTION.md` — current strategy.
 3. `docs/PRODUCT_IMPLEMENTATION_PLAN.md` and `docs/IMPLEMENTATION_TASKS.md` — the plan and the checklist.
 
 ## Commands
@@ -89,13 +89,13 @@ invent or pattern-guess a deep lesson URL. A focused video clip needs its captio
 id and range enter `VERIFIED_CLIPS`. Record every URL, video id and clip range with its check date in
 `docs/THIRD_PARTY_MATERIALS.md`.
 
-A missing Khan match never blocks a Dunlo lesson: show the original explanation and say plainly that
+A missing Khan match never blocks a Khanpanion lesson: show the original explanation and say plainly that
 no matched resource exists. Chemistry and physics steps are currently in that state and are listed in
 `khan-materials.ts`'s `UNMATCHED` set — that listing is load-bearing, because the fall-through
 otherwise serves algebra factoring resources to a chemistry learner.
 
 There is no Khan results API. Resource opens, learner self-reports, teacher-checked reports, and
-independent Dunlo answers stay four separate records. Never imply synchronisation or endorsement.
+independent Khanpanion answers stay four separate records. Never imply synchronisation or endorsement.
 
 ## Where things live
 

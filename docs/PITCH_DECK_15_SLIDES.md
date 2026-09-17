@@ -1,4 +1,4 @@
-# Dunlo: 15-page submission deck
+# Khanpanion: 15-page submission deck
 
 This deck is designed to be read independently for top-30 selection, without a spoken pitch. The same Canva design remains the editable source. Page 1 presents only the problem; page 14 closes the story and page 15 provides learning research.
 
@@ -8,9 +8,9 @@ This deck is designed to be read independently for top-30 selection, without a s
 - of Filipino 15-year-old students scored below basic proficiency in mathematics.
 - Source: [OECD, PISA 2025 Philippines country note (2026)](https://www.oecd.org/en/publications/pisa-2025-results-volume-i-country-notes_2d4ff9ea-en/philippines_3699b9d5-en.html). The OECD reports 21% at or above Level 2; the complement is 79% below that threshold.
 
-## Slide 2: Dunlo turns discovery into practice
+## Slide 2: Khanpanion turns discovery into practice
 
-- Dunlo turns discovery into practice
+- Khanpanion turns discovery into practice
 - A short-form learning feed with a clear path into Khan Academy.
 - Easy to start
 - Young learners can start with one idea / in a familiar, scrollable feed.
@@ -18,7 +18,7 @@ This deck is designed to be read independently for top-30 selection, without a s
 - The familiar feed opens the door. Connected practice gives that curiosity somewhere to go.
 - Clear to continue
 - Each idea points to a matching / Khan Academy exercise.
-- Return to Dunlo for a fresh question. / Save the idea to revisit later.
+- Return to Khanpanion for a fresh question. / Save the idea to revisit later.
 
 ## Slide 3: How one discovery becomes a learning session
 
@@ -26,13 +26,13 @@ This deck is designed to be read independently for top-30 selection, without a s
 - Choose one / short idea
 - Predict, then / see why
 - Practise with / Khan Academy
-- Answer a fresh / question in Dunlo
+- Answer a fresh / question in Khanpanion
 - One topic stays connected across the feed, Khan practice and later review. / Learning design: IES practice guide (2007).
 
 ## Slide 4: Short-form content. Active learning.
 
 - Short-form content. Active learning.
-- For learners used to mobile feeds, / Dunlo makes one idea easy to start.
+- For learners used to mobile feeds, / Khanpanion makes one idea easy to start.
 - Scroll. Try. Keep going.
 - Move a slider or watch a focused Khan clip. / Make a prediction and get an explanation.
 - Follow the idea into a matching Khan exercise. / Save it for a fresh question later.
@@ -50,7 +50,7 @@ This deck is designed to be read independently for top-30 selection, without a s
 - RESULT
 - x² + 7x + 12
 - Then try a different question.
-- Original Dunlo interactive · Learning design: Chi & Wylie (2014), ICAP framework
+- Original Khanpanion interactive · Learning design: Chi & Wylie (2014), ICAP framework
 - Example: move the four areas to see why the middle terms combine.
 
 ## Slide 6: Khan Academy, right in the feed
@@ -75,7 +75,7 @@ This deck is designed to be read independently for top-30 selection, without a s
 
 - Try the complete journey
 - Explore an idea, open Khan practice, / and return for a fresh question.
-- Try Dunlo
+- Try Khanpanion
 - dunlo.vercel.app
 - Scan to explore
 - Explore freely, or bring your current learning goal.
@@ -111,10 +111,10 @@ This deck is designed to be read independently for top-30 selection, without a s
 
 - Start with public access
 - PUBLIC LAUNCH
-- NO DUNLO ACCOUNT NEEDED
+- NO KHANPANION ACCOUNT NEEDED
 - Open an idea
 - Share an idea
-- Public topic links will let learners / open an idea without a Dunlo account.
+- Public topic links will let learners / open an idea without a Khanpanion account.
 - Save and share a specific challenge / to give someone a useful starting point.
 - Launch with short demo posts
 - Link each post to the matching idea
@@ -163,14 +163,14 @@ This deck is designed to be read independently for top-30 selection, without a s
 ## Slide 14: Turn curiosity into progress.
 
 - Turn curiosity into progress.
-- Dunlo uses short-form discovery to bring learners into Khan practice, / then helps them apply the idea and return to it.
-- Explore Dunlo · dunlo.vercel.app
+- Khanpanion uses short-form discovery to bring learners into Khan practice, / then helps them apply the idea and return to it.
+- Explore Khanpanion · dunlo.vercel.app
 - Matthew Labrador · Paul Recio · Harry Gomez / Coach: Justin Mesias · University of the Philippines Manila
 
 ## Slide 15: Research behind the learning design
 
 - Research behind the learning design
-- Dunlosky et al. (2013) / Improving students’ learning with effective / learning techniques. PSPI, 14(1).
+- Khanpanionsky et al. (2013) / Improving students’ learning with effective / learning techniques. PSPI, 14(1).
 - Carpenter, Pan & Butler (2022) / The science of effective learning with spacing / and retrieval practice. Nature Reviews Psychology.
 - Tversky, Morrison & Bétrancourt (2002) / Animation: can it facilitate? / International Journal of / Human-Computer Studies, 57(4).
 - Atkinson, Renkl & Merrill (2003) / Transitioning from studying examples / to solving problems. / Journal of Educational Psychology, 95(4).
@@ -180,4 +180,4 @@ This deck is designed to be read independently for top-30 selection, without a s
 
 ## Export checks
 
-Exactly 15 pages with descriptive PDF bookmarks. Preserve the UP Manila seal and university name on every page, with the Health Sciences Center tagline removed as requested. The native iPhone mockup uses a fresh app capture with status-area spacing; the camera cutout clears the controls and the navigation sits within the rounded display. QR pixels, QR image link, Try Dunlo button and printed URL open https://dunlo.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.
+Exactly 15 pages with descriptive PDF bookmarks. Preserve the UP Manila seal and university name on every page, with the Health Sciences Center tagline removed as requested. The native iPhone mockup uses a fresh app capture with status-area spacing; the camera cutout clears the controls and the navigation sits within the rounded display. QR pixels, QR image link, Try Khanpanion button and printed URL open https://dunlo.vercel.app/. The specific recovery example remains on slide 7. Learning references link to original records or publications. Future launch and growth work is described in future tense. The budget totals PHP 100,000.

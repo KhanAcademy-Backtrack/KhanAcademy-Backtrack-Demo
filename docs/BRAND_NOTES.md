@@ -1,12 +1,12 @@
-# Dunlo brand system
+# Khanpanion brand system
 
-Dunlo is the public study-companion identity; BACKTRACK remains the recovery engine. Keep the existing repository, saved-data compatibility and professional live URL.
+Khanpanion is the public study-companion identity; BACKTRACK remains the recovery engine. Keep the existing repository, saved-data compatibility and professional live URL.
 
 ## Mark and meaning
 
 The original green bookmark companion represents keeping a useful place in your learning. Its folded corner makes the object recognizable; the simple face makes returning feel welcoming. The wordmark is navy DM Sans Bold. It is an outlined vector for consistent display; the supplied font remains available for editable slide text.
 
-The coined working name draws on dunong and a learning loop. It is short enough for a tab title and distinct from the name of a single recovery feature. Basic web and app-store searches in September 2026 did not surface an obvious study app called Dunlo in the inspected results. Dunlo is also a place name in Pennsylvania. Domain, handle and trademark availability have not been established; these searches are not registration or legal clearance.
+The coined working name draws on “Khan” plus companion. It is short enough for a tab title and distinct from the name of a single recovery feature. Basic web and app-store searches in September 2026 did not surface an obvious study app called Khanpanion in the inspected results. A current Spanish-language report also records that “Khanpanion” was avoided by another team because of an escort-related meaning in some Latin American contexts ([report](https://observatoriolazaro.es/en/palabra.php?dir=asc&sort=borrowing&word=escort)). Treat the name as provisional until domain, handle, trademark and cross-language clearance are complete; these searches are not legal clearance.
 
 ## User-selected palette
 
@@ -29,6 +29,6 @@ The map language belongs where it explains a change of study route. Label every 
 
 Rebuild the owned bookmark and wordmark with scripts/build-companion-brand.py. Current SVGs and icons live in public and output/deck-assets. Keep the old BACKTRACK route mark as the engine identity and preserve old URLs.
 
-The official UP Manila logo remains unaltered, with its original colors and aspect ratio, on every slide. The user confirmed institutional endorsement. Khan Academy attribution remains separate from UP Manila endorsement and from the original product mark. Do not imply Khan sponsorship or copy its identity into the Dunlo logo.
+The official UP Manila logo remains unaltered, with its original colors and aspect ratio, on every slide. The user confirmed institutional endorsement. Khan Academy attribution remains separate from UP Manila endorsement and from the original product mark. Do not imply Khan sponsorship or copy its identity into the Khanpanion logo.
 
 Keep the existing Canva design and its editor link. The editor link is private team working access, never a link to print in the public deck or repository. Exported links point to the public product and sources.

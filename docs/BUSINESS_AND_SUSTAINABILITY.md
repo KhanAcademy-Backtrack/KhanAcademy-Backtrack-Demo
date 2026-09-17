@@ -1,6 +1,6 @@
-# Dunlo: free learning and continuity
+# Khanpanion: free learning and continuity
 
-Dunlo’s reusable value is a reviewed journey from interactive discovery to relevant Khan practice and later review. Learners access the service free of charge.
+Khanpanion’s reusable value is a reviewed journey from interactive discovery to relevant Khan practice and later review. Learners access the service free of charge.
 
 ## Implementation budget
 

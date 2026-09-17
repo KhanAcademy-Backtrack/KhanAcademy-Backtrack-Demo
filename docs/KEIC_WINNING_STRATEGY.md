@@ -1,8 +1,8 @@
-# Dunlo: discovery and continued Khan learning
+# Khanpanion: discovery and continued Khan learning
 
 Current direction: September 13, 2026.
 
-Dunlo makes a useful learning journey begin with curiosity. The public Explore collection connects original playable experiences, focused Khan Academy segments, relevant exercises, authored support and later review. A learner can also enter with a current Khan goal and use the full study companion.
+Khanpanion makes a useful learning journey begin with curiosity. The public Explore collection connects original playable experiences, focused Khan Academy segments, relevant exercises, authored support and later review. A learner can also enter with a current Khan goal and use the full study companion.
 
 ## The case for KEIC
 

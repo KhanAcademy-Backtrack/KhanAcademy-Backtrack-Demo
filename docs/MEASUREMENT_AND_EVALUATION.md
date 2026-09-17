@@ -1,4 +1,4 @@
-# Dunlo: measurement and evaluation
+# Khanpanion: measurement and evaluation
 
 The evaluation will examine whether discovery leads into continued useful Khan practice and independent application.
 
@@ -15,7 +15,7 @@ The present local history serves the learner. A consented evaluation must establ
 
 ## Design
 
-Start with voluntary usability and access feedback. A later structured evaluation can use unfamiliar immediate tasks and follow-ups. Report the full eligible denominator, non-completion, assistance and access failures. A feasible comparison with direct Khan use would help investigate the contribution of Dunlo; an uncontrolled pre/post gain alone does not establish causality.
+Start with voluntary usability and access feedback. A later structured evaluation can use unfamiliar immediate tasks and follow-ups. Report the full eligible denominator, non-completion, assistance and access failures. A feasible comparison with direct Khan use would help investigate the contribution of Khanpanion; an uncontrolled pre/post gain alone does not establish causality.
 
 Recruitment counts and partners will be set only when practical access and permissions exist. Do not reuse the earlier fixed 80–120 learner assumption as a commitment.
 

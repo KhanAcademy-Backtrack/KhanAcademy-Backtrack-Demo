@@ -1,6 +1,6 @@
-# Dunlo
+# Khanpanion
 
-Explore playable ideas and focused Khan Academy lessons, continue into relevant practice, and return for a fresh question. Dunlo is a free independent learning project. The broader study companion and recovery engine remain available.
+Explore playable ideas and focused Khan Academy lessons, continue into relevant practice, and return for a fresh question. Khanpanion is a free independent learning project. The broader study companion and recovery engine remain available.
 
 Live product: https://dunlo.vercel.app/
 
@@ -16,7 +16,7 @@ A learner chooses a destination and a manageable study block. Their answers dete
 
 Nine destinations are available across three subjects. Mathematics: quadratics, equations with brackets, fractions, ratios, and linear graphs. Chemistry: moles and mass, and balancing equations. Physics: motion and speed, and forces and acceleration. Science routes descend into the mathematics already supported here — a failed `F = ma` question can reach the substitution and multiplication skills and their matched Khan practice.
 
-The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Short guided repairs, original interactive explanations, and practice stay inside Dunlo. Official Khan videos are embedded, with four caption-verified focused segments and controls to continue watching. Original Khan exercises are optional links. The chemistry and physics steps have no hand-verified Khan match yet, and the interface says so plainly rather than substituting an unrelated resource. No live Khan-results API, learner account server, or generative-model call is assumed.
+The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Short guided repairs, original interactive explanations, and practice stay inside Khanpanion. Official Khan videos are embedded, with four caption-verified focused segments and controls to continue watching. Original Khan exercises are optional links. The chemistry and physics steps have no hand-verified Khan match yet, and the interface says so plainly rather than substituting an unrelated resource. No live Khan-results API, learner account server, or generative-model call is assumed.
 
 The `/demo` page opens a fresh interactive sample with two example mistakes and a Replay control. It does not overwrite the learner’s saved routes.
 
@@ -45,7 +45,7 @@ Use Node 24 or later for the built-in TypeScript test runner.
 - docs/SUBMISSION_CHECKLIST.md: the submission package entry point.
 - output/submission: final submission PDF, editable Canva export, copy-paste project answers and short instructions.
 - output/pdf: seven individual answer PDFs and finished supporting documents.
-- output/submission/Dunlo_KEIC_2026_Editable.pptx: current editable Canva backup.
+- output/submission/Khanpanion_KEIC_2026_Editable.pptx: current editable Canva backup.
 Earlier standalone backups are historical; use output/submission for the current deck.
 
 ## Evidence boundaries

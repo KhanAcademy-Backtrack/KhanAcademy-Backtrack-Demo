@@ -41,9 +41,9 @@ def inline(t):
     return t
 def footer(c,doc):
     c.setStrokeColor(colors.HexColor('#DFE3EB'));c.line(48,42,A4[0]-48,42)
-    c.setFillColor(muted);c.setFont('BT',8);c.drawString(48,28,'Dunlo · KEIC 2026');c.drawRightString(A4[0]-48,28,str(doc.page))
+    c.setFillColor(muted);c.setFont('BT',8);c.drawString(48,28,'Khanpanion · KEIC 2026');c.drawRightString(A4[0]-48,28,str(doc.page))
 def write_doc(filename,title,flow):
-    doc=SimpleDocTemplate(str(out/filename),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=50,bottomMargin=58,title=title,author='Dunlo · University of the Philippines Manila')
+    doc=SimpleDocTemplate(str(out/filename),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=50,bottomMargin=58,title=title,author='Khanpanion · University of the Philippines Manila')
     doc.build(flow,onFirstPage=footer,onLaterPages=footer)
 def markdown_pdf(p):
     lines=p.read_text(encoding='utf-8-sig').splitlines();flow=[];buf=[];title=p.stem
@@ -81,7 +81,7 @@ for i,section in enumerate(submission['sections'] if not args.only or args.answe
 layout=json.loads((root/'.refs'/'deck-build'/'deck-layout.json').read_text(encoding='utf-8')) if args.include_backup_deck else []
 # The authoritative deck is exported from Canva. Rebuild the local backup only explicitly.
 if layout:
-    deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('Dunlo · KEIC 2026');c.setAuthor('University of the Philippines Manila BACKTRACK team')
+    deck=out/'BACKTRACK_KEIC_2026.pdf'; c=canvas.Canvas(str(deck),pagesize=(960,540));c.setTitle('Khanpanion · KEIC 2026');c.setAuthor('University of the Philippines Manila Khanpanion team')
     for slide in layout:
         c.saveState();c.scale(.75,.75)
         for e in slide['elements']:

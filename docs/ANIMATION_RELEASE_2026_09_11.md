@@ -1,6 +1,6 @@
 # Original interactive teaching scenes
 
-This pass replaces the earlier, insufficiently visible animation treatment with a visible homepage model and different interactions across the learning routes. The user’s quality reference is clean explanatory motion with an expressive character. Dunlo keeps its own folded-bookmark character, navy/green palette, graphics and lesson scripts. No reference video or competitor artwork is included in the site.
+This pass replaces the earlier, insufficiently visible animation treatment with a visible homepage model and different interactions across the learning routes. The user’s quality reference is clean explanatory motion with an expressive character. Khanpanion keeps its own folded-bookmark character, navy/green palette, graphics and lesson scripts. No reference video or competitor artwork is included in the site.
 
 ## What is implemented
 
