@@ -18,9 +18,9 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 70 tests
+npm test          # node --test, currently 115 tests
 npm run typecheck # tsc --noEmit
-npm run build     # static export, currently 28 routes (27 pages plus 404)
+npm run build     # static export, currently 104 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
 npm start         # serve the static build on http://127.0.0.1:3047
 ```
@@ -99,6 +99,12 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 
 ## Where things live
 
+- src/lib/mock: deterministic forms, item families, original banks, scoring and analysis. blueprint.ts is the practice configuration.
+- src/lib/program: device-local program state, planner, calendar, bridge maps, concepts, recall and verified resource facts.
+- src/content: original mock text, reviewer chapters and handbooks; question content remains draft pending review.
+- src/components/k: college program routes, shared navy/paper/oval UI, exam hall, results, reviewer and bridge.
+- scripts/test-program-browser.mjs: new program journeys invoked by the existing browser suite.
+
 - `src/lib/recovery.ts` — routing policy, item generation, answer checking. The whole product keys on `Topic`.
 - `src/lib/science.ts` — reviewed chemistry and physics constants, item families, rounding policy.
 - `src/lib/notation.ts` — notation tokeniser and spoken form (JSX-free so tests can assert it).
@@ -106,3 +112,10 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 - `src/components/study/ScienceLab.tsx`, `ConceptLab.tsx` — original interactive explanations.
 - `src/components/product/AnswerFields.tsx` — number and choice fields; units sit beside the box, never in it.
 - `tests/` — `node --test tests/*.test.mjs`. Science cases live in `tests/science.test.mjs`.
+
+
+## College program routing release, 30 September 2026
+
+The October UX and animation audits guide the current website. Navy frames readable paper surfaces; the previous white-grid presentation is superseded. All earlier route URLs stay working, and /demo keeps the former Today study space. The welcome tour opens only when explicitly requested. Website endorsement wording comes from UP_LINE in src/lib/program/facts.ts, not a local save field.
+
+Use verified official exam dates only. UPCAT 2027 testing was in August 2026; do not relabel an assumed August 2027 window as confirmed. Pledge dates can be personal planning targets. DLSU and PUP future dates are presently unconfirmed. Offline reviewer support remains Phase B. Messenger verification here means user-agent emulation, not a physical in-app phone test.

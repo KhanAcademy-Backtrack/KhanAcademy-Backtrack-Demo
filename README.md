@@ -1,24 +1,28 @@
 # Khanpanion
 
-Explore playable ideas and focused Khan Academy lessons, continue into relevant practice, and return for a fresh question. Khanpanion is a free independent learning project. The broader study companion and recovery engine remain available.
+Khanpanion is a free college study program with two sides: entrance exam review and a freshman bridge. It is a static Next.js export with device-local progress, no accounts, no backend and no runtime generative-model calls.
 
-Live product: https://khanpanion.vercel.app/
+Live: https://khanpanion.vercel.app/ . The Vercel project remains dunlo; main is the production branch and the older dunlo.vercel.app alias is retained.
 
-The expanded site includes Today planning, finite sessions, quiz rehearsal, scheduled review, curated/custom packs, note cards with PDF/TXT/Markdown import, shared scope links, same-screen co-op, a bookmark companion and teacher activity sheets. Supported Khan entry, focused video segments, saved returns and independent checks connect the experience. Progress, restore and recovery backups work locally.
+## College program
 
-Explore: https://khanpanion.vercel.app/explore
+A fresh device opens a three-question sprint. A study pledge sets a personal target date, study days and minutes. Returning learners see a countdown and a daily mission, then their weekly rhythm, next mock and Daily 3. The plan connects concept summaries, checked Khan Academy Philippine curriculum units and optional independent skill repair.
 
-The September 13 discovery release adds six original interactive ideas and four reviewed Khan segments, with saved interests, direct item links and a preserved Khan return. The same native Canva design now has the final 15-slide submission story, opening with “You watched it. Can you use it?”. The main QR and call to action open the homepage. See docs/DISCOVERY_EXECUTION_PLAN_2026_09_13.md for the release scope.
+The mock hub offers sprints, sections, full simulations, topic and placement checks, and printable booklets. Answers save immediately, elapsed time saves every eight seconds and on pagehide, and reload resumes the same section and question. Pauses and section breaks are excluded from active time. Going overtime keeps the questions available and is reported on results. The answer key can be hidden; Fix this opens a seeded skill session that still requires two fresh unassisted answers.
 
-## The product
+The reviewer includes original chapters, concept summaries and handbooks. Save chapters or recall cards, search the library, practise and print. Daily recall reads saved chapter cards, concepts marked Still hard and mock misses; recall self-reports affect spacing only. Offline caching is reserved for Phase B and is not advertised as delivered.
 
-A learner chooses a destination and a manageable study block. Their answers determine which earlier step to check, what can leave the route, and when to use a matched Khan resource. Common wrong-turn clues can choose a more useful starting check. For example, a matching factor pair entered as positive roots leads to a signs-and-solutions check. Two fresh unassisted checks support each route decision. Progress stays in the browser.
+The bridge maps first-year prerequisites for seven program groups, with placement checks, Khan unit paths, a summer schedule and topic rescue. These maps await faculty review. Group check-ins are shared manually through local cards or links; no synchronized roster or results are claimed.
 
-Nine destinations are available across three subjects. Mathematics: quadratics, equations with brackets, fractions, ratios, and linear graphs. Chemistry: moles and mass, and balancing equations. Physics: motion and speed, and forces and acceleration. Science routes descend into the mathematics already supported here — a failed `F = ma` question can reach the substitution and multiplication skills and their matched Khan practice.
+Official calendar dates are checked against primary pages. UPCAT 2027 refers to the test held August 1 and 2, 2026 for AY 2027-2028. Unconfirmed future UPCAT, DCAT and PUPCET dates are not prefilled. A learner may enter a planning target in the pledge. DOST-SEI qualifying dates November 14 and 15, 2026 are linked to its official scholarship portal. See docs/THIRD_PARTY_MATERIALS.md.
 
-The route can insert a deeper prerequisite, remove demonstrated review, pause, and recheck after a return. Short guided repairs, original interactive explanations, and practice stay inside Khanpanion. Official Khan videos are embedded, with four caption-verified focused segments and controls to continue watching. Original Khan exercises are optional links. The chemistry and physics steps have no hand-verified Khan match yet, and the interface says so plainly rather than substituting an unrelated resource. No live Khan-results API, learner account server, or generative-model call is assumed.
+Every earlier route remains available, including /demo, /study, /study/session, /packs, /review, /explore, /khan and all recovery entry routes. Existing deterministic question mappings and saved study evidence retain their meaning.
 
-The `/demo` page opens a fresh interactive sample with two example mistakes and a Replay control. It does not overwrite the learner’s saved routes.
+## Verification
+
+Run npm test, npm run typecheck, npm run build and npm run test:browser before release. Browser acceptance covers both 375 and 1280 px, calendar at 320 px, resume and pause timing, result-key visibility and repair, placement, calendar editing and .ics export, reviewer practice/print/recall, every concept/chapter/bridge page, and Messenger user-agent emulation. Screenshots and test receipts stay in the ignored .refs directory.
+
+The navy frame, paper sheets and answer-sheet ovals use Tailwind utilities. Plus Jakarta Sans and STIX Two Text are the two font families. Motion uses src/lib/motion-tokens.ts, with static quiet and reduced-motion paths. No runtime dependencies were added for the college program routing release.
 
 ## Run locally
 
