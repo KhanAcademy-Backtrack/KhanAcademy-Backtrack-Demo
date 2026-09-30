@@ -5,6 +5,7 @@ import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {programJourneys} from './test-program-browser.mjs';
+import {programTourJourneys} from './test-program-tour.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -169,6 +170,7 @@ try{
    const data=await saved(page);assert.equal(data.xp,0);assert.equal(Object.keys(data.review).length,0);await overflow(page);
  },{width:360,height:800});
  await programJourneys({scenario,origin,root});
+ await programTourJourneys({scenario,origin,root});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }

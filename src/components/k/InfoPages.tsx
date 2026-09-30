@@ -22,7 +22,7 @@ export function Admissions(){
    </li>;})}</ol></Sheet>
    <Sheet className="mt-5"><h2 className="text-2xl font-extrabold">Dates to confirm</h2><ul className="mt-4 grid gap-4">{EXAM_NOTICES.map(n=><li key={n.exam}><p className="font-bold">{EXAMS[n.exam].name}</p><p className="mt-1 text-ink-soft">{n.note}</p><a className={btn.text} href={EXAMS[n.exam].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></li>)}</ul></Sheet>
    <div className="mt-5 grid gap-5 lg:grid-cols-2">
-    <Sheet><h2 className="text-2xl font-extrabold">Worth knowing</h2><ul className="mt-4 grid gap-3">{['The UPCAT is free for Filipino applicants, and tuition at UP is free.','The UPCAT has four subtests, Language Proficiency, Reading Comprehension, Mathematics and Science, given in English and Filipino, and takes about four hours.','Khanpanion’s practice sets for DCAT, PUPCET and DOST-SEI are built from the same banks as the UPCAT review. They are practice, not copies of those exams.'].map(x=><li key={x} className="flex gap-3"><Oval filled size={20} className="mt-1"/><span className="text-[16px] leading-relaxed">{x}</span></li>)}</ul></Sheet>
+    <Sheet><h2 className="text-2xl font-extrabold">Before you choose a date</h2><ul className="mt-4 grid gap-3">{['Confirm your campus, application deadlines and test schedule on the official exam page.','Check your test permit for the place, time and instructions you need to follow.','Khanpanion’s practice sets use original questions. They help you review; the official exam instructions tell you what to expect on the day.'].map(x=><li key={x} className="flex gap-3"><Oval filled size={20} className="mt-1"/><span className="text-[16px] leading-relaxed">{x}</span></li>)}</ul></Sheet>
     <Sheet><h2 className="text-2xl font-extrabold">Exam-day kit</h2><p className="mt-1 text-ink-soft">A checklist for the night before and the morning of.</p><ul className="mt-4 grid gap-2">{['Test permit and a valid ID, as listed on the official instructions','Pencils and eraser, if the instructions call for them','Your route, with extra time for traffic and rain','Water and a light snack for breaks, if allowed','A jacket: testing rooms are often cold','Sleep at your usual time the night before'].map(x=><li key={x} className="flex items-center gap-3 text-[16px]"><Oval size={22}/>{x}</li>)}</ul><Link href="/reviewer/x_strategy" className={cx(btn.text,'mt-3')}>Read the full test-day handbook</Link></Sheet>
    </div>
   </div>
@@ -31,15 +31,15 @@ export function Admissions(){
 
 export function About(){
  return <>
-  <PageBand title="About Khanpanion" lead="A free college program built on Khan Academy’s Philippine curriculum courses. Entrance exam review first, then help getting through the first year of college."/>
+  <PageBand title="About Khanpanion" lead="A study companion for entrance exam preparation and your first year of college."/>
   <div className={pageBody}>
    <Sheet><div className="grid gap-8 lg:grid-cols-[1fr_300px] lg:items-center"><div>
     <h2 className="text-2xl font-extrabold">{UP_LINE}</h2>
-    <p className="mt-3 max-w-2xl font-serif text-[19px] leading-relaxed">Khan Academy has the curriculum. Khanpanion adds what a paid review program would: a plan to your exam date, a reason to finish it, practice that never runs out, and a way to find exactly what you are missing. It is free, it needs no account, and your progress stays on your phone.</p>
+    <p className="mt-3 max-w-2xl font-serif text-[19px] leading-relaxed">Khanpanion brings practice questions, explanations and a study routine together. Use it to prepare for an entrance exam, revisit a difficult topic or review the foundations for your college program. It is free to use, with no account needed.</p>
     <p className="mt-3 text-ink-soft">Built on Khan Academy’s Philippine curriculum courses.</p>
    </div><img src="/upm-logo-official.png" alt="University of the Philippines Manila" className="mx-auto h-auto w-full max-w-[260px]"/></div></Sheet>
    <Sheet className="mt-5"><h2 className="text-2xl font-extrabold">Our coach</h2>
-    <p className="mt-3 max-w-3xl font-serif text-[18px] leading-[1.7]">John Justin C. Mesias is an Assistant Professor at the College of Arts and Sciences, University of the Philippines Manila, where he has taught mathematics since 2016. An applied mathematician (MS Applied Mathematics, UP Diliman) and member of UP Manila’s Applied Mathematics and Artificial Intelligence Research Laboratory, he works in optimization, data science and sports analytics. His 2026 study analyzes what drove PISA 2022 performance across 81 countries, and his research on turning math anxiety into affinity in UP’s Math 10 was presented at the 2026 UP General Education Conference.</p>
+    <p className="mt-3 max-w-3xl font-serif text-[18px] leading-[1.7]">John Justin C. Mesias, Assistant Professor of Mathematics at the College of Arts and Sciences, UP Manila, coaches the team.</p>
    </Sheet>
    <Sheet className="mt-5"><h2 className="text-2xl font-extrabold">The team</h2><p className="mt-1 text-ink-soft">BS Computer Science students at UP Manila, and all three UPCAT passers.</p>
     <ul className="mt-5 grid gap-4 sm:grid-cols-3">{['Matthew Emmanuel T. Labrador','Paul Andrei H. Recio','Harry C. Gomez'].map(n=><li key={n} className="rounded-2xl bg-mint p-5"><Oval filled size={30}/><p className="mt-3 text-lg font-bold">{n}</p><p className="text-sm text-ink-soft">BS Computer Science, UP Manila</p></li>)}</ul>

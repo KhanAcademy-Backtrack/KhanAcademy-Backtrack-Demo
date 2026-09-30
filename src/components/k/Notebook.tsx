@@ -19,7 +19,7 @@ export function Notebook(){
  const byConcept=new Map<string,typeof entries>();for(const e of entries){const l=byConcept.get(e.concept)??[];l.push(e);byConcept.set(e.concept,l);}
  const seed=today.replace(/-/g,'');
  return <>
-  <PageBand title="Mistake notebook" lead="Every question you missed or did not know yet, with why it happened and how to fix it. Misses also come back in your daily recall."/>
+  <PageBand title="Mistake notebook" lead="Revisit questions you missed or weren’t sure about. Read the explanation, then work on the topic behind the question."/>
   <div className={pageBody}>
    <Sheet><div className="flex flex-wrap items-center justify-between gap-3"><p className="text-ink-soft">{state.notebook.filter(n=>!n.resolved).length} open · {state.notebook.filter(n=>n.resolved).length} understood</p><button className={btn.ghost} aria-pressed={showResolved} onClick={()=>setShowResolved(!showResolved)}>{showResolved?'Hide understood':'Show understood'}</button></div>
     {!entries.length&&<div className="py-8 text-center"><p className="font-serif text-2xl">Nothing here yet.</p><p className="mt-2 text-ink-soft">Take a sprint or a topic check. Anything you miss lands here with its fix.</p><Link href="/mock" className={cx(btn.primary,'mt-5')}>Choose a mock exam</Link></div>}

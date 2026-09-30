@@ -17,13 +17,13 @@ function Rescue({only}:{only?:string[]}){
  const fix=useFix(),[pick,setPick]=useState<string>('');
  const list=only?RESCUES.filter(r=>only.includes(r.id)):RESCUES,r=pick?RESCUE_BY_ID[pick]:undefined;
  return <Sheet>
-  <h2 className="text-2xl font-extrabold">Rescue mode</h2>
-  <p className="mt-1 text-ink-soft">Met something in class today that did not land? Pick it. Khanpanion finds the senior high topic it rests on.</p>
+  <h2 className="text-2xl font-extrabold">Work through a class topic</h2>
+  <p className="mt-1 text-ink-soft">Something from class not making sense yet? Choose the topic to find the earlier ideas that can help.</p>
   <div className="mt-4 flex flex-wrap gap-2">{list.map(x=><button key={x.id} aria-pressed={pick===x.id} onClick={()=>setPick(x.id)} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{x.topic}</button>)}</div>
   {r&&<div className="mt-5 rounded-2xl bg-mint p-4 sm:p-5" aria-live="polite">
    <p className="font-bold">{r.topic} assumes:</p><p className="mt-1 font-serif text-lg">{r.needs}</p>
    <div className="mt-4 grid gap-2 sm:grid-cols-2">{r.concepts.map(c=><Link key={c} href={`/learn/${c}`} className="flex min-h-14 items-center gap-3 rounded-2xl bg-white px-4 py-2 font-semibold hover:bg-sky"><Oval size={22}/>{CONCEPT_BY_ID[c].title}</Link>)}</div>
-   <div className="mt-4 flex flex-wrap gap-3">{r.engine&&<button className={btn.dark} onClick={()=>fix(r.engine!,NEXT_SKILL[r.engine!],`Rescue: ${r.topic}`)}>Find my missing skill</button>}{r.khan.map(k=><KhanLink key={k} href={khanUrl(k)}>{KHAN_UNITS[k].course}: {KHAN_UNITS[k].unit}</KhanLink>)}</div>
+   <div className="mt-4 flex flex-wrap gap-3">{r.engine&&<button className={btn.dark} onClick={()=>fix(r.engine!,NEXT_SKILL[r.engine!],`Help with ${r.topic}`)}>Find my missing skill</button>}{r.khan.map(k=><KhanLink key={k} href={khanUrl(k)}>{KHAN_UNITS[k].course}: {KHAN_UNITS[k].unit}</KhanLink>)}</div>
   </div>}
  </Sheet>;
 }
@@ -32,19 +32,13 @@ export function BridgeHub(){
  const {state,update}=useProgram(),router=useRouter();
  const choose=(id:string)=>{update(s=>({...s,sides:{...s.sides,bridge:true},activeSide:'bridge',bridgeProgram:id}));router.push(`/bridge/${id}`);};
  return <>
-  <PageBand title="Start college strong" lead="Your first year assumes things your senior high school may not have taught. Since the Strengthened SHS curriculum made Pre-Calculus, Calculus, Biology, Chemistry and Physics electives, many students arrive without them. Find what your program expects and fill the gaps before they cost you."/>
+  <PageBand title="Start college strong" lead="Choose your program to find the math and science to revisit before your first-year classes. You can also get help with a topic you met in class today."/>
   <div className={pageBody}>
    <Sheet><h2 className="text-2xl font-extrabold">What will you study?</h2><p className="mt-1 text-ink-soft">Pick the closest match. You can change it any time.</p>
     <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{PROGRAMS.map(p=><li key={p.id}><button onClick={()=>choose(p.id)} className={cx('flex h-full w-full flex-col gap-2 rounded-2xl border-2 p-4 text-left  hover:border-navy/40 hover:bg-mint text-navy',state.bridgeProgram===p.id?'border-navy bg-mint':'border-navy/10')}><span className="flex items-center gap-2 text-lg font-bold"><Oval filled={state.bridgeProgram===p.id} size={24}/>{p.title}</span><span className="text-sm text-ink-soft">{p.examples}</span></button></li>)}</ul>
    </Sheet>
    <div className="mt-5"><Rescue/></div>
-   <Sheet className="mt-5">
-    <h2 className="text-2xl font-extrabold">Surviving first year</h2>
-    <div className="mt-4 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-     <div className="rounded-2xl bg-navy p-5 text-white sm:p-6"><p className="text-sm font-bold text-green">Harry’s story</p><p className="mt-2 font-serif text-[19px] leading-relaxed">Harry came from an ICT strand into Computer Science at UP Manila. His classmates had already met the math and physics his first courses assumed; he had to rebuild them while keeping up. That is why this side of Khanpanion exists: so the next student finds the gaps in summer, not in the middle of a long exam.</p><p className="mt-3 text-sm text-white/70">Harry C. Gomez, BS Computer Science, UP Manila</p></div>
-     <ul className="grid content-start gap-4">{[['Read the syllabus in week one','It lists what the course assumes. Check each item against your bridge map.'],['Use consultation hours early','Professors set them aside for you. Going in week two is normal, not a sign of trouble.'],['Build a study group','Three or four people who meet weekly beat cramming alone. The Group tab helps you keep each other on track.'],['Fix gaps the week you find them','A missing prerequisite grows every week you leave it. Rescue mode above is built for this.']].map(([h,b])=><li key={h} className="flex gap-3"><Oval filled size={22} className="mt-1"/><div><p className="font-bold">{h}</p><p className="text-[15px] text-ink-soft">{b}</p></div></li>)}</ul>
-    </div>
-   </Sheet>
+
   </div>
  </>;
 }

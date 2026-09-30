@@ -28,7 +28,7 @@ export function CalendarView(){
  const agenda=items.filter(i=>(i.end??i.date)>=today).slice(0,60);
  const byDay=new Map<string,CalItem[]>();for(const i of agenda){const k=i.date<today?today:i.date;byDay.set(k,[...(byDay.get(k)??[]),i]);}
  return <>
-  <PageBand title="Calendar" lead="Your study sessions, mock exam days and official exam dates in one place. Move anything; the plan fills in around it." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}>Add to my phone calendar</button>{!state.pledge&&<Link href="/plan" className={btn.onDark}>Make a plan first</Link>}</div>}/>
+  <PageBand title="Calendar" lead="Keep your study sessions and exam dates together. Move a session when your week changes." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}>Add to my phone calendar</button>{!state.pledge&&<Link href="/plan" className={btn.onDark}>Make a plan first</Link>}</div>}/>
   <div className={pageBody}>
    <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
     <Sheet className="p-3 sm:p-6">
@@ -48,7 +48,7 @@ export function CalendarView(){
        </button>;})}</div>
       <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 px-2 text-sm text-ink-soft sm:px-0">{Object.values(KIND).map(k=><span key={k.label} className="flex items-center gap-2"><span className={cx('h-2.5 w-2.5 rounded-full',k.dot)}/>{k.label}</span>)}</div>
      </motion.div>
-     :<ol className="mt-4 grid gap-4">{[...byDay].map(([d,list])=><li key={d}><p className="font-bold">{d===today?'Today':parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</p><ul className="mt-2 grid gap-2">{list.map(i=>row(i,i.id+d))}</ul></li>)}{!byDay.size&&<p className="text-ink-soft">Nothing planned yet. Make a study pledge to fill your calendar.</p>}</ol>}
+     :<ol className="mt-4 grid gap-4">{[...byDay].map(([d,list])=><li key={d}><p className="font-bold">{d===today?'Today':parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</p><ul className="mt-2 grid gap-2">{list.map(i=>row(i,i.id+d))}</ul></li>)}{!byDay.size&&<p className="text-ink-soft">Nothing planned yet. Make a study plan to fill your calendar.</p>}</ol>}
     </Sheet>
     <Sheet className="lg:sticky lg:top-24 lg:self-start">
      <h2 className="text-xl font-extrabold">{selected===today?'Today':parseDay(selected).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</h2>

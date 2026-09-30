@@ -43,3 +43,9 @@ Verification: 115 domain tests, explicit TypeScript checking and a static produc
 The animation refinement was checked with 96 passing browser journeys across four suites, including 51 lesson cases at phone and desktop widths. The linked model is checked during movement, not only at the endpoints. The original recovery evidence and generated-question tests remain green.
 
 The completion audit added the missing 150 ms content fade on navigation, with no first-load fade and complete static quiet/reduced views. The exam hall keeps its own focused entry. It also cleaned reachable legacy punctuation and export labels without changing stored identifiers or generated answers.
+
+## Learner entry and content curation
+
+The homepage now leads with “Know what to study next.”, a short practice set and two clear preparation paths. Detailed help is placed with the task it supports. The tuition slogan, team credential columns and bank-size promotion were removed from the landing page. About retains concise attribution; the bridge starts with program selection and class-topic help. The progress page explains actual activity and independent-answer records instead of a research proposal. Storage keys, original question generation and evidence rules remain unchanged.
+
+A lazy optional six-step tour highlights the real Today, Plan/College, Mocks, Reviewer and Group navigation. Learners can replay it from the homepage, Me or the Me menu. Background content is inert, focus stays in the dialog and returns on close, answers stay selected, and closing or finishing writes no learning evidence. The earlier study-space tour remains available. Six additional acceptance journeys cover both main widths, keyboard use, college-context routing, a short 320 px phone with normal/quiet motion and intermediate pane widths. Headline sizing follows its column and keeps the two phrases together from 320 through 1280 px.

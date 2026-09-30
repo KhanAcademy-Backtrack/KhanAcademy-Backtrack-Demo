@@ -5,6 +5,7 @@ import {useEffect,useRef,useState} from 'react';
 import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
+import {useProgramTour} from './ProgramTourProvider';
 import {Wordmark,cx} from './ui';
 import {SPRING} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
@@ -33,6 +34,7 @@ function Icon({k}:{k:Tab['key']}){
 const FOCUS=[/^\/mock\/take/];
 
 export function AppNav(){
+ const openTour=useProgramTour();
  const path=usePathname()||'/',{state,update}=useProgram(),reduced=useQuietMotion();
  const [menu,setMenu]=useState(false),button=useRef<HTMLButtonElement>(null),panel=useRef<HTMLDivElement>(null);
  const lang=state.lang,both=state.sides.admission&&state.sides.bridge,bridge=state.activeSide==='bridge'&&state.sides.bridge;
@@ -46,7 +48,7 @@ export function AppNav(){
    <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-8">
     <Link href="/" aria-label="Khanpanion, Today" className="rounded-lg focus-visible:outline-3 focus-visible:outline-green"><Wordmark onDark small/></Link>
     <nav aria-label="Main" className="ml-6 hidden flex-1 items-center gap-1 md:flex">
-     {list.map(x=><Link key={x.key} href={x.href} aria-current={active===x.key?'page':undefined} className="relative flex min-h-11 items-center rounded-full px-4 text-[15px] font-semibold text-white/75  hover:text-white aria-[current=page]:text-navy">
+     {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex min-h-11 items-center rounded-full px-4 text-[15px] font-semibold text-white/75  hover:text-white aria-[current=page]:text-navy">
       {active===x.key&&<motion.span layoutId="tab-oval" transition={move} className="absolute inset-0 rounded-full bg-green"/>}
       <span className="relative">{t(lang,`nav.${x.key}${x.key==='plan'&&bridge?'.bridge':''}`)}</span>
      </Link>)}
@@ -60,6 +62,7 @@ export function AppNav(){
        <span className="grid h-7 w-7 place-items-center rounded-full bg-green text-navy" aria-hidden="true"><svg viewBox="0 0 24 24" className="h-4 w-4"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6" fill="currentColor"/></svg></span>{t(lang,'nav.me')}
       </button>
       {menu&&<div ref={panel} id="me-menu" className="absolute right-0 top-14 w-72 rounded-2xl bg-white p-2 text-navy shadow-[0_24px_60px_-20px_rgba(4,19,51,.6)]">
+       <button onClick={()=>{setMenu(false);openTour(button.current);}} className="flex min-h-11 w-full items-center rounded-xl px-3 text-left font-semibold hover:bg-mint">Show me around</button>
        {[['/plan#pledge','me.pledge'],['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-xl px-3 font-semibold hover:bg-mint">{t(lang,key)}</Link>)}
        <div className="mt-1 flex items-center justify-between rounded-xl bg-sky px-3 py-2"><span className="text-sm font-semibold">{t(lang,'me.language')}</span>
         <div className="flex gap-1">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(p=>({...p,lang:l}))} className="min-h-11 rounded-full px-3 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div>
@@ -71,7 +74,7 @@ export function AppNav(){
   </header>
   <nav aria-label="Main" className="print:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-navy pb-[env(safe-area-inset-bottom)] text-white md:hidden">
    <div className="grid grid-cols-5">
-    {list.map(x=><Link key={x.key} href={x.href} aria-current={active===x.key?'page':undefined} className="relative flex min-h-16 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-white/70 aria-[current=page]:text-white">
+    {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex min-h-16 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-white/70 aria-[current=page]:text-white">
      <span className="relative grid h-8 w-12 place-items-center">
       {active===x.key&&<motion.span layoutId="tab-oval-m" transition={move} className="absolute inset-0 rounded-[50%] bg-green"/>}
       <span className={cx('relative',active===x.key&&'text-navy')}><Icon k={x.key}/></span>

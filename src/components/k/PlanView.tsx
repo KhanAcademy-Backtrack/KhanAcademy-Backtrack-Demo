@@ -24,13 +24,13 @@ export function PlanView(){
  useEffect(()=>{if(typeof window!=='undefined'&&window.location.hash==='#pledge')setEditing(true);},[]);
  useEffect(()=>{const side=params.get('side');if(side==='admission'&&ready&&!s.sides.admission&&!s.pledge)setEditing(true);},[params,ready,s.sides.admission,s.pledge]);
  if(!ready)return <div className="min-h-[60vh] bg-navy"/>;
- if(!s.pledge||editing)return <><PageBand title={s.pledge?'Edit your study pledge':'Your plan starts with a pledge'} lead="Pick your exam, your reason and your routine. Khanpanion builds the schedule, the daily missions and the mock exam days from it."/><div className={pageBody}><div className="mx-auto max-w-3xl"><Pledge onSaved={()=>setEditing(false)}/></div></div></>;
+ if(!s.pledge||editing)return <><PageBand title={s.pledge?'Adjust your study plan':'Build your study plan'} lead="Choose your exam date and a routine that works for you. We’ll turn it into a weekly schedule."/><div className={pageBody}><div className="mx-auto max-w-3xl"><Pledge onSaved={()=>setEditing(false)}/></div></div></>;
  const p=s.pledge,list=phases(today,p.examDate),now=phaseOn(list,today),total=Math.max(1,daysBetween(today,p.examDate));
  const ready4=readiness(s),rank=focusRanking(s),byId=new Map(rank.map(r=>[r.concept.id,r]));
  const conceptsOf=(sub:Subtest)=>rank.filter(r=>r.concept.subtest===sub).map(r=>r.concept).sort((a,b)=>a.area.localeCompare(b.area));
  return <>
-  <PageBand title={`Your plan to the ${EXAMS[p.exam].name}`} lead={`${total} days, ${p.days} days a week, ${p.minutes} minutes a day. The plan rebalances itself every day, so nothing here is ever late.`}>
-   <div className="mt-6 flex flex-wrap gap-3"><Link href="/calendar" className={btn.primary}>Open my calendar</Link><button className={btn.onDark} onClick={()=>setEditing(true)}>Edit my pledge</button></div>
+  <PageBand title={`Your plan to the ${EXAMS[p.exam].name}`} lead={`${total} days, ${p.days} days a week, ${p.minutes} minutes a day. Adjust your routine whenever your week changes.`}>
+   <div className="mt-6 flex flex-wrap gap-3"><Link href="/calendar" className={btn.primary}>Open my calendar</Link><button className={btn.onDark} onClick={()=>setEditing(true)}>Edit my plan</button></div>
   </PageBand>
   <div className={cx(pageBody,'grid gap-5 lg:grid-cols-[340px_1fr]')}>
    <aside className="min-w-0"><Sheet>
@@ -62,7 +62,7 @@ export function PlanView(){
    </Sheet>
    <div className="grid gap-5 md:grid-cols-2 lg:col-span-2">
     <Sheet><h2 className="text-xl font-extrabold">Practise a topic your way</h2><p className="mt-1 text-ink-soft">The step-by-step practice rooms from before are still here, with fresh questions and the mistake finder.</p><div className="mt-4 flex flex-wrap gap-2"><Link href="/study" className={btn.ghost}>Practice rooms</Link><Link href="/packs" className={btn.ghost}>Topic packs</Link><Link href="/khan" className={btn.ghost}>Bring a Khan activity</Link></div></Sheet>
-    <Sheet><h2 className="text-xl font-extrabold">Other sides of Khanpanion</h2><p className="mt-1 text-ink-soft">Starting college soon? The freshman bridge maps what your program’s first year assumes.</p><div className="mt-4 flex flex-wrap gap-2"><Link href="/bridge" className={btn.ghost}>Freshman bridge</Link><Link href="/admissions" className={btn.ghost}>Exam dates</Link></div></Sheet>
+    <Sheet><h2 className="text-xl font-extrabold">Preparing for your first year?</h2><p className="mt-1 text-ink-soft">Choose your program to find useful math and science foundations to review.</p><div className="mt-4 flex flex-wrap gap-2"><Link href="/bridge" className={btn.ghost}>College preparation</Link><Link href="/admissions" className={btn.ghost}>Exam dates</Link></div></Sheet>
    </div>
   </div>
  </>;

@@ -35,6 +35,10 @@ Use Node 24 or later for the built-in TypeScript test runner.
 - npm run build (static export into out)
 - npm start (production preview at http://127.0.0.1:3047)
 
+## Getting started
+
+The homepage starts with a short practice set and two goals: entrance exam preparation or first-year foundations. Show me around opens an optional six-step tour of the current navigation. Replay it from Me or the Me menu; the earlier study-space tour remains available in Me. Tutorials never write learning results or change a plan.
+
 ## Where things live
 
 - src/lib/recovery.ts: deterministic routing and fresh question generation.

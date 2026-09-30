@@ -2,61 +2,60 @@
 import Link from 'next/link';
 import {useState} from 'react';
 import {useProgram} from './ProgramProvider';
+import {ProgramTourButton} from './ProgramTourProvider';
 import {Sprint} from './Sprint';
 import {Sheet,btn,Oval,cx} from './ui';
 import {Companion} from '@/components/study/Companion';
-import {bankStats} from '@/lib/mock/forms';
 
-const stats=bankStats();
-
-/** First visit with nothing saved: the landing is the product. Play first, commit
- *  second, and no signup anywhere. */
+/** One small start, then two useful paths. Product detail belongs with the task. */
 export function Landing(){
  const {update,today}=useProgram();
  const [result,setResult]=useState<{correct:number;total:number}>();
  const seed=today.replace(/-/g,'');
  return <div className="bg-navy">
-  <section className="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-10 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pb-24 lg:pt-16">
-   <div className="text-white lg:pt-6">
-    <h1 className="text-[2.3rem] font-extrabold leading-[.98] tracking-[-.045em] sm:text-6xl lg:text-[4.4rem]">Your next step to college. Free.</h1>
-    <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/80">Review for the UPCAT and other college entrance exams with a plan, a very large bank of mock exams and a full reviewer. Then get help through your first year of college.</p>
-    <ul className="mt-5 grid max-w-xl gap-3 text-[15px] text-white/85">
-     {['A study plan built from Khan Academy’s Philippine curriculum courses','Explanations for every miss, with skill checks where available',`${stats.families} question families that make new practice every time, plus ${stats.language+stats.reading+stats.scienceItems} written questions`,'No signup. Your progress stays on this phone.'].map(x=><li key={x} className="flex items-start gap-3"><Oval filled size={22} tone="white" className="mt-0.5"/>{x}</li>)}
-    </ul>
-    <div className="mt-8 flex flex-wrap gap-3">
-     <a href="#try" className={cx(btn.primary,'lg:hidden')}>Try 3 questions now</a>
-     <Link href="/plan?side=admission" className={btn.onDark}>Make my study plan</Link>
+  <section className="mx-auto grid max-w-6xl items-start gap-7 px-5 pb-12 pt-7 sm:px-8 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pb-20 lg:pt-14">
+   <div className="@container text-white lg:sticky lg:top-28 lg:py-5">
+    <p className="text-sm font-semibold text-green">Your college prep</p>
+    <h1 className="mt-3 text-[clamp(2rem,12.5cqw,2.55rem)] font-extrabold leading-[1.02] tracking-[-.045em] sm:text-[clamp(2.5rem,12.5cqw,3.3rem)] lg:text-[clamp(3rem,12.5cqw,4.5rem)]"><span className="block whitespace-nowrap">Know what to</span>{' '}<span className="block whitespace-nowrap">study next.</span></h1>
+    <p className="mt-4 max-w-md text-[17px] leading-relaxed text-white/80">Prepare for entrance exams and your first year of college, with practice and a plan that fits your week.</p>
+    <div className="mt-6 flex flex-wrap gap-3">
+     <a href="#try" className={btn.primary}>Try three questions</a>
+     <ProgramTourButton className="inline-flex min-h-11 items-center justify-center rounded-lg px-2 text-sm font-semibold text-white/80 underline decoration-green decoration-2 underline-offset-4 hover:text-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green"/>
     </div>
+    <p className="mt-4 text-sm text-white/65">Free to use · No account needed</p>
    </div>
-   <Sheet as="div" className="relative" aria-labelledby="try-title">
-    <div id="try" className="-mt-2 mb-4 flex items-center gap-3"><Companion size={52} pose={result?result.correct>=2?'aha':'encourage':'curious'}/><div><h2 id="try-title" className="text-lg font-bold leading-tight">Try three questions</h2><p className="text-sm text-ink-soft">Math, science and language. Check each answer as you go.</p></div></div>
+   <Sheet as="div" id="try" className="relative scroll-mt-20" aria-labelledby="try-title">
+    <div className="-mt-2 mb-4 flex items-center gap-3"><Companion size={52} pose={result?result.correct>=2?'aha':'encourage':'curious'}/><div><h2 id="try-title" className="text-lg font-bold leading-tight">Try three questions</h2><p className="mt-1 text-sm text-ink-soft">Math, science and language. Take your time.</p></div></div>
     {!result?<Sprint formKey={`daily~${seed}`} finishLabel="See how I did" onFinish={r=>{setResult(r);update(s=>({...s,daily:{...s.daily,[today]:{correct:r.correct,total:r.total}}}));}}/>
-     :<div className="py-4"><p className="font-serif text-2xl leading-snug">{result.correct} of {result.total} right.{result.correct===3?' A strong start.':result.correct===2?' Close. One trap got through.':' That is exactly what practice is for.'}</p>
-      <p className="mt-3 text-ink-soft">A plan turns this into a routine: a short mission each day, a mock exam each week, and the reviewer for whatever you miss.</p>
-      <div className="mt-6 flex flex-wrap gap-3"><Link href="/plan?side=admission" className={btn.primary}>Make my study plan</Link><Link href="/mock" className={btn.ghost}>Browse mock exams</Link></div></div>}
+     :<div className="py-4"><p className="font-serif text-2xl leading-snug">{result.correct} of {result.total} right. {result.correct===3?'A good start. Let’s build on it.':'Now you have a place to start.'}</p>
+      <p className="mt-3 text-ink-soft">Your answers are saved. Make a plan for what to study next, or choose another practice set.</p>
+      <div className="mt-6 flex flex-wrap gap-3"><Link href="/plan?side=admission" className={btn.primary}>Make my study plan</Link><Link href="/mock" className={btn.ghost}>Browse practice sets</Link></div>
+      {result.correct<result.total&&<Link href="/notebook" className={cx(btn.text,'mt-3 text-sm')}>Revisit the questions I missed</Link>}</div>}
    </Sheet>
   </section>
-  <section aria-label="Choose where you are" className="bg-white">
-   <div className="mx-auto grid max-w-6xl md:grid-cols-2">
-    <Link href="/plan?side=admission" className="group flex flex-col gap-4 border-b border-mint-line px-5 py-10  hover:bg-mint sm:px-8 md:border-b-0 md:border-r md:py-14">
-     <Oval filled size={40}/>
-     <h2 className="text-3xl font-extrabold tracking-[-.03em] text-navy">Getting into college</h2>
-     <p className="max-w-md text-[17px] leading-relaxed text-ink-soft">UPCAT first, with practice sets for DCAT, PUPCET and the DOST-SEI scholarship exam. A plan to your exam date, daily missions, mock exams and a complete reviewer.</p>
-     <span className="mt-auto font-bold text-navy underline decoration-green decoration-2 underline-offset-4">Start my exam plan</span>
-    </Link>
-    <Link href="/bridge" className="group flex flex-col gap-4 px-5 py-10  hover:bg-mint sm:px-8 md:py-14">
-     <Oval size={40}/>
-     <h2 className="text-3xl font-extrabold tracking-[-.03em] text-navy">Starting college</h2>
-     <p className="max-w-md text-[17px] leading-relaxed text-ink-soft">What your program’s first year assumes you already know, a placement check, a Khan Academy path through senior high math and science, and help with the topic you met in class today.</p>
-     <span className="mt-auto font-bold text-navy underline decoration-green decoration-2 underline-offset-4">Get ready for first year</span>
-    </Link>
+  <section aria-labelledby="choose-title" className="border-t border-white/10 bg-navy-deep text-white">
+   <div className="mx-auto max-w-6xl px-5 py-9 sm:px-8 lg:py-12">
+    <h2 id="choose-title" className="text-2xl font-extrabold tracking-[-.03em] sm:text-3xl">What are you getting ready for?</h2>
+    <div className="mt-6 grid gap-6 md:grid-cols-2 md:gap-10">
+     <Link href="/plan?side=admission" className="group flex gap-4 rounded-2xl border-2 border-white/15 p-5 hover:border-green focus-visible:outline-3 focus-visible:outline-green sm:p-6">
+      <Oval filled label="A" size={38} tone="white" className="mt-1"/>
+      <div><h3 className="text-xl font-extrabold text-white">An entrance exam</h3><p className="mt-2 max-w-md text-[15px] leading-relaxed text-white/75">Build a study routine for the UPCAT, DCAT, PUPCET or DOST-SEI exam.</p><span className="mt-4 inline-flex min-h-11 items-center gap-2 font-bold text-green">Make my study plan <span aria-hidden="true">→</span></span></div>
+     </Link>
+     <Link href="/bridge" className="group flex gap-4 rounded-2xl border-2 border-white/15 p-5 hover:border-green focus-visible:outline-3 focus-visible:outline-green sm:p-6">
+      <Oval label="B" size={38} tone="white" className="mt-1"/>
+      <div><h3 className="text-xl font-extrabold text-white">My first year of college</h3><p className="mt-2 max-w-md text-[15px] leading-relaxed text-white/75">Review the math and science your program builds on, or work through a topic from class.</p><span className="mt-4 inline-flex min-h-11 items-center gap-2 font-bold text-green">Choose my program <span aria-hidden="true">→</span></span></div>
+     </Link>
+    </div>
    </div>
   </section>
-  <section className="bg-mint">
-   <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:px-8 md:grid-cols-3">
-    <div><h2 className="text-xl font-extrabold text-navy">A University of the Philippines Manila team</h2><p className="mt-2 leading-relaxed text-ink-soft">Built by Matthew Labrador, Paul Recio and Harry Gomez, BS Computer Science students and UPCAT passers.</p></div>
-    <div><h2 className="text-xl font-extrabold text-navy">Coached by a UP mathematician</h2><p className="mt-2 leading-relaxed text-ink-soft">John Justin C. Mesias, Assistant Professor at the College of Arts and Sciences, UP Manila, teaching mathematics since 2016.</p><Link href="/about" className={cx(btn.text,'mt-1')}>Meet the team</Link></div>
-    <div><h2 className="text-xl font-extrabold text-navy">The UPCAT is free. So is UP.</h2><p className="mt-2 leading-relaxed text-ink-soft">Prepare with a daily routine, original practice questions and explanations. Check dates and requirements on the official exam pages.</p><Link href="/admissions" className={cx(btn.text,'mt-1')}>See exam dates</Link></div>
+  <section className="bg-mint text-navy">
+   <div className="mx-auto grid max-w-6xl gap-7 px-5 py-9 sm:px-8 lg:grid-cols-[1fr_1.2fr] lg:gap-14 lg:py-12">
+    <div><h2 className="text-2xl font-extrabold tracking-[-.03em]">Something you want to understand?</h2><p className="mt-3 max-w-sm text-[16px] leading-relaxed text-ink-soft">Look up a topic in the reviewer, or move the pieces in an interactive explanation.</p><div className="mt-4 flex flex-wrap gap-3"><Link href="/reviewer" className={btn.dark}>Find a topic</Link><Link href="/explore" className={btn.ghost}>Explore an idea</Link></div></div>
+    <div className="lg:border-l lg:border-navy/15 lg:pl-10">
+     <details className="border-b border-navy/15"><summary className="cursor-pointer py-4 text-[16px] font-bold focus-visible:outline-3 focus-visible:outline-navy">How does Khan Academy fit in?</summary><p className="pb-4 text-[15px] leading-relaxed text-ink-soft">Built on Khan Academy’s Philippine curriculum courses. Your plan points to reviewed lessons and practice. Khanpanion adds its own questions and explanations to help you choose what to work on next.</p></details>
+     <details className="border-b border-navy/15"><summary className="cursor-pointer py-4 text-[16px] font-bold focus-visible:outline-3 focus-visible:outline-navy">Where is my progress saved?</summary><p className="pb-4 text-[15px] leading-relaxed text-ink-soft">Your plan and answers stay in this browser. In Me, you can download a backup or restore one on another device. <Link href="/me" className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4">Open settings and backups</Link>.</p></details>
+     <Link href="/admissions" className={cx(btn.text,'mt-3 text-sm')}>Check official exam dates</Link>
+    </div>
    </div>
   </section>
  </div>;

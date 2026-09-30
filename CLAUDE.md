@@ -104,6 +104,8 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 - src/content: original mock text, reviewer chapters and handbooks; question content remains draft pending review.
 - src/components/k: college program routes, shared navy/paper/oval UI, exam hall, results, reviewer and bridge.
 - scripts/test-program-browser.mjs: new program journeys invoked by the existing browser suite.
+- src/components/k/ProgramTourProvider.tsx and ProgramTour.tsx: optional lazy walkthrough, focus/inert management and current-navigation highlights.
+- scripts/test-program-tour.mjs: tour keyboard, replay, context and small-screen checks.
 
 - `src/lib/recovery.ts` — routing policy, item generation, answer checking. The whole product keys on `Topic`.
 - `src/lib/science.ts` — reviewed chemistry and physics constants, item families, rounding policy.
@@ -119,3 +121,7 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 The October UX and animation audits guide the current website. Navy frames readable paper surfaces; the previous white-grid presentation is superseded. All earlier route URLs stay working, and /demo keeps the former Today study space. The welcome tour opens only when explicitly requested. Website endorsement wording comes from UP_LINE in src/lib/program/facts.ts, not a local save field.
 
 Use verified official exam dates only. UPCAT 2027 testing was in August 2026; do not relabel an assumed August 2027 window as confirmed. Pledge dates can be personal planning targets. DLSU and PUP future dates are presently unconfirmed. Offline reviewer support remains Phase B. Messenger verification here means user-agent emulation, not a physical in-app phone test.
+
+## Learner-facing content refinement, 30 September 2026
+
+Homepage copy begins with a concrete task, not the pitch. It offers a short practice set, exam/first-year preparation paths and topic help. Tuition slogans, question-bank sales statistics, academic biographies and research proposals do not belong in entry UI. Attribution stays in About; counts/minutes that help choose a practice set stay with that set. /evidence explains actual progress records rather than a proposed evaluation. The current optional quick tour highlights actual navigation, supports keyboard/quiet/small screens and does not change answers or plans. Me also retains the earlier study-space tour.
