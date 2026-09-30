@@ -22,8 +22,8 @@ export function readStudyImport(raw:string):StudyState{
 }
 
 export function listStudyBackups(storage:StudyStorage){
-  const backups:{key:string;at:number;kind:'earlier-save'|'before-restore'}[]=[];
-  for(let i=0;i<storage.length;i++){const key=storage.key(i);if(!key||!/^backtrack\.(?:study|restore)\.backup\.\d+$/.test(key))continue;const at=Number(key.split('.').at(-1));if(!Number.isFinite(at)||at>=8.64e15)continue;backups.push({key,at,kind:key.startsWith('backtrack.restore.')?'before-restore':'earlier-save'});}
+  const backups:{key:string;at:number;kind:'earlier-save'|'before-restore'|'earlier-plan'}[]=[];
+  for(let i=0;i<storage.length;i++){const key=storage.key(i);if(!key||!/^backtrack\.(?:study|restore|program)\.backup\.\d+$/.test(key))continue;const at=Number(key.split('.').at(-1));if(!Number.isFinite(at)||at>=8.64e15)continue;backups.push({key,at,kind:key.startsWith('backtrack.restore.')?'before-restore':key.startsWith('backtrack.program.')?'earlier-plan':'earlier-save'});}
   return backups.sort((a,b)=>b.at-a.at).slice(0,5);
 }
 

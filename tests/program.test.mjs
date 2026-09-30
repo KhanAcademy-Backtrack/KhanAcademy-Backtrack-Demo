@@ -30,7 +30,7 @@ test('storage round trip, and an unreadable save is backed up, not lost', ()=>{
  mem.setItem(PROGRAM_KEY,JSON.stringify(s));
  const back=loadProgram(mem,10);assert.equal(back.warning,'');assert.deepEqual(back.state,s);
  mem.setItem(PROGRAM_KEY,'{"version":1,"broken":');
- const bad=loadProgram(mem,11);assert.ok(bad.warning);assert.equal(mem.getItem('khanpanion.program.backup.11'),'{"version":1,"broken":');
+ const bad=loadProgram(mem,11);assert.ok(bad.warning);assert.equal(mem.getItem('backtrack.program.backup.11'),'{"version":1,"broken":');
  assert.ok(validProgram(JSON.parse(JSON.stringify(tidy(s)))));
 });
 

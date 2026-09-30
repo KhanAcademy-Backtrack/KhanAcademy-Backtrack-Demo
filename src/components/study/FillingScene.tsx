@@ -48,7 +48,7 @@ export function FillingScene({autoplay=false,compact=false,staticMode=false,save
    <g clipPath={`url(#tank-${id})`}><motion.rect className="flow-water" x="500" y={waterY} width="126" height={waterH} fill={`url(#water-${id})`}/><motion.line x1="500" x2="626" y1={waterY} y2={waterY} stroke="#0a2a66" strokeWidth="2"/></g>
    <path d="M498 48V302Q498 313 509 313H617Q628 313 628 302V48" fill="none" stroke="#0a2a66" strokeWidth="3" strokeLinecap="round"/>
    <path d="M588 20H563V54" stroke="#0a2a66" strokeWidth="9" strokeLinejoin="round" fill="none"/>
-   {isPlaying&&rate>0&&<motion.line className="flow-stream" x1="563" x2="563" y1="58" y2={waterY} stroke="#14bf96" strokeWidth="4" strokeLinecap="round" strokeDasharray="4 9" animate={{strokeDashoffset:[0,-26]}} transition={{duration:.65,repeat:Infinity,ease:'linear'}}/>}
+   {isPlaying&&rate>0&&<motion.line className="flow-stream" x1="563" x2="563" y1="58" y2={waterY} stroke="#14bf96" strokeWidth="4" strokeLinecap="round" strokeDasharray="4 9"/>}
    <text x="563" y="345" textAnchor="middle">Same amount</text>
    <motion.circle cx={dotX} cy={dotY} r="18" fill="white" stroke="#d5eee5" strokeWidth="2" onPointerDown={e=>{dragging.current=true;e.currentTarget.setPointerCapture(e.pointerId);pause();}} style={{cursor:'grab',touchAction:'none'}}/>
    <motion.circle className="flow-point" cx={dotX} cy={dotY} r="8" fill="#14bf96" stroke="#0a2a66" strokeWidth="2" style={{pointerEvents:'none'}}/>

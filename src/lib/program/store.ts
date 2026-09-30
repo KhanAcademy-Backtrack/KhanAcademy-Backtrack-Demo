@@ -4,7 +4,7 @@ import type {ExamId} from './admissions.ts';
 /** Device-local program data: the pledge, mock attempts, the calendar, the mistake
  *  notebook and reviewer progress. Stored beside (never inside) the study space so
  *  existing saves keep loading unchanged. No names or identifiers are stored. */
-export const PROGRAM_KEY='khanpanion.program.v1';
+export const PROGRAM_KEY='backtrack.program.v1';
 export type Side='admission'|'bridge';
 export type Pledge={exam:ExamId;examDate:string;why:string;days:number;minutes:number;when:string;time:string;weekdays:number[];createdAt:number};
 export type CalEvent={id:string;date:string;time?:string;minutes?:number;title:string;kind:'study'|'mock'|'custom';concept?:string;done?:boolean};
@@ -78,7 +78,7 @@ export function loadProgram(storage:Pick<Storage,'getItem'|'setItem'>,now:number
  const raw=storage.getItem(PROGRAM_KEY);
  if(!raw)return {state:initialProgram(),warning:''};
  try{const parsed=JSON.parse(raw);if(validProgram(parsed))return {state:parsed,warning:''};}catch{}
- try{storage.setItem(`khanpanion.program.backup.${now}`,raw);}catch{}
+ try{storage.setItem(`backtrack.program.backup.${now}`,raw);}catch{}
  return {state:initialProgram(),warning:'An earlier plan could not be read. A backup was kept in this browser.'};
 }
 

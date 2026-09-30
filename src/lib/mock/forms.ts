@@ -3,10 +3,11 @@ import {FAMILIES,FAMILY_BY_ID,generateItem} from './families/index.ts';
 import {LANGUAGE_ITEMS} from '../../content/mock/language.ts';
 import {READING_ITEMS,PASSAGES} from '../../content/mock/reading.ts';
 import {SCIENCE_ITEMS} from '../../content/mock/science.ts';
+import {PROGRAM_BY_ID} from '../program/bridge.ts';
 import {UPCAT_BLUEPRINT,SECTION_ORDER,SPRINT,TOPIC_CHECK,BREAK_MINUTES} from './blueprint.ts';
 import type {MockItem,Subtest} from './types.ts';
 
-export type FormKind='sprint'|'section'|'full'|'topic'|'daily'|'fixed';
+export type FormKind='sprint'|'section'|'full'|'topic'|'exit'|'daily'|'fixed'|'placement';
 export type FormSection={subtest:Subtest;minutes:number;itemIds:string[]};
 export type Form={id:string;kind:FormKind;title:string;seed:string;sections:FormSection[];breakMinutes:number;official:boolean};
 
@@ -123,6 +124,15 @@ export function fixedForm(letter:typeof FIXED_FORMS[number]):Form{
  return {id:`fixed-${letter}`,kind:'fixed',title:`Form ${letter}`,seed,official:true,breakMinutes:BREAK_MINUTES,sections:SECTION_ORDER.map(s=>({subtest:s,minutes:UPCAT_BLUEPRINT[s].minutes,itemIds:sectionItems(s,UPCAT_BLUEPRINT[s].items,seed,true)}))};
 }
 
+/** A freshman bridge placement check: one question from each family the program's
+ *  first year leans on, grouped by subtest. */
+export function placementForm(programId:string,seed:string):Form|undefined{
+ const p=PROGRAM_BY_ID[programId];if(!p)return undefined;
+ const bySub=new Map<Subtest,string[]>();
+ for(const f of p.placement.families){const fam=FAMILY_BY_ID[f];if(!fam)continue;bySub.set(fam.subtest,[...(bySub.get(fam.subtest)??[]),`${f}:${seed}-p`]);}
+ return {id:`placement-${programId}-${seed}`,kind:'placement',title:`Placement check: ${p.title}`,seed,official:false,breakMinutes:0,sections:[...bySub].map(([subtest,itemIds])=>({subtest,minutes:itemIds.length*2,itemIds}))};
+}
+
 export const formItems=(form:Form)=>form.sections.flatMap(s=>s.itemIds);
 export const formMinutes=(form:Form)=>form.sections.reduce((t,s)=>t+s.minutes,0)+(form.sections.length>1?form.breakMinutes*(form.sections.length-1):0);
 
@@ -134,6 +144,8 @@ export function formFromKey(key:string):Form|undefined{
  if(kind==='full')return fullForm(arg);
  if(kind==='section'){const [s,seed]=arg.split('|');if(['math','science','language','reading'].includes(s))return sectionForm(s as Subtest,seed??'1');}
  if(kind==='topic'){const [c,seed]=arg.split('|');return topicForm(c,seed??'1');}
+ if(kind==='exit'){const [c,seed]=arg.split('|');const f=topicForm(c,seed??'1');return {...f,id:`exit-${c}-${seed}`,kind:'exit',title:'Exit check',sections:f.sections.slice(0,1).map(s=>({...s,minutes:5,itemIds:s.itemIds.slice(0,4)}))};}
+ if(kind==='placement'){const [p,seed]=arg.split('|');return placementForm(p,seed??'1');}
  if(kind==='fixed'&&(FIXED_FORMS as readonly string[]).includes(arg))return fixedForm(arg as typeof FIXED_FORMS[number]);
  return undefined;
 }

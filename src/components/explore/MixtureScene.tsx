@@ -43,7 +43,7 @@ export function MixtureScene({value,active,still}:{value:number;active:boolean;s
      <rect className="mixture-water" x={x+3} y={BOTTOM-total} width="124" height={water} fill="#b3e3ee"/>
      <rect className="mixture-syrup" x={x+3} y={BOTTOM-syrup} width="124" height={syrup} fill="#14bf96"/>
      {[1,2,3].map(mark=><path key={mark} d={`M${x+112} ${BOTTOM-BASE_HEIGHT*mark}h15`} stroke="#0a2a66" strokeOpacity=".24" strokeWidth="2"/>)}
-     {total>.1&&<><path d={`M${x+3} ${BOTTOM-total}q31 ${ripple}62 0t62 0`} fill="none" stroke="#4c9eaf" strokeWidth="2"/><path d={`M${x+3} ${BOTTOM-syrup}h124`} stroke="#0a2a66" strokeOpacity=".45" strokeDasharray="4 4"/></>}
+     {total>.1&&<><path d={`M${x+3} ${BOTTOM-total}q31 ${ripple.toFixed(2)} 62 0t62 0`} fill="none" stroke="#4c9eaf" strokeWidth="2"/><path d={`M${x+3} ${BOTTOM-syrup}h124`} stroke="#0a2a66" strokeOpacity=".45" strokeDasharray="4 4"/></>}
      <path d={`M${x} 50v178h130V50`} fill="none" stroke="#0a2a66" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round"/>
      <text className="mixture-total" x={x+65} y="258" textAnchor="middle">{fmt(5*amount)} parts</text>
      <text className="mixture-ingredients" x={x+65} y="288" textAnchor="middle">{fmt(2*amount)} syrup + {fmt(3*amount)} water</text>
