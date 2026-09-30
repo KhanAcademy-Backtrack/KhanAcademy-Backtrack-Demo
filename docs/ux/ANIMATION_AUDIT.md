@@ -65,3 +65,21 @@ Problems found everywhere:
 | Score reveal | Feedback | Subtests reveal one at a time, 150 ms apart; each band bar grows with `scaleX` from zero. The static view shows everything at once. |
 | Tab change | Orientation | The active marker slides between tabs as a shared element; content fades in over 150 ms. |
 | Companion | Presence | See the Companion row. |
+
+
+## Refinement implemented, 30 September 2026
+
+The owner requested a thorough motion pass before publication. The changes now cover the program interface and the existing teaching scenes. No animation package or runtime dependency was added.
+
+- MotionProvider shares one typing and visibility listener. Quiet, reduced motion, text entry and background tabs stop nonessential motion. SceneMotionToggle provides a saved still view in the science, atom and coordinate guides and the existing maths guide.
+- The companion uses shoulder-pivot transforms, a single fixed friendly smile and occasional blinks. There are no breathing or squashing loops, SVG path morphs or extra mouth lines. A requested greeting is one bounded gesture; still mode gives an immediate static response.
+- Filling starts only after an action. Next minute and finite Play steps make the lesson inspectable. Water, point, guide lines and the rule share MotionValues. Text values bind directly to those values, so React render load cannot make the written rule lag behind the drawing. Fills use anchored scale transforms; water grows from its base.
+- Mixture never starts pouring while the learner reads. Both ingredients share one scale, preserving their two-fifths share through every frame. Replay is one bounded pour.
+- Coordinates advance across, then up through separate actions. The trace and selected coordinates still restore after reload. Multiplication and distribution move one whole group at a time. Substitution reveals multiplication before addition.
+- Factor products highlight one area and its matching edge product at a time. Middle-term combination is a separate stage; negative factors retain the signed symbolic explanation instead of inventing negative physical areas.
+- Fractions, ratio strips and science quantity bars use scale transforms rather than tweening dimensions. Force and route paths redraw through a short fade/draw instead of morphing path data. CSS motion declarations and obsolete keyframes were removed from touched legacy styles.
+- Correct answers settle once and draw their check. Wrong answers dim the pick and raise the fix note without a shake. Exam entry is distinct from a short question change, and the reading passage stays mounted between related questions. Score bars fill in sequence; group, week, skill and bridge progress have bounded feedback.
+
+All motion still communicates support or activity. It never contributes independent learning evidence. Existing question generation, reserved examples and the two fresh unassisted checks remain unchanged. Offline caching is still Phase B.
+
+Validation for this pass: all 115 domain tests passed; the main browser suite passed 28 journeys; the lesson suite passed 51 cases; controlled linked-model and recipe checks passed 8 cases; Explore passed 9 journeys. Lesson scenes were checked at 375 and 1280 px. The model checks sample intermediate frames and verify fixed fill anchors, point/water agreement, proportional recipe layers, synchronized rule text, bounded playback and static controls. Screenshots, WebM recordings and a short GIF preview are kept in ignored .refs folders.
