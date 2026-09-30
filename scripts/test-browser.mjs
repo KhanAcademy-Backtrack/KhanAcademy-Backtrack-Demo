@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {programJourneys} from './test-program-browser.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -14,8 +15,9 @@ const browser=await chromium.launch({channel:'chrome',headless:true});
 const report=[];await fs.mkdir(path.join(root,'.refs/browser-review'),{recursive:true});
 async function scenario(name,run,viewport={width:1280,height:850}){
   if(process.env.TEST_FILTER&&!new RegExp(process.env.TEST_FILTER).test(name))return;
-  const context=await browser.newContext({viewport});const page=await context.newPage();const errors=[];
+  const context=await browser.newContext({viewport,...(name.startsWith('program ')?{reducedMotion:'reduce'}:{})});const page=await context.newPage();const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
+  if(name.startsWith('program '))page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   try{await run(page,context);assert.deepEqual(errors,[],`Browser errors: ${errors.join('; ')}`);report.push({name,passed:true});console.log(`PASS ${name}`);}
   catch(error){await page.screenshot({path:path.join(root,'.refs/browser-review',name.replace(/\W+/g,'-')+'-failure.png'),fullPage:true});report.push({name,passed:false,error:error.message});console.log(`FAIL ${name}: ${error.message}`);}
   finally{await context.close();}
@@ -35,11 +37,11 @@ async function answerCurrent(page,topic){
 }
 try{
  await scenario('mobile palette and navigation',async page=>{
-   await page.goto(origin);if(await page.getByRole('button',{name:'Explore on my own'}).isVisible())await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('heading',{name:'Follow your curiosity.'}).waitFor();await overflow(page);
+   await page.goto(origin+'/demo');if(await page.getByRole('button',{name:'Explore on my own'}).isVisible())await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('heading',{name:'Follow your curiosity.'}).waitFor();await overflow(page);
    assert.equal(await page.locator('.study-space .button-primary').first().evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(20, 191, 150)');
    assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(10, 42, 102)');
    await page.screenshot({path:path.join(root,'.refs/browser-review/mobile-home.png'),fullPage:true});
-   await page.getByRole('navigation',{name:'Study navigation'}).getByRole('link',{name:'Packs',exact:true}).click();await page.getByRole('heading',{name:'Your study packs.'}).waitFor();await overflow(page);
+   await page.goto(origin+'/packs');await page.getByRole('heading',{name:'Your study packs.'}).waitFor();await overflow(page);
  },{width:390,height:844});
  await scenario('challenge to fresh checks reviewer and return',async page=>{
    await page.goto(origin+'/challenge?code=FQ1');await page.getByLabel('First number',{exact:true}).fill('2');await page.getByLabel('Second number',{exact:true}).fill('6');await page.getByRole('button',{name:'Check this answer',exact:true}).click();
@@ -49,7 +51,7 @@ try{
    await page.getByRole('button',{name:'Continue my session'}).click();
    await page.getByRole('heading',{name:'You used it on fresh problems.'}).waitFor();await page.getByRole('textbox',{name:'Note to future you'}).fill('Check both the sum and the product.');await page.getByRole('button',{name:'Save my note'}).click();
    const before=await saved(page);assert.equal(before.xp,10);assert.equal(Object.keys(before.review).length,1);assert.ok(before.review['skill:factor'].dueAt>Date.now());
-   await page.goto(origin);if(await page.getByRole('button',{name:'Explore on my own'}).isVisible())await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('link',{name:'Choose another topic'}).waitFor();await page.getByRole('button',{name:'I don’t recall yet'}).click();await page.getByText('Check both the sum and the product.',{exact:true}).waitFor();await page.reload();
+   await page.goto(origin+'/demo');if(await page.getByRole('button',{name:'Explore on my own'}).isVisible())await page.getByRole('button',{name:'Explore on my own'}).click();await page.getByRole('link',{name:'Choose another topic'}).waitFor();await page.getByRole('button',{name:'I don’t recall yet'}).click();await page.getByText('Check both the sum and the product.',{exact:true}).waitFor();await page.reload();
    await page.getByRole('link',{name:'Choose another topic'}).waitFor();assert.equal((await saved(page)).xp,10);await page.screenshot({path:path.join(root,'.refs/browser-review/returning-home.png'),fullPage:true});
  });
  await scenario('personal notes draft edit save and recall',async page=>{
@@ -101,7 +103,7 @@ try{
    await page.getByRole('button',{name:'Check my answer'}).click();
    await page.getByRole('button',{name:'Continue',exact:true}).click();
    await page.locator('.question-stage').waitFor();
-   assert.equal(await page.locator('.question-meta .eyebrow').innerText(),'UNIT CONVERSION','the goal miss opens the unit-conversion prerequisite');
+   assert.equal(await page.locator('.question-meta .eyebrow').innerText(),'Unit conversion','the goal miss opens the unit-conversion prerequisite');
    await overflow(page);
 
    // A unit-conversion difficulty gets a unit model, not an acceleration lesson.
@@ -166,6 +168,7 @@ try{
    await page.getByRole('button',{name:'Work through it together'}).click();await page.locator('.together-question input').first().fill('0');await page.locator('.together-question input').last().fill('1');await page.getByRole('button',{name:'Check together',exact:true}).click();await page.getByRole('button',{name:'Pass the turn'}).click();await page.getByRole('heading',{name:'Ben’s turn.'}).waitFor();await page.reload();await page.getByRole('heading',{name:'Ben’s turn.'}).waitFor();
    const data=await saved(page);assert.equal(data.xp,0);assert.equal(Object.keys(data.review).length,0);await overflow(page);
  },{width:360,height:800});
+ await programJourneys({scenario,origin,root});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }

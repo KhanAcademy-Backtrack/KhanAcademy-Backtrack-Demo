@@ -9,7 +9,7 @@ import type {Problem} from '@/lib/recovery';
  */
 export function AnswerField({p,index,value,onChange,ariaLabel,stepper=false}:{p:Problem;index:number;value:string;onChange:(v:string)=>void;ariaLabel?:string;stepper?:boolean}){
   const label=p.labels[index],field=p.fields?.[index],unit=field?.unit;
-  if(field?.kind==='choice'&&field.options)return <fieldset className="choice-field">
+  if(field?.kind==='choice'&&field.options)return <fieldset className="choice-field grid gap-2 [&_button]:min-h-14 [&_button]:rounded-2xl [&_button]:border-2 [&_button]:border-navy/15 [&_button]:bg-white [&_button]:text-navy [&_button]:aria-pressed:border-navy [&_button]:aria-pressed:bg-mint">
     <legend>{label}</legend>
     {field.options.map((option,i)=><label key={option}><input type="radio" name={`${p.id}-${index}`} value={String(i)} checked={value===String(i)} onChange={()=>onChange(String(i))}/><span>{option}</span></label>)}
   </fieldset>;
