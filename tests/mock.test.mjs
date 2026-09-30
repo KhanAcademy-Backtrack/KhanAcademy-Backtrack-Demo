@@ -5,6 +5,8 @@ import {MISCONCEPTIONS} from '../src/lib/mock/misconceptions.ts';
 import {fmt,rng} from '../src/lib/mock/prng.ts';
 import {LANGUAGE_ITEMS} from '../src/content/mock/language.ts';
 import {READING_ITEMS,PASSAGES} from '../src/content/mock/reading.ts';
+import {SCIENCE_ITEMS} from '../src/content/mock/science.ts';
+import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {UPCAT_BLUEPRINT,SPRINT,bandFor} from '../src/lib/mock/blueprint.ts';
 import {fullForm,sectionForm,sprintForm,dailyForm,topicForm,fixedForm,formItems,itemById,formFromKey,formKey,bankStats} from '../src/lib/mock/forms.ts';
 import {scoreAttempt,paceCheck} from '../src/lib/mock/scoring.ts';
@@ -28,8 +30,8 @@ function evaluate(src){
 const SEEDS=Array.from({length:40},(_,i)=>i);
 
 test('the bank has 20 math and 20 science families', ()=>{
- assert.equal(FAMILIES.filter(f=>f.subtest==='math').length,20);
- assert.equal(FAMILIES.filter(f=>f.subtest==='science').length,20);
+ assert.ok(FAMILIES.filter(f=>f.subtest==='math').length>=20);
+ assert.ok(FAMILIES.filter(f=>f.subtest==='science').length>=20);
  assert.equal(new Set(FAMILIES.map(f=>f.id)).size,FAMILIES.length);
  for(const f of FAMILIES)assert.match(f.id,/^\w+$/);
 });
@@ -86,7 +88,7 @@ test('misconceptions point at real engine topics, skills and Khan units', ()=>{
 
 test('authored items carry a rationale for every choice and authorship', ()=>{
  const ids=new Set();
- for(const item of [...LANGUAGE_ITEMS,...READING_ITEMS]){
+ for(const item of [...LANGUAGE_ITEMS,...READING_ITEMS,...SCIENCE_ITEMS]){
   assert.ok(!ids.has(item.id),`duplicate ${item.id}`);ids.add(item.id);
   assert.equal(item.choices.length,4,item.id);assert.equal(new Set(item.choices).size,4,item.id);
   assert.equal(item.rationales.length,4,item.id);assert.ok(item.rationales.every(r=>r.length>5),item.id);
@@ -114,7 +116,7 @@ test('forms match their blueprint counts and never repeat an item', ()=>{
  assert.deepEqual(fullForm('q'),fullForm('q'));
  assert.ok(formItems(topicForm('geometry','1')).length>=5);
  assert.deepEqual(formFromKey(formKey('section','math|z')),sectionForm('math','z'));
- const stats=bankStats();assert.equal(stats.families,40);assert.equal(stats.language,LANGUAGE_ITEMS.length);
+ const stats=bankStats();assert.equal(stats.families,FAMILIES.length);assert.equal(stats.language,LANGUAGE_ITEMS.length);
 });
 
 test('official fixed forms exclude draft items', ()=>{
@@ -138,4 +140,19 @@ test('scoring, bands, pace and triage', ()=>{
  const triage=suggestTriage(ids,attempt,id=>itemById(id).answerIndex);
  assert.equal(triage[ids[11]],'didnt_know');
  assert.ok(Object.keys(triage).length===6);
+});
+
+test('every concept on the study map has a topic check and a complete summary card', ()=>{
+ for(const c of CONCEPTS){
+  assert.match(c.id,/^\w+$/);
+  const items=formItems(topicForm(c.id,'t'));
+  assert.ok(items.length>=4,`${c.id} topic check has only ${items.length} items`);
+  for(const id of items)assert.equal(itemById(id).concept,c.id,`${c.id} topic check pulled ${id}`);
+  assert.ok(c.tldr.must.length>=3&&c.tldr.rule&&c.tldr.example.q&&c.tldr.trap,c.id);
+  for(const k of c.khan)assert.ok(KHAN_UNITS[k],`${c.id} Khan ${k}`);
+  if(c.engine)assert.ok(TOPICS[c.engine]);
+  for(const text of [c.title,c.blurb,...c.tldr.must,c.tldr.rule,c.tldr.trap])assert.doesNotMatch(text,/[—–]/,`${c.id}: ${text}`);
+ }
+ const families=new Set(FAMILIES.map(f=>f.concept));
+ for(const f of families)assert.ok(CONCEPTS.some(c=>c.id===f),`family concept ${f} missing from the map`);
 });

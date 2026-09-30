@@ -2,6 +2,7 @@ import {rng} from './prng.ts';
 import {FAMILIES,FAMILY_BY_ID,generateItem} from './families/index.ts';
 import {LANGUAGE_ITEMS} from '../../content/mock/language.ts';
 import {READING_ITEMS,PASSAGES} from '../../content/mock/reading.ts';
+import {SCIENCE_ITEMS} from '../../content/mock/science.ts';
 import {UPCAT_BLUEPRINT,SECTION_ORDER,SPRINT,TOPIC_CHECK,BREAK_MINUTES} from './blueprint.ts';
 import type {MockItem,Subtest} from './types.ts';
 
@@ -9,7 +10,9 @@ export type FormKind='sprint'|'section'|'full'|'topic'|'daily'|'fixed';
 export type FormSection={subtest:Subtest;minutes:number;itemIds:string[]};
 export type Form={id:string;kind:FormKind;title:string;seed:string;sections:FormSection[];breakMinutes:number;official:boolean};
 
-const AUTHORED:MockItem[]=[...LANGUAGE_ITEMS,...READING_ITEMS];
+const AUTHORED:MockItem[]=[...LANGUAGE_ITEMS,...READING_ITEMS,...SCIENCE_ITEMS];
+/** Share of a science section drawn from the conceptual (biology, Earth) bank. */
+const CONCEPTUAL_SHARE=.2;
 const AUTHORED_BY_ID:Record<string,MockItem>=Object.fromEntries(AUTHORED.map(i=>[i.id,i]));
 
 /** Resolves any item id: `family:seed` regenerates, anything else is authored. */
@@ -25,7 +28,7 @@ export const passageById=(id:string)=>PASSAGES.find(p=>p.id===id);
 /** Bank sizes, computed from the real banks. Pages show these, never a typed number. */
 export function bankStats(){
  const families=FAMILIES.length,mathFamilies=FAMILIES.filter(f=>f.subtest==='math').length,scienceFamilies=FAMILIES.filter(f=>f.subtest==='science').length;
- return {families,mathFamilies,scienceFamilies,language:LANGUAGE_ITEMS.length,reading:READING_ITEMS.length,passages:PASSAGES.length,filipino:AUTHORED.filter(i=>i.lang==='fil').length};
+ return {families,mathFamilies,scienceFamilies,scienceItems:SCIENCE_ITEMS.length,language:LANGUAGE_ITEMS.length,reading:READING_ITEMS.length,passages:PASSAGES.length,filipino:AUTHORED.filter(i=>i.lang==='fil').length};
 }
 
 /** Generated items for a subtest: every family in turn, each with its own seed, so a
@@ -48,10 +51,11 @@ function generated(subtest:'math'|'science',count:number,seed:string,filter?:(fa
  return ids;
 }
 
-function authored(subtest:'language'|'reading',count:number,seed:string,opts:{officialOnly?:boolean;concept?:string}={}):string[]{
+function authored(subtest:'language'|'reading'|'science',count:number,seed:string,opts:{officialOnly?:boolean;concept?:string}={}):string[]{
  const r=rng(`form:${subtest}:${seed}`);
  const ok=(i:MockItem)=>(!opts.officialOnly||i.status==='reviewed')&&(!opts.concept||i.concept===opts.concept);
  if(subtest==='language')return r.shuffle(LANGUAGE_ITEMS.filter(ok)).slice(0,count).map(i=>i.id);
+ if(subtest==='science')return r.shuffle(SCIENCE_ITEMS.filter(ok)).slice(0,count).map(i=>i.id);
  // Reading keeps each passage's questions together.
  const ids:string[]=[];
  for(const p of r.shuffle(PASSAGES)){
@@ -65,7 +69,12 @@ function authored(subtest:'language'|'reading',count:number,seed:string,opts:{of
 }
 
 function sectionItems(subtest:Subtest,count:number,seed:string,officialOnly=false){
- return subtest==='math'||subtest==='science'?generated(subtest,count,seed):authored(subtest,count,seed,{officialOnly});
+ if(subtest==='math')return generated('math',count,seed);
+ if(subtest==='science'){
+  const concept=authored('science',Math.round(count*CONCEPTUAL_SHARE),seed,{officialOnly});
+  return rng(`mix:${seed}`).shuffle([...generated('science',count-concept.length,seed),...concept]);
+ }
+ return authored(subtest,count,seed,{officialOnly});
 }
 
 export function sectionForm(subtest:Subtest,seed:string):Form{
@@ -98,9 +107,11 @@ export function topicForm(concept:string,seed:string):Form{
  const fam=FAMILIES.filter(f=>f.concept===concept);
  const sections:FormSection[]=[];
  const bySubtest=new Map<Subtest,string[]>();
- if(fam.length){const s=fam[0].subtest;bySubtest.set(s,generated(s,TOPIC_CHECK.items,seed,id=>FAMILY_BY_ID[id].concept===concept));}
- for(const s of ['language','reading'] as const){const ids=authored(s,TOPIC_CHECK.items,seed,{concept});if(ids.length)bySubtest.set(s,ids);}
- for(const [subtest,itemIds] of bySubtest)sections.push({subtest,minutes:TOPIC_CHECK.minutes,itemIds:itemIds.slice(0,TOPIC_CHECK.items)});
+ const add=(s:Subtest,ids:string[])=>{if(ids.length)bySubtest.set(s,[...(bySubtest.get(s)??[]),...ids]);};
+ if(fam.length)add(fam[0].subtest,generated(fam[0].subtest as 'math'|'science',TOPIC_CHECK.items,seed,id=>FAMILY_BY_ID[id].concept===concept));
+ for(const s of ['science','language','reading'] as const)add(s,authored(s,TOPIC_CHECK.items,seed,{concept}));
+ const r=rng(`topic:${concept}:${seed}`);
+ for(const [subtest,itemIds] of bySubtest)sections.push({subtest,minutes:TOPIC_CHECK.minutes,itemIds:(subtest==='reading'?itemIds:r.shuffle(itemIds)).slice(0,TOPIC_CHECK.items)});
  return {id:`topic-${concept}-${seed}`,kind:'topic',title:'Topic check',seed,official:false,breakMinutes:0,sections};
 }
 

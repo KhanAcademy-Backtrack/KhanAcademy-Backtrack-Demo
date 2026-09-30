@@ -58,6 +58,9 @@ export const MISCONCEPTIONS={
  polygon_n_times_180:m('Used n × 180°','Each triangle has 180°, and there are n sides.','A polygon with n sides splits into n − 2 triangles: (n − 2) × 180°.','m_geometry','g7m_q1'),
  one_angle_not_sum:m('Found one angle, not the sum','Regular polygon questions often ask for one angle.','Reread: “sum of the interior angles” means all of them together.','m_geometry','g7m_q1'),
  exterior_for_interior:m('Used the exterior angle sum','360° is the sum you remember for every polygon.','360° is the sum of the exterior angles. Interior angles sum to (n − 2) × 180°.','m_geometry','g7m_q1'),
+ trig_adjacent_for_opposite:m('Used the adjacent side for the opposite','Opposite and adjacent swap when you look from the other acute angle.','Stand at the angle named in the question. Opposite faces it; adjacent touches it and is not the hypotenuse.','m_trig','g9m_q4'),
+ trig_wrong_ratio:m('Used the wrong ratio','Sine, cosine and tangent are easy to mix up.','SOH CAH TOA: sine is opposite over hypotenuse, cosine adjacent over hypotenuse, tangent opposite over adjacent.','m_trig','g9m_q4'),
+ trig_ratio_inverted:m('Flipped the ratio','The two sides are right, just upside down.','Sine and cosine are never more than 1 because the hypotenuse is the longest side; it goes on the bottom.','m_trig','g9m_q4'),
  // Statistics and probability
  mean_missing_as_mean:m('Answered with the mean itself','The mean is the number given in the question.','Total = mean × count. The missing value is the total minus the values you know.','m_statistics','g7m_q3'),
  mean_wrong_count:m('Used the wrong count','Only n − 1 values are listed, so it is easy to count those.','The mean includes the missing value, so multiply by all n values.','m_statistics','g7m_q3'),

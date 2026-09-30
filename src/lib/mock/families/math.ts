@@ -115,5 +115,14 @@ export const MATH_FAMILIES:Family[]=[
   const [a,b]=r.pick([[2,3],[3,6],[4,12],[6,12],[10,15],[4,6],[12,24],[5,20]] as const),ans=a*b/(a+b);
   return {stem:`Carla can paint a room in ${a} hours. Dino can paint it in ${b} hours. Working together at the same pace, how long do they take?`,answer:ans,expr:`1/(1/${a}+1/${b})`,show:v=>`${fmt(v)} hours`,
    steps:[`Carla paints 1/${a} of the room per hour, Dino 1/${b}.`,`Together: 1/${a} + 1/${b} = ${frac(1/a+1/b)} per hour.`,`Time = 1 ÷ ${frac(1/a+1/b)} = ${fmt(ans)} hours.`],
-   wrong:[{value:(a+b)/2,misconception:'rates_averaged'},{value:a+b,misconception:'times_added'},{value:b-a,misconception:'times_subtracted'}]};}}
+   wrong:[{value:(a+b)/2,misconception:'rates_averaged'},{value:a+b,misconception:'times_added'},{value:b-a,misconception:'times_subtracted'}]};}},
+ {id:'m_trig_ratio',subtest:'math',title:'Trigonometric ratios',skill:'trig_ratio',concept:'trigonometry',difficulty:2,reviewerChapter:'m_trig',khanRef:'g9m_q4',build:r=>{
+  const [a0,b0,c0]=r.pick([[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29]] as const),k=r.int(1,2),a=a0*k,b=b0*k,c=c0*k;
+  const fn=r.pick(['sin','cos','tan'] as const);
+  const ans=fn==='sin'?a/c:fn==='cos'?b/c:a/b;
+  const wrong=fn==='sin'?[{value:b/c,misconception:'trig_adjacent_for_opposite'},{value:a/b,misconception:'trig_wrong_ratio'},{value:c/a,misconception:'trig_ratio_inverted'}]
+   :fn==='cos'?[{value:a/c,misconception:'trig_adjacent_for_opposite'},{value:b/a,misconception:'trig_wrong_ratio'},{value:c/b,misconception:'trig_ratio_inverted'}]
+   :[{value:b/a,misconception:'trig_adjacent_for_opposite'},{value:a/c,misconception:'trig_wrong_ratio'},{value:c/a,misconception:'trig_ratio_inverted'}];
+  return {stem:`In right triangle ABC, angle C is 90°. BC = ${a}, AC = ${b} and AB = ${c}. What is ${fn} A?`,answer:ans,expr:fn==='sin'?`${a}/${c}`:fn==='cos'?`${b}/${c}`:`${a}/${b}`,show:frac,
+   steps:[`From angle A: the opposite side is BC = ${a}, the adjacent side is AC = ${b}, the hypotenuse is AB = ${c}.`,fn==='sin'?`sin A = opposite ÷ hypotenuse = ${a}/${c}.`:fn==='cos'?`cos A = adjacent ÷ hypotenuse = ${b}/${c}.`:`tan A = opposite ÷ adjacent = ${a}/${b}.`,`In lowest terms: ${frac(ans)}.`],wrong};}}
 ];
