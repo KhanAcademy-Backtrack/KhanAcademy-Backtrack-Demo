@@ -128,7 +128,7 @@ function molesGoal(v:number,id:string):Problem{
   prompt:`How many moles are in ${mass} g of ${c.plain}? Its molar mass is ${M} g/mol. Give your answer to 2 decimal places.`,
   labels:['Amount'],fields:[num('Amount','mol')],expected:[round(mass/M,2)],decimals:2,tolerance:toleranceFor(2),
   hint:`Molar mass is the mass of one mole. Ask how many of those one-mole portions fit inside ${mass} g.`,
-  explanation:`Molar mass links mass to amount: one mole of ${c.plain} weighs ${M} g. So the number of moles is how many times ${M} g fits into ${mass} g: ${mass} ÷ ${M} = ${round(mass/M,2)} mol. Multiplying instead would answer a different question — the mass of ${mass} moles.`};
+  explanation:`Molar mass links mass to amount: one mole of ${c.plain} weighs ${M} g. So the number of moles is how many times ${M} g fits into ${mass} g: ${mass} ÷ ${M} = ${round(mass/M,2)} mol. Multiplying instead would answer a different question: the mass of ${mass} moles.`};
 }
 
 function balancingGoal(v:number,id:string):Problem{
@@ -171,7 +171,7 @@ function unitConvert(v:number,id:string):Problem{
   prompt:`Convert ${(tenths/10).toFixed(1)} minutes to seconds.`,
   labels:['Time'],fields:[num('Time','s')],expected:[answer],
   hint:`A second is smaller than a minute, so the same interval counts 60 of them for every minute.`,
-  explanation:`The interval does not change; only the unit does. ${(tenths/10).toFixed(1)} × 60 = ${answer} s. Because a second is the smaller unit, the number must grow — dividing would describe a much shorter interval.`};
+  explanation:`The interval does not change; only the unit does. ${(tenths/10).toFixed(1)} × 60 = ${answer} s. Because a second is the smaller unit, the number must grow. Dividing would describe a much shorter interval.`};
 }
 
 function netForce(v:number,id:string):Problem{
@@ -182,7 +182,7 @@ function netForce(v:number,id:string):Problem{
   prompt:`Two forces act on a block along one straight line. Taking right as positive and left as negative, what is the net force?`,
   labels:['Net force'],fields:[num('Net force','N')],expected:[net],
   hint:`Forces on one line combine by addition once each carries its own sign. The sign of the total tells you which way the block is pushed.`,
-  explanation:`Forces are not separate effects to be judged one at a time; along a line they add as signed quantities. ${signed(first)} + ${signed(second)} = ${signed(net)} N. ${net===0?'The two cancel exactly, so the block has no net push at all — that is balance, not the absence of forces.':`The sign says the block is pushed to the ${net>0?'right':'left'}.`} Adding the sizes while ignoring the signs would describe two forces pulling the same way, which is a different situation.`};
+  explanation:`Forces are not separate effects to be judged one at a time; along a line they add as signed quantities. ${signed(first)} + ${signed(second)} = ${signed(net)} N. ${net===0?'The two cancel exactly, so the block has no net push at all. That is balance, not the absence of forces.':`The sign says the block is pushed to the ${net>0?'right':'left'}.`} Adding the sizes while ignoring the signs would describe two forces pulling the same way, which is a different situation.`};
 }
 
 const RELATIONS=['F = m × a','m = F ÷ a','a = F ÷ m'];
@@ -220,5 +220,5 @@ function motionGoal(v:number,id:string):Problem{
   prompt:`A cart is already moving at ${u} m/s and speeds up steadily at ${a} m/s² for ${t} s. What is its final speed?`,
   labels:['Final speed'],fields:[num('Final speed','m/s')],expected:[u+a*t],
   hint:`Acceleration is how much speed is added each second, so ${t} seconds add ${a} × ${t}. The cart was already moving, so that gain is added to the speed it started with.`,
-  explanation:`Steady acceleration means a fixed gain in speed every second: v = u + at. The ${a} m/s² adds ${a*t} m/s over ${t} s, on top of the ${u} m/s it already had, giving ${u+a*t} m/s. Using at alone would describe a cart starting from rest — a different journey with the same acceleration.`};
+  explanation:`Steady acceleration means a fixed gain in speed every second: v = u + at. The ${a} m/s² adds ${a*t} m/s over ${t} s, on top of the ${u} m/s it already had, giving ${u+a*t} m/s. Using at alone would describe a cart starting from rest, a different journey with the same acceleration.`};
 }

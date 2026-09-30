@@ -1,10 +1,10 @@
 # Animation audit, October 2026
 
-Owner verdict: every current animation is bad. This audit judges each one against one rule:
+The initial owner verdict was that every animation needed work. This audit judges each one against one rule:
 motion must **teach** (show the invariant changing), give **feedback** (right, wrong, progress,
 mastery) or **orient** (where you came from, where you are going). Anything else is cut.
 
-Problems found everywhere:
+Problems found before the refinement:
 
 - **No shared tokens.** Durations range from 0.2 s to 4.6 s, with at least six easing curves and three
   spring settings, so nothing feels like one product.
@@ -25,11 +25,13 @@ Problems found everywhere:
   the one loop kept, because the owner likes it; it is now occasional and stops while typing and in the
   exam hall.
 - Reduced motion and the quiet setting give a complete static version. No information exists only in motion.
-- Tooling: Motion (already installed) covers every signature moment. GSAP and Rive were considered and
-  not added: the companion's expressions are drawn with matching path commands, so Motion's value
-  interpolation morphs them cleanly without MorphSVG, and nothing here needs a state machine file.
+- Tooling: Motion (already installed) covers every signature moment. No animation dependency was added.
+  The final companion uses fixed facial paths and transform gestures; it does not morph expressions.
 
-## Element by element
+## Original element plan
+
+This table records the initial diagnoses and planned work. The completed implementation and validation
+are recorded below in "Refinement implemented"; its P1 labels are historical.
 
 | Element | Intended meaning | What is wrong | Decision |
 | --- | --- | --- | --- |
@@ -81,5 +83,7 @@ The owner requested a thorough motion pass before publication. The changes now c
 - Correct answers settle once and draw their check. Wrong answers dim the pick and raise the fix note without a shake. Exam entry is distinct from a short question change, and the reading passage stays mounted between related questions. Score bars fill in sequence; group, week, skill and bridge progress have bounded feedback.
 
 All motion still communicates support or activity. It never contributes independent learning evidence. Existing question generation, reserved examples and the two fresh unassisted checks remain unchanged. Offline caching is still Phase B.
+
+The completion audit added the specified 150 ms navigation content fade. The first server-rendered screen stays visible while JavaScript starts; only subsequent route changes fade. Quiet/reduced motion has no fade or delay, and the exam hall retains its own entry sequence. Reachable legacy copy and export labels were cleaned without changing storage identifiers or generated answers.
 
 Validation for this pass: all 115 domain tests passed; the main browser suite passed 28 journeys; the lesson suite passed 51 cases; controlled linked-model and recipe checks passed 8 cases; Explore passed 9 journeys. Lesson scenes were checked at 375 and 1280 px. The model checks sample intermediate frames and verify fixed fill anchors, point/water agreement, proportional recipe layers, synchronized rule text, bounded playback and static controls. Screenshots, WebM recordings and a short GIF preview are kept in ignored .refs folders.

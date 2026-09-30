@@ -16,7 +16,7 @@ export function routeSummary(s:Recovery){
 export function returnTicket(s:Recovery){
   const summary=routeSummary(s),last=[...s.evidence].reverse().find(e=>!e.correct);
   const attempt=last?.answer.some(x=>x.trim())?last.answer.join(s.topic==='fractions'?' / ':' and '):'I did not know where to start';
-  return [`Khanpanion — ${s.goalTitle??TOPICS[s.topic].label}`,`Next useful action: ${summary.action}.`,`Checked here: ${summary.checked.length?summary.checked.map(x=>x==='goal'?'Today’s goal':LABELS[x]).join(', '):'No step has two unassisted checks yet.'}`,last?`My last difficult step: ${LABELS[last.skill]}. I tried: ${attempt}.`:'No difficult answer recorded.',`Khan practice: ${KHAN_EVIDENCE[summary.khan]}.`,`Please help me ${summary.goal?'check whether this stays with me next week':`work through ${LABELS[summary.next].toLowerCase()} and try a new example`}.`].join('\n');
+  return [`Khanpanion: ${s.goalTitle??TOPICS[s.topic].label}`,`Next useful action: ${summary.action}.`,`Checked here: ${summary.checked.length?summary.checked.map(x=>x==='goal'?'Today’s goal':LABELS[x]).join(', '):'No step has two unassisted checks yet.'}`,last?`My last difficult step: ${LABELS[last.skill]}. I tried: ${attempt}.`:'No difficult answer recorded.',`Khan practice: ${KHAN_EVIDENCE[summary.khan]}.`,`Please help me ${summary.goal?'check whether this stays with me next week':`work through ${LABELS[summary.next].toLowerCase()} and try a new example`}.`].join('\n');
 }
 export function importRouteRecord(raw:string):Recovery{
   if(raw.length>1_000_000)throw new Error('Use a Khanpanion route record smaller than 1 MB.');

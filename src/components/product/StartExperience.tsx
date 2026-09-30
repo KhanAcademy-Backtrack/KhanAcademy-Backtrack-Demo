@@ -10,7 +10,7 @@ export function StartExperience(){
   return <section className="start-page wrap">
     <p className="eyebrow">Start where you need to be</p>
     <h1>What needs to<br/><em>make sense today?</em></h1>
-    <p className="start-context">Choose the lesson you’re stuck on. We’ll check which earlier step needs a repair — in science, that step is sometimes a piece of mathematics.</p>
+    <p className="start-context">Choose the lesson you’re stuck on. We’ll check which earlier step needs a repair. In science, that step is sometimes a piece of mathematics.</p>
     {GROUPS.map(group=><div className="destination-group" key={group.subject}>
       <h2 className="destination-subject">{group.heading}</h2>
       <div className="destination-options">{entries.filter(([,t])=>t.subject===group.subject).map(([id,t])=>

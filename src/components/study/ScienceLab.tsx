@@ -130,7 +130,7 @@ function MolesLab({state,store}:{state?:Recovery;store:Store}){
   </>;
 }
 
-/* --- motion: a track and its speed–time reading -------------------------- */
+/* --- motion: a track and its speed-time reading -------------------------- */
 
 function MotionLab({store}:{store:Store}){
   const move=useSceneMotion();
@@ -141,7 +141,7 @@ function MotionLab({store}:{store:Store}){
     <h3>Acceleration is speed added, second by second.</h3>
     <p>The cart is already moving. Each second the acceleration adds the same amount again. so the final speed is what it started with, plus everything the acceleration built up.</p>
     <div className="science-buddy-note"><Companion size={82} pose={t>=5?'aha':'point'}/><p>Change the time, starting speed or acceleration. Watch which part of the journey changes.</p></div>
-    <svg className="track-figure" viewBox="0 0 320 145" role="img" aria-label={`A speed–time chart above a track. Each second the bar grows by the same ${a} metres per second. After ${t} seconds the cart has travelled ${round(distance,1)} metres and is moving at ${speed} metres per second.`}>
+    <svg className="track-figure" viewBox="0 0 320 145" role="img" aria-label={`A speed-time chart above a track. Each second the bar grows by the same ${a} metres per second. After ${t} seconds the cart has travelled ${round(distance,1)} metres and is moving at ${speed} metres per second.`}>
       {Array.from({length:t+1},(_,i)=>u+a*i).map((v,i)=>{const h=42*v/45;return <g key={i}>
         <motion.rect initial={false} transition={move} x={10+i*44} y={56-h} height={h} animate={{opacity:1}} width="26" rx="3" fill={i===t?'#14bf96':'#e7f9f3'} stroke="#0a2a66" strokeWidth="1.5"/>
         <text x={23+i*44} y="68" textAnchor="middle" fontSize="13" fill="#475e7c">{v}</text>
