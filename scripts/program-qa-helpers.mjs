@@ -12,3 +12,4 @@ export async function chooseGoal(page,origin,goal='exam',options={}){
  await page.getByRole('button',{name:'Show my study space',exact:true}).click();await page.getByRole('heading',{name:'This space is yours.'}).waitFor();
 }
 export async function closeGuide(page){await page.getByRole('button',{name:'Close guide',exact:true}).first().click();}
+export async function startDaily(page){await page.getByRole('button',{name:'Start today’s practice',exact:true}).click();await page.getByRole('radiogroup',{name:'Choices',exact:true}).waitFor();}

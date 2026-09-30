@@ -9,10 +9,10 @@ export const cx=(...xs:(string|false|null|undefined)[])=>xs.filter(Boolean).join
 
 /** Button looks. Green actions carry navy labels; every target is at least 44 px. */
 export const btn={
- primary:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-green px-5 py-2.5 text-[15px] font-bold text-navy  hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-45',
- dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-navy px-5 py-2.5 text-[15px] font-bold text-white  hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
- ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-navy/15 px-5 py-2 text-[15px] font-semibold text-navy  hover:border-navy/40 hover:bg-mint focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
- onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-white/25 px-5 py-2 text-[15px] font-semibold text-white  hover:border-white/60 hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',
+ primary:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-green px-5 py-2.5 text-[15px] font-bold text-navy  hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-45',
+ dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-navy px-5 py-2.5 text-[15px] font-bold text-white  hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
+ ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border-2 border-navy/15 px-5 py-2 text-[15px] font-semibold text-navy  hover:border-navy/40 hover:bg-mint focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
+ onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border-2 border-white/25 px-5 py-2 text-[15px] font-semibold text-white  hover:border-white/60 hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',
  text:'inline-flex min-h-11 items-center gap-1 font-semibold text-navy underline decoration-green decoration-2 underline-offset-4 hover:decoration-navy'
 };
 

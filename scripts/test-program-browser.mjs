@@ -8,7 +8,7 @@ import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {CHAPTERS} from '../src/content/reviewer/index.ts';
 import {EXTRAS} from '../src/content/reviewer/extras.ts';
 import {PROGRAMS} from '../src/lib/program/bridge.ts';
-import {chooseGoal,closeGuide} from './program-qa-helpers.mjs';
+import {chooseGoal,closeGuide,startDaily} from './program-qa-helpers.mjs';
 
 export async function programJourneys({scenario,origin,root}){
  const dir=path.join(root,'.refs/program-review');await fs.mkdir(dir,{recursive:true});
@@ -22,7 +22,7 @@ export async function programJourneys({scenario,origin,root}){
  for(const width of [375,1280]){
   const viewport={width,height:850};
   await scenario(`program landing sprint pledge today ${width}`,async page=>{
-   await chooseGoal(page,origin,'exam');await shot(page,'personal-guide',width);await closeGuide(page);await shot(page,'personal-home',width);
+   await chooseGoal(page,origin,'exam');await shot(page,'personal-guide',width);await closeGuide(page);await shot(page,'personal-home',width);await startDaily(page);
    for(let i=0;i<3;i++){await page.getByRole('radio').first().click();await page.getByRole('button',{name:'Check',exact:true}).click();await overflow(page);await page.getByRole('button',{name:i===2?'Finish':'Next question',exact:true}).click();}
    assert.equal((await data(page)).daily[Object.keys((await data(page)).daily)[0]].total,3);await shot(page,'sprint-result',width);
    await page.goto(origin+'/plan');await page.getByRole('button',{name:'Edit or add CETs'}).click();await page.getByRole('dialog').getByRole('button',{name:'Prepare for an entrance exam',exact:true}).click();await shot(page,'pledge',width);
@@ -45,7 +45,7 @@ export async function programJourneys({scenario,origin,root}){
    await page.getByRole('button',{name:/Fix this: find the missing skill/}).first().click();await page.waitForURL('**/study/session');await page.locator('.learning-stage').waitFor();const study=await page.evaluate(()=>JSON.parse(localStorage.getItem('backtrack.study.v1')));assert.equal(study.activeSession.tasks.length,1);const expected=misconception(itemById(ids[1]).misconceptions[wrong]).recovery;assert.equal(study.activeSession.tasks[0].topic,expected.topic);assert.equal(study.activeSession.tasks[0].skill,expected.skill);assert.equal(study.activeSession.complete,false);await shot(page,'study-session',width);
   },viewport);
   await scenario(`program full form resumes the same section ${width}`,async page=>{
-   const key='full~20260930';await exam(page,key);if(width===375)await page.getByRole('button',{name:'Questions',exact:true}).click();
+   const key='full~20260930';await exam(page,key);if(width===1280){assert.ok(await page.locator('aside').evaluate(el=>el.getBoundingClientRect().height<innerHeight),'Navigator is bounded by the viewport');assert.ok(await page.locator('aside').locator('xpath=preceding-sibling::div[1]').evaluate(el=>el.getBoundingClientRect().height<innerHeight),'Question sheet has its own natural height');}if(width===375)await page.getByRole('button',{name:'Questions',exact:true}).click();
    await page.locator('aside > div').nth(3).getByRole('button',{name:'Question 3',exact:true}).click();await page.getByRole('radio').nth(1).click();await page.reload();await page.getByRole('radiogroup').waitFor();const a=(await data(page)).attempts.at(-1);assert.equal(a.section,2);assert.equal(a.index,2);assert.equal(Object.values(a.answers)[0],1);
   },viewport);
   await scenario(`program bridge placement ${width}`,async page=>{
@@ -76,6 +76,6 @@ export async function programJourneys({scenario,origin,root}){
  for(const width of [375,1280])await scenario(`program Messenger landing sprint exam ${width}`,async(page,context)=>{
   // A separate context is used so the requested user agent really reaches every document.
   const ctx=await context.browser().newContext({viewport:{width,height:850},userAgent:messenger});const p=await ctx.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  try{await chooseGoal(p,origin,'exam');await closeGuide(p);await p.getByRole('radio').first().click();await p.getByRole('button',{name:'Check',exact:true}).click();await p.getByRole('button',{name:'Next question'}).click();await overflow(p);await exam(p,'daily~20260930');await p.getByRole('radio').first().click();await p.reload();await p.getByRole('radiogroup').waitFor();await overflow(p);assert.deepEqual(errors,[]);}finally{await ctx.close();}
+  try{await chooseGoal(p,origin,'exam');await closeGuide(p);await startDaily(p);await p.getByRole('radio').first().click();await p.getByRole('button',{name:'Check',exact:true}).click();await p.getByRole('button',{name:'Next question'}).click();await overflow(p);await exam(p,'daily~20260930');await p.getByRole('radio').first().click();await p.reload();await p.getByRole('radiogroup').waitFor();await overflow(p);assert.deepEqual(errors,[]);}finally{await ctx.close();}
  },{width,height:850});
 }

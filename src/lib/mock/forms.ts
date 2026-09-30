@@ -103,6 +103,35 @@ export function dailyForm(seed:string):Form{
  ]};
 }
 
+// Versioned separately: older daily~ keys must always rebuild their original questions.
+const DAILY_MATH=['m_pct_change','m_frac_add','m_ratio_share','m_linear_solve','m_exponents','m_expand_square','m_quad_root','m_slope','m_triangle_area','m_pythagoras','m_circle_area','m_mean_missing','m_prob_draw','m_simple_interest','m_avg_speed','m_func_eval','m_system','m_polygon_angles','m_arith_seq','m_work_rate','m_trig_ratio'];
+const DAILY_SCIENCE=['s_density','s_speed','s_acceleration','s_newton2','s_weight','s_ohm','s_moles','s_molarity','s_atom_count','s_half_life','s_punnett','s_ph','s_kinetic','s_potential','s_work','s_power','s_wave','s_boyle','s_heat','s_percent_comp'];
+// Frozen authored IDs: adding future bank material cannot rewrite an archived daily2 key.
+const numbered=(prefix:string,count:number)=>Array.from({length:count},(_,i)=>`${prefix}_${String(i+1).padStart(2,'0')}`);
+const DAILY_LANGUAGE=rng('daily2-language-v1').shuffle([...numbered('lang_sva',8),...numbered('lang_tense',7),...numbered('lang_vocab',9),...numbered('lang_struct',5),...numbered('lang_usage',6),...numbered('lang_fil',8),...numbered('lang_filv',6)]);
+const DAILY_READING=rng('daily2-reading-v1').shuffle(['mangroves','sleep','jeepney','barangay','solar','bayanihan','wika'].flatMap(p=>Array.from({length:5},(_,i)=>`read_${p}_${i+1}`)));
+const DAILY_CONCEPTS=rng('daily2-concepts-v1').shuffle([...numbered('sci_cell',8),...numbered('sci_gen',2),...numbered('sci_earth',8)]);
+const DAILY_POOLS=new Map<string,string[]>();
+const modulo=(n:number,size:number)=>((n%size)+size)%size;
+function dailyPool(family:string){
+ const cached=DAILY_POOLS.get(family);if(cached)return cached;
+ const ids:string[]=[],seen=new Set<string>();
+ for(let i=0;i<80&&ids.length<4;i++){const id=`${family}:d2bank-${i}`,item=itemById(id);if(item&&!seen.has(item.stem)){seen.add(item.stem);ids.push(id);}}
+ if(ids.length!==4)throw Error(`Daily rotation needs four distinct questions for ${family}`);
+ DAILY_POOLS.set(family,ids);return ids;
+}
+/** Three daily questions, varied by family and bank. No item repeats in any 60-day window. */
+export function dailyRotationForm(seed:string):Form|undefined{
+ if(!/^\d{8}$/.test(seed))return undefined;
+ const year=Number(seed.slice(0,4)),month=Number(seed.slice(4,6)),day=Number(seed.slice(6)),utc=Date.UTC(year,month-1,day),date=new Date(utc);
+ if(year<2026||year>2200||date.getUTCFullYear()!==year||date.getUTCMonth()!==month-1||date.getUTCDate()!==day)return undefined;
+ const n=Math.floor((utc-Date.UTC(2026,0,1))/86400000),mf=DAILY_MATH[modulo(n,DAILY_MATH.length)],sf=DAILY_SCIENCE[modulo(n,DAILY_SCIENCE.length)];
+ const math=dailyPool(mf)[modulo(Math.floor(n/DAILY_MATH.length),4)];
+ const science=modulo(n,6)===5?DAILY_CONCEPTS[modulo(Math.floor(n/6),DAILY_CONCEPTS.length)]:dailyPool(sf)[modulo(Math.floor(n/DAILY_SCIENCE.length),4)];
+ const verbal=modulo(n,2)===0?DAILY_LANGUAGE[modulo(Math.floor(n/2),DAILY_LANGUAGE.length)]:DAILY_READING[modulo(Math.floor(n/2),DAILY_READING.length)];
+ return {id:`daily2-${seed}`,kind:'daily',title:'Daily 3',seed,official:false,breakMinutes:0,sections:[{subtest:'math',minutes:2,itemIds:[math]},{subtest:'science',minutes:2,itemIds:[science]},{subtest:modulo(n,2)===0?'language':'reading',minutes:2,itemIds:[verbal]}]};
+}
+
 /** A topic check: exam-level questions from one concept only. */
 export function topicForm(concept:string,seed:string):Form{
  const fam=FAMILIES.filter(f=>f.concept===concept);
@@ -138,10 +167,11 @@ export const formMinutes=(form:Form)=>form.sections.reduce((t,s)=>t+s.minutes,0)
 
 /** Rebuilds a saved form from its kind and seed. Forms are never stored whole. */
 export function formFromKey(key:string):Form|undefined{
- if(!/^[a-z]+~[\w-]+(?:\|[\w-]+)?$/.test(key))return undefined;
+ if(!/^[a-z][a-z0-9]*~[\w-]+(?:\|[\w-]+)?$/.test(key))return undefined;
  const [kind,...rest]=key.split('~');const arg=rest.join('~');
  if(kind==='sprint')return sprintForm(arg);
  if(kind==='daily')return dailyForm(arg);
+ if(kind==='daily2')return dailyRotationForm(arg);
  if(kind==='full')return fullForm(arg);
  if(kind==='section'){const [s,seed]=arg.split('|');if(['math','science','language','reading'].includes(s))return sectionForm(s as Subtest,seed??'1');}
  if(kind==='topic'){const [c,seed]=arg.split('|');return topicForm(c,seed??'1');}

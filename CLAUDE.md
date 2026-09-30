@@ -1,7 +1,7 @@
 # Khanpanion — working notes for Claude
 
 Public product: **Khanpanion**. Recovery engine: **BACKTRACK**. Use Khanpanion in all learner-facing copy.
-Live address: https://khanpanion.vercel.app/ · https://dunlo.vercel.app/ stays attached as a legacy alias, and the Vercel project identifier remains dunlo. Static export, device-local storage, no backend.
+Live address: https://khanpanion.vercel.app/ · https://dunlo.vercel.app/ stays attached as a legacy alias, and the Vercel project identifier remains dunlo. Static export and device-local learning history. The optional live study group uses its own free backend.
 
 ## Attribution — do not get this wrong
 
@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 123 tests
+npm test          # node --test, currently 128 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 104 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -29,8 +29,7 @@ Run all four before reporting anything as done, and say plainly what you did not
 
 ## Hard constraints
 
-- **No backend, accounts, or provisioning.** Do not ask for Supabase or any service. No runtime
-  generative-model calls. No new runtime dependency without asking.
+- **Keep learning history local.** The user explicitly approved a separate free backend for live study groups on September 30, including organization selection and a $0 monthly quote. This overrides the older blanket backend prohibition for this feature only. No paid services, runtime generative-model calls, login requirement or new runtime dependency without asking.
 - **Palette:** `#14BF96` green, `#FFFFFF` white, `#0A2A66` navy, plus the tints in `src/app/palette.css`.
   Navy is the readable text colour. Bright green carries navy labels, never white small text.
 - **At most two font families:** Plus Jakarta Sans (interface), STIX Two Text (notation).
@@ -135,3 +134,9 @@ Guide is a visible header action and /?guide=1 deep link. Setup precedes the goa
 Entry behavior: the intent picker appears automatically on the first normal page in a browser-tab session. I’m just browsing continues a guide and subject browser without requiring a routine or questions. It is a session-only choice; saved preferences and learning records stay intact. A saved goal can be continued with one click. Refresh and normal navigation do not repeatedly interrupt the same visit. Timed/print and explicitly requested legacy-tour entries remain focused. Guide stays visible in the header and /?guide=1 opens it directly.
 
 Quality-of-life follow-up: keep one current Guide action in the header. Browsing home has Choose my goal; Me has a direct Change goal or routine menu action. The picker uses compact intent icons, a navy header and one dismiss control. College degree groups are explained with examples and a general/unsure option. CETPreferences is optional under the existing save, supports general review and up to 12 named/custom targets with separate optional dates; the schedule runs through the last target. No exam-specific bank is implied. PersonalPlan guards the legacy #pledge link for browsing and configured paths. Browsing a college map does not replace a different chosen goal or its stored field. Saved CET preferences survive switching to college/topic. Keep phone grid sheets min-w-0 so their locally scrolling week controls cannot widen the page.
+
+October 1 refinement: the owner's latest preference overrides oval-shaped UI controls. Navigation, dismiss icons, answer letters and exam number controls are rectangular; mathematical teaching diagrams retain their meaningful geometry. The guide has one stable four-step progress sequence and unnumbered feature examples. Today offers Daily 3 plus one next topic; alternative topics and week details are progressively disclosed. TopicPicker shows three starting topics with optional expansion.
+
+Daily rotation uses new daily2~YYYYMMDD keys and frozen family/authored-ID catalogs. Never rewrite daily~ or daily2~ mappings; version a future algorithm separately. Every consecutive 60-day window has 180 distinct items and question bodies. Daily practice preserves drafts under backtrack.daily-draft.v2.*, and the provider updates the Philippine date on a 30-second tick/focus. Historical completion records remain valid. The exam sheet sizes to its own content, its navigator scrolls independently, new questions enter at the top and unrelated site chrome stays hidden.
+
+Live groups use the separately approved $0 Supabase project zkznurjruubtolygomdy. Only group metadata, nicknames and deliberately posted check-ins leave the device. Study answers/notes/history and learning evidence remain local. Private schema khanpanion has RLS and no anon/authenticated grants; the public invoker RPC is service-role-only. Edge study-groups performs 256-bit capability authentication, validation and rate limiting. The secret service key stays in platform environment variables. verify_jwt=false is deliberate for this custom authentication, not open table access. Device hashes are never returned; group tokens are separate from learning backups and removed by the existing explicit device-clear control. Do not upgrade billing or add paid services. Group invites and returning groups bypass initial learning onboarding; explicitly requested Guide still opens. Group activity never grants personal mastery.

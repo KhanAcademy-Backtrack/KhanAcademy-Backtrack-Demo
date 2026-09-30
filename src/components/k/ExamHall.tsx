@@ -6,7 +6,7 @@ import {AnimatePresence,motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {Question,PassageView} from './Question';
-import {Oval,btn,cx,Wordmark} from './ui';
+import {btn,cx,Wordmark} from './ui';
 import {Companion} from '@/components/study/Companion';
 import {formFromKey,formItems,itemById,formMinutes,type Form} from '@/lib/mock/forms';
 import {newAttempt,type Attempt} from '@/lib/program/store';
@@ -16,7 +16,7 @@ import {DUR,EASE,tween} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
 
 const clock=(s:number)=>{const v=Math.max(0,Math.round(s)),h=Math.floor(v/3600),m=Math.floor(v%3600/60),x=v%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(x).padStart(2,'0')}`:`${m}:${String(x).padStart(2,'0')}`;};
-const KEY=/^[a-z]+~[\w|-]+$/;
+const KEY=/^[a-z][a-z0-9]*~[\w|-]+$/;
 
 export function ExamHall(){
  const params=useSearchParams(),router=useRouter(),{state,ready,update,today}=useProgram(),reduced=useQuietMotion(),lang=state.lang;
@@ -39,7 +39,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     <p className="mt-3 text-lg text-white/80">{total} questions{form.sections.length>1?` in ${form.sections.length} sections`:''}. About {minutes} minutes at exam pace.</p>
     <ul className="mt-6 grid gap-2">{form.sections.map((s,i)=><li key={i} className="flex items-center justify-between rounded-2xl bg-white/8 px-4 py-3"><span className="font-semibold">{SUBTEST_LABEL[s.subtest]}</span><span className="text-white/75">{s.itemIds.length} questions · {s.minutes} min</span></li>)}</ul>
     <fieldset className="mt-8"><legend className="font-bold">Timer</legend>
-     <div className="mt-3 grid gap-2 sm:grid-cols-2">{[[true,t(lang,'mock.timed'),'Counts down each section. You can pause or hide it any time.'],[false,t(lang,'mock.untimed'),'Take your time. Results still show how long you took.']].map(([v,l,d])=><button key={String(v)} aria-pressed={timed===v} onClick={()=>setTimed(v as boolean)} className="rounded-2xl border-2 border-white/20 p-4 text-left aria-pressed:border-green aria-pressed:bg-white/8 text-white"><span className="flex items-center gap-2 font-bold"><Oval filled={timed===v} size={24} tone="white"/>{l as string}</span><span className="mt-1 block text-sm text-white/75">{d as string}</span></button>)}</div>
+     <div className="mt-3 grid gap-2 sm:grid-cols-2">{[[true,t(lang,'mock.timed'),'Counts down each section. You can pause or hide it any time.'],[false,t(lang,'mock.untimed'),'Take your time. Results still show how long you took.']].map(([v,l,d])=><button key={String(v)} aria-pressed={timed===v} onClick={()=>setTimed(v as boolean)} className="rounded-2xl border-2 border-white/20 p-4 text-left aria-pressed:border-green aria-pressed:bg-white/8 text-white"><span className="flex items-center gap-2 font-bold"><span aria-hidden="true" className={cx('grid h-5 w-5 place-items-center rounded border border-white/40 text-sm',timed===v&&'bg-green text-navy')}>{timed===v?'✓':' '}</span>{l as string}</span><span className="mt-1 block text-sm text-white/75">{d as string}</span></button>)}</div>
     </fieldset>
     <p className="mt-6 text-white/80">{practice?'Practice mode: check each answer as you go and open the explanation straight away.':'Exam mode: answers and explanations appear on the results page, like the real thing.'} Every answer saves on this phone as you go, so you can close the page and come back.</p>
     <button className={cx(btn.primary,'mt-8 w-full sm:w-auto')} onClick={()=>onStart(timed)}>Enter the exam hall</button>
@@ -50,6 +50,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
  function Hall({form,attempt,practice}:{form:Form;attempt:Attempt;practice:boolean}){
   const router=useRouter(),{state,update,today}=useProgram(),reduced=useQuietMotion(),lang=state.lang;
   const [a,setA]=useState<Attempt>(attempt),live=useRef(a);
+  useEffect(()=>{window.scrollTo({top:0,behavior:'instant'});},[]);
   const [paused,setPaused]=useState(false),[hideTimer,setHideTimer]=useState(false),[nav,setNav]=useState(false),[confirm,setConfirm]=useState(false),[breakFor,setBreakFor]=useState<number|null>(null),[revealed,setRevealed]=useState<string[]>([]);
   const section=form.sections[a.section],id=section.itemIds[a.index],item=itemById(id)!;
   const elapsed=useRef(a.elapsedMs[a.section]??0),tick=useRef(Date.now()),itemStart=useRef(Date.now()),running=useRef(true);
@@ -60,7 +61,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   useEffect(()=>{const h=setInterval(()=>save(withTime(live.current)),8000);const hide=()=>save(withTime(live.current));window.addEventListener('pagehide',hide);return()=>{clearInterval(h);window.removeEventListener('pagehide',hide);};},[save,withTime]);
   const stopClock=()=>{save(withTime(live.current));running.current=false;};
   const startClock=()=>{tick.current=Date.now();itemStart.current=tick.current;running.current=true;};
-  const go=(section:number,index:number)=>{const x=withTime(live.current);elapsed.current=section!==x.section?(x.elapsedMs[section]??0):elapsed.current;setNow(elapsed.current);save({...x,section,index});setNav(false);};
+  const go=(section:number,index:number)=>{const x=withTime(live.current);elapsed.current=section!==x.section?(x.elapsedMs[section]??0):elapsed.current;setNow(elapsed.current);save({...x,section,index});setNav(false);window.scrollTo({top:0,behavior:'instant'});};
   const choose=(i:number)=>save({...a,answers:{...a.answers,[id]:i},idk:a.idk.filter(x=>x!==id)});
   const idk=()=>save({...a,answers:{...a.answers,[id]:null},idk:a.idk.includes(id)?a.idk.filter(x=>x!==id):[...a.idk,id]});
   const flag=()=>save({...a,flags:a.flags.includes(id)?a.flags.filter(x=>x!==id):[...a.flags,id]});
@@ -91,38 +92,38 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center gap-2 px-3 py-2 sm:gap-3 sm:px-8">
      <div className="min-w-0 basis-full sm:basis-auto sm:flex-1"><p className="truncate text-sm text-white/70">{form.title}</p><p className="truncate font-bold">{SUBTEST_LABEL[section.subtest]} · {a.index+1} of {section.itemIds.length}</p></div>
      {a.timed&&<div className="flex items-center gap-2">
-      {!hideTimer&&<motion.span initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={{duration:DUR.fast,delay:DUR.slow}} className={cx('rounded-full px-3 py-1 font-sans text-lg font-bold tabular-nums',remaining<0?'bg-white text-navy':'bg-white/10')} aria-label={remaining<0?'Over time':'Time left'}>{remaining<0?'+':''}{clock(Math.abs(remaining))}{remaining<0?' over':''}</motion.span>}
-      <button className="min-h-11 rounded-full px-3 text-sm font-semibold text-white/80 hover:bg-white/10" onClick={()=>setHideTimer(!hideTimer)}>{hideTimer?t(lang,'mock.showTimer'):t(lang,'mock.hideTimer')}</button>
+      {!hideTimer&&<motion.span initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={{duration:DUR.fast,delay:DUR.slow}} className={cx('rounded-xl px-3 py-1 font-sans text-lg font-bold tabular-nums',remaining<0?'bg-white text-navy':'bg-white/10')} aria-label={remaining<0?'Over time':'Time left'}>{remaining<0?'+':''}{clock(Math.abs(remaining))}{remaining<0?' over':''}</motion.span>}
+      <button className="min-h-11 rounded-xl px-3 text-sm font-semibold text-white/80 hover:bg-white/10" onClick={()=>setHideTimer(!hideTimer)}>{hideTimer?t(lang,'mock.showTimer'):t(lang,'mock.hideTimer')}</button>
      </div>}
-     <button className="min-h-11 rounded-full border-2 border-white/25 px-4 text-sm font-bold text-white" onClick={()=>{stopClock();setPaused(true);}}>{t(lang,'mock.pause')}</button>
-     <button className="min-h-11 rounded-full bg-white/10 px-4 text-sm font-bold lg:hidden text-white" aria-expanded={nav} onClick={()=>setNav(!nav)}>{t(lang,'mock.navigator')}</button>
+     <button className="min-h-11 rounded-xl border-2 border-white/25 px-4 text-sm font-bold text-white" onClick={()=>{stopClock();setPaused(true);}}>{t(lang,'mock.pause')}</button>
+     <button className="min-h-11 rounded-xl bg-white/10 px-4 text-sm font-bold lg:hidden text-white" aria-expanded={nav} onClick={()=>setNav(!nav)}>{t(lang,'mock.navigator')}</button>
     </div>
    </header>
-   <div className="mx-auto grid max-w-6xl gap-6 px-4 pb-40 pt-6 sm:px-8 lg:grid-cols-[1fr_280px] lg:pb-16">
+   <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 pb-40 pt-6 sm:px-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:pb-24">
     <motion.div initial={reduced?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{duration:DUR.slow,ease:EASE as unknown as [number,number,number,number]}}
-     className={cx('rounded-[22px] bg-white p-5 text-navy sm:p-8',item.passageId&&'lg:grid lg:grid-cols-2 lg:gap-8')}>
+     className={cx('min-w-0 self-start rounded-[22px] bg-white p-5 text-navy sm:p-8',item.passageId&&'lg:grid lg:grid-cols-2 lg:gap-8')}>
      {item.passageId&&<div className="mb-5 lg:mb-0"><PassageView id={item.passageId} compact/></div>}
      <motion.div key={id} initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={tween(reduced,DUR.fast)}>
       <Question key={id} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])}/>
       <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-mint-line pt-4">
-       <button aria-pressed={a.flags.includes(id)} onClick={flag} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-sky text-navy">{a.flags.includes(id)?t(lang,'mock.flagged'):t(lang,'mock.flag')}</button>
-       <button aria-pressed={a.sure[id]==='sure'} onClick={sure} disabled={a.answers[id]==null} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-green aria-pressed:bg-mint disabled:opacity-40 text-navy">{t(lang,'mock.sure')}</button>
+       <button aria-pressed={a.flags.includes(id)} onClick={flag} className="min-h-11 rounded-xl border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-sky text-navy">{a.flags.includes(id)?t(lang,'mock.flagged'):t(lang,'mock.flag')}</button>
+       <button aria-pressed={a.sure[id]==='sure'} onClick={sure} disabled={a.answers[id]==null} className="min-h-11 rounded-xl border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-green aria-pressed:bg-mint disabled:opacity-40 text-navy">{t(lang,'mock.sure')}</button>
       </div>
      </motion.div>
     </motion.div>
-    <aside className={cx('rounded-[22px] bg-navy p-4 lg:sticky lg:top-24 lg:block lg:self-start',nav?'fixed inset-x-3 bottom-24 z-40 max-h-[60vh] overflow-y-auto shadow-2xl':'hidden')}>
+    <aside className={cx('rounded-[22px] bg-navy p-4 lg:sticky lg:top-24 lg:block lg:max-h-[calc(100dvh-11rem)] lg:overflow-y-auto lg:self-start',nav?'fixed inset-x-3 bottom-24 z-40 max-h-[60vh] overflow-y-auto shadow-2xl':'hidden')}>
      <div className="mb-3 flex items-center justify-between lg:hidden"><h2 className="font-bold">Question navigator</h2><button className="min-h-11 px-3 font-bold text-white" onClick={()=>setNav(false)}>Close</button></div>
      {form.sections.map((sec,si)=><div key={si} className="mb-4 last:mb-0"><p className="mb-2 text-sm font-bold text-white/80">{SUBTEST_LABEL[sec.subtest]}</p>
-      <div className="grid grid-cols-6 gap-1.5">{sec.itemIds.map((x,xi)=>{const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
-       className={cx('relative grid h-11 place-items-center rounded-[50%] text-xs font-bold text-navy',answered?'bg-green text-navy':'bg-white/10 text-white',cur&&'ring-2 ring-white ring-offset-2 ring-offset-navy')}>{xi+1}{a.flags.includes(x)&&<span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-white"/>}</button>;})}</div></div>)}
-     <p className="mt-3 text-xs text-white/70">Green is answered. A white dot is flagged.</p>
+      <div className="grid grid-cols-6 gap-1.5 lg:grid-cols-5">{sec.itemIds.map((x,xi)=>{const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
+       className={cx('relative grid h-11 place-items-center rounded-lg border text-xs font-bold text-navy',answered?'border-green bg-green text-navy':'border-white/10 bg-white/10 text-white',cur&&'ring-2 ring-green ring-offset-2 ring-offset-navy')}>{xi+1}{a.flags.includes(x)&&<span className="absolute right-1 top-1 h-1.5 w-1.5 bg-white"/>}</button>;})}</div></div>)}
+     <p className="mt-3 text-xs text-white/70">Green is answered. A white corner mark is flagged.</p>
     </aside>
    </div>
    <footer className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-navy-night/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
     <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-8">
      <button className={btn.onDark} disabled={a.index===0&&a.section===0} onClick={()=>a.index>0?go(a.section,a.index-1):go(a.section-1,form.sections[a.section-1].itemIds.length-1)}>{t(lang,'mock.prev')}</button>
      <span className="flex-1"/>
-     <button className="hidden min-h-11 rounded-full px-4 font-semibold text-white/80 underline underline-offset-4 sm:block" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button>
+     <button className="hidden min-h-11 rounded-xl px-4 font-semibold text-white/80 underline underline-offset-4 sm:block" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button>
      <button className={btn.primary} onClick={next}>{lastInSection?(lastSection?t(lang,'mock.submit'):'Finish section'):t(lang,'mock.next')}</button>
     </div>
    </footer>

@@ -9,7 +9,7 @@ import {misconception} from '@/lib/mock/misconceptions';
 import {khanUrl,khanLabel} from '@/lib/program/khan-units';
 import {chapterHref} from '@/lib/program/links';
 import {DUR,SPRING} from '@/lib/motion-tokens';
-import {Oval,btn,cx,KhanLink} from './ui';
+import {btn,cx,KhanLink} from './ui';
 import {useFix} from './useFix';
 import {t,type Lang} from '@/lib/i18n';
 
@@ -47,15 +47,15 @@ export function Explanation({item}:{item:MockItem}){
   <p className="font-bold">Worked solution</p>
   <ol className="mt-2 list-decimal space-y-1 pl-5 font-serif text-[17px]">{item.solutionSteps.map((s,i)=><li key={i}>{s}</li>)}</ol>
   <p className="mt-4 font-bold">Every choice</p>
-  <ul className="mt-2 space-y-2">{item.choices.map((c,i)=>{const m=item.misconceptions[i]?misconception(item.misconceptions[i]!):undefined;return <li key={i} className="flex gap-3"><Oval filled={i===item.answerIndex} label={LETTERS[i]} size={30}/><span><span className="font-serif">{c}</span>{' '}<span className="text-ink-soft">{i===item.answerIndex?'Correct.':m?`${m.label}. ${m.why}`:item.rationales?.[i]??''}</span></span></li>;})}</ul>
+  <ul className="mt-2 space-y-2">{item.choices.map((c,i)=>{const m=item.misconceptions[i]?misconception(item.misconceptions[i]!):undefined;return <li key={i} className="flex gap-3"><span className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',i===item.answerIndex?'bg-green':'bg-white')}>{LETTERS[i]}</span><span><span className="font-serif">{c}</span>{' '}<span className="text-ink-soft">{i===item.answerIndex?'Correct.':m?`${m.label}. ${m.why}`:item.rationales?.[i]??''}</span></span></li>;})}</ul>
  </div>;
 }
 
-type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean};
+type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean};
 
 /** One question. In practice mode the learner checks each answer and can open the
  *  explanation straight away; in the exam hall answers stay hidden until the end. */
-export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true}:Props){
+export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false}:Props){
  const reduced=useQuietMotion(),[explain,setExplain]=useState(false);
  const locked=mode==='practice'&&revealed;
  const right=revealed&&chosen===item.answerIndex;
@@ -63,22 +63,22 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
  useEffect(()=>{if(!right||handled.current===item.id){if(reduced)settle.set(1);return;}handled.current=item.id;if(reduced)return;settle.set(.985);const run=animate(settle,1,SPRING);return()=>run.stop();},[right,item.id,reduced,settle]);
  return <div className="text-navy">
   {showPassage&&item.passageId&&<div className="mb-5"><PassageView id={item.passageId}/></div>}
-  <p className="font-serif text-[21px] leading-[1.5] sm:text-[23px]">{number!==undefined&&<span className="mr-2 font-sans text-base font-bold text-ink-soft">{number}.</span>}{item.stem}</p>
-  <div role="radiogroup" aria-label="Choices" className="mt-5 grid gap-2.5">
+  <div className={cx(spacious&&'flex min-h-40 items-center justify-center rounded-xl bg-sky/60 px-5 py-8 text-center sm:min-h-48 sm:px-10')}><p className={cx('font-serif leading-[1.5]',spacious?'max-w-3xl text-[25px] sm:text-[30px]':'text-[21px] sm:text-[23px]')}>{number!==undefined&&<span className="mr-2 font-sans text-base font-bold text-ink-soft">{number}.</span>}{item.stem}</p></div>
+  <div role="radiogroup" aria-label="Choices" className={cx('mt-5 grid gap-3',spacious&&'sm:grid-cols-2')}>
    {item.choices.map((c,i)=>{
     const picked=chosen===i,isKey=i===item.answerIndex;
     const state=!revealed?(picked?'picked':'idle'):isKey?'key':picked?'wrong':'dim';
-    return <motion.button key={i} role="radio" aria-checked={picked} disabled={locked} onClick={()=>onChoose(i)} style={{scale:i===item.answerIndex?settle:1}}
+    return <motion.button key={i} role="radio" aria-label={c} aria-checked={picked} disabled={locked} onClick={()=>onChoose(i)} style={{scale:i===item.answerIndex?settle:1}}
      animate={{opacity:state==='wrong'?.6:state==='dim'?.55:1}} transition={reduced?{duration:0}:{duration:DUR.base}}
-     className={cx('group flex min-h-14 w-full items-center gap-4 rounded-2xl border-2 px-4 py-3 text-left  focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green text-navy',
+     className={cx('group flex w-full items-center gap-4 rounded-xl border-2 px-4 py-3 text-left focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green text-navy',spacious?'min-h-20 sm:min-h-24 sm:px-5':'min-h-16',
       state==='picked'?'border-navy bg-mint':state==='key'?'border-green bg-mint':state==='wrong'?'border-navy/30 bg-white':'border-navy/12 bg-white hover:border-navy/40')}>
-     <Oval filled={picked||(revealed&&isKey)} label={LETTERS[i]} size={36}/>
+     <span aria-hidden="true" className={cx('grid h-9 w-9 shrink-0 place-items-center rounded-lg font-sans text-sm font-bold',picked||(revealed&&isKey)?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span>
      <span className="flex-1 font-serif text-[19px] leading-snug">{c}</span>
      {revealed&&isKey&&<svg viewBox="0 0 24 24" className="h-7 w-7 shrink-0 text-green-deep" aria-label="Correct answer"><motion.path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" initial={reduced||!right?false:{pathLength:0}} animate={{pathLength:1}} transition={reduced?{duration:0}:{duration:DUR.base}}/></svg>}
     </motion.button>;})}
   </div>
   <div className="mt-4 flex flex-wrap items-center gap-3">
-   <button aria-pressed={idk} disabled={locked} onClick={onIdk} className={cx('min-h-11 rounded-full border-2 px-4 text-[15px] font-semibold  text-navy',idk?'border-navy bg-navy text-white':'border-navy/15 text-navy hover:border-navy/40')}>{t(lang,'mock.idk')}</button>
+   <button aria-pressed={idk} disabled={locked} onClick={onIdk} className={cx('min-h-11 rounded-xl border-2 px-4 text-[15px] font-semibold text-navy',idk?'border-navy bg-navy text-white':'border-navy/15 text-navy hover:border-navy/40')}>{t(lang,'mock.idk')}</button>
    {mode==='practice'&&!revealed&&<button className={btn.primary} disabled={chosen===null&&!idk} onClick={onReveal}>{t(lang,'mock.check')}</button>}
   </div>
   <AnimatePresence initial={false}>{mode==='practice'&&revealed&&<motion.div key="fb" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={reduced?{duration:0}:SPRING} className="mt-5 space-y-3" aria-live="polite">

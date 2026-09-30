@@ -1,9 +1,9 @@
 'use client';
 import Link from 'next/link';
-import {useState} from 'react';
+
 import {useProgram} from './ProgramProvider';
 import {ProgressMoment} from './ProgressMoment';
-import {Sprint} from './Sprint';
+import {DailyPractice} from './DailyPractice';
 import {Sheet,btn,Oval,OvalRow,cx,KhanLink,Pill} from './ui';
 import {Companion} from '@/components/study/Companion';
 import {mission,weeks,focusRanking,statusOf,daysBetween,parseDay} from '@/lib/program/planner';
@@ -17,7 +17,6 @@ const longDate=(d:string)=>parseDay(d).toLocaleDateString('en-PH',{weekday:'long
 
 export function Today(){
  const {state:s,update,today}=useProgram();const lang=s.lang;
- const [dailyDone,setDailyDone]=useState<{correct:number;total:number}|undefined>(s.daily[today]);
  const bridgeOnly=s.sides.bridge&&(!s.sides.admission||s.activeSide==='bridge');
  const m=mission(s,today),w=weeks(s,today),focus=focusRanking(s,bridgeOnly?['math','science']:undefined).slice(0,4);
  const mock=calendarItems(s,today).find(i=>i.kind==='mock'&&i.date>=today);
@@ -62,12 +61,7 @@ export function Today(){
      <p className="mt-4 text-sm text-ink-soft">{conceptKhan?<>Khan Academy unit: {khanLabel(conceptKhan)}. </>:<>No Khan Academy course matches this topic, so the Khanpanion summary teaches it. </>}<Link href={`/learn/${m.concept.id}`} className="font-semibold text-navy underline decoration-green underline-offset-4">What you need to know</Link></p>
     </Sheet>
     <div className="order-4 grid gap-5 lg:order-none xl:grid-cols-2">
-     <Sheet>
-      <div className="flex items-baseline justify-between"><h2 className="text-xl font-extrabold">{t(lang,'today.daily3')}</h2>{dailyDone&&<Pill>{dailyDone.correct} of {dailyDone.total}</Pill>}</div>
-      <p className="mt-1 text-sm text-ink-soft">Three quick questions to warm up. New ones every day.</p>
-      <div className="mt-4">{dailyDone?<div><p className="font-serif text-xl">Done for today.{dailyDone.correct===dailyDone.total?' A clean sweep.':' Every miss is in your notebook for later.'}</p><Link href="/explore" className={cx(btn.text,'mt-2')}>Explore more ideas</Link></div>
-       :<Sprint formKey={`daily~${today.replace(/-/g,'')}`} lang={lang} finishLabel="Finish" onFinish={r=>{setDailyDone(r);update(p=>({...p,daily:{...p.daily,[today]:{correct:r.correct,total:r.total}},studyDays:[...p.studyDays,today]}));}}/>}</div>
-     </Sheet>
+     <DailyPractice className='xl:col-span-2'/>
      <Sheet>
       <h2 className="text-xl font-extrabold">{t(lang,'today.focus')}</h2>
       <p className="mt-1 text-sm text-ink-soft">Ranked from your answers so far. Unseen topics start in the middle.</p>

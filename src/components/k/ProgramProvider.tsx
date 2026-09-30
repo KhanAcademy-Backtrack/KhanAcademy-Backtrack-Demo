@@ -17,12 +17,13 @@ export function ProgramProvider({children}:{children:ReactNode}){
  const flush=useCallback(()=>write(live.current),[write]);
  useEffect(()=>{
   try{const r=loadProgram(localStorage,Date.now());live.current=r.state;setState(r.state);setWarning(r.warning);}catch{setWarning('Saved plans could not be opened in this browser.');}
-  setToday(toDay(new Date()));setReady(true);
+  const updateDay=()=>setToday(new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Manila'}));updateDay();setReady(true);
+  const dayTimer=setInterval(updateDay,30000);window.addEventListener('focus',updateDay);document.addEventListener('visibilitychange',updateDay);
   const sync=(e:StorageEvent)=>{if(e.key!==PROGRAM_KEY||!e.newValue)return;try{const n=JSON.parse(e.newValue);if(validProgram(n)&&n.updatedAt>=live.current.updatedAt){live.current=n;setState(n);}}catch{}};
   const cleared=()=>{live.current=initialProgram();setState(live.current);};
   const hide=()=>write(live.current);
   window.addEventListener('storage',sync);window.addEventListener('backtrack:cleared',cleared);window.addEventListener('pagehide',hide);
-  return()=>{window.removeEventListener('storage',sync);window.removeEventListener('backtrack:cleared',cleared);window.removeEventListener('pagehide',hide);};
+  return()=>{clearInterval(dayTimer);window.removeEventListener('focus',updateDay);document.removeEventListener('visibilitychange',updateDay);window.removeEventListener('storage',sync);window.removeEventListener('backtrack:cleared',cleared);window.removeEventListener('pagehide',hide);};
  },[write]);
  const api=useMemo(()=>({state,ready,warning,today,update,flush}),[state,ready,warning,today,update,flush]);
  return <Context.Provider value={api}>{ready?<>{warning&&<p role="status" className="bg-mint px-5 py-3 font-semibold text-navy print:hidden">{warning}</p>}{children}</>:<div role="status" aria-label="Opening your study program" className="min-h-screen bg-navy"/>}</Context.Provider>;

@@ -1,6 +1,6 @@
 # Khanpanion
 
-Khanpanion is a free college study program with two sides: entrance exam review and a freshman bridge. It is a static Next.js export with device-local progress, no accounts, no backend and no runtime generative-model calls.
+Khanpanion is a free college study program with two sides: entrance exam review and a freshman bridge. It is a static Next.js export with device-local learning progress and no runtime generative-model calls. Optional live study groups use a separate free backend and private device sessions, with no login required.
 
 Live: https://khanpanion.vercel.app/ . The Vercel project remains dunlo; main is the production branch and the older dunlo.vercel.app alias is retained.
 
@@ -12,7 +12,7 @@ The mock hub offers sprints, sections, full simulations, topic and placement che
 
 The reviewer includes original chapters, concept summaries and handbooks. Save chapters or recall cards, search the library, practise and print. Daily recall reads saved chapter cards, concepts marked Still hard and mock misses; recall self-reports affect spacing only. Offline caching is reserved for Phase B and is not advertised as delivered.
 
-The bridge maps first-year prerequisites for seven program groups, with placement checks, Khan unit paths, a summer schedule and topic rescue. These maps await faculty review. Group check-ins are shared manually through local cards or links; no synchronized roster or results are claimed.
+The bridge maps first-year prerequisites for seven program groups, with placement checks, Khan unit paths, a summer schedule and topic rescue. These maps await faculty review. Study groups have real invite codes, membership, a shared weekly goal and member-selected check-ins. The group page refreshes while visible; private answers, notes and independent-learning records stay local. Printable and downloaded check-in cards remain available.
 
 Official calendar dates are checked against primary pages. UPCAT 2027 refers to the test held August 1 and 2, 2026 for AY 2027-2028. Unconfirmed future UPCAT, DCAT and PUPCET dates are not prefilled. A learner may enter a planning target in the pledge. DOST-SEI qualifying dates November 14 and 15, 2026 are linked to its official scholarship portal. See docs/THIRD_PARTY_MATERIALS.md.
 
@@ -22,7 +22,7 @@ Every earlier route remains available, including /demo, /study, /study/session, 
 
 Run npm test, npm run typecheck, npm run build and npm run test:browser before release. Browser acceptance covers both 375 and 1280 px, calendar at 320 px, resume and pause timing, result-key visibility and repair, placement, calendar editing and .ics export, reviewer practice/print/recall, every concept/chapter/bridge page, and Messenger user-agent emulation. Screenshots and test receipts stay in the ignored .refs directory.
 
-The navy frame, paper sheets and answer-sheet ovals use Tailwind utilities. Plus Jakarta Sans and STIX Two Text are the two font families. Motion uses src/lib/motion-tokens.ts, with static quiet and reduced-motion paths. No runtime dependencies were added for the college program routing release.
+The navy frame, paper sheets and rectangular controls use Tailwind utilities. Plus Jakarta Sans and STIX Two Text are the two font families. Motion uses src/lib/motion-tokens.ts, with static quiet and reduced-motion paths. No runtime dependencies were added for the college program routing release or live groups.
 
 ## Run locally
 
@@ -79,3 +79,11 @@ The older local deck builder remains available through scripts/build-deck.mjs --
 Khan materials and logo attribution: docs/THIRD_PARTY_MATERIALS.md.
 
 Entry behavior: the intent picker appears automatically on the first normal page in a browser-tab session. I’m just browsing continues a guide and subject browser without requiring a routine or questions. It is a session-only choice; saved preferences and learning records stay intact. A saved goal can be continued with one click. Refresh and normal navigation do not repeatedly interrupt the same visit. Timed/print and explicitly requested legacy-tour entries remain focused. Guide stays visible in the header and /?guide=1 opens it directly.
+
+## Daily practice and live groups
+
+Daily 3 uses a versioned calendar rotation with 180 distinct questions in every 60-day window, drawn from the original banks. Three questions appear one at a time; unfinished work resumes on the same device. The Philippine date updates while the page is open. Old daily forms and saved results keep their original meanings. Today has one daily-practice action and one suggested next topic, with the full topic library available separately.
+
+The group backend is a separate Supabase Free project, explicitly approved at $0 per month. Real invite codes resolve to the group’s shared goal and members. Members choose which weekly counts to post; leaders can adjust the shared goal. The visible page refreshes every 15 seconds, and an explicit Refresh action is available. No account login or new runtime dependency is required. The browser keeps a private device capability, so group access is not transferred in a study backup; another device joins through an invite. Earlier on-device codes need a new live group. The free plan may pause after seven inactive days; see [Supabase pricing](https://supabase.com/pricing).
+
+Backend schema and Edge source live under supabase/. Tables are in a private RLS-enabled schema; anon and authenticated roles cannot access them or execute the service RPC. The Edge handler authenticates private device capabilities and keeps its service key server-side. Only the nickname and selected check-ins are shared with members. Draft questions and bridge maps retain their existing subject/faculty review requirements.

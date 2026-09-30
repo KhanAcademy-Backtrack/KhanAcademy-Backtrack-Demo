@@ -6,6 +6,8 @@ import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {programJourneys} from './test-program-browser.mjs';
 import {programTourJourneys} from './test-program-tour.mjs';
+import {liveGroupJourneys} from './test-live-groups.mjs';
+import {dailyJourneys} from './test-daily-practice.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -171,6 +173,8 @@ try{
  },{width:360,height:800});
  await programJourneys({scenario,origin,root});
  await programTourJourneys({scenario,origin,root});
+ await liveGroupJourneys({scenario,origin,root});
+ await dailyJourneys({scenario,origin,root});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }
