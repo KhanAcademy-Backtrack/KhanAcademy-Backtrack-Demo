@@ -138,6 +138,7 @@ export const formMinutes=(form:Form)=>form.sections.reduce((t,s)=>t+s.minutes,0)
 
 /** Rebuilds a saved form from its kind and seed. Forms are never stored whole. */
 export function formFromKey(key:string):Form|undefined{
+ if(!/^[a-z]+~[\w-]+(?:\|[\w-]+)?$/.test(key))return undefined;
  const [kind,...rest]=key.split('~');const arg=rest.join('~');
  if(kind==='sprint')return sprintForm(arg);
  if(kind==='daily')return dailyForm(arg);

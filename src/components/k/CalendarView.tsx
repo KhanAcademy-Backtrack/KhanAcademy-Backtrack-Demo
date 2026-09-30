@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import {useMemo,useState} from 'react';
-import {motion,useReducedMotion} from 'motion/react';
+import {motion} from 'motion/react';
+import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {PageBand,Sheet,btn,cx,pageBody} from './ui';
 import {calendarItems,itemsOn,monthGrid,toIcs,type CalItem} from '@/lib/program/calendar';
@@ -10,10 +11,10 @@ import {DUR} from '@/lib/motion-tokens';
 
 const WEEK=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const KIND:Record<CalItem['kind'],{dot:string;label:string}>={study:{dot:'bg-green',label:'Study session'},mock:{dot:'bg-navy',label:'Mock exam day'},custom:{dot:'bg-fog',label:'Your event'},exam:{dot:'bg-white ring-2 ring-navy',label:'Exam date'},examWindow:{dot:'bg-mint-line',label:'Exam window'}};
-const field='min-h-11 rounded-xl border-2 border-navy/15 bg-white px-3 text-navy focus:border-navy focus:outline-none';
+const field='min-h-11 min-w-0 max-w-full rounded-xl border-2 border-navy/15 bg-white px-3 text-navy focus:border-navy focus:outline-none';
 
 export function CalendarView(){
- const {state,update,today}=useProgram(),reduced=useReducedMotion();
+ const {state,update,today}=useProgram(),reduced=useQuietMotion();
  const [cursor,setCursor]=useState(()=>today.slice(0,7)),[selected,setSelected]=useState(today),[view,setView]=useState<'month'|'agenda'>('month');
  const [moving,setMoving]=useState<string|null>(null),[moveTo,setMoveTo]=useState(''),[adding,setAdding]=useState(false);
  const [draft,setDraft]=useState({title:'',time:'16:00',minutes:30});
@@ -33,14 +34,14 @@ export function CalendarView(){
     <Sheet className="p-3 sm:p-6">
      <div className="flex flex-wrap items-center gap-2 px-2 pt-2 sm:px-0 sm:pt-0">
       <h2 className="mr-auto text-2xl font-extrabold tracking-[-.02em]" aria-live="polite">{view==='month'?monthName:'Coming up'}</h2>
-      <div role="group" aria-label="View" className="flex rounded-full bg-sky p-1">{(['month','agenda'] as const).map(v=><button key={v} aria-pressed={view===v} onClick={()=>setView(v)} className="min-h-10 rounded-full px-4 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white">{v==='month'?'Month':'Agenda'}</button>)}</div>
-      {view==='month'&&<div className="flex gap-1"><button aria-label="Previous month" onClick={()=>shift(-1)} className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 hover:bg-mint">‹</button><button onClick={()=>{setCursor(today.slice(0,7));setSelected(today);}} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold hover:bg-mint">Today</button><button aria-label="Next month" onClick={()=>shift(1)} className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 hover:bg-mint">›</button></div>}
+      <div role="group" aria-label="View" className="flex rounded-full bg-sky p-1">{(['month','agenda'] as const).map(v=><button key={v} aria-pressed={view===v} onClick={()=>setView(v)} className="min-h-11 rounded-full px-4 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{v==='month'?'Month':'Agenda'}</button>)}</div>
+      {view==='month'&&<div className="flex gap-1"><button aria-label="Previous month" onClick={()=>shift(-1)} className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 hover:bg-mint text-navy">‹</button><button onClick={()=>{setCursor(today.slice(0,7));setSelected(today);}} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold hover:bg-mint text-navy">Today</button><button aria-label="Next month" onClick={()=>shift(1)} className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 hover:bg-mint text-navy">›</button></div>}
      </div>
      {view==='month'?<motion.div key={cursor} initial={reduced?false:{opacity:0,x:8}} animate={{opacity:1,x:0}} transition={{duration:DUR.base}} className="mt-4">
       <div className="grid grid-cols-7 text-center text-xs font-bold text-ink-soft sm:text-sm">{WEEK.map(w=><div key={w} className="py-2">{w}</div>)}</div>
       <div role="grid" aria-label={monthName} className="grid grid-cols-7 gap-1">{grid.map(d=>{const list=itemsOn(items,d),inMonth=Number(d.slice(5,7))===m,isToday=d===today,isSel=d===selected,exam=list.find(i=>i.kind==='exam'),win=list.some(i=>i.kind==='examWindow');
        return <button key={d} role="gridcell" aria-selected={isSel} aria-label={`${parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}${list.length?`, ${list.length} item${list.length===1?'':'s'}`:''}`} onClick={()=>setSelected(d)}
-        className={cx('relative flex min-h-14 flex-col items-stretch rounded-xl p-1 text-left transition-colors sm:min-h-24 sm:p-2',inMonth?'bg-white':'bg-transparent text-ink-soft/60',win&&inMonth&&'bg-mint',isSel?'ring-2 ring-navy':'hover:bg-sky')}>
+        className={cx('relative flex min-h-14 flex-col items-stretch rounded-xl p-1 text-left  sm:min-h-24 sm:p-2 text-navy',inMonth?'bg-white':'bg-transparent text-ink-soft/60',win&&inMonth&&'bg-mint',isSel?'ring-2 ring-navy':'hover:bg-sky')}>
         <span className={cx('grid h-7 w-7 place-items-center self-start rounded-full text-sm font-bold',isToday&&'bg-green text-navy',exam&&!isToday&&'ring-2 ring-navy')}>{Number(d.slice(8))}</span>
         <span className="mt-1 flex flex-wrap gap-1 sm:hidden">{list.filter(i=>i.kind!=='examWindow').slice(0,3).map(i=><span key={i.id} className={cx('h-2 w-2 rounded-full',KIND[i.kind].dot,i.done&&'opacity-40')}/>)}</span>
         <span className="mt-1 hidden flex-col gap-0.5 sm:flex">{list.filter(i=>i.kind!=='examWindow'||i.date===d).slice(0,3).map(i=><span key={i.id} className={cx('truncate rounded-md px-1.5 py-0.5 text-[11px] font-semibold',i.kind==='study'?'bg-green/20':i.kind==='mock'?'bg-navy text-white':i.kind==='exam'?'bg-white ring-1 ring-navy':i.kind==='examWindow'?'bg-mint-line':'bg-sky',i.done&&'line-through opacity-60')}>{i.title}</span>)}{list.length>3&&<span className="text-[11px] text-ink-soft">+{list.length-3} more</span>}</span>
@@ -70,9 +71,9 @@ export function CalendarView(){
     {i.kind==='mock'&&<Link className="min-h-11 py-2 text-sm font-bold underline decoration-green underline-offset-4" href={i.title==='Full simulation'?`/mock/take?f=full~${i.date.replace(/-/g,'')}`:'/mock'}>Start</Link>}
     {(i.kind==='exam'||i.kind==='examWindow')&&i.link&&<a className="min-h-11 py-2 text-sm font-bold underline decoration-green underline-offset-4" href={i.link} target="_blank" rel="noopener noreferrer">Official page ↗</a>}
     {(i.kind==='study'||i.kind==='mock'||i.kind==='custom')&&<>
-     <button className="min-h-11 text-sm font-semibold underline underline-offset-4" onClick={()=>{saveEvent({...i,done:!i.done});if(!i.done)update(s=>({...s,studyDays:[...s.studyDays,i.date<=today?i.date:today]}));}}>{i.done?'Not done':'Mark done'}</button>
-     <button className="min-h-11 text-sm font-semibold underline underline-offset-4" onClick={()=>{setMoving(i.id);setMoveTo(addDays(i.date,1));}}>Move</button>
-     <button className="min-h-11 text-sm font-semibold underline underline-offset-4" onClick={()=>own&&i.kind==='custom'?update(s=>({...s,events:s.events.filter(e=>e.id!==i.id)})):saveEvent({...i,removed:true} as never)}>Remove</button>
+     <button className="min-h-11 text-sm font-semibold underline underline-offset-4 text-navy" onClick={()=>{saveEvent({...i,done:!i.done});if(!i.done)update(s=>({...s,studyDays:[...s.studyDays,i.date<=today?i.date:today]}));}}>{i.done?'Not done':'Mark done'}</button>
+     <button className="min-h-11 text-sm font-semibold underline underline-offset-4 text-navy" onClick={()=>{setMoving(i.id);setMoveTo(addDays(i.date,1));}}>Move</button>
+     <button className="min-h-11 text-sm font-semibold underline underline-offset-4 text-navy" onClick={()=>own&&i.kind==='custom'?update(s=>({...s,events:s.events.filter(e=>e.id!==i.id)})):saveEvent({...i,removed:true} as never)}>Remove</button>
     </>}
    </div>
    {moving===i.id&&<form className="mt-2 flex flex-wrap items-end gap-2 pl-6" onSubmit={e=>{e.preventDefault();saveEvent({...i,date:moveTo});setMoving(null);setSelected(moveTo);}}><label className="grid gap-1 text-sm font-semibold">New date<input type="date" min={toDay(new Date())} className={field} value={moveTo} onChange={e=>setMoveTo(e.target.value)}/></label><button className={btn.dark}>Move</button><button type="button" className={btn.ghost} onClick={()=>setMoving(null)}>Cancel</button></form>}

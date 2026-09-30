@@ -1,17 +1,18 @@
 'use client';
 import Link from 'next/link';
 import type {ReactNode,ComponentProps} from 'react';
-import {motion,useReducedMotion} from 'motion/react';
+import {motion} from 'motion/react';
+import {useQuietMotion} from './useQuietMotion';
 import {DUR,SPRING} from '@/lib/motion-tokens';
 
 export const cx=(...xs:(string|false|null|undefined)[])=>xs.filter(Boolean).join(' ');
 
 /** Button looks. Green actions carry navy labels; every target is at least 44 px. */
 export const btn={
- primary:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-green px-5 py-2.5 text-[15px] font-bold text-navy transition-colors hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-45',
- dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-navy px-5 py-2.5 text-[15px] font-bold text-white transition-colors hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
- ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-navy/15 px-5 py-2 text-[15px] font-semibold text-navy transition-colors hover:border-navy/40 hover:bg-mint focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
- onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-white/25 px-5 py-2 text-[15px] font-semibold text-white transition-colors hover:border-white/60 hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',
+ primary:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-green px-5 py-2.5 text-[15px] font-bold text-navy  hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-45',
+ dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-navy px-5 py-2.5 text-[15px] font-bold text-white  hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
+ ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-navy/15 px-5 py-2 text-[15px] font-semibold text-navy  hover:border-navy/40 hover:bg-mint focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
+ onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-white/25 px-5 py-2 text-[15px] font-semibold text-white  hover:border-white/60 hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',
  text:'inline-flex min-h-11 items-center gap-1 font-semibold text-navy underline decoration-green decoration-2 underline-offset-4 hover:decoration-navy'
 };
 
@@ -25,7 +26,7 @@ export function Wordmark({onDark=false,small=false}:{onDark?:boolean;small?:bool
 
 /** The answer-sheet oval: the product's unit of choice and of progress. */
 export function Oval({filled=false,label,size=28,tone='navy',className}:{filled?:boolean;label?:string;size?:number;tone?:'navy'|'green'|'white';className?:string}){
- const reduced=useReducedMotion();
+ const reduced=useQuietMotion();
  const ring=tone==='white'?'#ffffff':tone==='green'?'#14bf96':'#0a2a66';
  return <svg width={size} height={size*.72} viewBox="0 0 40 29" className={cx('shrink-0',className)} aria-hidden="true">
   <ellipse cx="20" cy="14.5" rx="18" ry="12.5" fill="none" stroke={ring} strokeOpacity={filled?1:.45} strokeWidth="2.2"/>
@@ -42,7 +43,7 @@ export function OvalRow({done,total,tone='navy',label}:{done:number;total:number
 /** A sheet of paper for reading. Navy frames the page; paper holds the words. */
 export function Sheet({children,className,as='section',...rest}:{children:ReactNode;className?:string;as?:'section'|'div'|'article'}&Omit<ComponentProps<'section'>,'className'|'children'|'ref'>){
  const Tag=as as 'section';
- return <Tag {...rest} className={cx('rounded-[22px] bg-white p-5 text-navy shadow-sheet sm:p-7',className)}>{children}</Tag>;
+ return <Tag {...rest} className={cx('rounded-[22px] text-navy shadow-sheet',!/\bbg-/.test(className??'')&&'bg-white',!/\bp-/.test(className??'')&&'p-5 sm:p-7',className)}>{children}</Tag>;
 }
 
 /** Page frame: a navy band with the page's title, and paper underneath. */
@@ -66,7 +67,7 @@ export function KhanLink({href,children,className}:{href:string;children:ReactNo
 }
 
 export function Rise({children,delay=0,className}:{children:ReactNode;delay?:number;className?:string}){
- const reduced=useReducedMotion();
+ const reduced=useQuietMotion();
  return <motion.div className={className} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.slow,delay,ease:[.2,.8,.2,1]}}>{children}</motion.div>;
 }
 

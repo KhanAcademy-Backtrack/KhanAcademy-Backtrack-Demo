@@ -26,7 +26,6 @@ export type ProgramState={
  daily:Record<string,{correct:number;total:number}>;
  group?:{code:string;goal:number;joinedAt:number};
  placement:Record<string,{at:number;correct:number;total:number;weak:string[]}>;
- endorsed?:boolean;
 };
 export const initialProgram=():ProgramState=>({version:1,updatedAt:0,lang:'en',sides:{admission:false,bridge:false},activeSide:'admission',attempts:[],concepts:{},missions:{},studyDays:[],events:[],notebook:[],bookmarks:[],recall:{},daily:{},placement:{}});
 

@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import {useMemo,useState} from 'react';
 import {useSearchParams} from 'next/navigation';
-import {motion,useReducedMotion} from 'motion/react';
+import {motion} from 'motion/react';
+import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {Explanation,WhyPanel,PassageView} from './Question';
 import {TldrCard} from './TldrCard';
@@ -16,8 +17,8 @@ import {misconception} from '@/lib/mock/misconceptions';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
 import {chapterHref} from '@/lib/program/links';
-import {shareCardPng,shareOrDownload} from '@/lib/share-card';
-import {DUR} from '@/lib/motion-tokens';
+
+import {DUR,EASE} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
 
 const LETTERS=['A','B','C','D'];
@@ -25,7 +26,7 @@ const TRIAGE:Record<Triage,string>={didnt_know:'Didn’t know yet',careless:'Car
 const mins=(s:number)=>s<90?`${Math.round(s)} s`:`${Math.round(s/60)} min`;
 
 export function Results(){
- const params=useSearchParams(),{state,ready,update}=useProgram(),reduced=useReducedMotion(),fix=useFix(),lang=state.lang;
+ const params=useSearchParams(),{state,ready,update}=useProgram(),reduced=useQuietMotion(),fix=useFix(),lang=state.lang;
  const attempt=state.attempts.find(a=>a.id===params.get('a'));
  const form=attempt?formFromKey(attempt.formKey):undefined;
  const result=useMemo(()=>form&&attempt?scoreAttempt(form,attempt):undefined,[form,attempt]);
@@ -40,7 +41,7 @@ export function Results(){
  const ids=formItems(form),map=timeMap(ids,attempt);
  const setTriage=(id:string,v:Triage)=>update(s=>({...s,attempts:s.attempts.map(a=>a.id===attempt.id?{...a,triage:{...a.triage,[id]:v}}:a),notebook:s.notebook.map(n=>n.itemId===id&&n.formKey===attempt.formKey?{...n,triage:v}:n)}));
  const praise=result.total.percent>=80?'Strong work.':result.total.percent>=60?'Solid. The misses below are very fixable.':result.total.percent>=40?'You have the base. Now for the traps.':'Every miss here is a map of what to learn next.';
- async function share(){try{const blob=await shareCardPng({title:`${result!.total.correct} of ${result!.total.total} on a ${form!.title.toLowerCase()}`,subtitle:growth!==undefined&&growth>0?`Up ${growth} points from last time.`:'Practising for college entrance exams.',lines:result!.subtests.map(s=>({label:SUBTEST_LABEL[s.subtest],value:`${s.correct}/${s.total}`,fill:s.total?s.correct/s.total:0})),footer:'khanpanion.vercel.app · free exam review'});setShared(await shareOrDownload(blob,'khanpanion-result.png','My practice result on Khanpanion'));}catch{setShared('error');}}
+ async function share(){try{const {shareCardPng,shareOrDownload}=await import('@/lib/share-card');const blob=await shareCardPng({title:`${result!.total.correct} of ${result!.total.total} on a ${form!.title.toLowerCase()}`,subtitle:growth!==undefined&&growth>0?`Up ${growth} points from last time.`:'Practising for college entrance exams.',lines:result!.subtests.map(s=>({label:SUBTEST_LABEL[s.subtest],value:`${s.correct}/${s.total}`,fill:s.total?s.correct/s.total:0})),footer:'khanpanion.vercel.app · free exam review'});setShared(await shareOrDownload(blob,'khanpanion-result.png','My practice result on Khanpanion'));}catch{setShared('error');}}
  return <>
   <div className="bg-navy text-white">
    <div className="mx-auto grid max-w-6xl gap-8 px-5 pb-16 pt-9 sm:px-8 lg:grid-cols-[1fr_1fr] lg:pb-20 lg:pt-12">
@@ -52,9 +53,9 @@ export function Results(){
      <div className="mt-6 flex flex-wrap gap-3"><a href="#key" className={btn.primary}>{t(lang,'result.key')}</a><button className={btn.onDark} onClick={share}>Share my result</button></div>
      {shared&&<p role="status" className="mt-2 text-sm text-white/75">{shared==='downloaded'?'Image saved to your downloads.':shared==='shared'?'Shared.':shared==='error'?'This browser could not make the image.':''}</p>}
     </div>
-    <div className="grid content-start gap-3">{result.subtests.map((s,i)=>{const pace=paceCheck(s);return <motion.div key={s.subtest} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.base,delay:reduced?0:.15+i*.15}} className="rounded-2xl bg-white/8 p-4">
+    <div className="grid content-start gap-3">{result.subtests.map((s,i)=>{const pace=paceCheck(s);return <motion.div key={s.subtest} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.base,delay:reduced?0:DUR.fast+i*DUR.fast}} className="rounded-2xl bg-white/8 p-4">
      <div className="flex items-baseline justify-between"><p className="font-bold">{SUBTEST_LABEL[s.subtest]}</p><p className="text-2xl font-extrabold">{s.correct}<span className="text-base font-semibold text-white/70">/{s.total}</span></p></div>
-     <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/12"><motion.div className="h-full w-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:s.total?s.correct/s.total:0}} transition={{duration:DUR.slow,delay:reduced?0:.25+i*.15,ease:[.2,.8,.2,1]}}/></div>
+     <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/12"><motion.div className="h-full w-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:s.total?s.correct/s.total:0}} transition={{duration:DUR.slow,delay:reduced?0:.25+i*.15,ease:EASE as unknown as [number,number,number,number]}}/></div>
      <p className="mt-2 text-sm text-white/85"><span className="font-bold">{s.band.label}.</span> {s.band.note}</p>
      {pace&&<p className="mt-1 text-sm text-white/70">{t(lang,'result.pace')}: {pace.onPace?`on pace, about ${pace.perItem} s a question.`:`about ${pace.perItem} s a question. At that pace the real ${s.total<pace.items?'section':'exam'} would reach about ${pace.reach} of ${pace.items} questions. One timed section a week closes that gap.`}</p>}
     </motion.div>;})}</div>
@@ -79,7 +80,7 @@ export function Results(){
     <p className="mt-2 text-sm text-ink-soft">Total time {mins(result.seconds)}.</p>
    </Sheet>
    <Sheet className="mt-5" id="key">
-    <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-extrabold">{t(lang,'result.key')}</h2><button className={btn.dark} aria-pressed={showKey} onClick={()=>setShowKey(!showKey)}>{showKey?t(lang,'result.hideAnswers'):t(lang,'result.showAnswers')}</button></div>
+    <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-extrabold">{t(lang,'result.key')}</h2><button className={btn.dark} aria-pressed={showKey} onClick={()=>{setShowKey(!showKey);setOpen([]);}}>{showKey?t(lang,'result.hideAnswers'):t(lang,'result.showAnswers')}</button></div>
     <p className="mt-1 text-ink-soft">{showKey?'Correct answers are marked. Hide them to try the questions again.':'Answers hidden. Reveal one question at a time, or show them all.'}</p>
     <ol className="mt-5 grid gap-4">{ids.map((id,n)=>{const it=itemById(id)!,chosen=attempt.answers[id]??null,right=chosen===it.answerIndex,revealed=showKey||open.includes(id),isOpen=open.includes(`x:${id}`);const prevPassage=n>0&&itemById(ids[n-1])?.passageId===it.passageId;
      return <li key={id} id={`q-${n+1}`} className="scroll-mt-24 rounded-2xl border-2 border-mint-line p-4 sm:p-5">
@@ -91,7 +92,7 @@ export function Results(){
        <button className={btn.ghost} aria-expanded={isOpen} onClick={()=>setOpen(o=>o.includes(`x:${id}`)?o.filter(x=>x!==`x:${id}`):[...o,`x:${id}`])}>{isOpen?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
       </div>
       {!right&&revealed&&<div className="mt-3 grid gap-3"><WhyPanel item={it} chosen={chosen} lang={lang}/>
-       <fieldset><legend className="text-sm font-semibold">Why did you miss it?</legend><div className="mt-1 flex flex-wrap gap-2">{(Object.keys(TRIAGE) as Triage[]).map(k=><button key={k} aria-pressed={attempt.triage[id]===k} onClick={()=>setTriage(id,k)} className="min-h-10 rounded-full border-2 border-navy/15 px-3 text-sm font-semibold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white">{TRIAGE[k]}</button>)}</div></fieldset></div>}
+       <fieldset><legend className="text-sm font-semibold">Why did you miss it?</legend><div className="mt-1 flex flex-wrap gap-2">{(Object.keys(TRIAGE) as Triage[]).map(k=><button key={k} aria-pressed={attempt.triage[id]===k} onClick={()=>setTriage(id,k)} className="min-h-11 rounded-full border-2 border-navy/15 px-3 text-sm font-semibold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{TRIAGE[k]}</button>)}</div></fieldset></div>}
       {isOpen&&<div className="mt-3"><Explanation item={it}/></div>}
      </li>;})}</ol>
    </Sheet>

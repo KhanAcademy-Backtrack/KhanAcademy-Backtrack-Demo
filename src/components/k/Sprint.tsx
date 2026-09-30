@@ -1,6 +1,8 @@
 'use client';
 import {useMemo,useState} from 'react';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
+import {useProgram} from './ProgramProvider';
+import {newAttempt} from '@/lib/program/store';
 import {Question} from './Question';
 import {OvalRow,btn} from './ui';
 import type {Lang} from '@/lib/i18n';
@@ -8,11 +10,12 @@ import type {Lang} from '@/lib/i18n';
 /** A short practice set answered one question at a time with instant checking.
  *  Used by the landing page's live sprint and Today's Daily 3. */
 export function Sprint({formKey,lang='en',onFinish,finishLabel='See how you did'}:{formKey:string;lang?:Lang;onFinish:(r:{answers:Record<string,number|null>;idk:string[];correct:number;total:number})=>void;finishLabel?:string}){
+ const {update}=useProgram();
  const ids=useMemo(()=>{const f=formFromKey(formKey);return f?formItems(f):[];},[formKey]);
  const [i,setI]=useState(0),[answers,setAnswers]=useState<Record<string,number|null>>({}),[idk,setIdk]=useState<string[]>([]),[revealed,setRevealed]=useState<string[]>([]);
  const id=ids[i],item=id?itemById(id):undefined;if(!item)return null;
  const done=revealed.length,last=i===ids.length-1;
- const finish=()=>{const correct=ids.filter(x=>answers[x]===itemById(x)?.answerIndex).length;onFinish({answers,idk,correct,total:ids.length});};
+ const finish=()=>{const correct=ids.filter(x=>answers[x]===itemById(x)?.answerIndex).length;const at=Date.now(),attempt={...newAttempt(formKey,false,at),answers,idk,submittedAt:at};update(s=>{const misses=ids.filter(x=>answers[x]!==itemById(x)?.answerIndex),recall={...s.recall};for(const x of misses)recall[`item:${x}`]={due:at+86400000,stage:0,last:at};return {...s,attempts:[...s.attempts,attempt],recall,notebook:[...s.notebook,...misses.map(x=>({itemId:x,at,formKey,chosen:answers[x]??null,idk:idk.includes(x),concept:itemById(x)!.concept}))]};});onFinish({answers,idk,correct,total:ids.length});};
  return <div>
   <div className="mb-4 flex items-center justify-between gap-3"><OvalRow done={done} total={ids.length} label={`${done} of ${ids.length} answered`}/><span className="text-sm font-semibold text-ink-soft">Question {i+1} of {ids.length}</span></div>
   <Question key={id} item={item} mode="practice" lang={lang} chosen={answers[id]??null} idk={idk.includes(id)} revealed={revealed.includes(id)}

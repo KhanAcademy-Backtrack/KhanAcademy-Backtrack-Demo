@@ -17,7 +17,7 @@ export function Pledge({onSaved}:{onSaved?:()=>void}){
  const [weekdays,setWeekdays]=useState<number[]>(p?.weekdays??[1,3,5,6]),[minutes,setMinutes]=useState(p?.minutes??45),[when,setWhen]=useState(p?.when??'after dinner'),[time,setTime]=useState(p?.time??'19:00');
  const [error,setError]=useState('');
  function save(){
-  if(date<=today){setError('Choose an exam date after today.');return;}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date<=today){setError('Choose an exam date after today.');return;}
   if(!weekdays.length){setError('Choose at least one day a week.');return;}
   update(s=>({...s,pledge:{exam,examDate:date,why:why.trim().slice(0,400),days:weekdays.length,minutes,when:when.trim().slice(0,200)||'after class',time,weekdays:[...weekdays].sort(),createdAt:p?.createdAt??Date.now()},sides:{...s.sides,admission:true},activeSide:'admission'}));
   onSaved?.();router.push('/');
@@ -30,14 +30,14 @@ export function Pledge({onSaved}:{onSaved?:()=>void}){
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{(Object.keys(EXAMS) as ExamId[]).map(e=><button type="button" key={e} aria-pressed={exam===e} onClick={()=>{setExam(e);if(!p)setDate(DEFAULT_EXAM_DATE[e]);}} className="min-h-12 rounded-xl border-2 border-navy/15 px-3 font-bold text-navy aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white">{EXAMS[e].name}</button>)}</div>
     {exam!=='upcat'&&<p className="mt-2 text-sm text-ink-soft">Your plan uses Khanpanion’s practice sets for {EXAMS[exam].name}, built from the same banks as the UPCAT review.</p>}
    </fieldset>
-   <label className="grid gap-2"><span className="font-bold">{t(lang,'onb.date')}</span><input type="date" className={field} value={date} min={today} onChange={e=>setDate(e.target.value)}/></label>
+   <label className="grid gap-2"><span className="font-bold">{t(lang,'onb.date')}</span><input type="date" aria-label={t(lang,'onb.date')} aria-describedby="date-note" className={field} value={date} min={today} onChange={e=>setDate(e.target.value)} onInput={e=>setDate(e.currentTarget.value)}/><span id="date-note" className="text-sm text-ink-soft">Use your announced exam date, or choose a personal planning target. A target does not confirm an official test date.</span></label>
    <label className="grid gap-2"><span className="font-bold">{t(lang,'onb.why')}</span><span className="text-sm text-ink-soft">{t(lang,'onb.whyHint')}</span><textarea className={cx(field,'min-h-24 py-2 font-serif text-lg')} maxLength={400} value={why} onChange={e=>setWhy(e.target.value)} placeholder="I want to be the first in my family to study at UP."/></label>
    <fieldset><legend className="mb-2 font-bold">{t(lang,'onb.weekdays')}</legend>
-    <div className="flex flex-wrap gap-2">{DAYS.map((d,i)=><button type="button" key={d} aria-pressed={weekdays.includes(i)} onClick={()=>setWeekdays(w=>w.includes(i)?w.filter(x=>x!==i):[...w,i])} className="min-h-12 min-w-14 rounded-full border-2 border-navy/15 px-3 font-bold aria-pressed:border-green aria-pressed:bg-green">{d}</button>)}</div>
+    <div className="flex flex-wrap gap-2">{DAYS.map((d,i)=><button type="button" key={d} aria-pressed={weekdays.includes(i)} onClick={()=>setWeekdays(w=>w.includes(i)?w.filter(x=>x!==i):[...w,i])} className="min-h-12 min-w-14 rounded-full border-2 border-navy/15 px-3 font-bold aria-pressed:border-green aria-pressed:bg-green text-navy">{d}</button>)}</div>
     <p className="mt-2 text-sm text-ink-soft">{weekdays.length} day{weekdays.length===1?'':'s'} a week. Saturdays become mock exam days once practice starts.</p>
    </fieldset>
    <fieldset><legend className="mb-2 font-bold">{t(lang,'onb.minutes')}</legend>
-    <div className="flex flex-wrap gap-2">{[20,30,45,60,90].map(n=><button type="button" key={n} aria-pressed={minutes===n} onClick={()=>setMinutes(n)} className="min-h-12 rounded-full border-2 border-navy/15 px-4 font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white">{n} min</button>)}</div>
+    <div className="flex flex-wrap gap-2">{[20,30,45,60,90].map(n=><button type="button" key={n} aria-pressed={minutes===n} onClick={()=>setMinutes(n)} className="min-h-12 rounded-full border-2 border-navy/15 px-4 font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{n} min</button>)}</div>
    </fieldset>
    <div className="rounded-2xl bg-mint p-4 sm:p-5">
     <p className="font-bold">Your if-then plan</p>

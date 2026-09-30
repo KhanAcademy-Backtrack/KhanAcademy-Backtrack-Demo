@@ -1,7 +1,8 @@
 'use client';
 import {useState} from 'react';
 import Link from 'next/link';
-import {AnimatePresence,motion,useReducedMotion} from 'motion/react';
+import {AnimatePresence,motion} from 'motion/react';
+import {useQuietMotion} from './useQuietMotion';
 import type {MockItem} from '@/lib/mock/types';
 import {passageById} from '@/lib/mock/forms';
 import {misconception} from '@/lib/mock/misconceptions';
@@ -55,7 +56,7 @@ type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose
 /** One question. In practice mode the learner checks each answer and can open the
  *  explanation straight away; in the exam hall answers stay hidden until the end. */
 export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true}:Props){
- const reduced=useReducedMotion(),[explain,setExplain]=useState(false);
+ const reduced=useQuietMotion(),[explain,setExplain]=useState(false);
  const locked=mode==='practice'&&revealed;
  const right=revealed&&chosen===item.answerIndex;
  return <div className="text-navy">
@@ -67,7 +68,7 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
     const state=!revealed?(picked?'picked':'idle'):isKey?'key':picked?'wrong':'dim';
     return <motion.button key={i} role="radio" aria-checked={picked} disabled={locked} onClick={()=>onChoose(i)}
      animate={{opacity:state==='wrong'?.6:state==='dim'?.55:1}} transition={reduced?{duration:0}:{duration:DUR.base}}
-     className={cx('group flex min-h-14 w-full items-center gap-4 rounded-2xl border-2 px-4 py-3 text-left transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',
+     className={cx('group flex min-h-14 w-full items-center gap-4 rounded-2xl border-2 px-4 py-3 text-left  focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green text-navy',
       state==='picked'?'border-navy bg-mint':state==='key'?'border-green bg-mint':state==='wrong'?'border-navy/30 bg-white':'border-navy/12 bg-white hover:border-navy/40')}>
      <Oval filled={picked||(revealed&&isKey)} label={LETTERS[i]} size={36}/>
      <span className="flex-1 font-serif text-[19px] leading-snug">{c}</span>
@@ -75,7 +76,7 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
     </motion.button>;})}
   </div>
   <div className="mt-4 flex flex-wrap items-center gap-3">
-   <button aria-pressed={idk} disabled={locked} onClick={onIdk} className={cx('min-h-11 rounded-full border-2 px-4 text-[15px] font-semibold transition-colors',idk?'border-navy bg-navy text-white':'border-navy/15 text-navy hover:border-navy/40')}>{t(lang,'mock.idk')}</button>
+   <button aria-pressed={idk} disabled={locked} onClick={onIdk} className={cx('min-h-11 rounded-full border-2 px-4 text-[15px] font-semibold  text-navy',idk?'border-navy bg-navy text-white':'border-navy/15 text-navy hover:border-navy/40')}>{t(lang,'mock.idk')}</button>
    {mode==='practice'&&!revealed&&<button className={btn.primary} disabled={chosen===null&&!idk} onClick={onReveal}>{t(lang,'mock.check')}</button>}
   </div>
   <AnimatePresence initial={false}>{mode==='practice'&&revealed&&<motion.div key="fb" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={reduced?{duration:0}:SPRING} className="mt-5 space-y-3" aria-live="polite">

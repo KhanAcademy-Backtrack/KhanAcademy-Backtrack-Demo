@@ -78,7 +78,7 @@ export const MISCONCEPTIONS={
  times_added:m('Added the times','Two workers, two times, add them.','Together is faster than either alone. Add the hourly rates, then flip.','m_word_problems','g7m_q1'),
  times_subtracted:m('Subtracted the times','The difference looks like a saving.','Add the hourly rates, then flip.','m_word_problems','g7m_q1'),
  // Science: shared quantity slips
- ratio_inverted:m('Divided the wrong way round','Both quantities are in the question, and division order is easy to swap.','Check the units. Speed is metres per second, so metres go on top.','s_units','phys1_q1',{topic:'motion',skill:'unit_convert',routeClue:'Use the units to decide what goes on top.'}),
+ ratio_inverted:m('Divided the wrong way round','Both quantities are in the question, and division order is easy to swap.','Write the relationship first, then isolate the quantity you need. Check which value belongs above and below the division.','s_units','phys1_q1',{topic:'motion',skill:'unit_convert',routeClue:'Use the units to decide what goes on top.'}),
  multiplied_quantities:m('Multiplied instead of dividing','Multiplying two given numbers is a quick reflex.','Write the formula with units first. The units tell you whether to multiply or divide.','s_units','phys1_q1',{topic:'motion',skill:'unit_convert',routeClue:'Let the units choose the operation.'}),
  subtracted_quantities:m('Subtracted two different quantities','Subtraction gives a small, tidy number.','You can only subtract quantities with the same unit.','s_units','phys1_q1'),
  added_quantities:m('Added two different quantities','Adding feels like combining.','You can only add quantities with the same unit. Work is force × distance.','s_units','phys1_q1'),

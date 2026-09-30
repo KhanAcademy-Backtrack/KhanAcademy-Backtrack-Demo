@@ -7,7 +7,7 @@ export const SCIENCE_CHAPTERS:Chapter[]=[
     {heading:'Distance, displacement, speed, velocity',body:['Distance is how far you travelled along the path. Displacement is the straight-line change in position, with a direction.','Speed = distance ÷ time. Velocity = displacement ÷ time, with a direction.','Walk 3 m east then 3 m west: distance 6 m, displacement 0.'],formula:'v = d ÷ t'},
     {heading:'Acceleration',body:['Acceleration is how fast velocity changes: a = (v − u) ÷ t, in m/s².','Slowing down is acceleration too, just negative (opposite to the motion).','Constant velocity means zero acceleration, even at high speed.'],formula:'a = (v − u) ÷ t'},
     {heading:'Uniformly accelerated motion',body:['When acceleration is constant, use v = u + at, d = ut + ½at², and v² = u² + 2ad.','Pick the equation that has the three things you know and the one you want.','Free fall near Earth: a = 9.8 m/s² downward, whatever the mass (ignoring air).']},
-    {heading:'Reading motion graphs',body:['Position–time graph: the slope is the velocity. A flat line means the object is at rest.','Velocity–time graph: the slope is the acceleration, and the area under the line is the displacement.']}
+    {heading:'Reading motion graphs',body:['Position-time graph: the slope is the velocity. A flat line means the object is at rest.','Velocity-time graph: the slope is the acceleration, and the area under the line is the displacement.']}
    ]},
   examples:[
    {level:'Warm-up',q:'A jeepney travels 18 km in 30 minutes. What is its average speed in km/h?',steps:['30 minutes = 0.5 h.','18 ÷ 0.5 = 36.'],answer:'36 km/h'},
@@ -17,7 +17,7 @@ export const SCIENCE_CHAPTERS:Chapter[]=[
   traps:['ratio_inverted','initial_velocity_ignored','velocity_change_added','multiplied_by_time'],
   tip:'Write every quantity with its unit before you touch a formula. If the unit of your answer is not what the question asks for, you have picked the wrong operation.',
   practice:{families:['s_speed','s_acceleration','s_density']},
-  recall:[{front:'Acceleration formula',back:'a = (v − u) ÷ t'},{front:'Slope of a velocity–time graph',back:'Acceleration'},{front:'Area under a velocity–time graph',back:'Displacement'},{front:'Free-fall acceleration',back:'9.8 m/s² downward'},{front:'Distance vs displacement',back:'Path length vs straight-line change in position, with direction'}],
+  recall:[{front:'Acceleration formula',back:'a = (v − u) ÷ t'},{front:'Slope of a velocity-time graph',back:'Acceleration'},{front:'Area under a velocity-time graph',back:'Displacement'},{front:'Free-fall acceleration',back:'9.8 m/s² downward'},{front:'Distance vs displacement',back:'Path length vs straight-line change in position, with direction'}],
   hard:{text:'Converting units is usually the missing step in motion problems.',engine:{topic:'motion',skill:'unit_convert'},concepts:['matter_measurement','linear_equations']}},
  {id:'s_forces',subtest:'science',concept:'motion_forces',title:'Forces and Newton’s laws',author:TEAM,reviewer:'',status:'draft',createdAt:DRAFTED,
   summary:{intro:'Newton’s three laws explain why things start, stop and turn. Exam questions usually hinge on one idea: only the NET force changes motion.',
@@ -35,7 +35,7 @@ export const SCIENCE_CHAPTERS:Chapter[]=[
   traps:['friction_ignored','forces_added','mass_as_weight','divided_by_g'],
   tip:'Sketch the object as a dot with arrows for each force. Ten seconds of drawing prevents most sign mistakes.',
   practice:{families:['s_newton2','s_weight','s_work']},
-  recall:[{front:'Newton’s second law',back:'F_net = ma'},{front:'Why don’t action–reaction pairs cancel?',back:'They act on different objects.'},{front:'Weight of a 50 kg person',back:'50 × 9.8 = 490 N'},{front:'Constant velocity means net force is',back:'zero'}],
+  recall:[{front:'Newton’s second law',back:'F_net = ma'},{front:'Why don’t action-reaction pairs cancel?',back:'They act on different objects.'},{front:'Weight of a 50 kg person',back:'50 × 9.8 = 490 N'},{front:'Constant velocity means net force is',back:'zero'}],
   hard:{text:'Finding the net force is the usual gap.',engine:{topic:'forces',skill:'net_force'},concepts:['matter_measurement']}},
  {id:'s_moles',subtest:'science',concept:'moles_formulas',title:'Formulas, moles and composition',author:TEAM,reviewer:'',status:'draft',createdAt:DRAFTED,
   summary:{intro:'The mole lets chemists count particles by weighing them. Once you can read a formula and find its molar mass, grams, moles and particles convert into each other in one step.',

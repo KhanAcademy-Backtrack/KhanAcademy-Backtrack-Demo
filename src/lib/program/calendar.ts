@@ -12,7 +12,7 @@ export function calendarItems(s:ProgramState,today:string):CalItem[]{
  const planned=buildSchedule(s,today).filter(e=>!own.has(e.id)).map(e=>({...e,planned:true}));
  const mine=s.events.filter(e=>!(e as CalEvent&{removed?:boolean}).removed);
  const exams:CalItem[]=EXAM_DATES.map(d=>({id:d.id,date:d.start,end:d.end,title:d.title,kind:d.window?'examWindow':'exam',link:d.link}));
- if(s.pledge&&!EXAM_DATES.some(d=>d.exam===s.pledge!.exam&&d.start===s.pledge!.examDate))exams.push({id:'my-exam',date:s.pledge.examDate,title:`My ${EXAMS[s.pledge.exam].name} date`,kind:'exam'});
+ if(s.pledge&&!EXAM_DATES.some(d=>d.exam===s.pledge!.exam&&d.start===s.pledge!.examDate))exams.push({id:'my-exam',date:s.pledge.examDate,title:`My ${EXAMS[s.pledge.exam].name} planning target`,kind:'exam'});
  return [...planned,...mine,...exams].sort((a,b)=>a.date.localeCompare(b.date)||(a.time??'').localeCompare(b.time??''));
 }
 

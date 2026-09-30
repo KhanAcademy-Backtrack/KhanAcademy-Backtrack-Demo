@@ -10,13 +10,13 @@ export const EXAMS:Record<ExamId,{name:string;full:string;link:string;practice:s
 };
 const CHECKED='2026-09-30';
 export const EXAM_DATES:ExamDate[]=[
- {id:'dcat_nov8',exam:'dcat',title:'DCAT (Manila)',start:'2026-11-08',place:'Manila',note:'Testing day',link:EXAMS.dcat.link,checked:CHECKED},
- {id:'dostsei_nov14',exam:'dostsei',title:'DOST-SEI qualifying exam',start:'2026-11-14',end:'2026-11-15',note:'Two testing days',link:EXAMS.dostsei.link,checked:CHECKED},
- {id:'dcat_nov15',exam:'dcat',title:'DCAT (Manila)',start:'2026-11-15',place:'Manila',note:'Testing day',link:EXAMS.dcat.link,checked:CHECKED},
- {id:'dcat_dec6',exam:'dcat',title:'DCAT (Laguna)',start:'2026-12-06',place:'Laguna',note:'Testing day',link:EXAMS.dcat.link,checked:CHECKED},
- {id:'pupcet_2027',exam:'pupcet',title:'PUPCET testing',start:'2027-01-01',end:'2027-03-31',window:true,note:'Testing runs January to March 2027. Check the official page for your schedule.',link:EXAMS.pupcet.link,checked:CHECKED},
- {id:'upcat_apply_2027',exam:'upcat',title:'UPCAT applications open',start:'2027-03-01',end:'2027-03-31',window:true,note:'Applications open around March 2027. Watch the official page for the exact dates.',link:EXAMS.upcat.link,checked:CHECKED},
- {id:'upcat_2027',exam:'upcat',title:'UPCAT',start:'2027-08-01',end:'2027-08-31',window:true,note:'Scheduled for August 2027. The exact testing days are announced by the UP Office of Admissions.',link:EXAMS.upcat.link,checked:CHECKED}
+ {id:'upcat_2027_test',exam:'upcat',title:'UPCAT 2027 test dates',start:'2026-08-01',end:'2026-08-02',note:'For admission in AY 2027-2028. This testing cycle has finished. The next cycle dates are not yet verified here.',link:'https://upcat.up.edu.ph/htmls/aboutupcat.html',checked:CHECKED},
+ {id:'dostsei_nov14',exam:'dostsei',title:'DOST-SEI qualifying exam',start:'2026-11-14',end:'2026-11-15',note:'For the 2027 Undergraduate Scholarships. Confirm your testing assignment on the official portal.',link:'https://ugs.science-scholarships.ph/pages/home.html',checked:CHECKED}
 ];
-/** A sensible default exam date for the pledge, used only until the learner edits it. */
-export const DEFAULT_EXAM_DATE:Record<ExamId,string>={upcat:'2027-08-01',dcat:'2026-11-08',dostsei:'2026-11-14',pupcet:'2027-02-01'};
+export const EXAM_NOTICES=[
+ {exam:'upcat' as const,note:'The next UPCAT testing and application dates need an official announcement. You can set your own planning target in your pledge.'},
+ {exam:'dcat' as const,note:'The inherited November and December dates could not be confirmed against the current official page. Check DLSU for your testing schedule.'},
+ {exam:'pupcet' as const,note:'PUPCET schedules vary by campus. No January to March 2027 window is confirmed here; check the official page for your campus.'}
+];
+/** Only announced future dates are prefilled. Others are chosen by the learner. */
+export const DEFAULT_EXAM_DATE:Record<ExamId,string>={upcat:'',dcat:'',dostsei:'2026-11-14',pupcet:''};

@@ -83,7 +83,7 @@ test('calendar merges plan, own events and exams; ics is well formed', ()=>{
  assert.ok(items.some(i=>i.id==='mine1'));
  assert.equal(items.filter(i=>i.id===moved.id).length,1);
  assert.ok(items.some(i=>i.kind==='exam'));
- assert.ok(itemsOn(items,'2027-02-10').some(i=>i.id==='pupcet_2027'));
+ assert.ok(itemsOn(items,'2026-11-15').some(i=>i.id==='dostsei_nov14'));
  const grid=monthGrid(2026,9);assert.ok(grid.length===35||grid.length===42);assert.equal(new Date(grid[0]+'T00:00').getDay(),1);
  assert.ok(grid.includes('2026-10-01')&&grid.includes('2026-10-31'));
  const ics=toIcs(items.slice(0,20),'20261005T000000');

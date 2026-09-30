@@ -1,4 +1,4 @@
-import {CHAPTER_IDS} from '../../content/reviewer/index.ts';
+import {CHAPTER_IDS} from '../../content/reviewer/ids.ts';
 import {CONCEPTS} from './concepts.ts';
 
 /** A written reviewer chapter when one exists; otherwise the concept's study page,

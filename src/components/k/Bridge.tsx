@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useProgram} from './ProgramProvider';
+import {ProgressMoment} from './ProgressMoment';
 import {PageBand,Sheet,btn,Oval,cx,pageBody,KhanLink,Pill} from './ui';
 import {useFix} from './useFix';
 import {PROGRAMS,PROGRAM_BY_ID,RESCUES,RESCUE_BY_ID,summerPlan} from '@/lib/program/bridge';
@@ -18,7 +19,7 @@ function Rescue({only}:{only?:string[]}){
  return <Sheet>
   <h2 className="text-2xl font-extrabold">Rescue mode</h2>
   <p className="mt-1 text-ink-soft">Met something in class today that did not land? Pick it. Khanpanion finds the senior high topic it rests on.</p>
-  <div className="mt-4 flex flex-wrap gap-2">{list.map(x=><button key={x.id} aria-pressed={pick===x.id} onClick={()=>setPick(x.id)} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white">{x.topic}</button>)}</div>
+  <div className="mt-4 flex flex-wrap gap-2">{list.map(x=><button key={x.id} aria-pressed={pick===x.id} onClick={()=>setPick(x.id)} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{x.topic}</button>)}</div>
   {r&&<div className="mt-5 rounded-2xl bg-mint p-4 sm:p-5" aria-live="polite">
    <p className="font-bold">{r.topic} assumes:</p><p className="mt-1 font-serif text-lg">{r.needs}</p>
    <div className="mt-4 grid gap-2 sm:grid-cols-2">{r.concepts.map(c=><Link key={c} href={`/learn/${c}`} className="flex min-h-14 items-center gap-3 rounded-2xl bg-white px-4 py-2 font-semibold hover:bg-sky"><Oval size={22}/>{CONCEPT_BY_ID[c].title}</Link>)}</div>
@@ -34,7 +35,7 @@ export function BridgeHub(){
   <PageBand title="Start college strong" lead="Your first year assumes things your senior high school may not have taught. Since the Strengthened SHS curriculum made Pre-Calculus, Calculus, Biology, Chemistry and Physics electives, many students arrive without them. Find what your program expects and fill the gaps before they cost you."/>
   <div className={pageBody}>
    <Sheet><h2 className="text-2xl font-extrabold">What will you study?</h2><p className="mt-1 text-ink-soft">Pick the closest match. You can change it any time.</p>
-    <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{PROGRAMS.map(p=><li key={p.id}><button onClick={()=>choose(p.id)} className={cx('flex h-full w-full flex-col gap-2 rounded-2xl border-2 p-4 text-left transition-colors hover:border-navy/40 hover:bg-mint',state.bridgeProgram===p.id?'border-navy bg-mint':'border-navy/10')}><span className="flex items-center gap-2 text-lg font-bold"><Oval filled={state.bridgeProgram===p.id} size={24}/>{p.title}</span><span className="text-sm text-ink-soft">{p.examples}</span></button></li>)}</ul>
+    <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{PROGRAMS.map(p=><li key={p.id}><button onClick={()=>choose(p.id)} className={cx('flex h-full w-full flex-col gap-2 rounded-2xl border-2 p-4 text-left  hover:border-navy/40 hover:bg-mint text-navy',state.bridgeProgram===p.id?'border-navy bg-mint':'border-navy/10')}><span className="flex items-center gap-2 text-lg font-bold"><Oval filled={state.bridgeProgram===p.id} size={24}/>{p.title}</span><span className="text-sm text-ink-soft">{p.examples}</span></button></li>)}</ul>
    </Sheet>
    <div className="mt-5"><Rescue/></div>
    <Sheet className="mt-5">
@@ -69,8 +70,8 @@ export function BridgeProgramPage({id}:{id:string}){
      return <li key={a.text} className="grid gap-2 py-4 sm:grid-cols-[1fr_auto] sm:items-center"><div className="flex gap-3"><Oval filled={solid} size={28} className="mt-0.5"/><div><p className="font-semibold">{a.text}</p><p className="text-sm text-ink-soft">{solid?'Solid':seen?'Keep practising':'Not checked yet'}</p></div></div><div className="flex flex-wrap gap-2 pl-10 sm:pl-0">{a.concepts.map(c=><Link key={c} className={btn.ghost} href={`/learn/${c}`}>{CONCEPT_BY_ID[c].title}</Link>)}</div></li>;})}</ul>
    </Sheet>
    <div className="mt-5 grid gap-5 lg:grid-cols-2">
-    <Sheet><h2 className="text-2xl font-extrabold">Your Khan Academy path</h2><p className="mt-1 text-ink-soft">In order. Tick a unit when you finish it on Khan Academy; that tick is your own note and stays separate from your Khanpanion scores.</p>
-     <ol className="mt-4 grid gap-2">{p.khanPath.map((k,i)=><li key={k} className="flex items-start gap-3"><button aria-pressed={khanDone(k)} aria-label={`Mark ${KHAN_UNITS[k].unit} as finished`} onClick={()=>toggleKhan(k)} className="grid min-h-11 min-w-11 place-items-center"><Oval filled={khanDone(k)} label={String(i+1)} size={34}/></button><div className="pt-1"><KhanLink href={khanUrl(k)}>{KHAN_UNITS[k].course}: {KHAN_UNITS[k].unit}</KhanLink><p className="-mt-2 text-sm text-ink-soft">{KHAN_UNITS[k].covers}</p></div></li>)}</ol>
+    <Sheet><h2 className="text-2xl font-extrabold">Your Khan Academy path</h2><ProgressMoment>{p.khanPath.filter(k=>khanDone(k)).length} of {p.khanPath.length} units marked finished by you</ProgressMoment><p className="mt-1 text-ink-soft">In order. Tick a unit when you finish it on Khan Academy; that tick is your own note and stays separate from your Khanpanion scores.</p>
+     <ol className="mt-4 grid gap-2">{p.khanPath.map((k,i)=><li key={k} className="flex items-start gap-3"><button aria-pressed={khanDone(k)} aria-label={`Mark ${KHAN_UNITS[k].unit} as finished`} onClick={()=>toggleKhan(k)} className="grid min-h-11 min-w-11 place-items-center text-navy"><Oval filled={khanDone(k)} label={String(i+1)} size={34}/></button><div className="pt-1"><KhanLink href={khanUrl(k)}>{KHAN_UNITS[k].course}: {KHAN_UNITS[k].unit}</KhanLink><p className="-mt-2 text-sm text-ink-soft">{KHAN_UNITS[k].covers}</p></div></li>)}</ol>
     </Sheet>
     <Sheet><h2 className="text-2xl font-extrabold">An eight-week summer bridge</h2><p className="mt-1 text-ink-soft">A steady pace before classes start: about four sessions a week.</p>
      <ol className="mt-4 grid gap-3">{weeks.map(w=><li key={w.week} className="rounded-2xl bg-sky p-3"><p className="font-bold">Week {w.week}</p><p className="text-[15px]">{w.focus}</p>{!!w.khan.length&&<p className="mt-1 text-sm text-ink-soft">{w.khan.map(k=>`${KHAN_UNITS[k].course}: ${KHAN_UNITS[k].unit}`).join('; ')}</p>}{w.check&&<Pill tone="green">Placement check</Pill>}</li>)}</ol>
