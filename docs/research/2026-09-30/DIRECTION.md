@@ -34,7 +34,7 @@ Offline reviewer caching and its acceptance test are Phase B. No backend, accoun
 
 ## Release validation
 
-The production export generates 104 pages. The landing route first-load JavaScript is 232 kB in the Next.js build report; the exam hall is 256 kB and results are 257 kB. Today is loaded when a saved side requires it; share-card generation is loaded when sharing is requested. The lightweight reviewer catalog keeps chapter prose out of answer-link lookup. The deterministic question banks still contribute to the landing bundle. No runtime dependencies were added.
+The production export generates 104 pages. The landing route first-load JavaScript is 233 kB in the Next.js build report; the exam hall is 256 kB and results are 257 kB. Today is loaded when a saved side requires it; share-card generation is loaded when sharing is requested. The lightweight reviewer catalog keeps chapter prose out of answer-link lookup. The deterministic question banks still contribute to the landing bundle. No runtime dependencies were added.
 
 The legacy base colour alias collided with Tailwind text-base and caused white labels on paper at desktop sizes. That unused alias was removed; paper controls have explicit navy labels. The browser suite asserts inactive subject-label colour to prevent this regression. The plan now places phase/readiness information beside the subject list at desktop width.
 
