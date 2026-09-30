@@ -50,7 +50,7 @@ export function Sheet({children,className,as='section',...rest}:{children:ReactN
 export function PageBand({title,lead,children,aside}:{title:ReactNode;lead?:ReactNode;children?:ReactNode;aside?:ReactNode}){
  return <div className="bg-navy text-white">
   <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-14 pt-9 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-16 lg:pt-12">
-   <div className="max-w-3xl"><h1 className="text-[2.1rem] font-extrabold leading-[1.02] tracking-[-.035em] text-white sm:text-5xl">{title}</h1>{lead&&<p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-white/80">{lead}</p>}{children}</div>
+   <div className="max-w-3xl"><h1 className="break-words text-[2.1rem] font-extrabold leading-[1.02] tracking-[-.035em] text-white sm:text-5xl">{title}</h1>{lead&&<p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-white/80">{lead}</p>}{children}</div>
    {aside}
   </div>
  </div>;

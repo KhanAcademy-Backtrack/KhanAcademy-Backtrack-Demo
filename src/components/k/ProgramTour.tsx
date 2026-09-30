@@ -8,6 +8,7 @@ import {useMotionPolicy} from '@/components/motion/MotionPolicy';
 import {DUR,tween} from '@/lib/motion-tokens';
 import {useProgram} from './ProgramProvider';
 import {goalLabel,learnerGoal} from '@/lib/program/personalization';
+import {PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {btn,cx,Oval} from './ui';
 
 function tourSteps(state:ReturnType<typeof useProgram>['state'],browsing:boolean){
@@ -17,11 +18,11 @@ function tourSteps(state:ReturnType<typeof useProgram>['state'],browsing:boolean
  {tab:'calendar',title:'Keep your own dates here.',body:'You can use the calendar without a study plan. Add a date from your week, edit it or just look around. You can continue the guide without adding anything.',preview:['Pick a day','Add an event if you want','Continue whenever you are ready'],href:'/calendar',action:'Open the calendar'},
  {tab:'today',title:'Choose a goal whenever you want.',body:'The home page keeps your subject browser close. Use Choose my goal when you want a personalized routine. Guide stays in the header if you need another look.',preview:['Keep browsing','Choose a goal later','Your existing work stays saved'],href:'/',action:'Return to browsing'}
  ];
- const goal=learnerGoal(state),label=goalLabel(state),setup=state.setup,topic=setup?.concept;
- const next=goal==='college'?'/bridge/'+(state.bridgeProgram??''):goal==='topic'&&topic?'/learn/'+topic:'/plan';
+ const goal=learnerGoal(state),label=goalLabel(state),setup=state.setup,topic=setup?.concept,program=PROGRAM_BY_ID[state.bridgeProgram??''];
+ const next=goal==='college'?program?'/bridge/'+program.id:'/bridge':goal==='topic'&&topic?'/learn/'+topic:'/plan';
  return [
   {tab:'today',title:'This space is yours.',body:'You chose '+label+'. Your home page now brings the relevant topics and your study week together.',preview:[label,(setup?.weekdays.length??3)+' study days a week',(setup?.minutes??30)+' minutes per session'],href:'/',action:'Open my home page'},
-  {tab:'plan',title:goal==='college'?'Start with your foundations.':goal==='topic'?'Your chosen topic is close by.':'A routine you can adjust.',body:goal==='college'?'Your program map connects first-year topics to foundations you can review. A placement check can help you choose where to begin.':goal==='topic'?'Open your topic summary, follow a reviewed lesson where available, and try the practice questions when you are ready.':'Your plan follows your study days. You can change the routine or add a target date whenever you have one.',preview:goal==='college'?['Your program','Useful foundations','Placement check']:goal==='topic'?['Read the summary','Learn with an example','Try it yourself']:['Your study days','A manageable session','Your planning target, if known'],href:next,action:goal==='college'?'Open my program map':goal==='topic'?'Open my topic':'Open my plan'},
+  {tab:'plan',title:goal==='college'?program?'Start with your foundations.':'Explore a college field.':goal==='topic'?'Your chosen topic is close by.':'A routine you can adjust.',body:goal==='college'?program?'Your program map connects first-year topics to foundations you can review. A placement check can help you choose where to begin.':'Start with general foundations. You can browse degree groups and choose a field when you are ready.':goal==='topic'?'Open your topic summary, follow a reviewed lesson where available, and try the practice questions when you are ready.':'Your plan follows your study days. You can change the routine or add a target date whenever you have one.',preview:goal==='college'?program?['Your program','Useful foundations','Placement check']:['General foundations','Browse college fields','Choose your field later']:goal==='topic'?['Read the summary','Learn with an example','Try it yourself']:['Your study days','A manageable session','Your planning target, if known'],href:next,action:goal==='college'?program?'Open my program map':'Explore college fields':goal==='topic'?'Open my topic':'Open my plan'},
   {tab:'calendar',title:'Use your real study calendar.',body:'Your chosen days already have sessions. Pick a date, edit a session or add something from your own week. Let’s try the calendar itself.',preview:['Pick a day','Edit or add a session','Move it when plans change'],href:'/calendar',action:'Open my calendar'},
   {tab:'reviewer',title:'Come back when you need help.',body:'The reviewer is there when a topic needs another look. Search by subject, save a useful page, or return to your home page for the next session.',preview:['Search a topic','Save a useful explanation','Keep your routine flexible'],href:'/reviewer',action:'Open the reviewer'}
  ];
@@ -66,7 +67,7 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
     <Link href={href} className={cx(btn.text,'mt-2 text-sm')} onClick={e=>{if(current.tab==='calendar'){e.preventDefault();onCalendar();}else onClose();}}>{current.action} <span aria-hidden="true">→</span></Link>
    </motion.div>
    <div className="mt-3 flex items-center gap-2 border-t border-navy/10 pt-4">{step>0&&<button className={btn.ghost} onClick={()=>onStep(step-1)}>Back</button>}<button className={cx(btn.primary,'ml-auto')} onClick={()=>current.tab==='calendar'?onCalendar():step===STEPS.length-1?onClose():onStep(step+1)}>{current.tab==='calendar'?'Try my calendar':step===STEPS.length-1?'Finish guide':'Next'}</button></div>
-   <div className="mt-2 flex items-center justify-between gap-3"><button className={cx(btn.text,'text-sm')} onClick={onClose}>Close guide</button><p className="max-w-48 text-right text-xs leading-relaxed text-ink-soft">Open Guide any time from the header.</p></div>
+   <p className="mt-3 text-right text-xs leading-relaxed text-ink-soft">Open Guide any time from the header.</p>
   </div>
  </div>,document.body);
 }

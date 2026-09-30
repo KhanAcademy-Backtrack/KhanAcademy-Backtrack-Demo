@@ -1,7 +1,7 @@
 import {buildSchedule,addDays} from './planner.ts';
-import {EXAM_DATES,EXAMS} from './admissions.ts';
+import {EXAM_DATES} from './admissions.ts';
 import type {ProgramState,CalEvent} from './store.ts';
-import {learnerGoal,targetDay} from './personalization.ts';
+import {examTargets} from './personalization.ts';
 
 export type CalItem={id:string;date:string;end?:string;time?:string;minutes?:number;title:string;kind:'study'|'mock'|'custom'|'exam'|'examWindow';concept?:string;done?:boolean;planned?:boolean;link?:string};
 
@@ -13,8 +13,7 @@ export function calendarItems(s:ProgramState,today:string,includeOfficial=true):
  const planned=buildSchedule(s,today).filter(e=>!own.has(e.id)).map(e=>({...e,planned:true}));
  const mine=s.events.filter(e=>!(e as CalEvent&{removed?:boolean}).removed);
  const exams:CalItem[]=includeOfficial?EXAM_DATES.map(d=>({id:d.id,date:d.start,end:d.end,title:d.title,kind:d.window?'examWindow':'exam',link:d.link})):[];
- const target=targetDay(s),exam=s.setup?.exam??s.pledge?.exam;
- if(target&&exam&&learnerGoal(s)==='exam'&&!EXAM_DATES.some(d=>d.exam===exam&&d.start===target))exams.push({id:'my-exam',date:target,title:`My ${EXAMS[exam].name} planning target`,kind:'exam'});
+ for(const target of examTargets(s))if(target.date&&(!includeOfficial||!EXAM_DATES.some(d=>d.exam===target.exam&&d.start===target.date)))exams.push({id:s.setup?.cet?`cet-${target.key}`:'my-exam',date:target.date,title:`My ${target.name} planning target`,kind:'exam'});
  return [...planned,...mine,...exams].sort((a,b)=>a.date.localeCompare(b.date)||(a.time??'').localeCompare(b.time??''));
 }
 

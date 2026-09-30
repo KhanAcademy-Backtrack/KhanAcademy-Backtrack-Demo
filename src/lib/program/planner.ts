@@ -3,7 +3,7 @@ import {bandFor} from '../mock/blueprint.ts';
 import {itemById,formFromKey,formItems} from '../mock/forms.ts';
 import {SUBTESTS,type Subtest} from '../mock/types.ts';
 import type {ProgramState,CalEvent} from './store.ts';
-import {goalConceptIds,targetDay} from './personalization.ts';
+import {goalConceptIds,scheduleEnd} from './personalization.ts';
 
 /** Dates are local calendar days written YYYY-MM-DD. Every function here takes
  *  "today" as an argument so plans are testable and never depend on the clock. */
@@ -86,7 +86,7 @@ export const statusOf=(row:FocusRow)=>!row.seen?'not started':row.accuracy!==und
  *  simply redistributes what is left; nothing is ever marked late. */
 export function buildSchedule(s:ProgramState,today:string):CalEvent[]{
  const p=s.setup??s.pledge;if(!p)return [];
- const end=targetDay(s),list=end?phases(today,end):undefined,rank=(s.setup?personalFocus(s):focusRanking(s)).map(r=>r.concept.id);
+ const end=scheduleEnd(s),list=end?phases(today,end):undefined,rank=(s.setup?personalFocus(s):focusRanking(s)).map(r=>r.concept.id);
  if(!rank.length)return [];
  const days=p.weekdays.length?p.weekdays:[1,3,5];
  const out:CalEvent[]=[];let cursor=0;

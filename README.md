@@ -37,7 +37,7 @@ Use Node 24 or later for the built-in TypeScript test runner.
 
 ## Getting started
 
-The first visit asks for a goal: entrance exam preparation, first-year college foundations or a class topic. I’m just browsing opens the guide and subject browser without requiring questions or a routine. Otherwise, choose the relevant exam, program or categorized topic, then a comfortable routine. The saved choices drive the home page and a real study calendar, even when an exam date is unknown. Guide is visible in the header; /?guide=1 opens it directly. Its calendar step opens the editable calendar rather than a preview. The earlier study-space tour remains in Me. Configuration and calendar check-ins stay separate from learning results.
+The first visit asks for a goal: entrance exam preparation, first-year college foundations or a class topic. I’m just browsing opens the guide and subject browser without requiring questions or a routine. Exam review supports General CET review, several named targets and custom CET names, each with an optional planning date. All use the shared reviewer and practice bank; adding a target does not reproduce that exam’s exact format. College selection explains the degree groups and offers I’m not sure yet. The saved choices drive the home page and a real study calendar. Guide stays in the header; /?guide=1 opens it directly. Choose my goal on the browsing home or Me → Change goal or routine reopens personalization. The calendar guide opens the editable page. The earlier study-space tour remains in Me. Configuration and calendar check-ins stay separate from learning results.
 
 ## Where things live
 

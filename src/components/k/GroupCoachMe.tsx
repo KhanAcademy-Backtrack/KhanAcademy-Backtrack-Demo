@@ -7,7 +7,7 @@ import {ProgressMoment} from './ProgressMoment';
 import {PageBand,Sheet,btn,Oval,OvalRow,cx,pageBody,Pill} from './ui';
 import {useStudy} from '@/components/study/StudyProvider';
 import {StudyBackups} from '@/components/study/StudyBackups';
-import {ProgramTourButton,ChangeGoalButton} from './ProgramTourProvider';
+import {ChangeGoalButton} from './ProgramTourProvider';
 import {goalLabel} from '@/lib/program/personalization';
 import {weeks} from '@/lib/program/planner';
 import {formFromKey} from '@/lib/mock/forms';
@@ -80,7 +80,7 @@ export function Me(){
   <PageBand title="Me" lead="Adjust your settings, choose a study goal and keep a backup of your progress."/>
   <div className={pageBody}>
    <div className="grid gap-5 lg:grid-cols-2">
-    <Sheet className="lg:col-span-2"><div className="flex flex-wrap items-center justify-between gap-4"><div><h2 className="text-2xl font-extrabold">Getting started</h2><p className="mt-1 text-ink-soft">A quick look at Today, plans, practice and the reviewer.</p></div><ProgramTourButton className={btn.primary}/></div><Link href="/demo?tour=1" className={cx(btn.text,'mt-2 text-sm')}>Study space tour</Link></Sheet>
+    <Sheet className="lg:col-span-2"><h2 className="text-2xl font-extrabold">The practice rooms</h2><p className="mt-1 text-ink-soft">Explore the earlier study space and its interactive lessons.</p><Link href="/demo?tour=1" className={cx(btn.text,'mt-2 text-sm')}>Study space tour</Link></Sheet>
     <Sheet><h2 className="text-2xl font-extrabold">{t(lang,'me.language')}</h2><div className="mt-3 flex gap-2">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(s=>({...s,lang:l}))} className="min-h-11 rounded-full border-2 border-navy/15 px-5 font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div><p className="mt-2 text-sm text-ink-soft">Filipino covers navigation, your plan, Today and the exam screens.</p></Sheet>
     <Sheet><h2 className="text-2xl font-extrabold">Your goal and routine</h2><p className="mt-3 font-semibold">{goalLabel(state)}</p><p className="mt-1 text-sm text-ink-soft">Change what you are preparing for, your topic or your study days.</p><ChangeGoalButton className={cx(btn.primary,'mt-4')}/></Sheet>
     <Sheet><h2 className="text-2xl font-extrabold">Motion and sound</h2><label className="mt-3 flex min-h-11 items-center gap-3"><input type="checkbox" className="h-5 w-5 accent-[#14bf96]" checked={study.state.settings.quiet} onChange={e=>study.update(s=>({...s,settings:{...s.settings,quiet:e.target.checked},updatedAt:Date.now()}))}/>Quiet mode: still pictures, no movement</label><label className="flex min-h-11 items-center gap-3"><input type="checkbox" className="h-5 w-5 accent-[#14bf96]" checked={study.state.settings.sound} onChange={e=>study.update(s=>({...s,settings:{...s.settings,sound:e.target.checked},updatedAt:Date.now()}))}/>Sounds when a round finishes</label></Sheet>

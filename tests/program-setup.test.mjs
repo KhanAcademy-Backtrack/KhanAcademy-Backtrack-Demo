@@ -50,3 +50,16 @@ test('calendar export keeps local times, UTC stamps, midnight rollover and UTF-8
  for(const line of ics.split('\r\n'))assert.ok(Buffer.byteLength(line,'utf8')<=75);
  assert.ok(validProgram({...initialProgram(),setup:setup()}));assert.equal(PROGRAM_KEY,'backtrack.program.v1');
 });
+
+test('general CET review does not assume UPCAT or require a date',()=>{
+ const s={...initialProgram(),setup:{...setup('exam'),exam:undefined,cet:{general:true,targets:[]}}};
+ assert.ok(validProgram(s));assert.equal(goalLabel(s),'General CET review');assert.equal(targetDay(s),undefined);assert.ok(buildSchedule(s,'2026-10-01').length>0);
+ for(const cet of [{general:false,targets:[]},{general:true,targets:[{key:'x',name:''}]},{general:false,targets:[{key:'x',name:'Exam',date:'2027-02-30'}]}])assert.equal(validProgram({...s,setup:{...s.setup,cet}}),false);
+});
+test('several CET targets retain separate dates and schedule through the last exam',()=>{
+ const s={...initialProgram(),setup:{...setup('exam'),cet:{general:false,targets:[{key:'dcat',name:'DCAT',exam:'dcat',date:'2026-10-15'},{key:'own-test',name:'My school CET',date:'2026-11-15'}]}}};
+ assert.ok(validProgram(s));assert.equal(targetDay(s),'2026-10-15');assert.equal(goalLabel(s),'CET review · 2 exam targets');assert.ok(buildSchedule(s,'2026-10-01').some(e=>e.date>'2026-10-15'));
+ const dates=calendarItems(s,'2026-10-01',false).filter(e=>e.kind==='exam');assert.deepEqual(dates.map(e=>e.date),['2026-10-15','2026-11-15']);assert.equal(new Set(dates.map(e=>e.id)).size,2);
+ const raw=JSON.stringify(s);assert.deepEqual(loadProgram({getItem:()=>raw,setItem:()=>assert.fail('valid multi-CET save')},3).state,s);
+ const college={...s,setup:{...s.setup,goal:'college'},bridgeProgram:'general'};assert.ok(validProgram(college));assert.equal(targetDay(college),undefined);assert.equal(calendarItems(college,'2026-10-01',false).some(e=>e.kind==='exam'),false);
+});

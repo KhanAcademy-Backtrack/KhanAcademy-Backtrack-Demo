@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 121 tests
+npm test          # node --test, currently 123 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 104 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -133,3 +133,5 @@ LearnerSetup is an optional, backward-compatible field in the existing program s
 Guide is a visible header action and /?guide=1 deep link. Setup precedes the goal-aware guide for an unconfigured learner. Calendar practice is non-modal and uses the actual editing controls, with a continuation action. Main navigation includes Calendar at six stable positions; it switches to the bottom bar below 1024 px. Inline setup actions offset above that bar. Date navigation and add-event intent use validated/consumed query parameters. Removals have Undo; custom appointments do not add study days. Existing answers, exposure/version rules, backups, old route URLs and raw saved progress remain intact.
 
 Entry behavior: the intent picker appears automatically on the first normal page in a browser-tab session. I’m just browsing continues a guide and subject browser without requiring a routine or questions. It is a session-only choice; saved preferences and learning records stay intact. A saved goal can be continued with one click. Refresh and normal navigation do not repeatedly interrupt the same visit. Timed/print and explicitly requested legacy-tour entries remain focused. Guide stays visible in the header and /?guide=1 opens it directly.
+
+Quality-of-life follow-up: keep one current Guide action in the header. Browsing home has Choose my goal; Me has a direct Change goal or routine menu action. The picker uses compact intent icons, a navy header and one dismiss control. College degree groups are explained with examples and a general/unsure option. CETPreferences is optional under the existing save, supports general review and up to 12 named/custom targets with separate optional dates; the schedule runs through the last target. No exam-specific bank is implied. PersonalPlan guards the legacy #pledge link for browsing and configured paths. Browsing a college map does not replace a different chosen goal or its stored field. Saved CET preferences survive switching to college/topic. Keep phone grid sheets min-w-0 so their locally scrolling week controls cannot widen the page.

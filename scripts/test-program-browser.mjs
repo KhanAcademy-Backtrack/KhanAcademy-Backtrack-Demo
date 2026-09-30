@@ -25,10 +25,10 @@ export async function programJourneys({scenario,origin,root}){
    await chooseGoal(page,origin,'exam');await shot(page,'personal-guide',width);await closeGuide(page);await shot(page,'personal-home',width);
    for(let i=0;i<3;i++){await page.getByRole('radio').first().click();await page.getByRole('button',{name:'Check',exact:true}).click();await overflow(page);await page.getByRole('button',{name:i===2?'Finish':'Next question',exact:true}).click();}
    assert.equal((await data(page)).daily[Object.keys((await data(page)).daily)[0]].total,3);await shot(page,'sprint-result',width);
-   await page.goto(origin+'/plan');await page.getByRole('button',{name:'Add an exam planning date'}).click();await page.getByRole('heading',{name:'Make your study plan'}).waitFor();await shot(page,'pledge',width);
-   await page.getByLabel('Exam date').fill('2027-08-07');await page.getByLabel('Why does this matter to you?').fill('Study Computer Science');await page.getByRole('button',{name:'Save my plan'}).click();
-   await page.getByRole('heading',{name:'UPCAT preparation',exact:true}).waitFor();assert.equal((await data(page)).pledge.why,'Study Computer Science');await page.getByText(/days to your planning target/).waitFor();await shot(page,'today',width);
-   await page.goto(origin+'/plan');await page.getByRole('heading',{name:'Three phases'}).waitFor();assert.equal(await page.getByRole('tab',{name:'Language',exact:true}).evaluate(el=>getComputedStyle(el).color),'rgb(10, 42, 102)','Inactive subject labels remain visible on paper');await shot(page,'plan',width);
+   await page.goto(origin+'/plan');await page.getByRole('button',{name:'Edit or add CETs'}).click();await page.getByRole('dialog').getByRole('button',{name:'Prepare for an entrance exam',exact:true}).click();await shot(page,'pledge',width);
+   await page.getByLabel('Planning date, if you have one').fill('2027-08-07');await page.getByRole('button',{name:'Continue',exact:true}).click();await page.getByRole('button',{name:'Show my study space',exact:true}).click();await closeGuide(page);
+   await page.getByRole('heading',{name:'UPCAT preparation',exact:true}).waitFor();assert.equal((await data(page)).setup.cet.targets[0].date,'2027-08-07');await page.getByText(/days to your planning target/).waitFor();await shot(page,'today',width);
+   await page.goto(origin+'/plan');await page.getByRole('heading',{name:'Your exam targets'}).waitFor();assert.equal(await page.getByRole('button',{name:'Language',exact:true}).evaluate(el=>getComputedStyle(el).color),'rgb(10, 42, 102)','Inactive subject labels remain visible on paper');await shot(page,'plan',width);
   },viewport);
   await scenario(`program mock autosave pause reload overtime results fix ${width}`,async page=>{
    const key='section~math|20260930',ids=formItems(formFromKey(key));await exam(page,key);

@@ -33,11 +33,11 @@ function Rescue({only}:{only?:string[]}){
 
 export function BridgeHub(){
  const {state,update}=useProgram(),router=useRouter();
- const choose=(id:string)=>{update(s=>({...s,sides:{...s.sides,bridge:true},activeSide:'bridge',bridgeProgram:id,...(s.setup?{setup:{...s.setup,goal:'college'}}:{})}));router.push(`/bridge/${id}`);};
+ const choose=(id:string)=>{update(s=>s.setup&&s.setup.goal!=='college'?s:{...s,sides:{...s.sides,bridge:true},activeSide:s.setup?s.activeSide:'bridge',bridgeProgram:id});router.push(`/bridge/${id}`);};
  return <>
   <PageBand title="Start college strong" lead="Choose your program to find the math and science to revisit before your first-year classes. You can also get help with a topic you met in class today."/>
   <div className={pageBody}>
-   <Sheet><h2 className="text-2xl font-extrabold">What will you study?</h2><p className="mt-1 text-ink-soft">Pick the closest match. You can change it any time.</p>
+   <Sheet><h2 className="text-2xl font-extrabold">Explore a college field</h2><p className="mt-1 text-ink-soft">Open a field to see its foundation topics.</p>
     <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{PROGRAMS.map(p=><li key={p.id}><button onClick={()=>choose(p.id)} className={cx('flex h-full w-full flex-col gap-2 rounded-2xl border-2 p-4 text-left  hover:border-navy/40 hover:bg-mint text-navy',state.bridgeProgram===p.id?'border-navy bg-mint':'border-navy/10')}><span className="flex items-center gap-2 text-lg font-bold"><Oval filled={state.bridgeProgram===p.id} size={24}/>{p.title}</span><span className="text-sm text-ink-soft">{p.examples}</span></button></li>)}</ul>
    </Sheet>
    <div className="mt-5"><Rescue/></div>

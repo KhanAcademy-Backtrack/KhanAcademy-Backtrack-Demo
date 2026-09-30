@@ -7,7 +7,9 @@ import type {ExamId} from './admissions.ts';
 export const PROGRAM_KEY='backtrack.program.v1';
 export type Side='admission'|'bridge';
 export type Pledge={exam:ExamId;examDate:string;why:string;days:number;minutes:number;when:string;time:string;weekdays:number[];createdAt:number};
-export type LearnerSetup={goal:'exam'|'college'|'topic';exam?:ExamId;concept?:string;targetDate?:string;weekdays:number[];minutes:number;time:string;createdAt:number};
+export type CETTarget={key:string;name:string;exam?:ExamId;date?:string};
+export type CETPreferences={general:boolean;targets:CETTarget[]};
+export type LearnerSetup={goal:'exam'|'college'|'topic';exam?:ExamId;cet?:CETPreferences;concept?:string;targetDate?:string;weekdays:number[];minutes:number;time:string;createdAt:number};
 export type CalEvent={id:string;date:string;time?:string;minutes?:number;title:string;kind:'study'|'mock'|'custom';concept?:string;done?:boolean;removed?:boolean};
 export type NoteEntry={itemId:string;at:number;formKey:string;chosen:number|null;idk:boolean;triage?:Triage;misconception?:string;concept:string;resolved?:boolean};
 export type ConceptProgress={khanOpened?:number;khanDone?:number;read?:number;checks:{at:number;correct:number;total:number}[]};
@@ -43,10 +45,15 @@ export function validDay(value:unknown):value is string{
  const [y,m,d]=(value as string).split('-').map(Number),day=new Date(y,m-1,d);
  return y>=1900&&y<=2200&&day.getFullYear()===y&&day.getMonth()===m-1&&day.getDate()===d;
 }
+function validCet(x:unknown){
+ return obj(x)&&typeof x.general==='boolean'&&Array.isArray(x.targets)&&x.targets.length<=12&&(x.general||x.targets.length>0)
+  &&x.targets.every(t=>obj(t)&&id(t.key)&&text(t.name,60)&&typeof t.name==='string'&&t.name.trim().length>0&&(t.exam===undefined||['upcat','dcat','dostsei','pupcet'].includes(String(t.exam)))&&(t.date===undefined||validDay(t.date)))
+  &&new Set(x.targets.map(t=>t.key)).size===x.targets.length;
+}
 function validSetup(x:unknown){
  return obj(x)&&['exam','college','topic'].includes(String(x.goal))
   &&(x.exam===undefined||['upcat','dcat','dostsei','pupcet'].includes(String(x.exam)))
-  &&(x.goal!=='exam'||x.exam!==undefined)&&(x.goal!=='topic'||id(x.concept))
+  &&(x.cet===undefined||validCet(x.cet))&&(x.goal!=='exam'||x.exam!==undefined||x.cet!==undefined)&&(x.goal!=='topic'||id(x.concept))
   &&(x.concept===undefined||id(x.concept))&&(x.targetDate===undefined||validDay(x.targetDate))
   &&Array.isArray(x.weekdays)&&x.weekdays.length>0&&x.weekdays.length<=7&&new Set(x.weekdays).size===x.weekdays.length&&x.weekdays.every(d=>Number.isInteger(d)&&d>=0&&d<7)
   &&num(x.minutes,5,240)&&Number.isInteger(x.minutes)&&typeof x.time==='string'&&/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(x.time)&&num(x.createdAt);

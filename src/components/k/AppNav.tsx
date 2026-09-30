@@ -10,6 +10,7 @@ import {Wordmark,cx} from './ui';
 import {SPRING} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
 import {learnerGoal} from '@/lib/program/personalization';
+import {PROGRAM_BY_ID} from '@/lib/program/bridge';
 
 type Tab={href:string;key:'today'|'plan'|'calendar'|'mocks'|'reviewer'|'group';match:(p:string)=>boolean};
 function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{return [
@@ -39,8 +40,8 @@ export function AppNav(){
  const openTour=useProgramTour(),guide=useProgramGuide();
  const path=usePathname()||'/',{state,update}=useProgram(),reduced=useQuietMotion();
  const [menu,setMenu]=useState(false),button=useRef<HTMLButtonElement>(null),panel=useRef<HTMLDivElement>(null);
- const goal=guide.browsing?undefined:learnerGoal(state),lang=state.lang,both=state.sides.admission&&state.sides.bridge,bridge=goal==='college',topic=goal==='topic'?state.setup?.concept:undefined;
- const list=tabs(bridge,topic,state.bridgeProgram),active=list.find(x=>x.match(path))?.key;
+ const goal=guide.browsing?undefined:learnerGoal(state),lang=state.lang,bridge=goal==='college',topic=goal==='topic'?state.setup?.concept:undefined;
+ const list=tabs(bridge,topic,PROGRAM_BY_ID[state.bridgeProgram??'']?state.bridgeProgram:undefined),active=list.find(x=>x.match(path))?.key;
  useEffect(()=>setMenu(false),[path]);
  useEffect(()=>{if(!menu)return;const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){setMenu(false);button.current?.focus();}};const click=(e:MouseEvent)=>{if(!panel.current?.contains(e.target as Node)&&!button.current?.contains(e.target as Node))setMenu(false);};document.addEventListener('keydown',key);document.addEventListener('mousedown',click);return()=>{document.removeEventListener('keydown',key);document.removeEventListener('mousedown',click);};},[menu]);
  if(FOCUS.some(r=>r.test(path)))return null;
@@ -56,17 +57,14 @@ export function AppNav(){
      </Link>)}
     </nav>
     <div className="ml-auto flex items-center gap-2">
-     {both&&!guide.browsing&&goal!=='topic'&&<div role="group" aria-label={t(lang,'nav.side')} className="hidden rounded-full bg-white/10 p-1 xl:flex">
-      {(['admission','bridge'] as const).map(s=><button key={s} aria-pressed={state.activeSide===s} onClick={()=>update(p=>({...p,activeSide:s,...(p.setup?{setup:{...p.setup,goal:s==='bridge'?'college':'exam',exam:p.setup.exam??p.pledge?.exam??'upcat'}}:{})}))} className="min-h-11 rounded-full px-3 text-[13px] font-semibold text-white/75 aria-pressed:bg-white aria-pressed:text-navy">{t(lang,`side.${s}.short`)}</button>)}
-     </div>}
      <button data-guide-button onClick={e=>openTour(e.currentTarget)} className="min-h-11 rounded-full border-2 border-white/25 px-3 text-sm font-semibold text-white hover:border-green focus-visible:outline-3 focus-visible:outline-green">Guide</button>
      <div className="relative">
       <button aria-label="Me" ref={button} aria-expanded={menu} aria-controls="me-menu" onClick={()=>setMenu(!menu)} className="flex min-h-11 items-center gap-2 rounded-full border-2 border-white/20 px-2 min-[360px]:pr-4 text-[15px] font-semibold hover:border-white/50 focus-visible:outline-3 focus-visible:outline-green text-white">
        <span className="grid h-7 w-7 place-items-center rounded-full bg-green text-navy" aria-hidden="true"><svg viewBox="0 0 24 24" className="h-4 w-4"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6" fill="currentColor"/></svg></span><span className="hidden min-[360px]:inline">{t(lang,'nav.me')}</span>
       </button>
       {menu&&<div ref={panel} id="me-menu" className="absolute right-0 top-14 w-72 rounded-2xl bg-white p-2 text-navy shadow-[0_24px_60px_-20px_rgba(4,19,51,.6)]">
-       <button onClick={()=>{setMenu(false);openTour(button.current);}} className="flex min-h-11 w-full items-center rounded-xl px-3 text-left font-semibold hover:bg-mint">Show me around</button>
-       {[['/plan#pledge','me.pledge'],['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-xl px-3 font-semibold hover:bg-mint">{t(lang,key)}</Link>)}
+       <button onClick={()=>{setMenu(false);guide.configure(button.current);}} className="flex min-h-11 w-full items-center rounded-xl bg-mint px-3 text-left font-semibold hover:bg-green/20">Change goal or routine</button>
+       {[['/plan','me.pledge'],['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-xl px-3 font-semibold hover:bg-mint">{t(lang,key)}</Link>)}
        <div className="mt-1 flex items-center justify-between rounded-xl bg-sky px-3 py-2"><span className="text-sm font-semibold">{t(lang,'me.language')}</span>
         <div className="flex gap-1">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(p=>({...p,lang:l}))} className="min-h-11 rounded-full px-3 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div>
        </div>
