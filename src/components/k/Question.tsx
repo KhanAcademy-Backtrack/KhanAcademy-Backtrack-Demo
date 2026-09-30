@@ -1,7 +1,7 @@
 'use client';
-import {useState} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import Link from 'next/link';
-import {AnimatePresence,motion} from 'motion/react';
+import {AnimatePresence,animate,motion,useMotionValue} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import type {MockItem} from '@/lib/mock/types';
 import {passageById} from '@/lib/mock/forms';
@@ -59,6 +59,8 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
  const reduced=useQuietMotion(),[explain,setExplain]=useState(false);
  const locked=mode==='practice'&&revealed;
  const right=revealed&&chosen===item.answerIndex;
+ const settle=useMotionValue(1),handled=useRef('');
+ useEffect(()=>{if(!right||handled.current===item.id){if(reduced)settle.set(1);return;}handled.current=item.id;if(reduced)return;settle.set(.985);const run=animate(settle,1,SPRING);return()=>run.stop();},[right,item.id,reduced,settle]);
  return <div className="text-navy">
   {showPassage&&item.passageId&&<div className="mb-5"><PassageView id={item.passageId}/></div>}
   <p className="font-serif text-[21px] leading-[1.5] sm:text-[23px]">{number!==undefined&&<span className="mr-2 font-sans text-base font-bold text-ink-soft">{number}.</span>}{item.stem}</p>
@@ -66,13 +68,13 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
    {item.choices.map((c,i)=>{
     const picked=chosen===i,isKey=i===item.answerIndex;
     const state=!revealed?(picked?'picked':'idle'):isKey?'key':picked?'wrong':'dim';
-    return <motion.button key={i} role="radio" aria-checked={picked} disabled={locked} onClick={()=>onChoose(i)}
+    return <motion.button key={i} role="radio" aria-checked={picked} disabled={locked} onClick={()=>onChoose(i)} style={{scale:i===item.answerIndex?settle:1}}
      animate={{opacity:state==='wrong'?.6:state==='dim'?.55:1}} transition={reduced?{duration:0}:{duration:DUR.base}}
      className={cx('group flex min-h-14 w-full items-center gap-4 rounded-2xl border-2 px-4 py-3 text-left  focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green text-navy',
       state==='picked'?'border-navy bg-mint':state==='key'?'border-green bg-mint':state==='wrong'?'border-navy/30 bg-white':'border-navy/12 bg-white hover:border-navy/40')}>
      <Oval filled={picked||(revealed&&isKey)} label={LETTERS[i]} size={36}/>
      <span className="flex-1 font-serif text-[19px] leading-snug">{c}</span>
-     {revealed&&isKey&&<svg viewBox="0 0 24 24" className="h-7 w-7 shrink-0 text-green-deep" aria-label="Correct answer"><motion.path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" initial={reduced?false:{pathLength:0}} animate={{pathLength:1}} transition={reduced?{duration:0}:{duration:DUR.base,delay:.05}}/></svg>}
+     {revealed&&isKey&&<svg viewBox="0 0 24 24" className="h-7 w-7 shrink-0 text-green-deep" aria-label="Correct answer"><motion.path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" initial={reduced||!right?false:{pathLength:0}} animate={{pathLength:1}} transition={reduced?{duration:0}:{duration:DUR.base}}/></svg>}
     </motion.button>;})}
   </div>
   <div className="mt-4 flex flex-wrap items-center gap-3">

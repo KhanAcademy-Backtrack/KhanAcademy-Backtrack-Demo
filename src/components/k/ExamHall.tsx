@@ -12,7 +12,7 @@ import {formFromKey,formItems,itemById,formMinutes,type Form} from '@/lib/mock/f
 import {newAttempt,type Attempt} from '@/lib/program/store';
 import {suggestTriage} from '@/lib/mock/analysis';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
-import {DUR,EASE} from '@/lib/motion-tokens';
+import {DUR,EASE,tween} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
 
 const clock=(s:number)=>{const v=Math.max(0,Math.round(s)),h=Math.floor(v/3600),m=Math.floor(v%3600/60),x=v%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(x).padStart(2,'0')}`:`${m}:${String(x).padStart(2,'0')}`;};
@@ -91,7 +91,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center gap-2 px-3 py-2 sm:gap-3 sm:px-8">
      <div className="min-w-0 basis-full sm:basis-auto sm:flex-1"><p className="truncate text-sm text-white/70">{form.title}</p><p className="truncate font-bold">{SUBTEST_LABEL[section.subtest]} · {a.index+1} of {section.itemIds.length}</p></div>
      {a.timed&&<div className="flex items-center gap-2">
-      {!hideTimer&&<motion.span initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={{duration:DUR.base,delay:.25}} className={cx('rounded-full px-3 py-1 font-sans text-lg font-bold tabular-nums',remaining<0?'bg-white text-navy':'bg-white/10')} aria-label={remaining<0?'Over time':'Time left'}>{remaining<0?'+':''}{clock(Math.abs(remaining))}{remaining<0?' over':''}</motion.span>}
+      {!hideTimer&&<motion.span initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={{duration:DUR.fast,delay:DUR.slow}} className={cx('rounded-full px-3 py-1 font-sans text-lg font-bold tabular-nums',remaining<0?'bg-white text-navy':'bg-white/10')} aria-label={remaining<0?'Over time':'Time left'}>{remaining<0?'+':''}{clock(Math.abs(remaining))}{remaining<0?' over':''}</motion.span>}
       <button className="min-h-11 rounded-full px-3 text-sm font-semibold text-white/80 hover:bg-white/10" onClick={()=>setHideTimer(!hideTimer)}>{hideTimer?t(lang,'mock.showTimer'):t(lang,'mock.hideTimer')}</button>
      </div>}
      <button className="min-h-11 rounded-full border-2 border-white/25 px-4 text-sm font-bold text-white" onClick={()=>{stopClock();setPaused(true);}}>{t(lang,'mock.pause')}</button>
@@ -99,16 +99,16 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     </div>
    </header>
    <div className="mx-auto grid max-w-6xl gap-6 px-4 pb-40 pt-6 sm:px-8 lg:grid-cols-[1fr_280px] lg:pb-16">
-    <motion.div key={id} initial={reduced?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{duration:DUR.slow,ease:EASE as unknown as [number,number,number,number]}}
+    <motion.div initial={reduced?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{duration:DUR.slow,ease:EASE as unknown as [number,number,number,number]}}
      className={cx('rounded-[22px] bg-white p-5 text-navy sm:p-8',item.passageId&&'lg:grid lg:grid-cols-2 lg:gap-8')}>
      {item.passageId&&<div className="mb-5 lg:mb-0"><PassageView id={item.passageId} compact/></div>}
-     <div>
-      <Question item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])}/>
+     <motion.div key={id} initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={tween(reduced,DUR.fast)}>
+      <Question key={id} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])}/>
       <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-mint-line pt-4">
        <button aria-pressed={a.flags.includes(id)} onClick={flag} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-sky text-navy">{a.flags.includes(id)?t(lang,'mock.flagged'):t(lang,'mock.flag')}</button>
        <button aria-pressed={a.sure[id]==='sure'} onClick={sure} disabled={a.answers[id]==null} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-green aria-pressed:bg-mint disabled:opacity-40 text-navy">{t(lang,'mock.sure')}</button>
       </div>
-     </div>
+     </motion.div>
     </motion.div>
     <aside className={cx('rounded-[22px] bg-navy p-4 lg:sticky lg:top-24 lg:block lg:self-start',nav?'fixed inset-x-3 bottom-24 z-40 max-h-[60vh] overflow-y-auto shadow-2xl':'hidden')}>
      <div className="mb-3 flex items-center justify-between lg:hidden"><h2 className="font-bold">Question navigator</h2><button className="min-h-11 px-3 font-bold text-white" onClick={()=>setNav(false)}>Close</button></div>

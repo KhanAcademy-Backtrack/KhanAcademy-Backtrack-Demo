@@ -45,7 +45,7 @@ export function PlanView(){
     <p className="mt-1 text-ink-soft">From your recent mock exams and topic checks. A band describes your practice so far, not a predicted exam score.</p>
     <div className="mt-5 grid gap-3">{ready4.map((r,i)=><div key={r.subtest} className="grid items-center gap-2">
      <p className="font-bold">{SUBTEST_LABEL[r.subtest]}</p>
-     <div className="h-4 overflow-hidden rounded-full bg-sky"><motion.div className="h-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:(r.percent??0)/100}} transition={reduced?{duration:0}:{duration:DUR.slow,delay:i*.15}} style={{width:'100%'}}/></div>
+     <div className="h-4 overflow-hidden rounded-full bg-sky"><motion.div className="h-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:(r.percent??0)/100}} transition={reduced?{duration:0}:{duration:DUR.slow,delay:i*DUR.fast}} style={{width:'100%'}}/></div>
      <p className="text-[15px]">{r.band?<><span className="font-bold">{r.band.label}</span>{r.growth!==undefined&&r.growth!==0&&<span className="text-ink-soft"> · {r.growth>0?`up ${r.growth} points`:'dipped a little'}</span>}</>:<span className="text-ink-soft">No answers yet. <Link className="font-semibold text-navy underline decoration-green underline-offset-4" href={`/mock/take?f=section~${r.subtest}|${today.replace(/-/g,'')}&mode=practice`}>Take a section</Link></span>}</p>
     </div>)}</div>
    </Sheet></aside>

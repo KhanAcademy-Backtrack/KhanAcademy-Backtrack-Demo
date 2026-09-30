@@ -1,12 +1,14 @@
 'use client';
 
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
+import {useMotionPolicy} from '@/components/motion/MotionPolicy';
+import {DUR,tween} from '@/lib/motion-tokens';
 import { useState } from 'react';
 import { LABELS, TOPICS, type Recovery, type Skill } from '@/lib/recovery';
 import { buildCubics, resample, polylinePath } from '@/lib/route-geometry';
 
 export function RouteCanvas({ state, compact = false }: { state: Recovery; compact?: boolean }) {
-  const reduced=useReducedMotion();
+  const {off}=useMotionPolicy();
   const [selected,setSelected]=useState<Skill|null>(null);
   const destination=state.destinationSkill??'goal';
   const nodes=state.goalPassed?[destination]:state.planned.filter(x=>!state.passed.includes(x)||x===destination);
@@ -21,7 +23,7 @@ export function RouteCanvas({ state, compact = false }: { state: Recovery; compa
     <div className="route-heading"><span className={state.suspected.length&&!state.goalPassed?'warm':''}>{label}</span><span>{state.goalPassed?'Destination checked':depth>1?`${depth-1} possible review ${depth-1===1?'step':'steps'}`:'One skill at a time'}</span></div>
     <div className="route-roadmap">
       <svg viewBox={`0 0 94 ${Math.max(68,nodes.length*78)}`} preserveAspectRatio="none" aria-hidden="true" className="roadmap-line">
-        {depth>1&&<motion.path className={`route-stroke ${state.suspected.length&&!state.goalPassed?'detour':''}`} d={path} initial={false} animate={{d:path}} transition={{duration:reduced?0:.65,ease:[.22,1,.36,1]}}/>}
+        {depth>1&&<motion.path className={`route-stroke ${state.suspected.length&&!state.goalPassed?'detour':''}`} key={path} d={path} initial={off?false:{opacity:0,pathLength:0}} animate={{opacity:1,pathLength:1}} transition={tween(off,DUR.base)}/>}
         {points.map((p,i)=><g key={p.id}>
           <circle cx={p.x} cy={p.y} r={p.id===state.active?15:12} className={p.id===state.active?'node-active':'node-idle'}/>
           <text x={p.x} y={p.y+4} textAnchor="middle" className="node-number">{state.goalPassed?'✓':i+1}</text>

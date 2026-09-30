@@ -1,7 +1,9 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
-import {motion,useReducedMotion} from 'motion/react';
-import {useStudy} from './StudyProvider';
+import {motion} from 'motion/react';
+import {MotionScope,useMotionPolicy} from '@/components/motion/MotionPolicy';
+import {SceneMotionToggle} from './SceneMotionToggle';
+import {DUR,tween} from '@/lib/motion-tokens';
 import {Companion} from './Companion';
 import {MathText} from '@/components/math/Math';
 import type {Recovery} from '@/lib/recovery';
@@ -30,7 +32,7 @@ export type ScienceKind='balancing'|'moles'|'motion'|'forces';
  *  arrangement the learner had built rather than the worked example's defaults.
  *  Reading clamps, because a value restored from storage is not trusted. */
 type Store={value:(name:string,fallback:number,min:number,max:number)=>number;put:(name:string,next:(v:number)=>number,fallback:number)=>void};
-function useSceneMotion(){const reduced=useReducedMotion(),{state}=useStudy();return {duration:reduced||state.settings.quiet?0:.55,ease:[.22,1,.36,1] as [number,number,number,number]};}
+function useSceneMotion(){return tween(useMotionPolicy().off);}
 
 function Predict({question,options,answer,onDone}:{question:string;options:string[];answer:number;onDone:()=>void}){
   const [picked,setPicked]=useState<number>();
@@ -73,12 +75,12 @@ function BalanceLab({state,store}:{state?:Recovery;store:Store}){
   const tilt=elements.reduce((sum,el)=>sum+left(el)-right(el),0);
   return <>
     <h3>Atoms are rearranged, never created.</h3>
-    <p>Change the numbers in front. Watch the counts on both sides — a coefficient changes how many units there are, and every atom inside them moves with it.</p>
+    <p>Change the numbers in front. Watch the counts on both sides. a coefficient changes how many units there are, and every atom inside them moves with it.</p>
     <div className="lab-equation"><MathText size="md">{`${side(0,e.reactants)} → ${side(e.reactants,e.species.length)}`}</MathText></div>
     <div className="science-buddy-note"><Companion size={82} pose={balanced?'aha':'thinking'}/><p>Compare each element separately. A matching total alone is not enough.</p></div>
     <svg className="balance-figure element-comparison" viewBox={`0 0 400 ${55+elements.length*59}`} role="img" aria-label={`Atom counts: ${elements.map(el=>`${ELEMENT_NAMES[el]}, left ${left(el)}, right ${right(el)}`).join('; ')}. ${balanced?'Every element matches.':'Some elements still differ.'}`}>
       <text x="100" y="20" textAnchor="middle">Reactants</text><text x="280" y="20" textAnchor="middle">Products</text>
-      {elements.map((el,i)=>{const max=Math.max(1,left(el),right(el)),y=42+i*59;return <g key={el}><text x="8" y={y+21}>{el}</text><rect x="45" y={y} width="125" height="28" rx="5" fill="#edf5f2"/><rect x="225" y={y} width="125" height="28" rx="5" fill="#edf1f7"/><motion.rect initial={false} x="45" y={y} animate={{width:125*left(el)/max}} height="28" rx="5" fill="#14bf96" transition={move}/><motion.rect initial={false} x="225" y={y} animate={{width:125*right(el)/max}} height="28" rx="5" fill="#b9d5ec" transition={move}/><text x="108" y={y+20} textAnchor="middle">{left(el)}</text><text x="288" y={y+20} textAnchor="middle">{right(el)}</text><text x="197" y={y+20} textAnchor="middle">{left(el)===right(el)?'=':'≠'}</text></g>;})}
+      {elements.map((el,i)=>{const max=Math.max(1,left(el),right(el)),y=42+i*59;return <g key={el}><text x="8" y={y+21}>{el}</text><rect x="45" y={y} width="125" height="28" rx="5" fill="#edf5f2"/><rect x="225" y={y} width="125" height="28" rx="5" fill="#edf1f7"/><motion.rect initial={false} x="45" y={y} width="125" style={{transformOrigin:`45px ${y}px`}} animate={{scaleX:left(el)/max}} height="28" rx="5" fill="#14bf96" transition={move}/><motion.rect initial={false} x="225" y={y} width="125" style={{transformOrigin:`225px ${y}px`}} animate={{scaleX:right(el)/max}} height="28" rx="5" fill="#b9d5ec" transition={move}/><text x="108" y={y+20} textAnchor="middle">{left(el)}</text><text x="288" y={y+20} textAnchor="middle">{right(el)}</text><text x="197" y={y+20} textAnchor="middle">{left(el)===right(el)?'=':'≠'}</text></g>;})}
     </svg>
     <div className="lab-steppers">{e.species.map((sp,i)=>step(`${sp.plain}`,coefficients[i],next=>set(i,next),1,12))}</div>
     <table className="atom-ledger"><caption>Atoms on each side</caption>
@@ -86,7 +88,7 @@ function BalanceLab({state,store}:{state?:Recovery;store:Store}){
       <tbody>{elements.map(el=><tr key={el} data-match={left(el)===right(el)}><th scope="row">{ELEMENT_NAMES[el]}</th><td>{left(el)}</td><td>{right(el)}</td></tr>)}</tbody>
     </table>
     <p className="concept-invariant" aria-live="polite">{balanced?'Balanced: the number of atoms of each element is the same on both sides.':`Not yet: ${elements.filter(el=>left(el)!==right(el)).map(el=>`${ELEMENT_NAMES[el]} is ${left(el)} against ${right(el)}`).join(', ')}.`}</p>
-    <p className="concept-explanation">The invariant is the atom count. Coefficients are the only thing you may change — editing a subscript would balance the numbers by quietly swapping one substance for another.</p>
+    <p className="concept-explanation">The invariant is the atom count. Coefficients are the only thing you may change. editing a subscript would balance the numbers by quietly swapping one substance for another.</p>
   </>;
 }
 
@@ -104,7 +106,7 @@ function MolesLab({state,store}:{state?:Recovery;store:Store}){
   const moles=massMode?amount:round(grams/M,2),particles=round((grams/M)*6.022,2);
   return <>
     <h3>{massMode?'Every atom contributes to the mass.':'One substance, three ways of counting it.'}</h3>
-    <p>Molar mass is a fixed exchange rate: {M} g of {compound.plain} is always one mole. Move the mass and watch all three readings move together — they are one quantity, not three.</p>
+    <p>Molar mass is a fixed exchange rate: {M} g of {compound.plain} is always one mole. Move the mass and watch all three readings move together. they are one quantity, not three.</p>
     <div className="science-buddy-note"><Companion size={80} pose="point"/><p>The substance stays the same. Its mass, amount and particle count describe one quantity.</p></div>
     <details className="formula-mass-parts" open={massMode||undefined}><summary>Where does the molar mass come from?</summary>{Object.entries(compound.parts).map(([element,count])=><p key={element}>{count} × {ATOMIC_MASS[element]} for {ELEMENT_NAMES[element]}</p>)}<p>Total: {M} g/mol, rounded to two decimal places using the table.</p></details>
     {massMode?<label className="concept-slider">Amount of {compound.plain}: <strong>{amount} mol</strong><input type="range" min="1" max="4" value={amount} onChange={e=>setAmount(Number(e.target.value))} aria-label={`Amount of ${compound.plain} in moles`}/></label>:<>    <label className="concept-slider">Mass of {compound.plain}: <strong>{grams} g</strong>
@@ -113,9 +115,9 @@ function MolesLab({state,store}:{state?:Recovery;store:Store}){
 </>}
     <svg className="moles-figure" viewBox="0 0 320 74" role="img" aria-label={`A bar showing ${grams} grams filling ${moles} of four mole portions.`}>
       <rect x="4" y="20" width="312" height="34" rx="8" fill="#eef3fa" stroke="#0a2a66" strokeWidth="1.5"/>
-      <motion.rect initial={false} x="4" y="20" animate={{width:312*grams/(M*4)}} transition={move} height="34" rx="8" fill="#14bf96"/>
+      <motion.rect initial={false} x="4" y="20" width="312" style={{originX:0,originY:0}} animate={{scaleX:grams/(M*4)}} transition={move} height="34" rx="8" fill="#14bf96"/>
       {[1,2,3].map(n=><path key={n} d={`M${4+312*n/4} 20v34`} stroke="#0a2a66" strokeWidth="1.5"/>)}
-      {[0,1,2,3].map(n=><text key={n} x={4+312*(n+0.5)/4} y="68" textAnchor="middle" fontSize="10" fill="#475e7c">{n+1} mol</text>)}
+      {[0,1,2,3].map(n=><text key={n} x={4+312*(n+0.5)/4} y="68" textAnchor="middle" fontSize="13" fill="#475e7c">{n+1} mol</text>)}
     </svg>
     <dl className="lab-readout" aria-live="polite">
       <div><dt>Mass</dt><dd>{grams} g</dd></div>
@@ -124,7 +126,7 @@ function MolesLab({state,store}:{state?:Recovery;store:Store}){
     </dl>
     <div className="lab-equation">{massMode?<MathText size="md" speak={`Mass equals ${amount} moles times ${M} grams per mole, giving ${grams} grams.`}>{`m = nM = ${amount} × ${M} = ${grams}\\,\\mathrm{g}`}</MathText>:<MathText size="md" speak={`n equals m over M, ${grams} over ${M}, approximately ${moles} moles.`}>{`n = \\frac{m}{M} = \\frac{${grams}}{${M}} ≈ ${moles}\\,\\mathrm{mol}`}</MathText>}</div>
     <p className="concept-invariant">The rate stays the same when the quantity changes. Doubling the mass doubles the moles and doubles the particles; the {M} g per mole never moves.</p>
-    <p className="concept-explanation">{massMode?`One mole weighs ${M} g according to this table. Each additional mole adds another ${M} g, so multiply molar mass by the number of moles.`:<>This is why dividing is the right move: you are asking how many whole-mole portions fit inside the mass you have. Multiplying by {M} answers a different question — the mass of {grams} moles.</>}</p>
+    <p className="concept-explanation">{massMode?`One mole weighs ${M} g according to this table. Each additional mole adds another ${M} g, so multiply molar mass by the number of moles.`:<>This is why dividing is the right move: you are asking how many whole-mole portions fit inside the mass you have. Multiplying by {M} answers a different question. the mass of {grams} moles.</>}</p>
   </>;
 }
 
@@ -137,12 +139,12 @@ function MotionLab({store}:{store:Store}){
   const speed=u+a*t,distance=u*t+a*t*t/2;
   return <>
     <h3>Acceleration is speed added, second by second.</h3>
-    <p>The cart is already moving. Each second the acceleration adds the same amount again — so the final speed is what it started with, plus everything the acceleration built up.</p>
+    <p>The cart is already moving. Each second the acceleration adds the same amount again. so the final speed is what it started with, plus everything the acceleration built up.</p>
     <div className="science-buddy-note"><Companion size={82} pose={t>=5?'aha':'point'}/><p>Change the time, starting speed or acceleration. Watch which part of the journey changes.</p></div>
     <svg className="track-figure" viewBox="0 0 320 145" role="img" aria-label={`A speed–time chart above a track. Each second the bar grows by the same ${a} metres per second. After ${t} seconds the cart has travelled ${round(distance,1)} metres and is moving at ${speed} metres per second.`}>
       {Array.from({length:t+1},(_,i)=>u+a*i).map((v,i)=>{const h=42*v/45;return <g key={i}>
-        <motion.rect initial={false} transition={move} x={10+i*44} animate={{y:56-h,height:h}} width="26" rx="3" fill={i===t?'#14bf96':'#e7f9f3'} stroke="#0a2a66" strokeWidth="1.5"/>
-        <text x={23+i*44} y="68" textAnchor="middle" fontSize="9" fill="#475e7c">{v}</text>
+        <motion.rect initial={false} transition={move} x={10+i*44} y={56-h} height={h} animate={{opacity:1}} width="26" rx="3" fill={i===t?'#14bf96':'#e7f9f3'} stroke="#0a2a66" strokeWidth="1.5"/>
+        <text x={23+i*44} y="68" textAnchor="middle" fontSize="13" fill="#475e7c">{v}</text>
       </g>;})}
       <path d="M6 56h306" stroke="#0a2a66" strokeWidth="1.5"/>
       <text x="6" y="10" fontSize="9" fill="#475e7c">speed each second (m/s)</text>
@@ -154,13 +156,14 @@ function MotionLab({store}:{store:Store}){
     <div className="lab-steppers">{step('Starting speed',u,setU,0,9)}{step('Acceleration',a,setA,1,6)}{step('Seconds',t,setT,1,6)}</div>
     <div className="lab-equation"><MathText size="md" speak={`v equals u plus a t equals ${u} plus ${a} times ${t} equals ${speed}`}>{`v = u + at = ${u} + ${a} × ${t} = ${speed}`}</MathText></div>
     <p className="concept-invariant" aria-live="polite">The speed increases by {a} m/s each second. The chart uses the same scale as you change the controls. The final speed is {speed} m/s: the {u} m/s it already had, plus the {a*t} m/s the acceleration added.</p>
-    <p className="concept-explanation">Dropping the starting speed and using at alone describes a different cart — one that began at rest. The acceleration would be identical; the journey would not.</p>
+    <p className="concept-explanation">Dropping the starting speed and using at alone describes a different cart. one that began at rest. The acceleration would be identical; the journey would not.</p>
   </>;
 }
 
 /* --- forces: free-body arrows and what they produce ---------------------- */
 
 function ForcesLab({store}:{store:Store}){
+  const arrowsOff=useMotionPolicy().off;
   const move=useSceneMotion();
   const right=store.value('fright',12,0,16),left=store.value('fleft',5,0,16),mass=store.value('kg',4,1,8);
   const setRight=(next:(v:number)=>number)=>store.put('fright',next,12),setLeft=(next:(v:number)=>number)=>store.put('fleft',next,5),setMass=(next:(v:number)=>number)=>store.put('kg',next,4);
@@ -169,10 +172,10 @@ function ForcesLab({store}:{store:Store}){
      animated `d` is briefly written as d="undefined", which the browser rejects. */
   const arrow=(x:number,size:number,direction:1|-1,colour:string)=>{if(size===0)return null;
     const d=`M${x} 46h${direction*size*5}m0 0l${-direction*9} -6m${direction*9} 6l${-direction*9} 6`;
-    return <motion.path d={d} initial={false} animate={{d}} transition={move} stroke={colour} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"/>;};
+    return <motion.path key={d} d={d} initial={arrowsOff?false:{opacity:0}} animate={{opacity:1}} transition={move} stroke={colour} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"/>;};
   return <>
     <h3>Forces do not act one at a time.</h3>
-    <p>Both pushes are there at once. What the block actually does is set by what is left over after they combine — and by how much block there is to move.</p>
+    <p>Both pushes are there at once. What the block actually does is set by what is left over after they combine. and by how much block there is to move.</p>
     <div className="science-buddy-note"><Companion size={82} pose={net===0?'aha':'thinking'}/><p>Try making the pushes equal. Then change the mass while keeping the forces fixed.</p></div>
     <svg className="forces-figure" viewBox="0 0 320 92" role="img" aria-label={`A block with ${right} newtons to the right and ${left} newtons to the left. The net force is ${signed(net)} newtons and the acceleration is ${accel} metres per second squared.`}>
       <path d="M8 74h304" stroke="#0a2a66" strokeWidth="2"/>
@@ -180,12 +183,12 @@ function ForcesLab({store}:{store:Store}){
       <text x="160" y="59" textAnchor="middle" fontSize="12" fill="#0a2a66">{mass} kg</text>
       {arrow(184,right,1,'#0a2a66')}
       {arrow(136,left,-1,'#475e7c')}
-      <motion.rect initial={false} animate={{x:net<0?160-Math.abs(net)*5:160,width:Math.abs(net)*5}} transition={move} y="14" height="8" rx="4" fill="#14bf96"/>
+      <motion.rect initial={false} x="160" width="80" style={{originX:0,originY:0}} animate={{scaleX:net/16}} transition={move} y="14" height="8" rx="4" fill="#14bf96"/>
       <text x="160" y="10" textAnchor="middle" fontSize="9" fill="#475e7c">net {signed(net)} N</text>
     </svg>
     <div className="lab-steppers">{step('Force right',right,setRight,0,16)}{step('Force left',left,setLeft,0,16)}{step('Mass',mass,setMass,1,8)}</div>
     <div className="lab-equation"><MathText size="md" speak={`net force equals ${signed(net)} newtons, a equals ${signed(net)} over ${mass} equals ${accel}`}>{`F = ${signed(net)}\\,\\mathrm{N},\\,a = \\frac{${signed(net)}}{${mass}} = ${accel}`}</MathText></div>
-    <p className="concept-invariant" aria-live="polite">{net===0?'The forces cancel exactly. The net force is zero, so there is no acceleration — the velocity can stay constant, even though both forces are present.':`The net force sets the acceleration: ${signed(net)} N on ${mass} kg gives ${accel} m/s², to the ${net>0?'right':'left'}.`}</p>
+    <p className="concept-invariant" aria-live="polite">{net===0?'The forces cancel exactly. The net force is zero, so there is no acceleration. the velocity can stay constant, even though both forces are present.':`The net force sets the acceleration: ${signed(net)} N on ${mass} kg gives ${accel} m/s², to the ${net>0?'right':'left'}.`}</p>
     <p className="concept-explanation">Make the block heavier without touching either push and the arrows stay exactly as they were, but its velocity changes more slowly under the same net force. The forces decide the net push; the mass decides what that push produces.</p>
   </>;
 }
@@ -197,16 +200,16 @@ export function ScienceLab({kind,onContinue,state,onExpose,reserve,initial,onSav
     put:(name,next,fallback)=>set(v=>({...v,values:{...v.values,[name]:next(v.values[name]??fallback)}}))};
   const shown=(s.values.shown??0)===1;
   useEffect(()=>{if(exposed.current||!state||reserve===undefined)return;exposed.current=true;onExpose?.(reserve);},[state,reserve,onExpose]);
-  const predict=kind==='balancing'?{question:'If you double every number in front of a balanced equation, is it still balanced?',options:['No — the amounts change','Yes — both sides double together','Only if nothing has a subscript'],answer:1}
-    :kind==='moles'?{question:'Two beakers hold the same mass: one of water, one of glucose. Do they hold the same number of moles?',options:['Yes — the mass is the same','No — a mole of each weighs a different amount','Only if both are pure'],answer:1}
-    :kind==='motion'?{question:'A cart already moving at 4 m/s accelerates at 2 m/s² for 3 s. Is its final speed 6 m/s?',options:['Yes — 2 × 3 = 6','No — the 4 m/s it already had still counts','Only if it started from rest'],answer:1}
-    :{question:'A block is pushed with 10 N right and 10 N left. Is it accelerating?',options:['Yes — two forces are acting','No — the forces cancel, so there is no net force','Only if the block is light'],answer:1};
-  return <section className="concept-lab science-lab">
-    <div className="repair-kicker"><span>Khanpanion visual guide</span></div>
+  const predict=kind==='balancing'?{question:'If you double every number in front of a balanced equation, is it still balanced?',options:['No. the amounts change','Yes. both sides double together','Only if nothing has a subscript'],answer:1}
+    :kind==='moles'?{question:'Two beakers hold the same mass: one of water, one of glucose. Do they hold the same number of moles?',options:['Yes. the mass is the same','No. a mole of each weighs a different amount','Only if both are pure'],answer:1}
+    :kind==='motion'?{question:'A cart already moving at 4 m/s accelerates at 2 m/s² for 3 s. Is its final speed 6 m/s?',options:['Yes. 2 × 3 = 6','No. the 4 m/s it already had still counts','Only if it started from rest'],answer:1}
+    :{question:'A block is pushed with 10 N right and 10 N left. Is it accelerating?',options:['Yes. two forces are acting','No. the forces cancel, so there is no net force','Only if the block is light'],answer:1};
+  return <MotionScope still={s.static}><section className="concept-lab science-lab">
+    <div className="repair-kicker"><span>Khanpanion visual guide</span></div><SceneMotionToggle still={s.static} onChange={staticMode=>set(v=>({...v,static:staticMode}))}/>
     {shown?<>
       {kind==='balancing'?<BalanceLab state={state} store={store}/>:kind==='moles'?<MolesLab state={state} store={store}/>:kind==='motion'?<MotionLab store={store}/>:<ForcesLab store={store}/>}
       <button className="button-primary" type="button" onClick={onContinue}>Use the idea on a fresh check ↗</button>
       <p className="fine-print">Nothing in this guide is recorded as evidence. The fresh check that follows uses numbers you have not seen here.</p>
     </>:<Predict {...predict} onDone={()=>store.put('shown',()=>1,0)}/>}
-  </section>;
+  </section></MotionScope>;
 }
