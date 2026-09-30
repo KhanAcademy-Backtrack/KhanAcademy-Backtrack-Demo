@@ -1,18 +1,20 @@
 import {buildSchedule,addDays} from './planner.ts';
 import {EXAM_DATES,EXAMS} from './admissions.ts';
 import type {ProgramState,CalEvent} from './store.ts';
+import {learnerGoal,targetDay} from './personalization.ts';
 
 export type CalItem={id:string;date:string;end?:string;time?:string;minutes?:number;title:string;kind:'study'|'mock'|'custom'|'exam'|'examWindow';concept?:string;done?:boolean;planned?:boolean;link?:string};
 
 /** The learner's calendar: the planned schedule, their own events (which override a
  *  planned session with the same id, so moving or removing one is just an edit),
  *  and official exam dates. */
-export function calendarItems(s:ProgramState,today:string):CalItem[]{
+export function calendarItems(s:ProgramState,today:string,includeOfficial=true):CalItem[]{
  const own=new Map(s.events.map(e=>[e.id,e]));
  const planned=buildSchedule(s,today).filter(e=>!own.has(e.id)).map(e=>({...e,planned:true}));
  const mine=s.events.filter(e=>!(e as CalEvent&{removed?:boolean}).removed);
- const exams:CalItem[]=EXAM_DATES.map(d=>({id:d.id,date:d.start,end:d.end,title:d.title,kind:d.window?'examWindow':'exam',link:d.link}));
- if(s.pledge&&!EXAM_DATES.some(d=>d.exam===s.pledge!.exam&&d.start===s.pledge!.examDate))exams.push({id:'my-exam',date:s.pledge.examDate,title:`My ${EXAMS[s.pledge.exam].name} planning target`,kind:'exam'});
+ const exams:CalItem[]=includeOfficial?EXAM_DATES.map(d=>({id:d.id,date:d.start,end:d.end,title:d.title,kind:d.window?'examWindow':'exam',link:d.link})):[];
+ const target=targetDay(s),exam=s.setup?.exam??s.pledge?.exam;
+ if(target&&exam&&learnerGoal(s)==='exam'&&!EXAM_DATES.some(d=>d.exam===exam&&d.start===target))exams.push({id:'my-exam',date:target,title:`My ${EXAMS[exam].name} planning target`,kind:'exam'});
  return [...planned,...mine,...exams].sort((a,b)=>a.date.localeCompare(b.date)||(a.time??'').localeCompare(b.time??''));
 }
 
@@ -36,10 +38,10 @@ const stamp=(date:string,time?:string)=>time?`${date.replace(/-/g,'')}T${time.re
 export function toIcs(items:CalItem[],nowStamp:string){
  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Khanpanion//Study plan//EN','CALSCALE:GREGORIAN'];
  for(const i of items){
-  lines.push('BEGIN:VEVENT',`UID:${i.id}@khanpanion`,`DTSTAMP:${nowStamp}`);
+  lines.push('BEGIN:VEVENT',`UID:${i.id}@khanpanion`,`DTSTAMP:${nowStamp.replace(/Z$/,'')}Z`);
   if(i.time){
    lines.push(`DTSTART:${stamp(i.date,i.time)}`);
-   const [h,m]=i.time.split(':').map(Number),end=h*60+m+(i.minutes??30);
+   const [h,m]=i.time.split(':').map(Number),end=h*60+m+Math.round(i.minutes??30);
    const endDate=end>=1440?addDays(i.date,1):i.date,endTime=`${String(Math.floor(end%1440/60)).padStart(2,'0')}:${String(end%60).padStart(2,'0')}`;
    lines.push(`DTEND:${stamp(endDate,endTime)}`);
   }else{lines.push(`DTSTART;VALUE=DATE:${stamp(i.date)}`,`DTEND;VALUE=DATE:${stamp(addDays(i.end??i.date,1))}`);}
@@ -48,5 +50,7 @@ export function toIcs(items:CalItem[],nowStamp:string){
   lines.push('END:VEVENT');
  }
  lines.push('END:VCALENDAR');
- return lines.join('\r\n')+'\r\n';
+ const encoder=new TextEncoder();
+ const fold=(line:string)=>{const parts:string[]=[];let part='',length=0;for(const char of line){const bytes=encoder.encode(char).length;if(length+bytes>75){parts.push(part);part=' ';length=1;}part+=char;length+=bytes;}parts.push(part);return parts.join('\r\n');};
+ return lines.map(fold).join('\r\n')+'\r\n';
 }

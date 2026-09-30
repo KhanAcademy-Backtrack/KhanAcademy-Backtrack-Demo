@@ -3,6 +3,7 @@ import {bandFor} from '../mock/blueprint.ts';
 import {itemById,formFromKey,formItems} from '../mock/forms.ts';
 import {SUBTESTS,type Subtest} from '../mock/types.ts';
 import type {ProgramState,CalEvent} from './store.ts';
+import {goalConceptIds,targetDay} from './personalization.ts';
 
 /** Dates are local calendar days written YYYY-MM-DD. Every function here takes
  *  "today" as an argument so plans are testable and never depend on the clock. */
@@ -76,6 +77,7 @@ export function focusRanking(s:ProgramState,subtests:Subtest[]=SUBTESTS){
  return CONCEPTS.filter(c=>subtests.includes(c.subtest)).map(score).sort((a,b)=>b.priority-a.priority||CONCEPTS.indexOf(a.concept)-CONCEPTS.indexOf(b.concept));
 }
 export type FocusRow=ReturnType<typeof focusRanking>[number];
+export function personalFocus(s:ProgramState){const order=goalConceptIds(s),ids=new Set(order);return focusRanking(s).filter(row=>ids.has(row.concept.id)).sort((a,b)=>b.priority-a.priority||order.indexOf(a.concept.id)-order.indexOf(b.concept.id));}
 export const statusOf=(row:FocusRow)=>!row.seen?'not started':row.accuracy!==undefined&&row.accuracy>=80?'solid':row.accuracy!==undefined&&row.accuracy>=50?'getting there':'focus here';
 
 /** Study sessions from today to the exam on the learner's chosen weekdays. Each
@@ -83,14 +85,15 @@ export const statusOf=(row:FocusRow)=>!row.seen?'not started':row.accuracy!==und
  *  are Saturdays in practice (a section) and simulation (a full run). Rebuilding
  *  simply redistributes what is left; nothing is ever marked late. */
 export function buildSchedule(s:ProgramState,today:string):CalEvent[]{
- const p=s.pledge;if(!p)return [];
- const list=phases(today,p.examDate),rank=focusRanking(s).map(r=>r.concept.id);
+ const p=s.setup??s.pledge;if(!p)return [];
+ const end=targetDay(s),list=end?phases(today,end):undefined,rank=(s.setup?personalFocus(s):focusRanking(s)).map(r=>r.concept.id);
+ if(!rank.length)return [];
  const days=p.weekdays.length?p.weekdays:[1,3,5];
  const out:CalEvent[]=[];let cursor=0;
- const horizon=Math.min(daysBetween(today,p.examDate),370);
+ const horizon=s.setup?end&&end>today?Math.min(daysBetween(today,end),370):28:Math.min(daysBetween(today,s.pledge!.examDate),370);
  for(let i=0;i<horizon;i++){
-  const day=addDays(today,i),wd=weekday(day),phase=phaseOn(list,day);
-  if(wd===6&&phase.id!=='foundation'){out.push({id:`mock-${day}`,date:day,time:'09:00',minutes:phase.id==='simulation'?240:60,title:phase.id==='simulation'?'Full simulation':'Timed section',kind:'mock'});continue;}
+  const day=addDays(today,i),wd=weekday(day),phase=list?phaseOn(list,day):undefined;
+  if(!s.setup&&wd===6&&phase&&phase.id!=='foundation'){out.push({id:`mock-${day}`,date:day,time:'09:00',minutes:phase.id==='simulation'?240:60,title:phase.id==='simulation'?'Full simulation':'Timed section',kind:'mock'});continue;}
   if(!days.includes(wd))continue;
   const concept=rank[cursor++%rank.length];
   out.push({id:`study-${day}`,date:day,time:p.time||undefined,minutes:p.minutes,title:CONCEPT_BY_ID[concept].title,kind:'study',concept});
@@ -100,7 +103,7 @@ export function buildSchedule(s:ProgramState,today:string):CalEvent[]{
 
 /** Today's three-step mission: quick recall, a Khan block, a fresh exit check. */
 export function mission(s:ProgramState,today:string){
- const top=focusRanking(s,s.sides.bridge&&!s.sides.admission?['math','science']:SUBTESTS)[0];
+ const top=personalFocus(s)[0]??focusRanking(s)[0];
  const done=s.missions[today]??{};
  const dueRecall=Object.values(s.recall).filter(r=>r.due<=parseDay(today).getTime()+DAY_MS).length;
  return {concept:top.concept,steps:[
@@ -113,7 +116,7 @@ export function mission(s:ProgramState,today:string){
 /** Weeks since the pledge with the study days logged, and shields: every full week
  *  earns one (up to two), and a shield quietly covers a week that fell short. */
 export function weeks(s:ProgramState,today:string){
- const target=s.pledge?.days??3;
+ const target=s.setup?.weekdays.length??s.pledge?.days??3;
  const start=addDays(today,-((weekday(today)+6)%7));
  const rows=[] as {start:string;days:number;met:boolean;shielded:boolean}[];
  let shields=0;

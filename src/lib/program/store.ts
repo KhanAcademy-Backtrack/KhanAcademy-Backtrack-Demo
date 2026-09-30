@@ -7,7 +7,8 @@ import type {ExamId} from './admissions.ts';
 export const PROGRAM_KEY='backtrack.program.v1';
 export type Side='admission'|'bridge';
 export type Pledge={exam:ExamId;examDate:string;why:string;days:number;minutes:number;when:string;time:string;weekdays:number[];createdAt:number};
-export type CalEvent={id:string;date:string;time?:string;minutes?:number;title:string;kind:'study'|'mock'|'custom';concept?:string;done?:boolean};
+export type LearnerSetup={goal:'exam'|'college'|'topic';exam?:ExamId;concept?:string;targetDate?:string;weekdays:number[];minutes:number;time:string;createdAt:number};
+export type CalEvent={id:string;date:string;time?:string;minutes?:number;title:string;kind:'study'|'mock'|'custom';concept?:string;done?:boolean;removed?:boolean};
 export type NoteEntry={itemId:string;at:number;formKey:string;chosen:number|null;idk:boolean;triage?:Triage;misconception?:string;concept:string;resolved?:boolean};
 export type ConceptProgress={khanOpened?:number;khanDone?:number;read?:number;checks:{at:number;correct:number;total:number}[]};
 export type RecallCard={due:number;stage:number;last:number};
@@ -15,6 +16,7 @@ export type ProgramState={
  version:1;updatedAt:number;lang:'en'|'fil';
  sides:Record<Side,boolean>;activeSide:Side;
  pledge?:Pledge;bridgeProgram?:string;
+ setup?:LearnerSetup;
  attempts:Attempt[];activeAttempt?:string;
  concepts:Record<string,ConceptProgress>;
  missions:Record<string,{recall?:number;khan?:number;exit?:number}>;
@@ -36,6 +38,20 @@ const num=(v:unknown,lo=0,hi=8.64e15)=>typeof v==='number'&&Number.isFinite(v)&&
 const date=(v:unknown)=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v);
 const id=(v:unknown)=>typeof v==='string'&&/^[\w:|~.-]{1,160}$/.test(v);
 
+export function validDay(value:unknown):value is string{
+ if(!date(value))return false;
+ const [y,m,d]=(value as string).split('-').map(Number),day=new Date(y,m-1,d);
+ return y>=1900&&y<=2200&&day.getFullYear()===y&&day.getMonth()===m-1&&day.getDate()===d;
+}
+function validSetup(x:unknown){
+ return obj(x)&&['exam','college','topic'].includes(String(x.goal))
+  &&(x.exam===undefined||['upcat','dcat','dostsei','pupcet'].includes(String(x.exam)))
+  &&(x.goal!=='exam'||x.exam!==undefined)&&(x.goal!=='topic'||id(x.concept))
+  &&(x.concept===undefined||id(x.concept))&&(x.targetDate===undefined||validDay(x.targetDate))
+  &&Array.isArray(x.weekdays)&&x.weekdays.length>0&&x.weekdays.length<=7&&new Set(x.weekdays).size===x.weekdays.length&&x.weekdays.every(d=>Number.isInteger(d)&&d>=0&&d<7)
+  &&num(x.minutes,5,240)&&Number.isInteger(x.minutes)&&typeof x.time==='string'&&/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(x.time)&&num(x.createdAt);
+}
+
 function validAttempt(a:unknown):a is Attempt{
  if(!obj(a))return false;
  const answers=a.answers,sure=a.sure,seconds=a.seconds,triage=a.triage,elapsed=a.elapsedMs;
@@ -50,6 +66,7 @@ function validAttempt(a:unknown):a is Attempt{
 
 /** Accepts only well-formed saves. Older saves without newer optional fields pass. */
 export function validProgram(x:unknown):x is ProgramState{
+ if(obj(x)&&x.setup!==undefined&&!validSetup(x.setup))return false;
  if(!obj(x)||x.version!==1||!num(x.updatedAt))return false;
  if(x.lang!=='en'&&x.lang!=='fil')return false;
  if(!obj(x.sides)||typeof x.sides.admission!=='boolean'||typeof x.sides.bridge!=='boolean')return false;
