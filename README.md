@@ -6,7 +6,7 @@ Live: https://khanpanion.vercel.app/ . The Vercel project remains dunlo; main is
 
 ## College program
 
-A fresh device opens a three-question sprint. A study pledge sets a personal target date, study days and minutes. Returning learners see a countdown and a daily mission, then their weekly rhythm, next mock and Daily 3. The plan connects concept summaries, checked Khan Academy Philippine curriculum units and optional independent skill repair.
+A visit starts with a goal picker and an option to browse. A chosen exam, college program or class topic shapes the home page and guide. Study days, duration and time generate a real weekly calendar; an exam planning date is optional. Exam learners also have Daily 3, while college and topic learners see relevant foundations first. The plan connects concept summaries, checked Khan Academy Philippine curriculum units and optional independent skill repair.
 
 The mock hub offers sprints, sections, full simulations, topic and placement checks, and printable booklets. Answers save immediately, elapsed time saves every eight seconds and on pagehide, and reload resumes the same section and question. Pauses and section breaks are excluded from active time. Going overtime keeps the questions available and is reported on results. The answer key can be hidden; Fix this opens a seeded skill session that still requires two fresh unassisted answers.
 
@@ -37,7 +37,7 @@ Use Node 24 or later for the built-in TypeScript test runner.
 
 ## Getting started
 
-The homepage starts with a short practice set and two goals: entrance exam preparation or first-year foundations. Show me around opens an optional six-step tour of the current navigation. Replay it from Me or the Me menu; the earlier study-space tour remains available in Me. Tutorials never write learning results or change a plan.
+The first visit asks for a goal: entrance exam preparation, first-year college foundations or a class topic. I’m just browsing opens the guide and subject browser without requiring questions or a routine. Otherwise, choose the relevant exam, program or categorized topic, then a comfortable routine. The saved choices drive the home page and a real study calendar, even when an exam date is unknown. Guide is visible in the header; /?guide=1 opens it directly. Its calendar step opens the editable calendar rather than a preview. The earlier study-space tour remains in Me. Configuration and calendar check-ins stay separate from learning results.
 
 ## Where things live
 
@@ -77,3 +77,5 @@ scripts/build-submission.mjs validates the seven word counts and writes the comb
 The older local deck builder remains available through scripts/build-deck.mjs --build-backup. It creates a versioned backup and cannot overwrite the current Canva exports. The slide-script builder similarly requires --from-backup. These commands are separate from the website build.
 
 Khan materials and logo attribution: docs/THIRD_PARTY_MATERIALS.md.
+
+Entry behavior: the intent picker appears automatically on the first normal page in a browser-tab session. I’m just browsing continues a guide and subject browser without requiring a routine or questions. It is a session-only choice; saved preferences and learning records stay intact. A saved goal can be continued with one click. Refresh and normal navigation do not repeatedly interrupt the same visit. Timed/print and explicitly requested legacy-tour entries remain focused. Guide stays visible in the header and /?guide=1 opens it directly.

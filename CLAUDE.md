@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 115 tests
+npm test          # node --test, currently 121 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 104 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -118,10 +118,18 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 
 ## College program routing release, 30 September 2026
 
-The October UX and animation audits guide the current website. Navy frames readable paper surfaces; the previous white-grid presentation is superseded. All earlier route URLs stay working, and /demo keeps the former Today study space. The welcome tour opens only when explicitly requested. Website endorsement wording comes from UP_LINE in src/lib/program/facts.ts, not a local save field.
+The October UX and animation audits guide the current website. Navy frames readable paper surfaces; the previous white-grid presentation is superseded. All earlier route URLs stay working, and /demo keeps the former Today study space. Normal entry now opens the goal picker; its guide is also replayable. Website endorsement wording comes from UP_LINE in src/lib/program/facts.ts, not a local save field.
 
 Use verified official exam dates only. UPCAT 2027 testing was in August 2026; do not relabel an assumed August 2027 window as confirmed. Pledge dates can be personal planning targets. DLSU and PUP future dates are presently unconfirmed. Offline reviewer support remains Phase B. Messenger verification here means user-agent emulation, not a physical in-app phone test.
 
 ## Learner-facing content refinement, 30 September 2026
 
-Homepage copy begins with a concrete task, not the pitch. It offers a short practice set, exam/first-year preparation paths and topic help. Tuition slogans, question-bank sales statistics, academic biographies and research proposals do not belong in entry UI. Attribution stays in About; counts/minutes that help choose a practice set stay with that set. /evidence explains actual progress records rather than a proposed evaluation. The current optional quick tour highlights actual navigation, supports keyboard/quiet/small screens and does not change answers or plans. Me also retains the earlier study-space tour.
+Homepage copy begins with a concrete task, not the pitch. Its goal picker offers exam preparation, college foundations, a class topic and browsing. Tuition slogans, question-bank sales statistics, academic biographies and research proposals do not belong in entry UI. Attribution stays in About; counts/minutes that help choose a practice set stay with that set. /evidence explains actual progress records rather than a proposed evaluation. The goal-aware guide highlights actual navigation, supports keyboard/quiet/small screens and does not change answers or plans. Me also retains the earlier study-space tour.
+
+## Goal-first setup and calendar release
+
+LearnerSetup is an optional, backward-compatible field in the existing program save. personalization.ts selects the active goal and relevant concepts; planner.ts budgets sessions using the chosen weekdays, duration and local time. Unknown exam dates do not fabricate a target. GoalSetup.tsx, PersonalHome.tsx and StudyWeek.tsx provide the real setup/home/calendar data flow. TopicPicker.tsx uses subjects before topics and supports cross-subject search.
+
+Guide is a visible header action and /?guide=1 deep link. Setup precedes the goal-aware guide for an unconfigured learner. Calendar practice is non-modal and uses the actual editing controls, with a continuation action. Main navigation includes Calendar at six stable positions; it switches to the bottom bar below 1024 px. Inline setup actions offset above that bar. Date navigation and add-event intent use validated/consumed query parameters. Removals have Undo; custom appointments do not add study days. Existing answers, exposure/version rules, backups, old route URLs and raw saved progress remain intact.
+
+Entry behavior: the intent picker appears automatically on the first normal page in a browser-tab session. I’m just browsing continues a guide and subject browser without requiring a routine or questions. It is a session-only choice; saved preferences and learning records stay intact. A saved goal can be continued with one click. Refresh and normal navigation do not repeatedly interrupt the same visit. Timed/print and explicitly requested legacy-tour entries remain focused. Guide stays visible in the header and /?guide=1 opens it directly.

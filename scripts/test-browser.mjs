@@ -16,7 +16,7 @@ const browser=await chromium.launch({channel:'chrome',headless:true});
 const report=[];await fs.mkdir(path.join(root,'.refs/browser-review'),{recursive:true});
 async function scenario(name,run,viewport={width:1280,height:850}){
   if(process.env.TEST_FILTER&&!new RegExp(process.env.TEST_FILTER).test(name))return;
-  const context=await browser.newContext({viewport,...(name.startsWith('program ')?{reducedMotion:'reduce'}:{})});const page=await context.newPage();const errors=[];
+  const context=await browser.newContext({viewport,...(name.startsWith('program ')?{reducedMotion:'reduce'}:{})});if(!/program personalized|program first-entry|program returning|program direct guide/.test(name))await context.addInitScript(()=>sessionStorage.setItem('backtrack.entry.choice','study'));const page=await context.newPage();const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   if(name.startsWith('program '))page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   try{await run(page,context);assert.deepEqual(errors,[],`Browser errors: ${errors.join('; ')}`);report.push({name,passed:true});console.log(`PASS ${name}`);}

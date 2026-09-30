@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useProgram} from './ProgramProvider';
 import {ProgressMoment} from './ProgressMoment';
+import {TopicPicker} from './TopicPicker';
 import {PageBand,Sheet,btn,Oval,cx,pageBody,KhanLink,Pill} from './ui';
 import {useFix} from './useFix';
 import {PROGRAMS,PROGRAM_BY_ID,RESCUES,RESCUE_BY_ID,summerPlan} from '@/lib/program/bridge';
@@ -13,13 +14,15 @@ import {khanUrl,KHAN_UNITS} from '@/lib/program/khan-units';
 import {NEXT_SKILL} from '@/lib/recovery';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
 
+const RESCUE_SUBJECT:Record<string,string>={limits:'Math',derivatives:'Math',integrals:'Math',statistics:'Math',discrete:'Math',vectors:'Physics',kinematics:'Physics',newton:'Physics',stoichiometry:'Chemistry',balancing:'Chemistry',solutions:'Chemistry',logs:'Chemistry',genetics_prob:'Biology',business_math:'Business',graphs_econ:'Business',academic_reading:'Reading'};
+
 function Rescue({only}:{only?:string[]}){
  const fix=useFix(),[pick,setPick]=useState<string>('');
  const list=only?RESCUES.filter(r=>only.includes(r.id)):RESCUES,r=pick?RESCUE_BY_ID[pick]:undefined;
  return <Sheet>
   <h2 className="text-2xl font-extrabold">Work through a class topic</h2>
   <p className="mt-1 text-ink-soft">Something from class not making sense yet? Choose the topic to find the earlier ideas that can help.</p>
-  <div className="mt-4 flex flex-wrap gap-2">{list.map(x=><button key={x.id} aria-pressed={pick===x.id} onClick={()=>setPick(x.id)} className="min-h-11 rounded-full border-2 border-navy/15 px-4 text-sm font-bold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{x.topic}</button>)}</div>
+  <TopicPicker items={list.map(x=>({id:x.id,label:x.topic,category:RESCUE_SUBJECT[x.id],search:x.needs}))} value={pick} onChoose={setPick}/>
   {r&&<div className="mt-5 rounded-2xl bg-mint p-4 sm:p-5" aria-live="polite">
    <p className="font-bold">{r.topic} assumes:</p><p className="mt-1 font-serif text-lg">{r.needs}</p>
    <div className="mt-4 grid gap-2 sm:grid-cols-2">{r.concepts.map(c=><Link key={c} href={`/learn/${c}`} className="flex min-h-14 items-center gap-3 rounded-2xl bg-white px-4 py-2 font-semibold hover:bg-sky"><Oval size={22}/>{CONCEPT_BY_ID[c].title}</Link>)}</div>
@@ -30,7 +33,7 @@ function Rescue({only}:{only?:string[]}){
 
 export function BridgeHub(){
  const {state,update}=useProgram(),router=useRouter();
- const choose=(id:string)=>{update(s=>({...s,sides:{...s.sides,bridge:true},activeSide:'bridge',bridgeProgram:id}));router.push(`/bridge/${id}`);};
+ const choose=(id:string)=>{update(s=>({...s,sides:{...s.sides,bridge:true},activeSide:'bridge',bridgeProgram:id,...(s.setup?{setup:{...s.setup,goal:'college'}}:{})}));router.push(`/bridge/${id}`);};
  return <>
   <PageBand title="Start college strong" lead="Choose your program to find the math and science to revisit before your first-year classes. You can also get help with a topic you met in class today."/>
   <div className={pageBody}>

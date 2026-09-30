@@ -8,6 +8,7 @@ import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {CHAPTERS} from '../src/content/reviewer/index.ts';
 import {EXTRAS} from '../src/content/reviewer/extras.ts';
 import {PROGRAMS} from '../src/lib/program/bridge.ts';
+import {chooseGoal,closeGuide} from './program-qa-helpers.mjs';
 
 export async function programJourneys({scenario,origin,root}){
  const dir=path.join(root,'.refs/program-review');await fs.mkdir(dir,{recursive:true});
@@ -21,13 +22,12 @@ export async function programJourneys({scenario,origin,root}){
  for(const width of [375,1280]){
   const viewport={width,height:850};
   await scenario(`program landing sprint pledge today ${width}`,async page=>{
-   await page.goto(origin);await page.getByRole('heading',{name:'Try three questions'}).waitFor();await shot(page,'landing',width);
-   assert.equal(await page.getByRole('dialog').count(),0);
-   for(let i=0;i<3;i++){await page.getByRole('radio').first().click();await page.getByRole('button',{name:'Check',exact:true}).click();await overflow(page);await page.getByRole('button',{name:i===2?'See how I did':'Next question',exact:true}).click();}
-   await page.getByText(/of 3 right/).waitFor();await shot(page,'sprint-result',width);
-   await page.getByRole('link',{name:'Make my study plan',exact:true}).last().click();await page.getByRole('heading',{name:'Make your study plan'}).waitFor();await shot(page,'pledge',width);
+   await chooseGoal(page,origin,'exam');await shot(page,'personal-guide',width);await closeGuide(page);await shot(page,'personal-home',width);
+   for(let i=0;i<3;i++){await page.getByRole('radio').first().click();await page.getByRole('button',{name:'Check',exact:true}).click();await overflow(page);await page.getByRole('button',{name:i===2?'Finish':'Next question',exact:true}).click();}
+   assert.equal((await data(page)).daily[Object.keys((await data(page)).daily)[0]].total,3);await shot(page,'sprint-result',width);
+   await page.goto(origin+'/plan');await page.getByRole('button',{name:'Add an exam planning date'}).click();await page.getByRole('heading',{name:'Make your study plan'}).waitFor();await shot(page,'pledge',width);
    await page.getByLabel('Exam date').fill('2027-08-07');await page.getByLabel('Why does this matter to you?').fill('Study Computer Science');await page.getByRole('button',{name:'Save my plan'}).click();
-   await page.getByRole('heading',{name:'Today’s mission',exact:true}).waitFor();assert.equal((await data(page)).pledge.why,'Study Computer Science');await page.getByText(/days to/).waitFor();await shot(page,'today',width);
+   await page.getByRole('heading',{name:'UPCAT preparation',exact:true}).waitFor();assert.equal((await data(page)).pledge.why,'Study Computer Science');await page.getByText(/days to your planning target/).waitFor();await shot(page,'today',width);
    await page.goto(origin+'/plan');await page.getByRole('heading',{name:'Three phases'}).waitFor();assert.equal(await page.getByRole('tab',{name:'Language',exact:true}).evaluate(el=>getComputedStyle(el).color),'rgb(10, 42, 102)','Inactive subject labels remain visible on paper');await shot(page,'plan',width);
   },viewport);
   await scenario(`program mock autosave pause reload overtime results fix ${width}`,async page=>{
@@ -55,7 +55,7 @@ export async function programJourneys({scenario,origin,root}){
   await scenario(`program calendar move add export ${width}`,async page=>{
    await seedPledge(page);await page.goto(origin+'/calendar');await page.getByRole('heading',{name:'Calendar',exact:true}).waitFor();await page.getByRole('button',{name:'Move',exact:true}).first().click();await page.getByLabel('New date').fill('2026-10-05');await page.locator('form').getByRole('button',{name:'Move',exact:true}).click();assert.ok((await data(page)).events.some(e=>e.date==='2026-10-05'));
    await page.getByRole('button',{name:'Add an event',exact:true}).click();await page.getByLabel('What',{exact:true}).fill('Review at the library');await page.getByRole('button',{name:'Add to this day',exact:true}).click();assert.ok((await data(page)).events.some(e=>e.title==='Review at the library'));await shot(page,'calendar',width);
-   const dl=page.waitForEvent('download');await page.getByRole('button',{name:'Add to my phone calendar'}).click();const download=await dl;assert.match(await fs.readFile(await download.path(),'utf8'),/BEGIN:VCALENDAR/);
+   const dl=page.waitForEvent('download');await page.getByRole('button',{name:'Download calendar'}).click();const download=await dl;assert.match(await fs.readFile(await download.path(),'utf8'),/BEGIN:VCALENDAR/);
    if(width===375){await page.setViewportSize({width:320,height:850});await overflow(page);await page.screenshot({path:path.join(dir,'calendar-320.png'),fullPage:true});}
   },viewport);
   await scenario(`program reviewer search bookmark practice print recall ${width}`,async page=>{
@@ -76,6 +76,6 @@ export async function programJourneys({scenario,origin,root}){
  for(const width of [375,1280])await scenario(`program Messenger landing sprint exam ${width}`,async(page,context)=>{
   // A separate context is used so the requested user agent really reaches every document.
   const ctx=await context.browser().newContext({viewport:{width,height:850},userAgent:messenger});const p=await ctx.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  try{await p.goto(origin);await p.getByRole('heading',{name:'Try three questions'}).waitFor();await p.getByRole('radio').first().click();await p.getByRole('button',{name:'Check',exact:true}).click();await p.getByRole('button',{name:'Next question'}).click();await overflow(p);await exam(p,'daily~20260930');await p.getByRole('radio').first().click();await p.reload();await p.getByRole('radiogroup').waitFor();await overflow(p);assert.deepEqual(errors,[]);}finally{await ctx.close();}
+  try{await chooseGoal(p,origin,'exam');await closeGuide(p);await p.getByRole('radio').first().click();await p.getByRole('button',{name:'Check',exact:true}).click();await p.getByRole('button',{name:'Next question'}).click();await overflow(p);await exam(p,'daily~20260930');await p.getByRole('radio').first().click();await p.reload();await p.getByRole('radiogroup').waitFor();await overflow(p);assert.deepEqual(errors,[]);}finally{await ctx.close();}
  },{width,height:850});
 }

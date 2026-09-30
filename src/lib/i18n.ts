@@ -3,7 +3,7 @@
  *  Missing Filipino falls back to English, never to a raw key. */
 export type Lang='en'|'fil';
 const EN={
- 'nav.today':'Today','nav.plan':'Plan','nav.plan.bridge':'College','nav.mocks':'Mocks','nav.reviewer':'Reviewer','nav.group':'Group','nav.me':'Me','nav.side':'Study goal',
+ 'nav.today':'Today','nav.plan':'Plan','nav.plan.bridge':'College','nav.mocks':'Mocks','nav.reviewer':'Reviewer','nav.calendar':'Calendar','nav.group':'Group','nav.me':'Me','nav.side':'Study goal',
  'side.admission.short':'Exam prep','side.bridge.short':'College prep',
  'side.admission':'Getting into college','side.bridge':'Starting college',
  'me.pledge':'My study plan','me.calendar':'Calendar','me.admissions':'Exam dates','me.bridge':'College preparation','me.settings':'Settings and backups','me.about':'About Khanpanion','me.language':'Language',
@@ -15,7 +15,7 @@ const EN={
 } as const;
 export type Key=keyof typeof EN;
 const FIL:Partial<Record<Key,string>>={
- 'nav.today':'Ngayon','nav.plan':'Plano','nav.plan.bridge':'Kolehiyo','nav.mocks':'Mock','nav.reviewer':'Reviewer','nav.group':'Grupo','nav.me':'Ako','nav.side':'Aling panig',
+ 'nav.today':'Ngayon','nav.plan':'Plano','nav.plan.bridge':'Kolehiyo','nav.mocks':'Mock','nav.reviewer':'Reviewer','nav.calendar':'Kalendaryo','nav.group':'Grupo','nav.me':'Ako','nav.side':'Aling panig',
  'side.admission.short':'Makapasok','side.bridge.short':'Magsimula nang malakas',
  'side.admission':'Pagpasok sa kolehiyo','side.bridge':'Pagsisimula sa kolehiyo',
  'me.pledge':'Aking plano sa pag-aaral','me.calendar':'Kalendaryo','me.admissions':'Mga petsa ng exam','me.bridge':'Paghahanda sa kolehiyo','me.settings':'Settings at backup','me.about':'Tungkol sa Khanpanion','me.language':'Wika',

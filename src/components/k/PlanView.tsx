@@ -6,6 +6,10 @@ import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {Pledge} from './Pledge';
+import {StudyWeek} from './StudyWeek';
+import {ChangeGoalButton} from './ProgramTourProvider';
+import {calendarItems} from '@/lib/program/calendar';
+import {goalLabel,targetDay} from '@/lib/program/personalization';
 import {PageBand,Sheet,btn,Oval,cx,pageBody} from './ui';
 import {phases,phaseOn,readiness,focusRanking,statusOf,daysBetween,parseDay} from '@/lib/program/planner';
 import {EXAMS} from '@/lib/program/admissions';
@@ -24,6 +28,7 @@ export function PlanView(){
  useEffect(()=>{if(typeof window!=='undefined'&&window.location.hash==='#pledge')setEditing(true);},[]);
  useEffect(()=>{const side=params.get('side');if(side==='admission'&&ready&&!s.sides.admission&&!s.pledge)setEditing(true);},[params,ready,s.sides.admission,s.pledge]);
  if(!ready)return <div className="min-h-[60vh] bg-navy"/>;
+ if(s.setup&&(!targetDay(s)||s.setup.goal!=='exam')&&!editing)return <><PageBand title="Your study routine" lead={goalLabel(s)} aside={<ChangeGoalButton className={btn.onDark}/>}/><div className={pageBody}><Sheet className="mx-auto min-w-0 max-w-3xl"><h2 className="mb-3 text-xl font-extrabold">Your chosen study days</h2><StudyWeek items={calendarItems(s,today,s.setup.goal==='exam')} today={today}/>{s.setup.goal==='exam'&&<button className={cx(btn.text,'mt-4')} onClick={()=>setEditing(true)}>Add an exam planning date</button>}</Sheet></div></>;
  if(!s.pledge||editing)return <><PageBand title={s.pledge?'Adjust your study plan':'Build your study plan'} lead="Choose your exam date and a routine that works for you. We’ll turn it into a weekly schedule."/><div className={pageBody}><div className="mx-auto max-w-3xl"><Pledge onSaved={()=>setEditing(false)}/></div></div></>;
  const p=s.pledge,list=phases(today,p.examDate),now=phaseOn(list,today),total=Math.max(1,daysBetween(today,p.examDate));
  const ready4=readiness(s),rank=focusRanking(s),byId=new Map(rank.map(r=>[r.concept.id,r]));

@@ -19,7 +19,7 @@ export function Pledge({onSaved}:{onSaved?:()=>void}){
  function save(){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date<=today){setError('Choose an exam date after today.');return;}
   if(!weekdays.length){setError('Choose at least one day a week.');return;}
-  update(s=>({...s,pledge:{exam,examDate:date,why:why.trim().slice(0,400),days:weekdays.length,minutes,when:when.trim().slice(0,200)||'after class',time,weekdays:[...weekdays].sort(),createdAt:p?.createdAt??Date.now()},sides:{...s.sides,admission:true},activeSide:'admission'}));
+  update(s=>({...s,pledge:{exam,examDate:date,why:why.trim().slice(0,400),days:weekdays.length,minutes,when:when.trim().slice(0,200)||'after class',time,weekdays:[...weekdays].sort(),createdAt:p?.createdAt??Date.now()},sides:{...s.sides,admission:true},activeSide:'admission',...(s.setup?{setup:{...s.setup,goal:'exam',exam,targetDate:date,weekdays:[...weekdays].sort(),minutes,time}}:{})}));
   onSaved?.();router.push('/');
  }
  return <Sheet id="pledge" aria-labelledby="pledge-title">
