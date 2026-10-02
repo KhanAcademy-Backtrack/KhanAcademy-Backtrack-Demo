@@ -40,7 +40,8 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
    const target=[...document.querySelectorAll<HTMLElement>(`[data-program-tour="${current.tab}"]`)].find(el=>el.getBoundingClientRect().width>0);
    const box=target?.getBoundingClientRect(),width=Math.min(420,innerWidth-28),height=Math.min(dialog.current?.getBoundingClientRect().height??430,innerHeight-112);
    const r=box?{x:Math.max(3,box.x-3),y:Math.max(3,box.y-3),w:Math.min(innerWidth-6,box.width+6),h:Math.min(innerHeight-6,box.height+6)}:undefined;
-   setRect(r);setPosition({left:r?Math.min(innerWidth-width-14,Math.max(14,r.x)):Math.max(14,(innerWidth-width)/2),top:r?Math.max(14,Math.min(innerHeight-height-14,r.y>innerHeight/2?r.y-height-16:r.y+r.h+16)):Math.max(14,(innerHeight-height)/2)});
+   const side=!!target?.closest('[data-sidebar]');
+   setRect(r);setPosition(r&&side?{left:Math.min(innerWidth-width-14,r.x+r.w+16),top:Math.max(14,Math.min(innerHeight-height-14,r.y-12))}:{left:r?Math.min(innerWidth-width-14,Math.max(14,r.x)):Math.max(14,(innerWidth-width)/2),top:r?Math.max(14,Math.min(innerHeight-height-14,r.y>innerHeight/2?r.y-height-16:r.y+r.h+16)):Math.max(14,(innerHeight-height)/2)});
   };
   measure();const observer=new ResizeObserver(measure);if(dialog.current)observer.observe(dialog.current);
   window.addEventListener('resize',measure);return()=>{observer.disconnect();window.removeEventListener('resize',measure);};
