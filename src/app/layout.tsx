@@ -6,6 +6,7 @@ import './palette.css';
 import './maths-labs.css';
 import './living-scenes.css';
 import './explore.css';
+import './calm.css';
 import { RouteTransition } from '@/components/motion/RouteTransition';
 import { MotionProvider } from '@/components/motion/MotionPolicy';
 import { AppNav } from '@/components/k/AppNav';
@@ -16,5 +17,5 @@ import {StudyProvider} from '@/components/study/StudyProvider';
 const sans=Plus_Jakarta_Sans({subsets:['latin'],display:'swap',variable:'--font-instrument-sans'});
 const math=STIX_Two_Text({subsets:['latin'],weight:['400','500'],display:'swap',variable:'--font-stix'});
 export const metadata:Metadata={title:{default:'Khanpanion',template:'%s · Khanpanion'},description:'College entrance exam practice, clear explanations and a study plan for your week. Get ready for your first year, too.',applicationName:'Khanpanion',openGraph:{title:'Khanpanion · Know what to study next.',description:'College entrance exam practice, clear explanations and a study plan for your week. Get ready for your first year, too.',type:'website'},icons:{icon:[{url:'/favicon.svg?v=khanpanion',type:'image/svg+xml'},{url:'/khanpanion-icon-32.png',sizes:'32x32',type:'image/png'}],apple:'/khanpanion-icon-180.png'}};
-export const viewport:Viewport={themeColor:'#0A2A66',width:'device-width',initialScale:1};
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en" className={`${sans.variable} ${math.variable}`}><body className="min-h-screen bg-navy pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0 print:min-h-0 print:bg-white print:pb-0"><StudyProvider><MotionProvider><ProgramProvider><ProgramTourProvider><a href="#main" className="skip-link print:hidden">Skip to content</a><AppNav/><main id="main"><RouteTransition>{children}</RouteTransition></main><SiteFooter/></ProgramTourProvider></ProgramProvider></MotionProvider></StudyProvider></body></html>}
+export const viewport:Viewport={themeColor:'#FFFFFF',width:'device-width',initialScale:1};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en" className={`${sans.variable} ${math.variable}`}><body className="min-h-screen bg-canvas pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0 print:min-h-0 print:bg-white print:pb-0"><StudyProvider><MotionProvider><ProgramProvider><ProgramTourProvider><a href="#main" className="skip-link print:hidden">Skip to content</a><AppNav/><main id="main"><RouteTransition>{children}</RouteTransition></main><SiteFooter/></ProgramTourProvider></ProgramProvider></MotionProvider></StudyProvider></body></html>}

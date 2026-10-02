@@ -7,12 +7,14 @@ import {DUR,SPRING} from '@/lib/motion-tokens';
 
 export const cx=(...xs:(string|false|null|undefined)[])=>xs.filter(Boolean).join(' ');
 
-/** Button looks. Green actions carry navy labels; every target is at least 44 px. */
+/** Button looks. Green actions carry navy labels; every target is at least 44 px.
+ *  One primary action per view; everything else is quiet. */
 export const btn={
- primary:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-green px-5 py-2.5 text-[15px] font-bold text-navy  hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-45',
- dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-navy px-5 py-2.5 text-[15px] font-bold text-white  hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
- ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border-2 border-navy/15 px-5 py-2 text-[15px] font-semibold text-navy  hover:border-navy/40 hover:bg-mint focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
- onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border-2 border-white/25 px-5 py-2 text-[15px] font-semibold text-white  hover:border-white/60 hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',
+ primary:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-green px-5 py-2.5 text-[15px] font-bold text-navy hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-45',
+ dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[15px] font-bold text-white hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
+ ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-line bg-white px-5 py-2 text-[15px] font-semibold text-navy hover:border-line-strong hover:bg-sky focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
+ quiet:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-[15px] font-semibold text-navy underline decoration-line-strong decoration-2 underline-offset-4 hover:bg-sky hover:decoration-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
+ onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-[15px] font-semibold text-navy underline decoration-line-strong decoration-2 underline-offset-4 hover:bg-sky hover:decoration-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
  text:'inline-flex min-h-11 items-center gap-1 font-semibold text-navy underline decoration-green decoration-2 underline-offset-4 hover:decoration-navy'
 };
 
@@ -40,26 +42,26 @@ export function OvalRow({done,total,tone='navy',label}:{done:number;total:number
  return <div role="img" aria-label={label} className="flex flex-wrap gap-1">{Array.from({length:total},(_,i)=><Oval key={i} filled={i<done} size={22} tone={tone}/>)}</div>;
 }
 
-/** A sheet of paper for reading. Navy frames the page; paper holds the words. */
+/** A white study card on the calm canvas: soft shadow, no border. */
 export function Sheet({children,className,as='section',...rest}:{children:ReactNode;className?:string;as?:'section'|'div'|'article'}&Omit<ComponentProps<'section'>,'className'|'children'|'ref'>){
  const Tag=as as 'section';
- return <Tag {...rest} className={cx('rounded-[22px] text-navy shadow-sheet',!/\bbg-/.test(className??'')&&'bg-white',!/\bp-/.test(className??'')&&'p-5 sm:p-7',className)}>{children}</Tag>;
+ return <Tag {...rest} className={cx('rounded-2xl text-navy shadow-sheet',!/\bbg-/.test(className??'')&&'bg-white',!/\bp-/.test(className??'')&&'p-5 sm:p-7',className)}>{children}</Tag>;
 }
 
-/** Page frame: a navy band with the page's title, and paper underneath. */
+/** Page header: a small title on the canvas and one quiet line underneath. */
 export function PageBand({title,lead,children,aside}:{title:ReactNode;lead?:ReactNode;children?:ReactNode;aside?:ReactNode}){
- return <div className="bg-navy text-white">
-  <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-14 pt-9 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-16 lg:pt-12">
-   <div className="max-w-3xl"><h1 className="break-words text-[2.1rem] font-extrabold leading-[1.02] tracking-[-.035em] text-white sm:text-5xl">{title}</h1>{lead&&<p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-white/80">{lead}</p>}{children}</div>
+ return <div>
+  <div className="mx-auto grid max-w-6xl gap-4 px-5 pb-6 pt-8 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:pt-10">
+   <div className="min-w-0 max-w-3xl"><h1 className="break-words text-[1.65rem] font-extrabold leading-tight tracking-[-.025em] text-navy sm:text-[1.9rem]">{title}</h1>{lead&&<p className="mt-2 max-w-2xl text-[16px] leading-relaxed text-ink-soft">{lead}</p>}{children}</div>
    {aside}
   </div>
  </div>;
 }
-export const pageBody='mx-auto -mt-8 max-w-6xl px-4 pb-32 sm:px-8 lg:pb-20';
+export const pageBody='mx-auto max-w-6xl px-4 pb-32 sm:px-8 lg:pb-20';
 
 export function Pill({children,tone='mint'}:{children:ReactNode;tone?:'mint'|'navy'|'sky'|'green'}){
  const c=tone==='navy'?'bg-navy text-white':tone==='sky'?'bg-sky text-navy':tone==='green'?'bg-green text-navy':'bg-mint text-navy';
- return <span className={cx('inline-flex items-center rounded-full px-3 py-1 text-[13px] font-semibold',c)}>{children}</span>;
+ return <span className={cx('inline-flex items-center rounded-md px-2.5 py-1 text-[13px] font-semibold',c)}>{children}</span>;
 }
 
 export function KhanLink({href,children,className}:{href:string;children:ReactNode;className?:string}){
