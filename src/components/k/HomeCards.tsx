@@ -3,7 +3,7 @@ import {Sheet,cx} from './ui';
 
 /** A home section: a small label above one card, so the page reads as a short list. */
 export function Section({label,children,className}:{label:string;children:ReactNode;className?:string}){
- return <section className={cx('min-w-0',className)}><p className="mb-2.5 px-1 text-[15px] font-bold text-navy">{label}</p>{children}</section>;
+ return <div className={cx('min-w-0',className)}><p className="mb-2.5 px-1 text-[15px] font-bold text-navy">{label}</p>{children}</div>;
 }
 
 /** One thing to do: an icon, a title, a line of context and one full-width action,
