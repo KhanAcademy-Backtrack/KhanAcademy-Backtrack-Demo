@@ -6,7 +6,7 @@ import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {useProgramTour,useProgramGuide} from './ProgramTourProvider';
-import {Wordmark,cx} from './ui';
+import {Wordmark} from './ui';
 import {SPRING} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
 import {learnerGoal} from '@/lib/program/personalization';
@@ -47,39 +47,37 @@ export function AppNav(){
  if(FOCUS.some(r=>r.test(path)))return null;
  const move=reduced?{duration:0}:SPRING;
  return <>
-  <header className="print:hidden sticky top-0 z-40 bg-navy text-white shadow-[0_1px_0_rgba(255,255,255,.08)]">
+  <header className="print:hidden sticky top-0 z-40 border-b border-line bg-white text-navy">
    <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-4 sm:px-8">
-    <Link href="/" aria-label="Khanpanion, Today" className="rounded-lg focus-visible:outline-3 focus-visible:outline-green"><Wordmark onDark small/></Link>
-    <nav aria-label="Main" className="ml-6 hidden flex-1 items-center gap-1 lg:flex">
-     {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex min-h-11 items-center rounded-xl px-2.5 text-[14px] xl:px-4 xl:text-[15px] font-semibold text-white/75  hover:text-white aria-[current=page]:text-navy">
-      {active===x.key&&<motion.span layoutId="tab-oval" transition={move} className="absolute inset-0 rounded-xl bg-green"/>}
+    <Link href="/" aria-label="Khanpanion, Today" className="rounded-lg focus-visible:outline-3 focus-visible:outline-navy"><Wordmark small/></Link>
+    <nav aria-label="Main" className="ml-6 hidden h-16 flex-1 items-stretch gap-1 lg:flex">
+     {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex items-center px-2.5 text-[14px] xl:px-3.5 xl:text-[15px] font-semibold text-ink-soft hover:text-navy aria-[current=page]:text-navy focus-visible:outline-3 focus-visible:-outline-offset-4 focus-visible:outline-navy">
+      {active===x.key&&<motion.span layoutId="tab-oval" transition={move} className="absolute inset-x-2.5 bottom-0 h-[3px] rounded-t-sm bg-green xl:inset-x-3.5"/>}
       <span className="relative">{x.key==='plan'&&topic?'Topic':x.key==='mocks'&&goal!=='exam'?'Practice':t(lang,`nav.${x.key}${x.key==='plan'&&bridge?'.bridge':''}`)}</span>
      </Link>)}
     </nav>
     <div className="ml-auto flex items-center gap-2">
-     <button data-guide-button onClick={e=>openTour(e.currentTarget)} className="min-h-11 rounded-xl border-2 border-white/25 px-3 text-sm font-semibold text-white hover:border-green focus-visible:outline-3 focus-visible:outline-green">Guide</button>
+     <button data-guide-button onClick={e=>openTour(e.currentTarget)} className="min-h-11 rounded-lg px-3 text-sm font-semibold text-navy hover:bg-sky focus-visible:outline-3 focus-visible:outline-navy">Guide</button>
      <div className="relative">
-      <button aria-label="Me" ref={button} aria-expanded={menu} aria-controls="me-menu" onClick={()=>setMenu(!menu)} className="flex min-h-11 items-center gap-2 rounded-xl border-2 border-white/20 px-2 min-[360px]:pr-4 text-[15px] font-semibold hover:border-white/50 focus-visible:outline-3 focus-visible:outline-green text-white">
-       <span className="grid h-7 w-7 place-items-center rounded-xl bg-green text-navy" aria-hidden="true"><svg viewBox="0 0 24 24" className="h-4 w-4"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6" fill="currentColor"/></svg></span><span className="hidden min-[360px]:inline">{t(lang,'nav.me')}</span>
+      <button aria-label="Me" ref={button} aria-expanded={menu} aria-controls="me-menu" onClick={()=>setMenu(!menu)} className="flex min-h-11 items-center gap-2 rounded-lg px-2 min-[360px]:pr-3 text-[15px] font-semibold text-navy hover:bg-sky aria-expanded:bg-sky focus-visible:outline-3 focus-visible:outline-navy">
+       <span className="grid h-7 w-7 place-items-center rounded-md bg-green text-navy" aria-hidden="true"><svg viewBox="0 0 24 24" className="h-4 w-4"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6" fill="currentColor"/></svg></span><span className="hidden min-[360px]:inline">{t(lang,'nav.me')}</span>
       </button>
-      {menu&&<div ref={panel} id="me-menu" className="absolute right-0 top-14 w-72 rounded-2xl bg-white p-2 text-navy shadow-[0_24px_60px_-20px_rgba(4,19,51,.6)]">
-       <button onClick={()=>{setMenu(false);guide.configure(button.current);}} className="flex min-h-11 w-full items-center rounded-xl bg-mint px-3 text-left font-semibold hover:bg-green/20">Change goal or routine</button>
-       {[['/plan','me.pledge'],['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-xl px-3 font-semibold hover:bg-mint">{t(lang,key)}</Link>)}
-       <div className="mt-1 flex items-center justify-between rounded-xl bg-sky px-3 py-2"><span className="text-sm font-semibold">{t(lang,'me.language')}</span>
-        <div className="flex gap-1">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(p=>({...p,lang:l}))} className="min-h-11 rounded-xl px-3 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div>
+      {menu&&<div ref={panel} id="me-menu" className="absolute right-0 top-14 w-72 rounded-xl border border-line bg-white p-2 text-navy shadow-lift">
+       <button onClick={()=>{setMenu(false);guide.configure(button.current);}} className="flex min-h-11 w-full items-center rounded-lg px-3 text-left font-semibold hover:bg-sky">Change goal or routine</button>
+       {[['/plan','me.pledge'],['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-lg px-3 font-semibold hover:bg-sky">{t(lang,key)}</Link>)}
+       <div className="mt-1 flex items-center justify-between border-t border-line px-3 pt-2"><span className="text-sm font-semibold">{t(lang,'me.language')}</span>
+        <div className="flex gap-1">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(p=>({...p,lang:l}))} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div>
        </div>
       </div>}
      </div>
     </div>
    </div>
   </header>
-  <nav aria-label="Main" className="print:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-navy pb-[env(safe-area-inset-bottom)] text-white lg:hidden">
+  <nav aria-label="Main" className="print:hidden fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white pb-[env(safe-area-inset-bottom)] text-navy lg:hidden">
    <div className="grid grid-cols-6">
-    {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex min-h-16 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-white/70 aria-[current=page]:text-white">
-     <span className="relative grid h-8 w-12 place-items-center">
-      {active===x.key&&<motion.span layoutId="tab-oval-m" transition={move} className="absolute inset-0 rounded-lg bg-green"/>}
-      <span className={cx('relative',active===x.key&&'text-navy')}><Icon k={x.key}/></span>
-     </span>
+    {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex min-h-16 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-ink-soft aria-[current=page]:text-navy">
+     {active===x.key&&<motion.span layoutId="tab-oval-m" transition={move} className="absolute inset-x-3 top-0 h-[3px] rounded-b-sm bg-green"/>}
+     <span className="relative grid h-8 w-12 place-items-center"><Icon k={x.key}/></span>
      {x.key==='plan'&&topic?'Topic':x.key==='mocks'&&goal!=='exam'?'Practice':t(lang,`nav.${x.key}${x.key==='plan'&&bridge?'.bridge':''}`)}
     </Link>)}
    </div>
