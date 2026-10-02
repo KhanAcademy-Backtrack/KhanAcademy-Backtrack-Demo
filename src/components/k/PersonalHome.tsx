@@ -49,7 +49,7 @@ export function PersonalHome(){
    </FeatureCard>
   </Section>
 
-  {goal==='college'&&<Section label="Your first-year foundations">{program?<FeatureCard icon={glyph.cap} title={program.title} body={`Your ${program.title} map connects college topics to the foundations behind them.`}
+  {goal==='college'&&<Section label="Your program map">{program?<FeatureCard icon={glyph.cap} title="Your first-year foundations" body={`Your ${program.title} map connects college topics to the foundations behind them.`}
     action={<><Link href={`/bridge/${program.id}`} className={btn.dark}>Open my program map</Link><Link href={`/mock/take?f=placement~${program.id}|${seed}&mode=practice`} className={btn.ghost}>Try the placement check</Link></>}/>
    :<FeatureCard icon={glyph.cap} title="Choose a field when you’re ready" body="Keep reviewing general foundations, or choose a field for a more specific map." action={<ChangeGoalButton className={btn.ghost} label="Choose my college field"/>}/>}</Section>}
 
