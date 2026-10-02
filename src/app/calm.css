@@ -1,0 +1,55 @@
+/* Calm study shell, October 2026.
+   One quiet canvas, white cards with a soft shadow, small secondary labels, rectangular controls.
+   The rules live in the components layer so they settle the older legacy layers without
+   specificity fights; Tailwind utilities on an element still win. Learner-facing copy,
+   answer handling and evidence rules are untouched here. */
+@layer components {
+.eyebrow{letter-spacing:0;text-transform:none;font-size:.875rem;font-weight:600;color:#475e7c}
+.explore-ending .eyebrow{color:rgba(255,255,255,.8)}
+
+/* BACKTRACK route */
+.product-shell{max-width:1200px;margin:0 auto;padding:20px 16px 8px}
+.goal-bar{border-bottom:0;margin-bottom:16px}
+.goal-bar strong{font-size:1rem;font-weight:700;color:#0a2a66}
+.goal-bar>a{font-size:.875rem;font-weight:600;color:#0a2a66}
+.goal-bar .eyebrow,.session-label{font-size:.8125rem;color:#475e7c}
+.goal-progress{color:#475e7c;font-size:.8125rem}
+.goal-progress progress{height:8px;border-radius:4px;background:#e3e8f1}
+.goal-progress progress::-webkit-progress-bar{background:#e3e8f1;border-radius:4px}
+.goal-progress progress::-webkit-progress-value{background:#14bf96;border-radius:4px}
+.goal-progress progress::-moz-progress-bar{background:#14bf96;border-radius:4px}
+.learning-layout{gap:16px;min-height:0}
+.learning-stage{padding:32px clamp(20px,3.5vw,48px);align-items:flex-start}
+.learning-stage .eyebrow{letter-spacing:0}
+.setup-stage h1{font-size:clamp(1.6rem,2.4vw,2rem);line-height:1.25;margin:8px 0 20px;letter-spacing:-.02em}
+.feedback-stage h2,.pause-stage h2,.completion h2,.round-moment h2{font-size:clamp(1.45rem,2.2vw,1.85rem);line-height:1.25;margin:10px 0 16px;letter-spacing:-.02em}
+.question-stage h2{font-size:1.2rem;line-height:1.5;font-weight:600}
+.budget-choice button{border:2px solid #e3e8f1;border-radius:8px;background:#fff;color:#0a2a66}
+.budget-choice button:hover{border-color:#cfd8e6}
+.budget-choice button[aria-pressed='true']{border-color:#0a2a66;background:#e7f9f3;box-shadow:none}
+.confidence legend{font-size:.875rem;font-weight:600;color:#475e7c;margin-bottom:8px}
+.confidence button,.small-options button{font-size:.875rem;color:#0a2a66}
+.number-field>span{font-size:.8125rem;font-weight:600;color:#475e7c}
+.number-field input{border:2px solid #cfd8e6;border-radius:8px}
+.number-field input:focus{border-color:#0a2a66;outline:none;box-shadow:0 0 0 3px #e7f9f3}
+.hint-row button{color:#0a2a66}
+.product-bottom{background:transparent;border:0;padding:14px 4px}
+.feedback-buddy{opacity:.95}
+@media(min-width:781px){
+ .product-shell{padding:28px 32px 8px}
+ .goal-bar{position:sticky;top:64px}
+ .learning-layout{grid-template-columns:minmax(0,1fr) minmax(280px,340px)}
+ .learning-map{background:#fff;border:0;border-radius:16px;box-shadow:0 0 32px rgba(10,42,102,.08);justify-content:flex-start;padding:28px 24px}
+ .map-goal{border-left:3px solid #14bf96}
+ .goal-bar .session-label{margin-left:auto}
+ .goal-bar>.goal-progress{flex:0 1 300px;flex-basis:300px;width:auto}
+}
+@media(max-width:780px){
+ .goal-bar{position:static}
+ .learning-stage{padding:24px 18px}
+}
+
+/* Study space, packs and sessions keep their structure; only the surfaces calm down. */
+.session-toolbar{position:static;height:auto;min-height:72px;border-bottom:0;margin-bottom:16px}
+.session-reason{margin:0 4px 16px}
+}

@@ -1,10 +1,10 @@
 @layer theme, base, legacy, components, utilities;
 @import 'tailwindcss';
 @theme {
- --color-navy:#0a2a66; --color-navy-deep:#061b45; --color-navy-night:#041333; --color-green:#14bf96; --color-green-deep:#0f9f7c; --color-mint:#e7f9f3; --color-mint-line:#c4e6db; --color-sky:#eef3fa; --color-ink-soft:#475e7c; --color-paper:#ffffff; --color-fog:#9fb3d4;
+ --color-navy:#0a2a66; --color-navy-deep:#061b45; --color-navy-night:#041333; --color-green:#14bf96; --color-green-deep:#0f9f7c; --color-mint:#e7f9f3; --color-mint-line:#c4e6db; --color-sky:#eef3fa; --color-ink-soft:#475e7c; --color-paper:#ffffff; --color-canvas:#f6f8fc; --color-line:#e3e8f1; --color-line-strong:#cfd8e6; --color-fog:#9fb3d4;
  --font-sans:var(--font-instrument-sans),Arial,sans-serif; --font-serif:var(--font-stix),Georgia,serif; --font-math:var(--font-stix),Georgia,serif;
  --ease-out-k:cubic-bezier(.2,.8,.2,1);
- --shadow-sheet:0 1px 0 #c4e6db, 0 18px 40px -24px rgba(6,27,69,.45);
+ --shadow-sheet:0 0 32px rgba(10,42,102,.08); --shadow-lift:0 6px 24px -8px rgba(10,42,102,.18);
 }
 @layer legacy {
 :root{color-scheme:dark;--bg:#101510;--surface:#192019;--line:#354033;--text:#f2f4e9;--muted:#b0b9a9;--accent:#d2f279;--warm:#f2af81}

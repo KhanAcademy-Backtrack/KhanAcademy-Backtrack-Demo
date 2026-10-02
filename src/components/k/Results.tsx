@@ -7,7 +7,7 @@ import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {Explanation,WhyPanel,PassageView} from './Question';
 import {TldrCard} from './TldrCard';
-import {PageBand,Sheet,btn,Oval,cx,pageBody,Pill} from './ui';
+import {PageBand,Sheet,btn,cx,pageBody,Pill} from './ui';
 import {Companion} from '@/components/study/Companion';
 import {useFix} from './useFix';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
@@ -31,7 +31,7 @@ export function Results(){
  const form=attempt?formFromKey(attempt.formKey):undefined;
  const result=useMemo(()=>form&&attempt?scoreAttempt(form,attempt):undefined,[form,attempt]);
  const [showKey,setShowKey]=useState(true),[open,setOpen]=useState<string[]>([]),[shared,setShared]=useState('');
- if(!ready)return <div className="min-h-screen bg-navy"/>;
+ if(!ready)return <div className="min-h-screen"/>;
  if(!attempt||!form||!result||!attempt.submittedAt)return <><PageBand title="No results here yet" lead="Results appear after you submit a mock exam or topic check on this phone."/><div className={pageBody}><Sheet><Link href="/mock" className={btn.primary}>Choose a mock exam</Link></Sheet></div></>;
  const previous=state.attempts.filter(a=>a.submittedAt&&a.id!==attempt.id&&a.formKey.split('~')[0]===attempt.formKey.split('~')[0]&&a.submittedAt<attempt.submittedAt!).sort((a,b)=>b.submittedAt!-a.submittedAt!)[0];
  const prevResult=previous?(()=>{const f=formFromKey(previous.formKey);return f?scoreAttempt(f,previous):undefined;})():undefined;
@@ -43,21 +43,21 @@ export function Results(){
  const praise=result.total.percent>=80?'Strong work.':result.total.percent>=60?'Solid. The misses below are very fixable.':result.total.percent>=40?'You have the base. Now for the traps.':'Every miss here is a map of what to learn next.';
  async function share(){try{const {shareCardPng,shareOrDownload}=await import('@/lib/share-card');const blob=await shareCardPng({title:`${result!.total.correct} of ${result!.total.total} on a ${form!.title.toLowerCase()}`,subtitle:growth!==undefined&&growth>0?`Up ${growth} points from last time.`:'Practising for college entrance exams.',lines:result!.subtests.map(s=>({label:SUBTEST_LABEL[s.subtest],value:`${s.correct}/${s.total}`,fill:s.total?s.correct/s.total:0})),footer:'khanpanion.vercel.app · free exam review'});setShared(await shareOrDownload(blob,'khanpanion-result.png','My practice result on Khanpanion'));}catch{setShared('error');}}
  return <>
-  <div className="bg-navy text-white">
-   <div className="mx-auto grid max-w-6xl gap-8 px-5 pb-16 pt-9 sm:px-8 lg:grid-cols-[1fr_1fr] lg:pb-20 lg:pt-12">
+  <div className="text-navy">
+   <div className="mx-auto grid max-w-6xl gap-8 px-5 pb-8 pt-9 sm:px-8 lg:grid-cols-[1fr_1fr] lg:pt-12">
     <div>
-     <p className="text-white/75">{form.title} · {t(lang,'result.title').toLowerCase()}</p>
-     <h1 className="mt-2 text-5xl font-extrabold tracking-[-.04em] sm:text-6xl">{result.total.correct} of {result.total.total}</h1>
-     <p className="mt-3 text-xl text-white/85">{praise}{growth!==undefined&&growth>0&&` Up ${growth} points from your last one.`}</p>
-     {result.sureButWrong>0&&<p className="mt-3 max-w-lg text-white/80">{result.sureButWrong} answer{result.sureButWrong===1?' was':'s were'} marked “sure” but wrong. Those are the most useful misses to study: they are ideas that feel right and are not.</p>}
-     <div className="mt-6 flex flex-wrap gap-3"><a href="#key" className={btn.primary}>{t(lang,'result.key')}</a><button className={btn.onDark} onClick={share}>Share my result</button></div>
-     {shared&&<p role="status" className="mt-2 text-sm text-white/75">{shared==='downloaded'?'Image saved to your downloads.':shared==='shared'?'Shared.':shared==='error'?'This browser could not make the image.':''}</p>}
+     <p className="text-sm font-semibold text-ink-soft">{form.title} · {t(lang,'result.title').toLowerCase()}</p>
+     <h1 className="mt-2 text-4xl font-extrabold tracking-[-.03em] sm:text-5xl">{result.total.correct} of {result.total.total}</h1>
+     <p className="mt-3 text-lg text-ink-soft">{praise}{growth!==undefined&&growth>0&&` Up ${growth} points from your last one.`}</p>
+     {result.sureButWrong>0&&<p className="mt-3 max-w-lg text-ink-soft">{result.sureButWrong} answer{result.sureButWrong===1?' was':'s were'} marked “sure” but wrong. Those are the most useful misses to study: they are ideas that feel right and are not.</p>}
+     <div className="mt-6 flex flex-wrap gap-3"><a href="#key" className={btn.primary}>{t(lang,'result.key')}</a><button className={btn.ghost} onClick={share}>Share my result</button></div>
+     {shared&&<p role="status" className="mt-2 text-sm text-ink-soft">{shared==='downloaded'?'Image saved to your downloads.':shared==='shared'?'Shared.':shared==='error'?'This browser could not make the image.':''}</p>}
     </div>
-    <div className="grid content-start gap-3">{result.subtests.map((s,i)=>{const pace=paceCheck(s);return <motion.div key={s.subtest} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.base,delay:reduced?0:DUR.fast+i*DUR.fast}} className="rounded-2xl bg-white/8 p-4">
-     <div className="flex items-baseline justify-between"><p className="font-bold">{SUBTEST_LABEL[s.subtest]}</p><p className="text-2xl font-extrabold">{s.correct}<span className="text-base font-semibold text-white/70">/{s.total}</span></p></div>
-     <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/12"><motion.div className="h-full w-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:s.total?s.correct/s.total:0}} transition={{duration:DUR.fast,delay:reduced?0:DUR.fast+i*DUR.fast,ease:EASE as unknown as [number,number,number,number]}}/></div>
-     <p className="mt-2 text-sm text-white/85"><span className="font-bold">{s.band.label}.</span> {s.band.note}</p>
-     {pace&&<p className="mt-1 text-sm text-white/70">{t(lang,'result.pace')}: {pace.onPace?`on pace, about ${pace.perItem} s a question.`:`about ${pace.perItem} s a question. At that pace the real ${s.total<pace.items?'section':'exam'} would reach about ${pace.reach} of ${pace.items} questions. One timed section a week closes that gap.`}</p>}
+    <div className="grid content-start gap-3">{result.subtests.map((s,i)=>{const pace=paceCheck(s);return <motion.div key={s.subtest} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.base,delay:reduced?0:DUR.fast+i*DUR.fast}} className="rounded-2xl bg-white p-4 shadow-sheet">
+     <div className="flex items-baseline justify-between"><p className="font-bold">{SUBTEST_LABEL[s.subtest]}</p><p className="text-2xl font-extrabold">{s.correct}<span className="text-base font-semibold text-ink-soft">/{s.total}</span></p></div>
+     <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-line"><motion.div className="h-full w-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:s.total?s.correct/s.total:0}} transition={{duration:DUR.fast,delay:reduced?0:DUR.fast+i*DUR.fast,ease:EASE as unknown as [number,number,number,number]}}/></div>
+     <p className="mt-2 text-sm text-ink-soft"><span className="font-bold text-navy">{s.band.label}.</span> {s.band.note}</p>
+     {pace&&<p className="mt-1 text-sm text-ink-soft">{t(lang,'result.pace')}: {pace.onPace?`on pace, about ${pace.perItem} s a question.`:`about ${pace.perItem} s a question. At that pace the real ${s.total<pace.items?'section':'exam'} would reach about ${pace.reach} of ${pace.items} questions. One timed section a week closes that gap.`}</p>}
     </motion.div>;})}</div>
    </div>
   </div>
@@ -83,16 +83,16 @@ export function Results(){
     <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-extrabold">{t(lang,'result.key')}</h2><button className={btn.dark} aria-pressed={showKey} onClick={()=>{setShowKey(!showKey);setOpen([]);}}>{showKey?t(lang,'result.hideAnswers'):t(lang,'result.showAnswers')}</button></div>
     <p className="mt-1 text-ink-soft">{showKey?'Correct answers are marked. Hide them to try the questions again.':'Answers hidden. Reveal one question at a time, or show them all.'}</p>
     <ol className="mt-5 grid gap-4">{ids.map((id,n)=>{const it=itemById(id)!,chosen=attempt.answers[id]??null,right=chosen===it.answerIndex,revealed=showKey||open.includes(id),isOpen=open.includes(`x:${id}`);const prevPassage=n>0&&itemById(ids[n-1])?.passageId===it.passageId;
-     return <li key={id} id={`q-${n+1}`} className="scroll-mt-24 rounded-2xl border-2 border-mint-line p-4 sm:p-5">
+     return <li key={id} id={`q-${n+1}`} className="scroll-mt-24 rounded-2xl border-2 border-line p-4 sm:p-5">
       {it.passageId&&!prevPassage&&<details className="mb-3"><summary className="min-h-11 cursor-pointer py-2 font-semibold">Show the passage</summary><PassageView id={it.passageId}/></details>}
       <div className="flex flex-wrap items-start justify-between gap-2"><p className="font-serif text-[19px] leading-snug"><span className="mr-2 font-sans text-sm font-bold text-ink-soft">{n+1}.</span>{it.stem}</p>{revealed&&<Pill tone={right?'green':'sky'}>{right?'Right':attempt.idk.includes(id)?'Didn’t know yet':chosen===null?'Blank':'Missed'}</Pill>}</div>
-      <ul className="mt-3 grid gap-1.5">{it.choices.map((c,i)=><li key={i} className={cx('flex items-center gap-3 rounded-xl px-2 py-1.5',revealed&&i===it.answerIndex&&'bg-mint')}><Oval filled={chosen===i} label={LETTERS[i]} size={30}/><span className="font-serif text-[17px]">{c}</span>{revealed&&i===it.answerIndex&&<span className="ml-auto text-sm font-bold">Answer</span>}{chosen===i&&<span className={cx('text-sm text-ink-soft',!(revealed&&i===it.answerIndex)&&'ml-auto')}>Your pick</span>}</li>)}</ul>
+      <ul className="mt-3 grid gap-1.5">{it.choices.map((c,i)=><li key={i} className={cx('flex items-center gap-3 rounded-xl px-2 py-1.5',revealed&&i===it.answerIndex&&'bg-mint')}><span aria-hidden="true" className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',chosen===i?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span><span className="font-serif text-[17px]">{c}</span>{revealed&&i===it.answerIndex&&<span className="ml-auto text-sm font-bold">Answer</span>}{chosen===i&&<span className={cx('text-sm text-ink-soft',!(revealed&&i===it.answerIndex)&&'ml-auto')}>Your pick</span>}</li>)}</ul>
       <div className="mt-3 flex flex-wrap gap-2">
        {!showKey&&<button className={btn.ghost} onClick={()=>setOpen(o=>o.includes(id)?o.filter(x=>x!==id):[...o,id])}>{revealed?'Hide answer':'Reveal answer'}</button>}
        <button className={btn.ghost} aria-expanded={isOpen} onClick={()=>setOpen(o=>o.includes(`x:${id}`)?o.filter(x=>x!==`x:${id}`):[...o,`x:${id}`])}>{isOpen?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
       </div>
       {!right&&revealed&&<div className="mt-3 grid gap-3"><WhyPanel item={it} chosen={chosen} lang={lang}/>
-       <fieldset><legend className="text-sm font-semibold">Why did you miss it?</legend><div className="mt-1 flex flex-wrap gap-2">{(Object.keys(TRIAGE) as Triage[]).map(k=><button key={k} aria-pressed={attempt.triage[id]===k} onClick={()=>setTriage(id,k)} className="min-h-11 rounded-full border-2 border-navy/15 px-3 text-sm font-semibold aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white text-navy">{TRIAGE[k]}</button>)}</div></fieldset></div>}
+       <fieldset><legend className="text-sm font-semibold">Why did you miss it?</legend><div className="mt-1 flex flex-wrap gap-2">{(Object.keys(TRIAGE) as Triage[]).map(k=><button key={k} aria-pressed={attempt.triage[id]===k} onClick={()=>setTriage(id,k)} className="min-h-11 rounded-lg border-2 border-line bg-white px-3 text-sm font-semibold text-navy hover:border-line-strong aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white">{TRIAGE[k]}</button>)}</div></fieldset></div>}
       {isOpen&&<div className="mt-3"><Explanation item={it}/></div>}
      </li>;})}</ol>
    </Sheet>
