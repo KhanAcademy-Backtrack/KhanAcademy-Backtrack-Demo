@@ -53,12 +53,12 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
  }
  return createPortal(<div className="fixed inset-0 z-[70] print:hidden">
   {rect?<>
-   <div className="absolute inset-x-0 top-0 bg-navy-night/80" style={{height:rect.y}}/>
-   <div className="absolute inset-x-0 bottom-0 bg-navy-night/80" style={{top:rect.y+rect.h}}/>
-   <div className="absolute left-0 bg-navy-night/80" style={{top:rect.y,width:rect.x,height:rect.h}}/>
-   <div className="absolute right-0 bg-navy-night/80" style={{top:rect.y,left:rect.x+rect.w,height:rect.h}}/>
+   <div className="absolute inset-x-0 top-0 bg-navy-night/55" style={{height:rect.y}}/>
+   <div className="absolute inset-x-0 bottom-0 bg-navy-night/55" style={{top:rect.y+rect.h}}/>
+   <div className="absolute left-0 bg-navy-night/55" style={{top:rect.y,width:rect.x,height:rect.h}}/>
+   <div className="absolute right-0 bg-navy-night/55" style={{top:rect.y,left:rect.x+rect.w,height:rect.h}}/>
    <div data-tour-highlight={current.tab} className="pointer-events-none absolute rounded-2xl border-[3px] border-green" style={{left:rect.x,top:rect.y,width:rect.w,height:rect.h}}/>
-  </>:<div className="absolute inset-0 bg-navy-night/80"/>}
+  </>:<div className="absolute inset-0 bg-navy-night/55"/>}
   <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="program-tour-title" aria-describedby="program-tour-body" onKeyDown={trap} className="absolute w-[calc(100%-28px)] max-w-[420px] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-[22px] bg-white p-5 text-navy shadow-sheet sm:p-6" style={position}>
    <div className="flex items-center justify-between gap-3"><p className="text-sm font-semibold text-ink-soft">Step {step+1} of {STEPS.length} · {labels[step]}</p><button aria-label="Close guide" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-0 text-navy hover:bg-sky focus-visible:outline-2 focus-visible:outline-navy" onClick={onClose}><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
    <ol aria-label="Guide progress" className="mb-5 mt-2 grid grid-cols-4 gap-2">{labels.map((label,i)=><li key={label} aria-current={i===step?'step':undefined}><span className={cx('block h-1 rounded-sm',i===step?'bg-green':i<step?'bg-navy':'bg-navy/10')}/><span className={cx('mt-2 block text-[11px]',i===step?'font-bold text-navy':'text-ink-soft')}>{label}</span></li>)}</ol>

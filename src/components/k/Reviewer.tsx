@@ -48,7 +48,7 @@ export function ChapterPage({id}:{id:string}){
  if(!c||!concept)return null;
  const saved=state.bookmarks.includes(c.id);
  return <article>
-  <PageBand title={c.title} lead={c.summary.intro}><div className="mt-5 flex flex-wrap gap-2 print:hidden"><button className={btn.primary} onClick={()=>window.print()}>Print this chapter</button><button className={btn.onDark} aria-pressed={saved} onClick={()=>update(s=>({...s,bookmarks:saved?s.bookmarks.filter(x=>x!==c.id):[...s.bookmarks,c.id]}))}>{saved?'Saved':'Save for later'}</button><Link className={btn.onDark} href={`/mock/take?f=topic~${c.concept}|${today.replace(/-/g,'')}&mode=practice`}>Topic check</Link></div></PageBand>
+  <PageBand title={c.title} lead={c.summary.intro}><div className="mt-5 flex flex-wrap gap-2 print:hidden"><button className={btn.primary} onClick={()=>window.print()}>Print this chapter</button><button className={btn.quiet} aria-pressed={saved} onClick={()=>update(s=>({...s,bookmarks:saved?s.bookmarks.filter(x=>x!==c.id):[...s.bookmarks,c.id]}))}>{saved?'Saved':'Save for later'}</button><Link className={btn.quiet} href={`/mock/take?f=topic~${c.concept}|${today.replace(/-/g,'')}&mode=practice`}>Topic check</Link></div></PageBand>
   <div className={cx(pageBody,'print:mt-0')}>
    <TldrCard tldr={concept.tldr}/>
    <Sheet className="mt-5"><h2 className="text-2xl font-extrabold">1. The summary</h2>

@@ -17,7 +17,7 @@ import {validStudy} from '@/lib/study';
 import {t} from '@/lib/i18n';
 
 const LiveGroup=lazy(()=>import('./LiveStudyGroup').then(m=>({default:m.LiveStudyGroup})));
-export function Group(){return <Suspense fallback={<div className="min-h-screen bg-navy"/>}><LiveGroup/></Suspense>;}
+export function Group(){return <Suspense fallback={<div className="min-h-screen"/>}><LiveGroup/></Suspense>;}
 
 export function Coach(){
  return <>

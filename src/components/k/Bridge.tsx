@@ -58,8 +58,8 @@ export function BridgeProgramPage({id}:{id:string}){
  const weeks=summerPlan(p),seed=today.replace(/-/g,'');
  return <>
   <PageBand title={p.title} lead={`${p.examples}. First-year courses usually include ${p.firstYear.join(', ').toLowerCase()}.`}>
-   <div className="mt-6 flex flex-wrap gap-3"><Link className={btn.primary} href={`/mock/take?f=placement~${id}|${seed}&mode=practice`}>{placement?'Take the placement check again':'Take the placement check'}</Link><Link className={btn.onDark} href="/bridge">Change program</Link></div>
-   {placeScore!==undefined&&<p className="mt-3 text-white/80">Last placement check: {placeScore} of {formItems(placeForm!).length}. <Link className="underline underline-offset-4" href={`/mock/result?a=${placement!.id}`}>See what to fix</Link></p>}
+   <div className="mt-6 flex flex-wrap gap-3"><Link className={btn.primary} href={`/mock/take?f=placement~${id}|${seed}&mode=practice`}>{placement?'Take the placement check again':'Take the placement check'}</Link><Link className={btn.quiet} href="/bridge">Change program</Link></div>
+   {placeScore!==undefined&&<p className="mt-3 text-ink-soft">Last placement check: {placeScore} of {formItems(placeForm!).length}. <Link className="underline underline-offset-4" href={`/mock/result?a=${placement!.id}`}>See what to fix</Link></p>}
   </PageBand>
   <div className={pageBody}>
    <Sheet><h2 className="text-2xl font-extrabold">What your first year assumes</h2><p className="mt-1 text-ink-soft">Status comes from your placement check and topic checks. Tap a line to learn it.</p>

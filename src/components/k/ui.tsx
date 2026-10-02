@@ -14,7 +14,6 @@ export const btn={
  dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[15px] font-bold text-white hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
  ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-line bg-white px-5 py-2 text-[15px] font-semibold text-navy hover:border-line-strong hover:bg-sky focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
  quiet:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-[15px] font-semibold text-navy underline decoration-line-strong decoration-2 underline-offset-4 hover:bg-sky hover:decoration-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
- onDark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-[15px] font-semibold text-navy underline decoration-line-strong decoration-2 underline-offset-4 hover:bg-sky hover:decoration-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
  text:'inline-flex min-h-11 items-center gap-1 font-semibold text-navy underline decoration-green decoration-2 underline-offset-4 hover:decoration-navy'
 };
 

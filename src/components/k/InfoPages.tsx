@@ -43,7 +43,7 @@ export function About(){
    </Sheet>
    <Sheet className="mt-5"><h2 className="text-2xl font-extrabold">The team</h2><p className="mt-1 text-ink-soft">BS Computer Science students at UP Manila, and all three UPCAT passers.</p>
     <ul className="mt-5 grid gap-4 sm:grid-cols-3">{['Matthew Emmanuel T. Labrador','Paul Andrei H. Recio','Harry C. Gomez'].map(n=><li key={n} className="rounded-2xl bg-mint p-5"><Oval filled size={30}/><p className="mt-3 text-lg font-bold">{n}</p><p className="text-sm text-ink-soft">BS Computer Science, UP Manila</p></li>)}</ul>
-    <div className="mt-6 flex gap-4 rounded-2xl bg-navy p-5 text-white"><Companion size={70} pose="encourage"/><p className="font-serif text-[18px] leading-relaxed">Harry moved from an ICT strand into Computer Science and had to rebuild the math and physics his classmates already had. The freshman bridge exists so the next student finds those gaps early.</p></div>
+    <div className="mt-6 flex gap-4 rounded-2xl bg-mint p-5 text-navy"><Companion size={56} pose="encourage"/><p className="font-serif text-[18px] leading-relaxed">Harry moved from an ICT strand into Computer Science and had to rebuild the math and physics his classmates already had. The freshman bridge exists so the next student finds those gaps early.</p></div>
    </Sheet>
    <Sheet className="mt-5"><h2 className="text-xl font-extrabold">How it works underneath</h2><div className="mt-3 flex flex-wrap gap-2"><Link className={btn.ghost} href="/how-it-works">How the mistake finder works</Link><Link className={btn.ghost} href="/evidence">What counts as progress</Link><Link className={btn.ghost} href="/coach">For teachers and coaches</Link><Link className={btn.ghost} href="/explore">Explore ideas</Link></div></Sheet>
   </div>
