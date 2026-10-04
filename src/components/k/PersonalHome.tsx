@@ -6,6 +6,7 @@ import {Sheet,btn,cx} from './ui';
 import {StudyWeek} from './StudyWeek';
 import {DailyPractice} from './DailyPractice';
 import {ReviewTopics} from './ReviewTopics';
+import {HomeShortcuts} from './StudyTools';
 import {FeatureCard,RouteArt,Section,TopicArt,WeekArt,glyph} from './HomeCards';
 import {examTargets,goalLabel,learnerGoal,targetDay} from '@/lib/program/personalization';
 import {personalFocus,daysBetween,parseDay} from '@/lib/program/planner';
@@ -26,6 +27,7 @@ export function PersonalHome(){
    <p className="mt-1.5 text-ink-soft">{setup.weekdays.length} study days a week · {setup.minutes} minutes a session · Around {setup.time}</p>
    {target&&<p className="mt-1 text-sm text-ink-soft">{target>today?`${daysBetween(today,target)} days to your planning target`:'Your planning target has arrived'} · {parseDay(target).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'})}</p>}
   </header>
+  <HomeShortcuts/>
 
   {goal==='exam'&&<Section label="Today’s practice"><DailyPractice/></Section>}
 
