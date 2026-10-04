@@ -1,5 +1,6 @@
 import type {Attempt,Triage,Sure} from '../mock/scoring.ts';
-import type {ExamId} from './admissions.ts';
+import {EXAM_IDS,type ExamId} from './admissions.ts';
+const knownExam=(x:unknown)=>(EXAM_IDS as readonly string[]).includes(String(x));
 
 /** Device-local program data: the pledge, mock attempts, the calendar, the mistake
  *  notebook and reviewer progress. Stored beside (never inside) the study space so
@@ -47,12 +48,12 @@ export function validDay(value:unknown):value is string{
 }
 function validCet(x:unknown){
  return obj(x)&&typeof x.general==='boolean'&&Array.isArray(x.targets)&&x.targets.length<=12&&(x.general||x.targets.length>0)
-  &&x.targets.every(t=>obj(t)&&id(t.key)&&text(t.name,60)&&typeof t.name==='string'&&t.name.trim().length>0&&(t.exam===undefined||['upcat','dcat','dostsei','pupcet'].includes(String(t.exam)))&&(t.date===undefined||validDay(t.date)))
+  &&x.targets.every(t=>obj(t)&&id(t.key)&&text(t.name,60)&&typeof t.name==='string'&&t.name.trim().length>0&&(t.exam===undefined||knownExam(t.exam))&&(t.date===undefined||validDay(t.date)))
   &&new Set(x.targets.map(t=>t.key)).size===x.targets.length;
 }
 function validSetup(x:unknown){
  return obj(x)&&['exam','college','topic'].includes(String(x.goal))
-  &&(x.exam===undefined||['upcat','dcat','dostsei','pupcet'].includes(String(x.exam)))
+  &&(x.exam===undefined||knownExam(x.exam))
   &&(x.cet===undefined||validCet(x.cet))&&(x.goal!=='exam'||x.exam!==undefined||x.cet!==undefined)&&(x.goal!=='topic'||id(x.concept))
   &&(x.concept===undefined||id(x.concept))&&(x.targetDate===undefined||validDay(x.targetDate))
   &&Array.isArray(x.weekdays)&&x.weekdays.length>0&&x.weekdays.length<=7&&new Set(x.weekdays).size===x.weekdays.length&&x.weekdays.every(d=>Number.isInteger(d)&&d>=0&&d<7)
@@ -79,7 +80,7 @@ export function validProgram(x:unknown):x is ProgramState{
  if(!obj(x.sides)||typeof x.sides.admission!=='boolean'||typeof x.sides.bridge!=='boolean')return false;
  if(x.activeSide!=='admission'&&x.activeSide!=='bridge')return false;
  const p=x.pledge;
- if(p!==undefined&&!(obj(p)&&['upcat','dcat','dostsei','pupcet'].includes(p.exam as string)&&date(p.examDate)&&text(p.why,400)&&num(p.days,1,7)&&num(p.minutes,5,240)&&text(p.when,200)&&text(p.time,10)&&Array.isArray(p.weekdays)&&p.weekdays.every(d=>Number.isInteger(d)&&d>=0&&d<7)&&num(p.createdAt)))return false;
+ if(p!==undefined&&!(obj(p)&&knownExam(p.exam)&&date(p.examDate)&&text(p.why,400)&&num(p.days,1,7)&&num(p.minutes,5,240)&&text(p.when,200)&&text(p.time,10)&&Array.isArray(p.weekdays)&&p.weekdays.every(d=>Number.isInteger(d)&&d>=0&&d<7)&&num(p.createdAt)))return false;
  if(x.bridgeProgram!==undefined&&!id(x.bridgeProgram))return false;
  if(!Array.isArray(x.attempts)||x.attempts.length>LIMITS.attempts||!x.attempts.every(validAttempt))return false;
  if(x.activeAttempt!==undefined&&!id(x.activeAttempt))return false;
