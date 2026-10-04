@@ -60,6 +60,7 @@ export function CalendarView(){
        </button>;})}</div>
       <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 px-2 text-sm text-ink-soft sm:px-0">{Object.entries(KIND).filter(([key])=>official||(key!=='exam'&&key!=='examWindow')).map(([,k])=><span key={k.label} className="flex items-center gap-2"><span className={cx('h-2.5 w-2.5 rounded-lg',k.dot)}/>{k.label}</span>)}</div>
      <label className="mt-3 flex min-h-11 items-center gap-2 px-2 text-sm text-ink-soft"><input type="checkbox" checked={official} onChange={e=>setOfficial(e.target.checked)} className="h-5 w-5 accent-[#14bf96]"/>Show official exam dates</label>
+     <Link href="/admissions" className={cx(btn.text,'px-2 text-sm')}>Every exam date, with its official page</Link>
      </motion.div>
      :<ol className="mt-4 grid gap-4">{[...byDay].map(([d,list])=><li key={d}><p className="font-bold">{d===today?'Today':parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</p><ul className="mt-2 grid gap-2">{list.map(i=>row(i,i.id+d))}</ul></li>)}{!byDay.size&&<p className="text-ink-soft">Nothing planned yet. Make a study plan to fill your calendar.</p>}</ol>}
     </Sheet>
