@@ -54,7 +54,7 @@ export async function programJourneys({scenario,origin,root}){
   },viewport);
   await scenario(`program calendar move add export ${width}`,async page=>{
    await seedPledge(page);await page.goto(origin+'/calendar');await page.getByRole('heading',{name:'Calendar',exact:true}).waitFor();await page.getByRole('button',{name:'Move',exact:true}).first().click();await page.getByLabel('New date').fill('2026-10-05');await page.locator('form').getByRole('button',{name:'Move',exact:true}).click();assert.ok((await data(page)).events.some(e=>e.date==='2026-10-05'));
-   await page.getByRole('button',{name:'Add an event',exact:true}).click();await page.getByLabel('What',{exact:true}).fill('Review at the library');await page.getByRole('button',{name:'Add to this day',exact:true}).click();assert.ok((await data(page)).events.some(e=>e.title==='Review at the library'));await shot(page,'calendar',width);
+   await page.getByRole('button',{name:'Add an event',exact:true}).click();await page.getByLabel('What',{exact:true}).fill('Review at the library');await page.getByRole('button',{name:/^Add to (this day|today)$/}).click();assert.ok((await data(page)).events.some(e=>e.title==='Review at the library'));await shot(page,'calendar',width);
    const dl=page.waitForEvent('download');await page.getByRole('button',{name:'Download calendar'}).click();const download=await dl;assert.match(await fs.readFile(await download.path(),'utf8'),/BEGIN:VCALENDAR/);
    if(width===375){await page.setViewportSize({width:320,height:850});await overflow(page);await page.screenshot({path:path.join(dir,'calendar-320.png'),fullPage:true});}
   },viewport);
