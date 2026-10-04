@@ -14,10 +14,11 @@ function useToolNotes(){
  return (key:string)=>key==='recall'&&due?`${due} ready today`:key==='notebook'&&open?`${open} to revisit`:undefined;
 }
 
-/** Every study tool as a card, so the Study page shows what each one is for. */
+/** The Study page's cards: practice exams and daily recall, with what each is for. */
+const CARDS=new Set(['mocks','recall']);
 export function StudyTools(){
  const note=useToolNotes();
- return <ul aria-label="Study tools" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{STUDY_TOOLS.map(x=><li key={x.key} className="min-w-0">
+ return <ul aria-label="Study tools" className="grid gap-3 sm:grid-cols-2">{STUDY_TOOLS.filter(x=>CARDS.has(x.key)).map(x=><li key={x.key} className="min-w-0">
   <Link href={x.href} className="flex h-full min-h-28 gap-3 rounded-xl bg-white p-4 shadow-sheet hover:outline-2 hover:outline-line-strong focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy">
    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-mint text-navy"><NavIcon k={x.icon}/></span>
    <span className="min-w-0"><span className="block font-extrabold leading-tight">{x.label}</span><span className="mt-1 block text-sm leading-snug text-ink-soft">{x.blurb}</span>

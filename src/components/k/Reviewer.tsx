@@ -43,7 +43,7 @@ export function ReviewerLibrary(){
  const missing=cover?cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name):[];
  const mark=(id:string)=>update(s=>({...s,bookmarks:s.bookmarks.includes(id)?s.bookmarks.filter(x=>x!==id):[...s.bookmarks,id]}));
  return <>
-  <PageBand title="Study" lead="Practice exams, BACKTRACK and the full CET reviewer in one place. Pick a tool, or search the reviewer below."/>
+  <PageBand title="Study" lead="Practice exams, daily recall and the full CET reviewer in one place."/>
   <div className={pageBody}>
    <StudyTools/>
    <Sheet className="mt-8">
