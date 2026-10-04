@@ -18,6 +18,7 @@ import {StudyTools} from './StudyTools';
 import {t} from '@/lib/i18n';
 import {EXAMS,type ExamId} from '@/lib/program/admissions';
 import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection,listNames as list} from '@/lib/program/exam-coverage';
+import {EXAM_OUTLINES,type OutlineGroup} from '@/lib/program/exam-outline';
 import {firstExam} from '@/lib/program/personalization';
 
 const filipino=(concept:string)=>CONCEPT_BY_ID[concept]?.area===FILIPINO_CONCEPT_AREA;
@@ -46,6 +47,13 @@ export function ReviewerLibrary(){
  /** The reviewer's chapter cards and summary rows. Inside a section the section name is left out of each line. */
  const chapterCards=(list:typeof CHAPTERS,inside:boolean)=><ul className="mt-3 grid gap-3 md:grid-cols-2">{list.map(c=><li key={c.id} className="flex items-start gap-3 rounded-2xl border-2 border-mint-line p-4"><Oval filled size={26} className="mt-1"/><div className="flex-1"><Link href={`/reviewer/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-sm text-ink-soft">{inside?'':`${label(c.subtest,filipino(c.concept))} · `}{c.examples.length} worked examples · {c.recall.length} recall cards</p></div>{save(c.id,c.title)}</li>)}</ul>;
  const summaryRows=(list:typeof CONCEPTS,inside:boolean)=><ul className="mt-3 grid gap-2 md:grid-cols-2">{list.map(c=><li key={c.id} className="flex items-center gap-3 rounded-2xl px-2 py-1 hover:bg-mint"><Oval size={22}/><Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{c.title}<span className="block text-sm font-normal text-ink-soft">{inside?c.area:`${label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · ${c.area}`}</span></Link>{save(c.id,c.title)}</li>)}</ul>;
+ /** An outlined exam lists every topic reviewers report, sub-subject by sub-subject. A topic links to the summary
+  *  that teaches it; one without a summary stays greyed out and says so. */
+ const outline=scope?EXAM_OUTLINES[scope]:undefined;
+ const outlineRows=(sub:OutlineGroup[])=>sub.map((o,j)=><section key={o.name}><h3 className="mt-5 text-lg font-extrabold">{String.fromCharCode(97+j)}. {o.name}</h3>{o.less&&<p className="mt-1 text-sm text-ink-soft">Only some reviewers report this part.</p>}
+  <ul className="mt-3 grid gap-2 md:grid-cols-2">{o.topics.map(x=>{const c=x.concepts?.length?CONCEPT_BY_ID[x.concepts[0]]:undefined;return <li key={x.title} className={cx('flex items-center gap-3 rounded-2xl px-2 py-1',c&&'hover:bg-mint')}><Oval size={22} className={c?undefined:'opacity-40'}/>
+   {c?<Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{x.title}<span className="block text-sm font-normal text-ink-soft">Summary: {x.concepts!.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}</span></Link>
+   :<span className="min-h-11 flex-1 py-2 font-semibold text-ink-soft">{x.title}<span className="block text-sm font-normal">Not written yet</span></span>}{c&&save(c.id,x.title)}</li>;})}</ul></section>);
  const block=(chs:typeof CHAPTERS,cs:typeof CONCEPTS,inside:boolean)=><>{!!chs.length&&<><h3 className="mt-5 text-lg font-extrabold">Full chapters</h3>{chapterCards(chs,inside)}</>}{!!cs.length&&<><h3 className="mt-5 text-lg font-extrabold">Topic summaries</h3>{summaryRows(cs,inside)}</>}</>;
  const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-xl hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
  const savedChapters=CHAPTERS.filter(c=>state.bookmarks.includes(c.id)),savedConcepts=CONCEPTS.filter(c=>state.bookmarks.includes(c.id)),savedCount=savedChapters.length+savedConcepts.length;
@@ -66,16 +74,18 @@ export function ReviewerLibrary(){
      <p><span className="font-bold">{EXAMS[scope].full}:</span> {list(cover.sections.map(x=>x.name))}.</p>
      {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
      <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
+     {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Greyed topics have no Khanpanion summary yet.</p>}
     </div>}
     {norm?<>
      <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {scope?EXAMS[scope].name+' section':'subject'}</p>
      {block(chapters,concepts,false)}
      {!chapters.length&&!concepts.length&&<p className="mt-6 text-ink-soft">Nothing matches “{q}”. Try a shorter word.</p>}
     </>:<ul className="mt-5 grid gap-2">
-     {groups.map((g,i)=>{const chs=g.empty?[]:CHAPTERS.filter(c=>g.match(c.subtest,filipino(c.concept))),cs=g.empty?[]:CONCEPTS.filter(c=>g.match(c.subtest,c.area===FILIPINO_CONCEPT_AREA));
+     {groups.map((g,i)=>{const chs=g.empty?[]:CHAPTERS.filter(c=>g.match(c.subtest,filipino(c.concept))),cs=g.empty?[]:CONCEPTS.filter(c=>g.match(c.subtest,c.area===FILIPINO_CONCEPT_AREA)),sub=outline?.sections[g.label];
+      const all=sub?.flatMap(o=>o.topics),note=all?`${all.filter(x=>x.concepts?.length).length} of ${all.length} topics written`:`${cs.length} topic${cs.length===1?'':'s'}`;
       return <li key={g.key}>{cs.length?<details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
-       {summary(i+1,g.label,`${cs.length} topic${cs.length===1?'':'s'}`)}
-       <div className="border-t border-line px-3 pb-5 sm:px-5">{block(chs,cs,true)}</div>
+       {summary(i+1,g.label,note)}
+       <div className="border-t border-line px-3 pb-5 sm:px-5">{block(chs,sub?[]:cs,true)}{sub&&outlineRows(sub)}</div>
       </details>:<div className={cx(row,'rounded-xl border-2 border-dashed border-line')}><span className="flex-1 text-lg font-extrabold">{i+1}. {g.label}</span><span className="text-sm font-semibold text-ink-soft">No material yet</span></div>}</li>;})}
      {savedCount>0&&<li><details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
       {summary(groups.length+1,'Saved',`${savedCount} saved`)}
