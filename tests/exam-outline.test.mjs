@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {EXAM_OUTLINES} from '../src/lib/program/exam-outline.ts';
+import {EXAM_OUTLINES,OUTLINE_BY_KEY,topicKey} from '../src/lib/program/exam-outline.ts';
 import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,examTopics,inSection} from '../src/lib/program/exam-coverage.ts';
 import {CONCEPT_BY_ID} from '../src/lib/program/concepts.ts';
 
@@ -35,4 +35,18 @@ test('every summary the reviewer has for an outlined exam appears in its outline
   const upcat=EXAM_OUTLINES.upcat.sections;
   assert.deepEqual(upcat.Science.map(g=>g.name),['Biology','Chemistry','Physics','Earth science','Astronomy']);
   assert.ok(upcat.Mathematics.find(g=>g.name==='Logic and calculus basics').less,'only some reviewers report logic and calculus');
+});
+
+test('each outline topic saves under its own key, even when topics share a summary', () => {
+  for(const [exam,outline] of Object.entries(EXAM_OUTLINES)){
+    const keys=Object.values(outline.sections).flatMap(groups=>groups.flatMap(g=>g.topics.map(t=>topicKey(exam,t.title))));
+    assert.equal(new Set(keys).size,keys.length,`${exam} topic keys are unique`);
+    for(const k of keys){
+      assert.match(k,/^[\w:|~.-]{1,160}$/,`${k} is a valid saved id`);
+      assert.ok(OUTLINE_BY_KEY.has(k),k);
+    }
+  }
+  const a=topicKey('upcat','Functions and their graphs'),b=topicKey('upcat','The coordinate plane, lines and slope');
+  assert.notEqual(a,b);
+  assert.deepEqual(OUTLINE_BY_KEY.get(a).topic.concepts,OUTLINE_BY_KEY.get(b).topic.concepts,'the two share one summary');
 });

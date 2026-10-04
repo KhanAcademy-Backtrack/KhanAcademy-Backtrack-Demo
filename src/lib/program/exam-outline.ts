@@ -17,6 +17,10 @@ export type ExamOutline={sections:Record<string,OutlineGroup[]>;checked:string};
 
 const T=(title:string,...concepts:string[]):OutlineTopic=>concepts.length?{title,concepts}:{title};
 
+/** A topic's save key. Saving is per topic, not per summary: two topics taught by the same
+ *  summary are saved separately. Keys come from the title, so renaming a topic drops its saves. */
+export const topicKey=(exam:ExamId,title:string)=>`outline:${exam}:${title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}`;
+
 export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
  upcat:{checked:'2026-10-05',sections:{
   'Language Proficiency':[
@@ -199,3 +203,6 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
   ]
  }}
 };
+
+/** Every outlined topic by its save key, for the reviewer's Saved list. */
+export const OUTLINE_BY_KEY=new Map(Object.entries(EXAM_OUTLINES).flatMap(([exam,o])=>Object.entries(o?.sections??{}).flatMap(([section,groups])=>groups.flatMap(g=>g.topics.map(topic=>[topicKey(exam as ExamId,topic.title),{exam:exam as ExamId,section,topic}] as const)))));
