@@ -37,6 +37,23 @@ test('every summary the reviewer has for an outlined exam appears in its outline
   assert.ok(upcat.Mathematics.find(g=>g.name==='Logic and calculus basics').less,'only some reviewers report logic and calculus');
 });
 
+test('the DCAT outline covers its three written sections in English only and leaves Mental Ability empty', () => {
+  const dcat=EXAM_OUTLINES.dcat.sections;
+  assert.deepEqual(Object.keys(dcat),['Mathematics','Science','English']);
+  assert.ok(!('Mental Ability' in dcat),'Mental Ability has no material yet');
+  assert.deepEqual(dcat.Mathematics.map(g=>g.name),['Arithmetic and number sense','Algebra','Word problems','Geometry and trigonometry','Statistics and probability']);
+  assert.deepEqual(dcat.Science.map(g=>g.name),['Biology','Chemistry','Physics','Earth and space science']);
+  assert.deepEqual(dcat.English.map(g=>g.name),['Vocabulary','Grammar and usage','Sentence construction and correction','Reading comprehension']);
+  assert.deepEqual(Object.values(dcat).flat().filter(g=>g.less).map(g=>g.name),['Earth and space science'],'only earth and space science is reported by some reviewers alone');
+  const ids=Object.values(dcat).flat().flatMap(g=>g.topics.flatMap(t=>t.concepts??[]));
+  assert.ok(!ids.some(id=>CONCEPT_BY_ID[id].area===FILIPINO_CONCEPT_AREA),'the DCAT has no Filipino part');
+  const circles=[topicKey('upcat','Circles'),topicKey('dcat','Circles')];
+  assert.notEqual(circles[0],circles[1],'the same topic title saves separately per exam');
+  assert.deepEqual(circles.map(k=>OUTLINE_BY_KEY.get(k).exam),['upcat','dcat']);
+  assert.equal(OUTLINE_BY_KEY.get(topicKey('dcat','Gas laws')).section,'Science');
+  assert.equal(OUTLINE_BY_KEY.get(topicKey('dcat','Gas laws')).exam,'dcat');
+});
+
 test('each outline topic saves under its own key, even when topics share a summary', () => {
   for(const [exam,outline] of Object.entries(EXAM_OUTLINES)){
     const keys=Object.values(outline.sections).flatMap(groups=>groups.flatMap(g=>g.topics.map(t=>topicKey(exam,t.title))));

@@ -2,7 +2,7 @@ import type {ExamId} from './admissions.ts';
 
 /** What each exam section asks about, sub-subject by sub-subject, so the reviewer can show the
  *  whole map and not only the topics it has written. Sources and method are in
- *  docs/research/2026-10-05/UPCAT_TOPIC_OUTLINE.md.
+ *  docs/research/2026-10-05/UPCAT_TOPIC_OUTLINE.md and DCAT_TOPIC_OUTLINE.md.
  *
  *  The schools publish their sections, not topic lists. These outlines follow what established
  *  review books and review sites agree the exam covers, in Khanpanion's own words. Their names
@@ -199,6 +199,107 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Phases of the Moon and eclipses'),
     T('Stars and constellations'),
     T('The origin of the universe')
+   ]}
+  ]
+ }},
+ dcat:{checked:'2026-10-05',sections:{
+  'Mathematics':[
+   {name:'Arithmetic and number sense',topics:[
+    T('Operations with integers'),
+    T('Fractions and decimals','percent_fractions'),
+    T('Percent and percent change','percent_fractions'),
+    T('Ratio and proportion','ratio_rate'),
+    T('Square roots and radicals')
+   ]},
+   {name:'Algebra',topics:[
+    T('Algebraic expressions and laws of exponents','exponents_polynomials'),
+    T('Special products and factoring','exponents_polynomials'),
+    T('Linear equations and inequalities','linear_equations'),
+    T('Systems of linear equations','linear_equations'),
+    T('Quadratic equations','quadratics'),
+    T('Functions, lines and slope','lines_functions'),
+    T('Number patterns and sequences','sequences')
+   ]},
+   {name:'Word problems',topics:[
+    T('Rate, distance and time','word_problems'),
+    T('Work problems','word_problems'),
+    T('Age and mixture problems'),
+    T('Interest, discounts and other business math','word_problems','percent_fractions')
+   ]},
+   {name:'Geometry and trigonometry',topics:[
+    T('Angles and polygons','geometry'),
+    T('Triangles and the Pythagorean theorem','geometry'),
+    T('Perimeter and area','geometry'),
+    T('Circles','geometry'),
+    T('Surface area and volume'),
+    T('Trigonometric ratios','trigonometry'),
+    T('Special angles','trigonometry')
+   ]},
+   {name:'Statistics and probability',topics:[
+    T('Mean, median and mode','statistics_probability'),
+    T('Counting outcomes'),
+    T('Probability of events','statistics_probability'),
+    T('Reading tables and graphs')
+   ]}
+  ],
+  'Science':[
+   {name:'Biology',topics:[
+    T('Cell parts and transport','cells_life'),
+    T('Photosynthesis and respiration','cells_life'),
+    T('Genetics and inheritance','genetics'),
+    T('Human body systems')
+   ]},
+   {name:'Chemistry',topics:[
+    T('Matter and its changes'),
+    T('Atomic structure'),
+    T('Chemical symbols and naming compounds'),
+    T('Formulas, molar mass and the mole','moles_formulas'),
+    T('Gas laws','gases'),
+    T('Acids, bases and solutions','solutions_acids')
+   ]},
+   {name:'Physics',topics:[
+    T('SI units, measurement and density','matter_measurement'),
+    T('Motion and Newton’s laws','motion_forces'),
+    T('Work, energy and power','energy_heat'),
+    T('Heat and temperature','energy_heat'),
+    T('Electricity and circuits','electricity_waves'),
+    T('Waves, sound and light','electricity_waves'),
+    T('Radioactivity','nuclear')
+   ]},
+   {name:'Earth and space science',less:true,topics:[
+    T('Earth’s structure and plate tectonics','earth_space'),
+    T('Rocks and minerals','earth_space'),
+    T('Weather and climate','earth_space'),
+    T('The solar system','earth_space')
+   ]}
+  ],
+  'English':[
+   {name:'Vocabulary',topics:[
+    T('Word meaning from context clues','vocabulary_context'),
+    T('Synonyms and antonyms','vocabulary_context'),
+    T('Word roots, prefixes and suffixes','vocabulary_context'),
+    T('Commonly confused words','usage'),
+    T('Idioms')
+   ]},
+   {name:'Grammar and usage',topics:[
+    T('Subject-verb agreement','grammar_agreement'),
+    T('Verb tenses and forms','grammar_verbs'),
+    T('Pronoun case','usage'),
+    T('Punctuation')
+   ]},
+   {name:'Sentence construction and correction',topics:[
+    T('Fragments, run-ons and comma splices','sentence_structure'),
+    T('Misplaced and dangling modifiers','sentence_structure'),
+    T('Parallel structure','sentence_structure'),
+    T('Finding the error in a sentence')
+   ]},
+   {name:'Reading comprehension',topics:[
+    T('Main idea','main_idea'),
+    T('Stated details','details'),
+    T('Inferences and conclusions','inference'),
+    T('Word meaning in a passage','vocabulary_in_context'),
+    T('Author’s purpose and tone','author_purpose'),
+    T('Graphs and data in a passage')
    ]}
   ]
  }}
