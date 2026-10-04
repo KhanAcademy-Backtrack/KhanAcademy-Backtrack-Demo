@@ -24,35 +24,44 @@ const filipino=(concept:string)=>CONCEPT_BY_ID[concept]?.area===FILIPINO_CONCEPT
 /** Handbooks by subject; the test-day handbook has none and always shows. */
 const EXTRA_SUBJECT:Record<string,Subtest>={x_formulas_math:'math',x_formulas_science:'science',x_grammar_en:'language',x_grammar_fil:'language',x_vocab:'language',x_reading:'reading'};
 type Group={key:string;label:string;match:(subtest:Subtest,fil:boolean)=>boolean;empty?:boolean};
+type Entry=(typeof CONCEPTS)[number];
+/** A section's topics grouped by area, in the reviewer's own order. */
+function areas(g:Group):[string,Entry[]][]{
+ const m=new Map<string,Entry[]>();
+ if(!g.empty)for(const c of CONCEPTS)if(g.match(c.subtest,c.area===FILIPINO_CONCEPT_AREA))m.set(c.area,[...(m.get(c.area)??[]),c]);
+ return [...m];
+}
+const chaptersOf=(concept:string)=>CHAPTERS.filter(ch=>ch.concept===concept);
+const row='flex min-h-14 items-center gap-3 px-4 py-3';
+const dot=<span aria-hidden="true" className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-green"/>;
 
-/** Study: every study tool first, then the reviewer library. The library holds complete chapters and every concept summary,
- *  with search and bookmarks. Picking an exam narrows it to that exam's own sections, one section at a time;
- *  a search looks across all of them. Offline caching is scheduled for Phase B. */
+/** Study: practice exams and daily recall first, then the reviewer library. The library lists the chosen exam's
+ *  sections, closed until one is opened; each opens to its topics grouped by area, with the full chapter where one
+ *  exists. A search shows matching chapters and summaries from the whole exam. Offline caching is scheduled for Phase B. */
 export function ReviewerLibrary(){
  const {state,update}=useProgram();
- const [q,setQ]=useState(''),[sub,setSub]=useState(''),[picked,setPicked]=useState<ExamId|'all'>();
+ const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId|'all'>();
  const norm=q.trim().toLowerCase();
  /** Start from the learner's first named exam; "All CETs" shows every subject. */
  const exam=picked??firstExam(state)??'all',scope=exam==='all'?undefined:exam,cover=scope&&EXAM_COVERAGE[scope];
  const groups:Group[]=cover?cover.sections.map((x,i)=>({key:'s'+i,label:x.name,match:(t:Subtest,f:boolean)=>inSection(x,t,f),empty:!x.reviewer.length})):SUBTESTS.map(x=>({key:x,label:SUBTEST_LABEL[x],match:(t:Subtest)=>t===x}));
- /** There is no everything tab: the first section with material opens first. */
- const tab=sub==='saved'||groups.some(g=>g.key===sub)?sub:(groups.find(g=>!g.empty)??groups[0]).key,group=norm?undefined:groups.find(g=>g.key===tab);
  const label=(t:Subtest,f:boolean)=>groups.find(g=>g.match(t,f))?.label??SUBTEST_LABEL[t];
- const shown=(id:string,t:Subtest,f:boolean)=>inCoverage(scope,t,f)&&(!!norm||(tab==='saved'?state.bookmarks.includes(id):!!group?.match(t,f)));
- const concepts=CONCEPTS.filter(c=>shown(c.id,c.subtest,c.area===FILIPINO_CONCEPT_AREA)&&(!norm||[c.title,c.blurb,c.area,...c.tldr.must].join(' ').toLowerCase().includes(norm)));
- const chapters=CHAPTERS.filter(c=>shown(c.id,c.subtest,filipino(c.concept))&&(!norm||[c.title,c.summary.intro,...c.summary.sections.flatMap(x=>[x.heading,...x.body])].join(' ').toLowerCase().includes(norm)));
+ const concepts=norm?CONCEPTS.filter(c=>inCoverage(scope,c.subtest,c.area===FILIPINO_CONCEPT_AREA)&&[c.title,c.blurb,c.area,...c.tldr.must].join(' ').toLowerCase().includes(norm)):[];
+ const chapters=norm?CHAPTERS.filter(c=>inCoverage(scope,c.subtest,filipino(c.concept))&&[c.title,c.summary.intro,...c.summary.sections.flatMap(x=>[x.heading,...x.body])].join(' ').toLowerCase().includes(norm)):[];
+ const saved=[...CHAPTERS.filter(c=>state.bookmarks.includes(c.id)).map(c=>({id:c.id,title:c.title,href:`/reviewer/${c.id}`})),...CONCEPTS.filter(c=>state.bookmarks.includes(c.id)).map(c=>({id:c.id,title:c.title,href:`/learn/${c.id}`}))];
  const extras=EXTRAS.filter(x=>!scope||!EXTRA_SUBJECT[x.id]||(FILIPINO_EXTRAS.has(x.id)?hasFilipino(scope):inCoverage(scope,EXTRA_SUBJECT[x.id],false)));
  const missing=cover?cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name):[];
  const mark=(id:string)=>update(s=>({...s,bookmarks:s.bookmarks.includes(id)?s.bookmarks.filter(x=>x!==id):[...s.bookmarks,id]}));
+ const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-lg hover:bg-sky focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
  return <>
   <PageBand title="Study" lead="Practice exams, daily recall and the full CET reviewer in one place."/>
   <div className={pageBody}>
    <StudyTools/>
    <Sheet className="mt-8">
     <h2 className="text-2xl font-extrabold">The reviewer</h2>
-    <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">{CHAPTERS.length} full chapters and {CONCEPTS.length} one-screen topic summaries, plus formula sheets, grammar guides and a test-day handbook. Free, printable, and easy to revisit.</p>
+    <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">Open a subject to see its topics. Each topic has a one-screen summary, and the main ones have a full printable chapter.</p>
     <div className="mt-4 flex flex-wrap items-end gap-3">
-     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={exam} onChange={e=>{setPicked(e.target.value as ExamId|'all');setSub('');}} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
+     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={exam} onChange={e=>setPicked(e.target.value as ExamId|'all')} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
       <option value="all">{t(state.lang,'reviewer.all')}</option>{(Object.keys(EXAMS) as ExamId[]).map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
      </select></label>
      <label className="block min-w-0 max-w-xl flex-1 basis-64"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-lg border-2 border-line-strong bg-white px-4 text-navy placeholder:text-ink-soft focus:border-green focus:outline-none"/></label>
@@ -62,12 +71,24 @@ export function ReviewerLibrary(){
      {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
      <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
     </div>}
-    {norm?<p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {scope?EXAMS[scope].name+' section':'subject'}</p>
-    :<div role="tablist" aria-label="Filter" className="mt-5 flex flex-wrap gap-2">{[...groups,{key:'saved',label:`Saved (${state.bookmarks.length})`}].map(x=><button key={x.key} role="tab" aria-selected={tab===x.key} onClick={()=>setSub(x.key)} className={cx('min-h-11 rounded-full border-2 px-4 font-bold',tab===x.key?'border-navy bg-navy text-white':'border-navy/15 text-navy')}>{x.label}</button>)}</div>}
-    {group?.empty&&<p className="mt-6 max-w-2xl text-ink-soft">{group.label} is part of the {EXAMS[scope!].name}, but the reviewer has no material for it yet. Use the official page to see what to expect.</p>}
-    {!!chapters.length&&<><h2 className="mt-7 text-xl font-extrabold">Full chapters</h2><ul className="mt-3 grid gap-3 md:grid-cols-2">{chapters.map(c=><li key={c.id} className="flex items-start gap-3 rounded-2xl border-2 border-mint-line p-4"><Oval filled size={26} className="mt-1"/><div className="flex-1"><Link href={`/reviewer/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-sm text-ink-soft">{label(c.subtest,filipino(c.concept))} · {c.examples.length} worked examples · {c.recall.length} recall cards</p></div><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-full px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
-    {!!concepts.length&&<><h2 className="mt-7 text-xl font-extrabold">Topic summaries</h2><ul className="mt-3 grid gap-2 md:grid-cols-2">{concepts.map(c=><li key={c.id} className="flex items-center gap-3 rounded-2xl px-2 py-1 hover:bg-mint"><Oval size={22}/><Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{c.title}<span className="block text-sm font-normal text-ink-soft">{label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · {c.area}</span></Link><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-full px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
-    {!chapters.length&&!concepts.length&&!group?.empty&&<p className="mt-6 text-ink-soft">{norm?`Nothing matches “${q}”. Try a shorter word.`:tab==='saved'?'Nothing saved here yet.':'Nothing here yet.'}</p>}
+    {norm?<>
+     <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {scope?EXAMS[scope].name+' section':'subject'}</p>
+     {!!chapters.length&&<><h3 className="mt-5 text-xl font-extrabold">Full chapters</h3><ul className="mt-3 grid gap-3 md:grid-cols-2">{chapters.map(c=><li key={c.id} className="flex items-start gap-3 rounded-2xl border-2 border-mint-line p-4"><Oval filled size={26} className="mt-1"/><div className="flex-1"><Link href={`/reviewer/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-sm text-ink-soft">{label(c.subtest,filipino(c.concept))} · {c.examples.length} worked examples · {c.recall.length} recall cards</p></div><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
+     {!!concepts.length&&<><h3 className="mt-6 text-xl font-extrabold">Topic summaries</h3><ul className="mt-3 grid gap-2 md:grid-cols-2">{concepts.map(c=><li key={c.id} className="flex items-center gap-3 rounded-2xl px-2 py-1 hover:bg-mint"><Oval size={22}/><Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{c.title}<span className="block text-sm font-normal text-ink-soft">{label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · {c.area}</span></Link><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
+     {!chapters.length&&!concepts.length&&<p className="mt-6 text-ink-soft">Nothing matches “{q}”. Try a shorter word.</p>}
+    </>:<ul className="mt-5 grid gap-2">
+     {groups.map((g,i)=>{const sets=areas(g),count=sets.reduce((n,[,x])=>n+x.length,0);return <li key={g.key}>{count?<details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
+      {summary(i+1,g.label,`${count} topic${count===1?'':'s'}`)}
+      <div className="grid gap-5 border-t border-line px-4 pb-5 pt-4 sm:px-6">{sets.map(([area,items],j)=><section key={area}>
+       {sets.length>1&&<h3 className="text-base font-bold leading-snug text-ink-soft">{String.fromCharCode(97+j)}. {area}</h3>}
+       <ul className={cx('grid gap-0.5',sets.length>1&&'mt-1.5 pl-4')}>{items.map(c=>{const full=chaptersOf(c.id);return <li key={c.id} className="flex gap-3 py-2">{dot}<span className="min-w-0"><Link href={`/learn/${c.id}`} className="font-semibold hover:underline">{c.title}</Link>{full.map(ch=><Link key={ch.id} href={`/reviewer/${ch.id}`} aria-label={`Full chapter: ${ch.title}`} className="ml-3 inline-block whitespace-nowrap text-sm font-semibold text-ink-soft underline decoration-green decoration-2 underline-offset-4 hover:text-navy">{full.length>1?`Chapter: ${ch.title}`:'Full chapter'}</Link>)}</span></li>;})}</ul>
+      </section>)}</div>
+     </details>:<div className={cx(row,'rounded-xl border-2 border-dashed border-line')}><span className="flex-1 text-lg font-extrabold">{i+1}. {g.label}</span><span className="text-sm font-semibold text-ink-soft">No material yet</span></div>}</li>;})}
+     {!!saved.length&&<li><details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
+      {summary(groups.length+1,'Saved',`${saved.length} saved`)}
+      <ul className="grid gap-0.5 border-t border-line px-4 pb-5 pt-4 sm:px-6">{saved.map(x=><li key={x.id} className="flex min-h-10 items-start gap-3 py-1">{dot}<Link href={x.href} className="flex-1 font-semibold hover:underline">{x.title}</Link><button aria-label={`Remove ${x.title} from saved`} onClick={()=>mark(x.id)} className="min-h-10 rounded-lg px-3 text-sm font-bold text-navy hover:bg-sky">Remove</button></li>)}</ul>
+     </details></li>}
+    </ul>}
    </Sheet>
    <Sheet className="mt-5"><h2 className="text-xl font-extrabold">Handbooks and sheets</h2><ul className="mt-3 grid gap-2 md:grid-cols-2">{extras.map(x=><li key={x.id}><Link href={`/reviewer/${x.id}`} className="flex min-h-14 items-center gap-3 rounded-2xl border-2 border-mint-line px-4 py-3 hover:bg-mint"><span className="flex-1"><span className="block font-bold">{x.title}</span><span className="text-sm text-ink-soft">{x.blurb}</span></span></Link></li>)}</ul></Sheet>
   </div>
