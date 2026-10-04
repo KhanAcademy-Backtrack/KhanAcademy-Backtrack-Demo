@@ -20,7 +20,7 @@ const PAGES:[string,string,string,string][]=[
  ['Study groups','Study with friends using a group code','/group','group friends together study'],
  ['Study packs','Topic packs that start BACKTRACK rounds','/packs','packs study space'],
  ['Explore ideas','Interactive explanations you can move','/explore','explore interactive ideas'],
- ['Reviewer','Chapters, summaries and handbooks','/reviewer','reviewer chapters handbook print'],
+ ['Study','Practice exams, BACKTRACK, study tools and the reviewer','/reviewer','study reviewer chapters handbook print tools'],
 ];
 
 export const SEARCH_INDEX:SearchEntry[]=[
