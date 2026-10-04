@@ -41,8 +41,8 @@ export function ProgramTourProvider({children}:{children:ReactNode}){
  },[locked,close]);
  function trap(e:React.KeyboardEvent){if(e.key!=='Tab')return;const nodes=[...setupDialog.current!.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input,select,textarea')],index=nodes.indexOf(document.activeElement as HTMLElement);e.preventDefault();nodes[index<0?(e.shiftKey?nodes.length-1:0):(index+(e.shiftKey?-1:1)+nodes.length)%nodes.length]?.focus();}
  const api:Api={start,configure,finishSetup,calendarGuide:mode==='calendar',browsing,browseNow,continueGuide:()=>{setStep(x=>x+1);setMode('tour');},close};
- return <Context.Provider value={api}><div inert={locked} aria-hidden={locked||undefined}>{children}</div>{locked&&<TourBoundary onClose={close}><Suspense fallback={<TourMessage onClose={close}/>}>
-  {mode==='setup'?<div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-navy-night/55 p-3 py-5 sm:items-center sm:p-8 print:hidden"><div ref={setupDialog} role="dialog" aria-modal="true" aria-labelledby="goal-dialog-title" onKeyDown={trap} className="max-h-[calc(100dvh-3rem)] w-full max-w-xl overflow-y-auto overscroll-contain rounded-[22px] bg-navy text-navy shadow-[0_24px_80px_rgba(0,0,0,.35)]"><Setup modal entry={entry} onSaved={finishSetup} onCancel={close} onBrowse={browseNow}/></div></div>
+ return <Context.Provider value={api}><div inert={locked} aria-hidden={locked||undefined}>{children}</div>{locked&&<TourBoundary onClose={close}><Suspense fallback={mode==='setup'?<div className="fixed inset-0 z-[70] bg-white print:hidden"/>:<TourMessage onClose={close}/>}>
+  {mode==='setup'?<div ref={setupDialog} role="dialog" aria-modal="true" aria-labelledby="goal-dialog-title" onKeyDown={trap} className="fixed inset-0 z-[70] h-dvh bg-white text-navy print:hidden"><Setup modal entry={entry} onSaved={finishSetup} onCancel={close} onBrowse={browseNow}/></div>
    :<Tour browsing={browsing} step={step} onStep={setStep} onClose={close} onCalendar={()=>{setMode('calendar');router.push('/calendar');}}/>}
  </Suspense></TourBoundary>}</Context.Provider>;
 }
