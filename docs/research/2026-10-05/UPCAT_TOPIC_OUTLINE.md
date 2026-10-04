@@ -51,5 +51,5 @@ contents pages and coverage pages were used. No questions, explanations or wordi
   changes from year to year.
 - Review providers' names stay out of the learner-facing site, as with the CET coverage list.
   The site says only that the topics "follow what established UPCAT reviewers cover".
-- Only the UPCAT has an outline. Other CETs keep the section-level reviewer until their own
+- The UPCAT and the DCAT (`DCAT_TOPIC_OUTLINE.md`) have outlines. Other CETs keep the section-level reviewer until their own
   outlines are researched.
