@@ -16,7 +16,7 @@ import {PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
 
 type Key='today'|'plan'|'study'|'group';
-type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'folder'|'plus'|'goal';
+type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'courses'|'folder'|'plus'|'goal';
 /** A page inside a main section, listed under it in the sidebar and in the section bar. `label` is an interface text key. */
 export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string;match:(p:string)=>boolean};
 type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[]};
@@ -32,17 +32,22 @@ export const STUDY_TOOLS:Sub[]=[
  *  request. Their addresses still work, are found by search and still belong to Study. */
 const OFF_MENU_STUDY=(p:string)=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')||p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
 const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:p=>p.startsWith('/reviewer')||p.startsWith('/learn/')};
+/** College foundations: each field's first-year courses and the math and science they build on. */
+const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:p=>p.startsWith('/bridge')};
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
 /** Four sections. Plan holds the goal page, the routine and the calendar with its exam dates;
- *  Study holds the reviewer, practice exams and every study tool. */
+ *  Study holds the CET reviewers, the college courses, practice exams and every study tool.
+ *  A goal page claims only the learner's own topic or program page; the rest of the reviewer
+ *  and the courses stay in Study. */
 function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{
- const goalPage:Sub[]=bridge?[{key:'college',href:program?'/bridge/'+program:'/bridge',label:'page.college',icon:'goal',match:p=>p.startsWith('/bridge')}]:topic?[{key:'topic',href:'/learn/'+topic,label:'page.topic',icon:'goal',match:p=>p==='/learn/'+topic}]:[];
+ const college=program?'/bridge/'+program:'/bridge';
+ const goalPage:Sub[]=bridge?[{key:'college',href:college,label:'page.college',icon:'goal',match:p=>p===college}]:topic?[{key:'topic',href:'/learn/'+topic,label:'page.topic',icon:'goal',match:p=>p==='/learn/'+topic}]:[];
  const plan:Sub[]=[...goalPage,{key:'plan',href:'/plan',label:'page.plan',icon:'plan',match:p=>p.startsWith('/plan')},{key:'calendar',href:'/calendar',label:'page.calendar',icon:'calendar',match:p=>p.startsWith('/calendar')},EXAM_DATES_LINK];
  return [
  {href:'/',key:'today',match:p=>p==='/',subs:[]},
- {href:plan[0].href,key:'plan',match:p=>p.startsWith('/bridge')||plan.some(x=>x.match(p)),subs:plan},
- {href:'/reviewer',key:'study',match:p=>OFF_MENU_STUDY(p)||[REVIEWER,...STUDY_TOOLS].some(x=>x.match(p)),subs:[REVIEWER,...STUDY_TOOLS]},
+ {href:plan[0].href,key:'plan',match:p=>plan.some(x=>x.match(p)),subs:plan},
+ {href:'/reviewer',key:'study',match:p=>OFF_MENU_STUDY(p)||[REVIEWER,COURSES,...STUDY_TOOLS].some(x=>x.match(p)),subs:[REVIEWER,COURSES,...STUDY_TOOLS]},
  {href:'/group',key:'group',match:p=>p.startsWith('/group')||p.startsWith('/together')||p.startsWith('/challenge'),subs:[]}
 ];}
 
@@ -61,6 +66,7 @@ export function NavIcon({k,small=false}:{k:IconKey;small?:boolean}){
   k==='explore'?<><circle cx="12" cy="12" r="9" {...stroke}/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" {...stroke}/></>:
   k==='dates'?<><rect x="4" y="5" width="16" height="15" rx="2.5" {...stroke}/><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4" {...stroke}/></>:
   k==='folder'?<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2h7.5A2.5 2.5 0 0 1 21 9.5v7a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5Z" {...stroke}/>:
+  k==='courses'?<path d="m2.5 9.5 9.5-5 9.5 5-9.5 5-9.5-5Zm4 2.3v5.2c3.5 2.6 7.5 2.6 11 0v-5.2M21 9.5v6" {...stroke}/>:
   k==='goal'?<><circle cx="12" cy="12" r="8" {...stroke}/><circle cx="12" cy="12" r="3.5" {...stroke}/></>:
   <path d="M12 5v14M5 12h14" {...stroke}/>
  }</svg>;

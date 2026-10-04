@@ -20,6 +20,7 @@ const PAGES:[string,string,string,string][]=[
  ['Study groups','Study with friends using a group code','/group','group friends together study'],
  ['Study packs','Topic packs that start BACKTRACK rounds','/packs','packs study space'],
  ['Explore ideas','Interactive explanations you can move','/explore','explore interactive ideas'],
+ ['Courses','The math and science your first-year college courses build on','/bridge','courses college first year foundations program degree field bridge'],
  ['Study','Practice exams, BACKTRACK, study tools and the reviewer','/reviewer','study reviewer chapters handbook print tools'],
 ];
 

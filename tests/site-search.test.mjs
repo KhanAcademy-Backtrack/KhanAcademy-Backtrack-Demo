@@ -7,7 +7,7 @@ import {EXTRAS} from '../src/content/reviewer/extras.ts';
 import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {TOPICS} from '../src/lib/recovery.ts';
 
-const statics=new Set(['/mock','/start','/review','/notebook','/plan','/calendar','/admissions','/group','/packs','/explore','/reviewer']);
+const statics=new Set(['/mock','/start','/review','/notebook','/plan','/calendar','/admissions','/group','/packs','/explore','/reviewer','/bridge']);
 
 test('every search result points at a statically exported route', () => {
   const reviewer=new Set([...CHAPTERS,...EXTRAS].map(c=>`/reviewer/${c.id}`)),learn=new Set(CONCEPTS.map(c=>`/learn/${c.id}`));
@@ -25,5 +25,6 @@ test('search needs every word and ranks title matches first', () => {
   assert.ok(fractions[0].title.toLowerCase().includes('fraction'));
   assert.ok(searchSite('balancing').some(e=>e.href==='/start/balancing'&&e.kind==='Fix a gap'));
   assert.ok(searchSite('upcat').some(e=>e.href==='/mock'));
+  assert.ok(searchSite('courses').some(e=>e.href==='/bridge'),'the courses are found from the header search');
   assert.equal(searchSite('fractions zzzz').length,0);
 });
