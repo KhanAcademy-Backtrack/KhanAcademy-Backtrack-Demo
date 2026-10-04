@@ -10,40 +10,49 @@ import {SiteSearch} from './SiteSearch';
 import {Wordmark,cx} from './ui';
 import {SiteFooter} from '@/components/site/SiteFooter';
 import {SPRING} from '@/lib/motion-tokens';
-import {t,type Lang} from '@/lib/i18n';
+import {t} from '@/lib/i18n';
 import {examTargets,learnerGoal} from '@/lib/program/personalization';
 import {PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
 
-type Key='today'|'plan'|'calendar'|'mocks'|'reviewer'|'group';
-type Tab={href:string;key:Key;match:(p:string)=>boolean};
-function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{return [
- {href:'/',key:'today',match:p=>p==='/'||p.startsWith('/study')||p==='/review'},
- {href:bridge?(program?'/bridge/'+program:'/bridge'):topic?'/learn/'+topic:'/plan',key:'plan',match:p=>p.startsWith('/plan')||p.startsWith('/bridge')||p.startsWith('/packs')||(!!topic&&p==='/learn/'+topic)},
- {href:'/calendar',key:'calendar',match:p=>p.startsWith('/calendar')},
- {href:'/mock',key:'mocks',match:p=>p.startsWith('/mock')},
- {href:'/reviewer',key:'reviewer',match:p=>p.startsWith('/reviewer')},
- {href:'/group',key:'group',match:p=>p.startsWith('/group')||p.startsWith('/together')||p.startsWith('/challenge')}
+type Key='today'|'plan'|'study'|'group';
+type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'folder'|'plus'|'goal';
+/** A page inside a main section, listed under it in the sidebar and in the section bar. */
+export type Sub={key:string;href:string;label:string;icon:IconKey;blurb?:string;match:(p:string)=>boolean};
+type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[]};
+
+/** Study tools, CET practice and BACKTRACK first. They live under Study and as shortcuts on the home page. */
+type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates';
+export const STUDY_TOOLS:Sub[]=[
+ {key:'mocks',href:'/mock',label:'Practice exams',icon:'mocks',blurb:'Full CET-style sets, timed or untimed, with an answer key.',match:p=>p.startsWith('/mock')},
+ {key:'start',href:'/start',label:'Fix a gap',icon:'start',blurb:'BACKTRACK finds the earlier step that is missing and repairs it.',match:p=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')||p.startsWith('/study')},
+ {key:'recall',href:'/review',label:'Daily recall',icon:'recall',blurb:'A quick look at the ideas that are due today.',match:p=>p==='/review'},
+ {key:'notebook',href:'/notebook',label:'Mistake notebook',icon:'notebook',blurb:'Every missed question, grouped by the idea behind it.',match:p=>p.startsWith('/notebook')},
+ {key:'packs',href:'/packs',label:'Study packs',icon:'packs',blurb:'Topic packs that start short BACKTRACK rounds.',match:p=>p.startsWith('/packs')||p.startsWith('/create')},
+ {key:'explore',href:'/explore',label:'Explore ideas',icon:'explore',blurb:'Interactive explanations you can move and test.',match:p=>p.startsWith('/explore')}
+];
+const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'Reviewer',icon:'reviewer',match:p=>p.startsWith('/reviewer')||p.startsWith('/learn/')};
+export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'Exam dates',icon:'dates',match:p=>p.startsWith('/admissions')};
+
+/** Four sections. Plan holds the goal page, the routine and the calendar with its exam dates;
+ *  Study holds the reviewer, practice exams and every study tool. */
+function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{
+ const goalPage:Sub[]=bridge?[{key:'college',href:program?'/bridge/'+program:'/bridge',label:'College map',icon:'goal',match:p=>p.startsWith('/bridge')}]:topic?[{key:'topic',href:'/learn/'+topic,label:'My topic',icon:'goal',match:p=>p==='/learn/'+topic}]:[];
+ const plan:Sub[]=[...goalPage,{key:'plan',href:'/plan',label:'My plan',icon:'plan',match:p=>p.startsWith('/plan')},{key:'calendar',href:'/calendar',label:'Calendar',icon:'calendar',match:p=>p.startsWith('/calendar')},EXAM_DATES_LINK];
+ return [
+ {href:'/',key:'today',match:p=>p==='/',subs:[]},
+ {href:plan[0].href,key:'plan',match:p=>p.startsWith('/bridge')||plan.some(x=>x.match(p)),subs:plan},
+ {href:'/reviewer',key:'study',match:p=>[REVIEWER,...STUDY_TOOLS].some(x=>x.match(p)),subs:[REVIEWER,...STUDY_TOOLS]},
+ {href:'/group',key:'group',match:p=>p.startsWith('/group')||p.startsWith('/together')||p.startsWith('/challenge'),subs:[]}
 ];}
 
-/** Study tools under "Start here": CET practice support and BACKTRACK first. */
-type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates';
-const TOOLS:{key:ToolKey;href:string;label:string;match:(p:string)=>boolean}[]=[
- {key:'start',href:'/start',label:'Fix a gap',match:p=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')},
- {key:'recall',href:'/review',label:'Daily recall',match:p=>p==='/review'},
- {key:'notebook',href:'/notebook',label:'Mistake notebook',match:p=>p.startsWith('/notebook')},
- {key:'packs',href:'/packs',label:'Study packs',match:p=>p.startsWith('/packs')},
- {key:'explore',href:'/explore',label:'Explore ideas',match:p=>p.startsWith('/explore')},
- {key:'dates',href:'/admissions',label:'Exam dates',match:p=>p.startsWith('/admissions')}
-];
-
 const stroke={fill:'none',stroke:'currentColor',strokeWidth:1.9,strokeLinecap:'round' as const,strokeLinejoin:'round' as const};
-function Icon({k}:{k:Key|ToolKey|'folder'|'plus'|'goal'}){
- return <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" aria-hidden="true">{
+export function NavIcon({k,small=false}:{k:IconKey;small?:boolean}){
+ return <svg viewBox="0 0 24 24" className={small?'h-5 w-5 shrink-0':'h-6 w-6 shrink-0'} aria-hidden="true">{
   k==='today'?<><path d="M3 11 12 4l9 7M5 10v10h14V10" {...stroke}/><ellipse cx="12" cy="15" rx="2.5" ry="2" fill="currentColor"/></>:k==='calendar'?<><rect x="4" y="5" width="16" height="15" rx="2.5" {...stroke}/><path d="M8 3v4M16 3v4M4 10h16" {...stroke}/><ellipse cx="12" cy="15" rx="2.6" ry="1.9" fill="currentColor"/></>:
   k==='plan'?<path d="M5 19V5M5 7h11l-2 3 2 3H5" {...stroke}/>:
   k==='mocks'?<><rect x="5" y="3" width="14" height="18" rx="2" {...stroke}/><ellipse cx="9.5" cy="9" rx="1.8" ry="1.3" fill="currentColor"/><ellipse cx="9.5" cy="14" rx="1.8" ry="1.3" {...stroke}/><path d="M13 9h3M13 14h3" {...stroke}/></>:
-  k==='reviewer'?<path d="M4 5.5C7 4 9.5 4.5 12 6c2.5-1.5 5-2 8-.5V19c-3-1.5-5.5-1-8 .5-2.5-1.5-5-2-8-.5ZM12 6v13.5" {...stroke}/>:
+  k==='reviewer'||k==='study'?<path d="M4 5.5C7 4 9.5 4.5 12 6c2.5-1.5 5-2 8-.5V19c-3-1.5-5.5-1-8 .5-2.5-1.5-5-2-8-.5ZM12 6v13.5" {...stroke}/>:
   k==='group'?<><circle cx="8" cy="9" r="3" {...stroke}/><circle cx="16.5" cy="10" r="2.5" {...stroke}/><path d="M3 19c.8-3 2.8-4.5 5-4.5s4.2 1.5 5 4.5M14 18.5c.5-2 1.8-3 3.3-3s2.7 1 3.2 3" {...stroke}/></>:
   k==='start'?<><path d="M9 14 4 9l5-5" {...stroke}/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" {...stroke}/></>:
   k==='recall'?<><path d="M20 12a8 8 0 1 1-2.4-5.7" {...stroke}/><path d="M20 4v5h-5" {...stroke}/></>:
@@ -71,12 +80,35 @@ export function AppShell({children}:{children:ReactNode}){
  const setRail=(v:boolean)=>{setRailState(v);try{localStorage.setItem(SIDEBAR_KEY,v?'rail':'open');}catch{}};
  return <Shell.Provider value={{rail,setRail}}>
   <AppNav/>
-  <div className={cx('transition-[padding] duration-200 motion-reduce:transition-none print:pl-0',!focus&&(rail?'lg:pl-[76px]':'lg:pl-[76px] xl:pl-60'))}><main id="main">{children}</main><SiteFooter/></div>
+  <div className={cx('transition-[padding] duration-200 motion-reduce:transition-none print:pl-0',!focus&&(rail?'lg:pl-[76px]':'lg:pl-[76px] xl:pl-60'))}><main id="main">{!focus&&<SectionBar rail={rail}/>}{children}</main><SiteFooter/></div>
  </Shell.Provider>;
 }
 
+/** The learner's sections, worked out from their goal and the current address. */
+function useSections(){
+ const guide=useProgramGuide(),{state}=useProgram(),path=usePathname()||'/';
+ const goal=guide.browsing?undefined:learnerGoal(state),bridge=goal==='college',topic=goal==='topic'?state.setup?.concept:undefined;
+ const list=tabs(bridge,topic,PROGRAM_BY_ID[state.bridgeProgram??'']?state.bridgeProgram:undefined);
+ return {list,active:list.find(x=>x.match(path))?.key,path,goal,lang:state.lang,label:(x:Tab)=>t(state.lang,`nav.${x.key}`)};
+}
+
+/** The current section's pages as a row of tabs, shown whenever the sidebar is not
+ *  wide enough to list them: on phones, tablets and with the sidebar narrowed. */
+function SectionBar({rail}:{rail:boolean}){
+ const {list,active,path,label}=useSections(),tab=list.find(x=>x.key===active),bar=useRef<HTMLUListElement>(null);
+ useEffect(()=>{bar.current?.querySelector('[aria-current=page]')?.scrollIntoView({block:'nearest',inline:'nearest'});},[path]);
+ if(!tab?.subs.length)return null;
+ const sub=tab.subs.find(y=>y.match(path));
+ return <nav aria-label={`${label(tab)} pages`} className={cx('print:hidden mx-auto max-w-6xl px-4 pt-3 sm:px-8',!rail&&'xl:hidden')}>
+  <ul ref={bar} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]">{tab.subs.map(y=><li key={y.key} className="shrink-0">
+   <Link href={y.href} aria-current={sub===y?'page':undefined} className={cx('relative flex min-h-11 items-center gap-2 whitespace-nowrap rounded-t-lg px-3 text-[14px] font-semibold focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',sub===y?'text-navy':'text-ink-soft hover:text-navy')}>
+    <NavIcon small k={y.icon}/>{y.label}{sub===y&&<span aria-hidden="true" className="absolute inset-x-2 bottom-0 h-[3px] rounded-t-sm bg-green"/>}
+   </Link></li>)}</ul>
+ </nav>;
+}
+
 type Rail='always'|'below-xl'|'never';
-function SidebarContent({rail,list,active,tool,goal,lang,label,onPick,main=false}:{rail:Rail;list:Tab[];active?:Key;tool?:ToolKey;goal:ReturnType<typeof learnerGoal>;lang:Lang;label:(x:Tab)=>string;onPick?:()=>void;main?:boolean}){
+function SidebarContent({rail,list,active,path,goal,label,onPick,main=false}:{rail:Rail;list:Tab[];active?:Key;path:string;goal:ReturnType<typeof learnerGoal>;label:(x:Tab)=>string;onPick?:()=>void;main?:boolean}){
  const {state}=useProgram(),guide=useProgramGuide(),reduced=useQuietMotion();
  const hide=rail==='always'?'sr-only':rail==='below-xl'?'sr-only xl:not-sr-only':'';
  const center=rail==='always'?'justify-center px-0':rail==='below-xl'?'justify-center px-0 xl:justify-start xl:px-3':'px-3';
@@ -87,21 +119,23 @@ function SidebarContent({rail,list,active,tool,goal,lang,label,onPick,main=false
  const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/plan',title:'General CET review'}]:[]),...targets.slice(0,5).map(x=>({href:'/plan',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
  return <>
   <nav aria-label={main?'Main':'All pages'} className="grid gap-1">
-   {list.map(x=><Link key={x.key} href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={active===x.key?'page':undefined} className={item(active===x.key,main)}>
-    {main&&active===x.key&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
-    <span className="relative"><Icon k={x.key}/></span><span className="relative"><span className={hide}>{label(x)}</span></span>
-   </Link>)}
+   {list.map(x=>{const on=active===x.key,sub=on?x.subs.find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
+    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={on?(sub?'true':'page'):undefined} className={item(on,main)}>
+     {main&&on&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
+     <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><span className={hide}>{label(x)}</span></span>
+    </Link>
+    {on&&rail!=='always'&&x.subs.length>0&&<ul aria-label={label(x)} className={cx('mb-1 ml-6 gap-0.5 border-l border-line pl-2',rail==='below-xl'?'hidden xl:grid':'grid')}>
+     {x.subs.map(y=><li key={y.key}><Link href={y.href} onClick={onPick} aria-current={sub===y?'page':undefined} className={cx('flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 text-[14px] font-semibold hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',sub===y?'bg-white text-navy shadow-sheet':'text-ink-soft hover:text-navy')}><NavIcon small k={y.icon}/>{y.label}</Link></li>)}
+    </ul>}
+   </div>;})}
   </nav>
-  <hr className="my-3 border-line"/>
-  <p className={heading}>Start here</p>
-  <ul aria-label="Start here" className="grid gap-1">{TOOLS.map(x=><li key={x.key}><Link href={x.href} onClick={onPick} title={tip&&x.label} aria-current={tool===x.key?'page':undefined} className={item(tool===x.key)}><Icon k={x.key}/><span className={hide}>{x.label}</span></Link></li>)}</ul>
   <hr className="my-3 border-line"/>
   <p className={heading}>{goal==='exam'?'Your exams':goal==='college'?'Your program':goal==='topic'?'Your topic':'Your goal'}</p>
   <ul aria-label="Your goal" className="grid gap-1">
-   {mine.map(x=><li key={x.title}><Link href={x.href} onClick={onPick} title={tip&&x.title} className={item(false)}><Icon k={goal==='exam'?'folder':'goal'}/><span className={cx('min-w-0 truncate',hide)}>{x.title}</span></Link></li>)}
+   {mine.map(x=><li key={x.title}><Link href={x.href} onClick={onPick} title={tip&&x.title} className={item(false)}><NavIcon k={goal==='exam'?'folder':'goal'}/><span className={cx('min-w-0 truncate',hide)}>{x.title}</span></Link></li>)}
    {goal==='exam'&&targets.length>5&&<li className={cx('px-3 text-sm text-ink-soft',hide)}>{targets.length-5} more in your plan</li>}
-   <li>{goal==='exam'?<Link href="/plan" onClick={onPick} title={tip&&'Add or edit exams'} className={item(false)}><Icon k="plus"/><span className={hide}>Add or edit exams</span></Link>
-    :<button type="button" onClick={()=>{onPick?.();guide.configure();}} title={tip&&(goal?'Change my goal':'Set a study goal')} className={cx(item(false),'w-full')}><Icon k="plus"/><span className={hide}>{goal?'Change my goal':'Set a study goal'}</span></button>}</li>
+   <li>{goal==='exam'?<Link href="/plan" onClick={onPick} title={tip&&'Add or edit exams'} className={item(false)}><NavIcon k="plus"/><span className={hide}>Add or edit exams</span></Link>
+    :<button type="button" onClick={()=>{onPick?.();guide.configure();}} title={tip&&(goal?'Change my goal':'Set a study goal')} className={cx(item(false),'w-full')}><NavIcon k="plus"/><span className={hide}>{goal?'Change my goal':'Set a study goal'}</span></button>}</li>
   </ul>
 
  </>;
@@ -109,13 +143,10 @@ function SidebarContent({rail,list,active,tool,goal,lang,label,onPick,main=false
 
 export function AppNav(){
  const openTour=useProgramTour(),guide=useProgramGuide(),{rail,setRail}=useContext(Shell);
- const path=usePathname()||'/',{state,update}=useProgram(),reduced=useQuietMotion();
+ const {state,update}=useProgram(),reduced=useQuietMotion(),{list,active,path,goal,lang,label}=useSections();
  const [menu,setMenu]=useState(false),button=useRef<HTMLButtonElement>(null),panel=useRef<HTMLDivElement>(null);
  const [drawer,setDrawer]=useState(false),[searching,setSearching]=useState(false),[wide,setWide]=useState(false),[scrolled,setScrolled]=useState(false);
  const burger=useRef<HTMLButtonElement>(null),drawerPanel=useRef<HTMLDivElement>(null);
- const goal=guide.browsing?undefined:learnerGoal(state),lang=state.lang,bridge=goal==='college',topic=goal==='topic'?state.setup?.concept:undefined;
- const list=tabs(bridge,topic,PROGRAM_BY_ID[state.bridgeProgram??'']?state.bridgeProgram:undefined),active=list.find(x=>x.match(path))?.key,tool=TOOLS.find(x=>x.match(path))?.key;
- const label=(x:Tab)=>x.key==='plan'&&topic?'Topic':x.key==='mocks'&&goal!=='exam'?'Practice':t(lang,`nav.${x.key}${x.key==='plan'&&bridge?'.bridge':''}`);
  useEffect(()=>{setMenu(false);setDrawer(false);setSearching(false);},[path]);
  useEffect(()=>{const q=matchMedia('(min-width:1280px)'),sync=()=>setWide(q.matches);sync();q.addEventListener('change',sync);const scroll=()=>setScrolled(scrollY>4);scroll();addEventListener('scroll',scroll,{passive:true});return()=>{q.removeEventListener('change',sync);removeEventListener('scroll',scroll);};},[]);
  useEffect(()=>{if(!menu)return;const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){setMenu(false);button.current?.focus();}};const click=(e:MouseEvent)=>{if(!panel.current?.contains(e.target as Node)&&!button.current?.contains(e.target as Node))setMenu(false);};document.addEventListener('keydown',key);document.addEventListener('mousedown',click);return()=>{document.removeEventListener('keydown',key);document.removeEventListener('mousedown',click);};},[menu]);
@@ -129,11 +160,11 @@ export function AppNav(){
     <button ref={burger} type="button" aria-label={wide?(rail?'Expand sidebar':'Collapse sidebar'):'Open menu'} aria-expanded={wide?!rail:drawer} onClick={()=>wide?setRail(!rail):setDrawer(true)} className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-navy hover:bg-white focus-visible:outline-3 focus-visible:outline-navy">
      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <Link href="/" aria-label="Khanpanion, Today" className="rounded-lg px-1 focus-visible:outline-3 focus-visible:outline-navy"><Wordmark small compact/></Link>
+    <Link href="/" aria-label="Khanpanion, Home" className="rounded-lg px-1 focus-visible:outline-3 focus-visible:outline-navy"><Wordmark small compact/></Link>
     <div className="flex min-w-0 flex-1 justify-center px-2 lg:px-6"><SiteSearch className="hidden w-full max-w-xl md:block"/></div>
     <div className="flex shrink-0 items-center gap-1 sm:gap-2">
      <button type="button" aria-label="Search" aria-expanded={searching} onClick={()=>setSearching(!searching)} className="grid h-11 w-11 place-items-center rounded-lg text-navy hover:bg-white md:hidden"><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
-     <Link href="/create" aria-label="Create a study pack" title="Create a study pack" className="hidden h-10 w-10 place-items-center rounded-lg bg-green text-navy hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy md:grid"><Icon k="plus"/></Link>
+     <Link href="/create" aria-label="Create a study pack" title="Create a study pack" className="hidden h-10 w-10 place-items-center rounded-lg bg-green text-navy hover:bg-green-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy md:grid"><NavIcon k="plus"/></Link>
      <button data-guide-button onClick={e=>openTour(e.currentTarget)} className="min-h-11 rounded-lg px-3 text-sm font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:outline-navy">Guide</button>
      <div className="relative">
       <button aria-label="Me" ref={button} aria-expanded={menu} aria-controls="me-menu" onClick={()=>setMenu(!menu)} className="flex min-h-11 items-center gap-2 rounded-lg px-2 min-[400px]:pr-3 text-[15px] font-semibold text-navy hover:bg-white aria-expanded:bg-white focus-visible:outline-3 focus-visible:outline-navy">
@@ -152,20 +183,20 @@ export function AppNav(){
    {searching&&<div className="px-3 pb-3 md:hidden"><SiteSearch autoFocus onDone={()=>setSearching(false)}/></div>}
   </header>
   <div data-sidebar className={cx('print:hidden fixed bottom-0 left-0 top-16 z-30 hidden overflow-y-auto overflow-x-hidden bg-canvas px-3 pb-6 pt-2 lg:block',rail?'w-[76px]':'w-[76px] xl:w-60')}>
-   <SidebarContent main rail={rail?'always':'below-xl'} list={list} active={tool?undefined:active} tool={tool} goal={goal} lang={lang} label={label}/>
+   <SidebarContent main rail={rail?'always':'below-xl'} list={list} active={active} path={path} goal={goal} label={label}/>
   </div>
   {drawer&&<div role="dialog" aria-modal="true" aria-label="Menu" className="print:hidden fixed inset-0 z-50">
    <div className="absolute inset-0 bg-navy-night/40" onClick={close}/>
    <div ref={drawerPanel} className="absolute inset-y-0 left-0 w-72 max-w-[85vw] overflow-y-auto bg-canvas px-3 pb-6 pt-2 shadow-lift">
     <div className="mb-2 flex h-14 items-center justify-between"><span className="px-2"><Wordmark small/></span><button type="button" aria-label="Close menu" onClick={close} className="grid h-11 w-11 place-items-center rounded-lg hover:bg-white"><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <SidebarContent rail="never" list={list} active={tool?undefined:active} tool={tool} goal={goal} lang={lang} label={label} onPick={()=>setDrawer(false)}/>
+    <SidebarContent rail="never" list={list} active={active} path={path} goal={goal} label={label} onPick={()=>setDrawer(false)}/>
    </div>
   </div>}
   <nav aria-label="Main" className="print:hidden fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white pb-[env(safe-area-inset-bottom)] text-navy lg:hidden">
-   <div className="grid grid-cols-6">
-    {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?'page':undefined} className="relative flex min-h-16 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-ink-soft aria-[current=page]:text-navy">
+   <div className="grid grid-cols-4">
+    {list.map(x=><Link key={x.key} href={x.href} data-program-tour={x.key} aria-current={active===x.key?(x.href===path?'page':'true'):undefined} className={cx('relative flex min-h-16 flex-col items-center justify-center gap-0.5 text-[12px] font-semibold',active===x.key?'text-navy':'text-ink-soft')}>
      {active===x.key&&<motion.span layoutId="tab-oval-m" transition={move} className="absolute inset-x-3 top-0 h-[3px] rounded-b-sm bg-green"/>}
-     <span className="relative grid h-8 w-12 place-items-center"><Icon k={x.key}/></span>
+     <span className="relative grid h-8 w-12 place-items-center"><NavIcon k={x.key}/></span>
      {label(x)}
     </Link>)}
    </div>

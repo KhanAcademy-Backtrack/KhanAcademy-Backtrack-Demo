@@ -96,7 +96,7 @@ export function Results(){
       {isOpen&&<div className="mt-3"><Explanation item={it}/></div>}
      </li>;})}</ol>
    </Sheet>
-   <div className="mt-5 flex flex-wrap gap-3"><Link href="/mock" className={btn.dark}>Another mock exam</Link><Link href="/notebook" className={btn.ghost}>Mistake notebook</Link><Link href="/" className={btn.ghost}>Back to Today</Link></div>
+   <div className="mt-5 flex flex-wrap gap-3"><Link href="/mock" className={btn.dark}>Another mock exam</Link><Link href="/notebook" className={btn.ghost}>Mistake notebook</Link><Link href="/" className={btn.ghost}>Back to home</Link></div>
   </div>
  </>;
 }
