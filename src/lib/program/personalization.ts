@@ -1,9 +1,12 @@
 import {CONCEPTS,CONCEPT_BY_ID} from './concepts.ts';
 import {PROGRAM_BY_ID} from './bridge.ts';
 import {EXAMS} from './admissions.ts';
+import type {ExamId} from './admissions.ts';
 import type {CETTarget,ProgramState} from './store.ts';
 
 export function learnerGoal(s:ProgramState){return s.setup?.goal??(s.sides.bridge&&(s.activeSide==='bridge'||!s.sides.admission)?'college':s.pledge||s.sides.admission?'exam':undefined);}
+/** The learner's first named entrance exam. The reviewer and the plan's topic list use its own sections. */
+export function firstExam(s:ProgramState):ExamId|undefined{return examTargets(s).find(t=>t.exam)?.exam;}
 export function examTargets(s:ProgramState):CETTarget[]{
  if(learnerGoal(s)!=='exam')return [];
  if(s.setup?.cet)return s.setup.cet.targets;

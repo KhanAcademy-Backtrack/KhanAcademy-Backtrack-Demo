@@ -8,7 +8,7 @@ import {DailyPractice} from './DailyPractice';
 import {ReviewTopics} from './ReviewTopics';
 import {HomeShortcuts} from './StudyTools';
 import {FeatureCard,RouteArt,Section,TopicArt,WeekArt,glyph} from './HomeCards';
-import {examTargets,goalLabel,learnerGoal,targetDay} from '@/lib/program/personalization';
+import {examTargets,firstExam,goalLabel,learnerGoal,targetDay} from '@/lib/program/personalization';
 import {personalFocus,daysBetween,parseDay} from '@/lib/program/planner';
 import {calendarItems} from '@/lib/program/calendar';
 import {PROGRAM_BY_ID} from '@/lib/program/bridge';
@@ -34,7 +34,7 @@ export function PersonalHome(){
   <Section label={goal==='topic'?'Your chosen topic':goal==='exam'?'Your next topic':'A foundation to start with'}>
    <FeatureCard data-program-tour-content="today" icon={glyph.book} title={concept.title} body={concept.blurb} art={<TopicArt/>}
     action={<><Link href={`/learn/${concept.id}`} className={btn.primary}>Learn this topic</Link>{goal==='topic'&&<Link href={`/mock/take?f=topic~${concept.id}|${seed}&mode=practice`} className={btn.ghost}>Try a topic check</Link>}</>}>
-    {goal!=='topic'&&<details className="mt-4 border-t border-line pt-2"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">Choose a different topic</summary><ReviewTopics/></details>}
+    {goal!=='topic'&&<details className="mt-4 border-t border-line pt-2"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">Choose a different topic</summary><ReviewTopics exam={firstExam(s)}/></details>}
     <Link href="/reviewer" className={cx(btn.text,'mt-1 self-start text-sm')}>{goal==='exam'?'Open the full CET reviewer':'Browse the reviewer'}</Link>
    </FeatureCard>
   </Section>

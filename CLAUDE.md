@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 134 tests
+npm test          # node --test, currently 135 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 104 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -106,7 +106,7 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 - src/components/k/ProgramTourProvider.tsx and ProgramTour.tsx: optional lazy walkthrough, focus/inert management and current-navigation highlights.
 - scripts/test-program-tour.mjs: tour keyboard, replay, context and small-screen checks.
 
-- `src/lib/program/exam-coverage.ts` — each CET's own sections in its own words, the reviewer material serving each (none for sections like Mental Ability), and whether the list is official, team-supplied or reported. Sources in `docs/research/2026-10-04/CET_COVERAGE.md`. Never relabel another exam with the UPCAT subtests. `EXAM_IDS` in `admissions.ts` is the only exam list (saves validate against it); append new exams.
+- `src/lib/program/exam-coverage.ts` — each CET's own sections in its own words, the reviewer material serving each (none for sections like Mental Ability), and whether the list is official, team-supplied or reported. Sources in `docs/research/2026-10-04/CET_COVERAGE.md`. Never relabel another exam with the UPCAT subtests. `EXAM_IDS` in `admissions.ts` is the only exam list (saves validate against it); append new exams. The reviewer has no Everything tab: its tabs are the chosen exam's sections, the first one with material opens first, and a search spans the whole exam. `examTopics` gives the plan's and home's topic list (`ReviewTopics`) the same sections for the learner's first named exam (`firstExam`).
 - `src/lib/recovery.ts` — routing policy, item generation, answer checking. The whole product keys on `Topic`.
 - `src/lib/science.ts` — reviewed chemistry and physics constants, item families, rounding policy.
 - `src/lib/notation.ts` — notation tokeniser and spoken form (JSX-free so tests can assert it).

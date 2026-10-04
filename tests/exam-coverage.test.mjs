@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {EXAMS,EXAM_IDS} from '../src/lib/program/admissions.ts';
-import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection} from '../src/lib/program/exam-coverage.ts';
+import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,examTopics,hasFilipino,inCoverage,inSection} from '../src/lib/program/exam-coverage.ts';
 import {initialProgram,validProgram} from '../src/lib/program/store.ts';
 import {SUBTESTS} from '../src/lib/mock/types.ts';
 import {CONCEPTS} from '../src/lib/program/concepts.ts';
@@ -46,6 +46,19 @@ test('Filipino material follows each exam', () => {
   assert.equal(inSection(filipinoSection,'language',true),true);
   assert.equal(inSection(filipinoSection,'language',false),false);
   assert.equal(inSection(filipinoSection,'reading',false),false);
+});
+
+test('the plan topic list uses each exam’s own sections and only the topics they cover', () => {
+  for(const exam of EXAM_IDS){
+    const topics=examTopics(exam),covered=names(exam).filter((_,i)=>EXAM_COVERAGE[exam].sections[i].reviewer.length);
+    assert.deepEqual([...new Set(topics.map(x=>x.section))],covered,exam);
+    for(const {concept,section} of topics)assert.ok(inCoverage(exam,concept.subtest,concept.area===FILIPINO_CONCEPT_AREA),`${exam} ${concept.id} ${section}`);
+    assert.equal(topics.length,CONCEPTS.filter(c=>inCoverage(exam,c.subtest,c.area===FILIPINO_CONCEPT_AREA)).length,exam);
+  }
+  assert.deepEqual([...new Set(examTopics('upcat').map(x=>x.section))],['Language Proficiency','Reading Comprehension','Mathematics','Science']);
+  assert.ok(!examTopics('dcat').some(x=>x.concept.area===FILIPINO_CONCEPT_AREA),'DCAT English leaves out Filipino topics');
+  assert.ok(examTopics('plmat').filter(x=>x.section==='Filipino').every(x=>x.concept.area===FILIPINO_CONCEPT_AREA));
+  assert.ok(!examTopics('acet').some(x=>x.concept.subtest==='science'),'ACET has no science section');
 });
 
 test('saved plans accept every listed exam and still reject unknown ones', () => {
