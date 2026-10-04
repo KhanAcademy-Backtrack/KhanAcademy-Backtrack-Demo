@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 128 tests
+npm test          # node --test, currently 132 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 104 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -106,6 +106,7 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 - src/components/k/ProgramTourProvider.tsx and ProgramTour.tsx: optional lazy walkthrough, focus/inert management and current-navigation highlights.
 - scripts/test-program-tour.mjs: tour keyboard, replay, context and small-screen checks.
 
+- `src/lib/program/exam-coverage.ts` — which reviewer subjects each CET tests, and whether that list is official. Sources in `docs/research/2026-10-04/CET_COVERAGE.md`. Keep a subject in when sources disagree.
 - `src/lib/recovery.ts` — routing policy, item generation, answer checking. The whole product keys on `Topic`.
 - `src/lib/science.ts` — reviewed chemistry and physics constants, item families, rounding policy.
 - `src/lib/notation.ts` — notation tokeniser and spoken form (JSX-free so tests can assert it).
