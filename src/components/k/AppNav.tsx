@@ -21,16 +21,16 @@ type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'folder'|'plus'|'goal';
 export type Sub={key:string;href:string;label:string;icon:IconKey;blurb?:string;match:(p:string)=>boolean};
 type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[]};
 
-/** Study tools, CET practice and BACKTRACK first. They live under Study and as shortcuts on the home page. */
+/** Study tools in the sidebar's Study list and the home shortcuts, CET practice first. */
 type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates';
 export const STUDY_TOOLS:Sub[]=[
  {key:'mocks',href:'/mock',label:'Practice exams',icon:'mocks',blurb:'Full CET-style sets, timed or untimed, with an answer key.',match:p=>p.startsWith('/mock')},
- {key:'start',href:'/start',label:'Fix a gap',icon:'start',blurb:'BACKTRACK finds the earlier step that is missing and repairs it.',match:p=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')||p.startsWith('/study')},
  {key:'recall',href:'/review',label:'Daily recall',icon:'recall',blurb:'A quick look at the ideas that are due today.',match:p=>p==='/review'},
- {key:'notebook',href:'/notebook',label:'Mistake notebook',icon:'notebook',blurb:'Every missed question, grouped by the idea behind it.',match:p=>p.startsWith('/notebook')},
- {key:'packs',href:'/packs',label:'Study packs',icon:'packs',blurb:'Topic packs that start short BACKTRACK rounds.',match:p=>p.startsWith('/packs')||p.startsWith('/create')},
- {key:'explore',href:'/explore',label:'Explore ideas',icon:'explore',blurb:'Interactive explanations you can move and test.',match:p=>p.startsWith('/explore')}
+ {key:'packs',href:'/packs',label:'Study packs',icon:'packs',blurb:'Topic packs that start short BACKTRACK rounds.',match:p=>p.startsWith('/packs')||p.startsWith('/create')}
 ];
+/** Fix a gap, the mistake notebook and explore ideas left the menus on 4 October at the owner's
+ *  request. Their addresses still work, are found by search and still belong to Study. */
+const OFF_MENU_STUDY=(p:string)=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')||p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
 const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'Reviewer',icon:'reviewer',match:p=>p.startsWith('/reviewer')||p.startsWith('/learn/')};
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'Exam dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
@@ -42,7 +42,7 @@ function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{
  return [
  {href:'/',key:'today',match:p=>p==='/',subs:[]},
  {href:plan[0].href,key:'plan',match:p=>p.startsWith('/bridge')||plan.some(x=>x.match(p)),subs:plan},
- {href:'/reviewer',key:'study',match:p=>[REVIEWER,...STUDY_TOOLS].some(x=>x.match(p)),subs:[REVIEWER,...STUDY_TOOLS]},
+ {href:'/reviewer',key:'study',match:p=>OFF_MENU_STUDY(p)||[REVIEWER,...STUDY_TOOLS].some(x=>x.match(p)),subs:[REVIEWER,...STUDY_TOOLS]},
  {href:'/group',key:'group',match:p=>p.startsWith('/group')||p.startsWith('/together')||p.startsWith('/challenge'),subs:[]}
 ];}
 
@@ -120,7 +120,7 @@ function SidebarContent({rail,list,active,path,goal,label,onPick,main=false}:{ra
  return <>
   <nav aria-label={main?'Main':'All pages'} className="grid gap-1">
    {list.map(x=>{const on=active===x.key,sub=on?x.subs.find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
-    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={on?(sub?'true':'page'):undefined} className={item(on,main)}>
+    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={item(on,main)}>
      {main&&on&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
      <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><span className={hide}>{label(x)}</span></span>
     </Link>

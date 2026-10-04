@@ -10,8 +10,8 @@ import {recallPrompt} from '@/lib/program/recall';
 function useToolNotes(){
  const {state}=useProgram(),[now,setNow]=useState<number>();
  useEffect(()=>setNow(Date.now()),[]);
- const due=now?Object.entries(state.recall).filter(([key,c])=>c.due<=now&&recallPrompt(key)).length:0,open=state.notebook.filter(n=>!n.resolved).length;
- return (key:string)=>key==='recall'&&due?`${due} ready today`:key==='notebook'&&open?`${open} to revisit`:undefined;
+ const due=now?Object.entries(state.recall).filter(([key,c])=>c.due<=now&&recallPrompt(key)).length:0;
+ return (key:string)=>key==='recall'&&due?`${due} ready today`:undefined;
 }
 
 /** The Study page's cards: practice exams and daily recall, with what each is for. */
@@ -27,9 +27,9 @@ export function StudyTools(){
  </li>)}</ul>;
 }
 
-/** The former Start here tools as one row of buttons on the home page. */
+/** Practice exams, daily recall, study packs and exam dates as one row of buttons on the home page. */
 export function HomeShortcuts({className}:{className?:string}){
- const note=useToolNotes(),list:Sub[]=[...STUDY_TOOLS.filter(x=>x.key!=='mocks'),EXAM_DATES_LINK];
+ const note=useToolNotes(),list:Sub[]=[...STUDY_TOOLS,EXAM_DATES_LINK];
  return <nav aria-label="Shortcuts" className={cx('min-w-0',className)}>
   <ul className="flex flex-wrap gap-2">{list.map(x=><li key={x.key}>
    <Link href={x.href} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3.5 text-[14px] font-semibold text-navy shadow-sheet hover:bg-sky focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy">
