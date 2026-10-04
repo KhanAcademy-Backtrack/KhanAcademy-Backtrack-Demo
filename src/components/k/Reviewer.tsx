@@ -8,7 +8,7 @@ import {Question} from './Question';
 import {useFix} from './useFix';
 import {CHAPTERS,CHAPTER_BY_ID} from '@/content/reviewer';
 import {CONCEPTS,CONCEPT_BY_ID} from '@/lib/program/concepts';
-import {SUBTEST_LABEL,SUBTESTS,type Subtest} from '@/lib/mock/types';
+import {SUBTEST_LABEL,type Subtest} from '@/lib/mock/types';
 import {misconception} from '@/lib/mock/misconceptions';
 import {generateItem} from '@/lib/mock/families';
 import {itemById} from '@/lib/mock/forms';
@@ -16,7 +16,7 @@ import {khanUrl,KHAN_UNITS} from '@/lib/program/khan-units';
 import {EXTRAS} from '@/content/reviewer/extras';
 import {StudyTools} from './StudyTools';
 import {t} from '@/lib/i18n';
-import {EXAMS,type ExamId} from '@/lib/program/admissions';
+import {EXAMS,EXAM_IDS,type ExamId} from '@/lib/program/admissions';
 import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection,listNames as list} from '@/lib/program/exam-coverage';
 import {EXAM_OUTLINES,type OutlineGroup} from '@/lib/program/exam-outline';
 import {firstExam} from '@/lib/program/personalization';
@@ -32,16 +32,16 @@ const row='flex min-h-14 items-center gap-3 px-4 py-3';
  *  a search shows from the whole exam. Offline caching is scheduled for Phase B. */
 export function ReviewerLibrary(){
  const {state,update}=useProgram();
- const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId|'all'>();
+ const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId>();
  const norm=q.trim().toLowerCase();
- /** Start from the learner's first named exam; "All CETs" shows every subject. */
- const exam=picked??firstExam(state)??'all',scope=exam==='all'?undefined:exam,cover=scope&&EXAM_COVERAGE[scope];
- const groups:Group[]=cover?cover.sections.map((x,i)=>({key:'s'+i,label:x.name,match:(t:Subtest,f:boolean)=>inSection(x,t,f),empty:!x.reviewer.length})):SUBTESTS.map(x=>({key:x,label:SUBTEST_LABEL[x],match:(t:Subtest)=>t===x}));
+ /** Always one exam: the learner's first named exam, else the first in the list. */
+ const scope=picked??firstExam(state)??EXAM_IDS[0],cover=EXAM_COVERAGE[scope];
+ const groups:Group[]=cover.sections.map((x,i)=>({key:'s'+i,label:x.name,match:(t:Subtest,f:boolean)=>inSection(x,t,f),empty:!x.reviewer.length}));
  const label=(t:Subtest,f:boolean)=>groups.find(g=>g.match(t,f))?.label??SUBTEST_LABEL[t];
  const concepts=norm?CONCEPTS.filter(c=>inCoverage(scope,c.subtest,c.area===FILIPINO_CONCEPT_AREA)&&[c.title,c.blurb,c.area,...c.tldr.must].join(' ').toLowerCase().includes(norm)):[];
  const chapters=norm?CHAPTERS.filter(c=>inCoverage(scope,c.subtest,filipino(c.concept))&&[c.title,c.summary.intro,...c.summary.sections.flatMap(x=>[x.heading,...x.body])].join(' ').toLowerCase().includes(norm)):[];
- const extras=EXTRAS.filter(x=>!scope||!EXTRA_SUBJECT[x.id]||(FILIPINO_EXTRAS.has(x.id)?hasFilipino(scope):inCoverage(scope,EXTRA_SUBJECT[x.id],false)));
- const missing=cover?cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name):[];
+ const extras=EXTRAS.filter(x=>!EXTRA_SUBJECT[x.id]||(FILIPINO_EXTRAS.has(x.id)?hasFilipino(scope):inCoverage(scope,EXTRA_SUBJECT[x.id],false)));
+ const missing=cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name);
  const mark=(id:string)=>update(s=>({...s,bookmarks:s.bookmarks.includes(id)?s.bookmarks.filter(x=>x!==id):[...s.bookmarks,id]}));
  /** The circle beside a chapter or topic saves it; a filled circle means saved. */
  const save=(id:string,title:string,size=22)=>{const on=state.bookmarks.includes(id);return <button type="button" aria-pressed={on} aria-label={`Save ${title}`} title={on?'Saved. Select to remove':'Save for later'} onClick={()=>mark(id)} className="grid h-11 w-11 shrink-0 place-items-center rounded-lg hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy"><Oval filled={on} size={size}/></button>;};
@@ -51,7 +51,7 @@ export function ReviewerLibrary(){
  const summaryRows=(list:typeof CONCEPTS,inside:boolean)=><ul className="mt-3 grid gap-2 md:grid-cols-2">{list.map(c=><li key={c.id} className="flex items-center gap-1 rounded-2xl py-1 pr-2">{save(c.id,c.title)}<Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold hover:underline">{c.title}<span className="block text-sm font-normal text-ink-soft">{inside?c.area:`${label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · ${c.area}`}</span></Link></li>)}</ul>;
  /** An outlined exam lists every topic reviewers report, sub-subject by sub-subject. A topic links to the summary
   *  that teaches it; one without a summary stays greyed out and says so. */
- const outline=scope?EXAM_OUTLINES[scope]:undefined;
+ const outline=EXAM_OUTLINES[scope];
  const outlineRows=(sub:OutlineGroup[])=>sub.map((o,j)=><section key={o.name}><h3 className="mt-5 text-lg font-extrabold">{String.fromCharCode(97+j)}. {o.name}</h3>{o.less&&<p className="mt-1 text-sm text-ink-soft">Only some reviewers report this part.</p>}
   <ul className="mt-3 grid gap-2 md:grid-cols-2">{o.topics.map(x=>{const c=x.concepts?.length?CONCEPT_BY_ID[x.concepts[0]]:undefined;return <li key={x.title} className="flex items-center gap-1 rounded-2xl py-1 pr-2">{c?save(c.id,x.title):unsaved}
    {c?<Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold hover:underline">{x.title}<span className="block text-sm font-normal text-ink-soft">Summary: {x.concepts!.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}</span></Link>
@@ -67,19 +67,19 @@ export function ReviewerLibrary(){
     <h2 className="text-2xl font-extrabold">The reviewer</h2>
     <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">{CHAPTERS.length} full chapters and {CONCEPTS.length} one-screen topic summaries, plus formula sheets, grammar guides and a test-day handbook. Open a subject to see its topics.</p>
     <div className="mt-4 flex flex-wrap items-end gap-3">
-     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={exam} onChange={e=>setPicked(e.target.value as ExamId|'all')} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
-      <option value="all">{t(state.lang,'reviewer.all')}</option>{(Object.keys(EXAMS) as ExamId[]).map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
+     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={scope} onChange={e=>setPicked(e.target.value as ExamId)} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
+      {EXAM_IDS.map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
      </select></label>
      <label className="block min-w-0 max-w-xl flex-1 basis-64"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-lg border-2 border-line-strong bg-white px-4 text-navy placeholder:text-ink-soft focus:border-green focus:outline-none"/></label>
     </div>
-    {cover&&scope&&<div className="mt-4 max-w-3xl rounded-lg bg-sky px-4 py-3 text-sm leading-relaxed text-navy">
+    <div className="mt-4 max-w-3xl rounded-lg bg-sky px-4 py-3 text-sm leading-relaxed text-navy">
      <p><span className="font-bold">{EXAMS[scope].full}:</span> {list(cover.sections.map(x=>x.name))}.</p>
      {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
      <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
      {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Greyed topics have no Khanpanion summary yet.</p>}
-    </div>}
+    </div>
     {norm?<>
-     <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {scope?EXAMS[scope].name+' section':'subject'}</p>
+     <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {EXAMS[scope].name} section</p>
      {block(chapters,concepts,false)}
      {!chapters.length&&!concepts.length&&<p className="mt-6 text-ink-soft">Nothing matches “{q}”. Try a shorter word.</p>}
     </>:<ul className="mt-5 grid gap-2">

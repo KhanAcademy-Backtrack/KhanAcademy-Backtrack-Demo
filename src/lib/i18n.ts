@@ -9,7 +9,7 @@ const EN={
  'nav.yourExams':'Your exams','nav.yourProgram':'Your program','nav.yourTopic':'Your topic','nav.yourGoal':'Your goal','nav.generalCet':'General CET review','nav.moreInPlan':'{n} more in your plan','nav.editExams':'Add or edit exams','nav.changeGoal':'Change my goal','nav.setGoal':'Set a study goal',
  'page.college':'College map','page.topic':'My topic','page.plan':'My plan','page.calendar':'Calendar','page.dates':'Exam dates','page.reviewer':'Reviewer','page.mocks':'Practice exams','page.recall':'Daily recall','page.packs':'Study packs',
  'search.label':'Search Khanpanion','search.placeholder':'Search topics, reviewer, practice','search.results':'Search results','search.none':'No matches yet. Try a topic like “fractions” or an exam like “UPCAT”.','search.loading':'Loading…',
- 'reviewer.for':'Reviewing for','reviewer.all':'All CETs',
+ 'reviewer.for':'Reviewing for',
  'side.admission.short':'Exam prep','side.bridge.short':'College prep',
  'side.admission':'Getting into college','side.bridge':'Starting college',
  'me.pledge':'My study plan','me.calendar':'Calendar','me.admissions':'Exam dates','me.bridge':'College preparation','me.settings':'Settings and backups','me.about':'About Khanpanion','me.language':'Language',
