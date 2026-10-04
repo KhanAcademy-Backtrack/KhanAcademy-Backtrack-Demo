@@ -24,20 +24,11 @@ const filipino=(concept:string)=>CONCEPT_BY_ID[concept]?.area===FILIPINO_CONCEPT
 /** Handbooks by subject; the test-day handbook has none and always shows. */
 const EXTRA_SUBJECT:Record<string,Subtest>={x_formulas_math:'math',x_formulas_science:'science',x_grammar_en:'language',x_grammar_fil:'language',x_vocab:'language',x_reading:'reading'};
 type Group={key:string;label:string;match:(subtest:Subtest,fil:boolean)=>boolean;empty?:boolean};
-type Entry=(typeof CONCEPTS)[number];
-/** A section's topics grouped by area, in the reviewer's own order. */
-function areas(g:Group):[string,Entry[]][]{
- const m=new Map<string,Entry[]>();
- if(!g.empty)for(const c of CONCEPTS)if(g.match(c.subtest,c.area===FILIPINO_CONCEPT_AREA))m.set(c.area,[...(m.get(c.area)??[]),c]);
- return [...m];
-}
-const chaptersOf=(concept:string)=>CHAPTERS.filter(ch=>ch.concept===concept);
 const row='flex min-h-14 items-center gap-3 px-4 py-3';
-const dot=<span aria-hidden="true" className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-green"/>;
 
 /** Study: practice exams and daily recall first, then the reviewer library. The library lists the chosen exam's
- *  sections, closed until one is opened; each opens to its topics grouped by area, with the full chapter where one
- *  exists. A search shows matching chapters and summaries from the whole exam. Offline caching is scheduled for Phase B. */
+ *  sections, closed until one is opened; each opens to its full chapters and topic summaries, the same cards
+ *  a search shows from the whole exam. Offline caching is scheduled for Phase B. */
 export function ReviewerLibrary(){
  const {state,update}=useProgram();
  const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId|'all'>();
@@ -48,18 +39,23 @@ export function ReviewerLibrary(){
  const label=(t:Subtest,f:boolean)=>groups.find(g=>g.match(t,f))?.label??SUBTEST_LABEL[t];
  const concepts=norm?CONCEPTS.filter(c=>inCoverage(scope,c.subtest,c.area===FILIPINO_CONCEPT_AREA)&&[c.title,c.blurb,c.area,...c.tldr.must].join(' ').toLowerCase().includes(norm)):[];
  const chapters=norm?CHAPTERS.filter(c=>inCoverage(scope,c.subtest,filipino(c.concept))&&[c.title,c.summary.intro,...c.summary.sections.flatMap(x=>[x.heading,...x.body])].join(' ').toLowerCase().includes(norm)):[];
- const saved=[...CHAPTERS.filter(c=>state.bookmarks.includes(c.id)).map(c=>({id:c.id,title:c.title,href:`/reviewer/${c.id}`})),...CONCEPTS.filter(c=>state.bookmarks.includes(c.id)).map(c=>({id:c.id,title:c.title,href:`/learn/${c.id}`}))];
  const extras=EXTRAS.filter(x=>!scope||!EXTRA_SUBJECT[x.id]||(FILIPINO_EXTRAS.has(x.id)?hasFilipino(scope):inCoverage(scope,EXTRA_SUBJECT[x.id],false)));
  const missing=cover?cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name):[];
  const mark=(id:string)=>update(s=>({...s,bookmarks:s.bookmarks.includes(id)?s.bookmarks.filter(x=>x!==id):[...s.bookmarks,id]}));
- const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-lg hover:bg-sky focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
+ const save=(id:string,title:string)=><button aria-pressed={state.bookmarks.includes(id)} aria-label={`Save ${title}`} onClick={()=>mark(id)} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(id)?'Saved':'Save'}</button>;
+ /** The reviewer's chapter cards and summary rows. Inside a section the section name is left out of each line. */
+ const chapterCards=(list:typeof CHAPTERS,inside:boolean)=><ul className="mt-3 grid gap-3 md:grid-cols-2">{list.map(c=><li key={c.id} className="flex items-start gap-3 rounded-2xl border-2 border-mint-line p-4"><Oval filled size={26} className="mt-1"/><div className="flex-1"><Link href={`/reviewer/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-sm text-ink-soft">{inside?'':`${label(c.subtest,filipino(c.concept))} · `}{c.examples.length} worked examples · {c.recall.length} recall cards</p></div>{save(c.id,c.title)}</li>)}</ul>;
+ const summaryRows=(list:typeof CONCEPTS,inside:boolean)=><ul className="mt-3 grid gap-2 md:grid-cols-2">{list.map(c=><li key={c.id} className="flex items-center gap-3 rounded-2xl px-2 py-1 hover:bg-mint"><Oval size={22}/><Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{c.title}<span className="block text-sm font-normal text-ink-soft">{inside?c.area:`${label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · ${c.area}`}</span></Link>{save(c.id,c.title)}</li>)}</ul>;
+ const block=(chs:typeof CHAPTERS,cs:typeof CONCEPTS,inside:boolean)=><>{!!chs.length&&<><h3 className="mt-5 text-lg font-extrabold">Full chapters</h3>{chapterCards(chs,inside)}</>}{!!cs.length&&<><h3 className="mt-5 text-lg font-extrabold">Topic summaries</h3>{summaryRows(cs,inside)}</>}</>;
+ const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-xl hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
+ const savedChapters=CHAPTERS.filter(c=>state.bookmarks.includes(c.id)),savedConcepts=CONCEPTS.filter(c=>state.bookmarks.includes(c.id)),savedCount=savedChapters.length+savedConcepts.length;
  return <>
   <PageBand title="Study" lead="Practice exams, daily recall and the full CET reviewer in one place."/>
   <div className={pageBody}>
    <StudyTools/>
    <Sheet className="mt-8">
     <h2 className="text-2xl font-extrabold">The reviewer</h2>
-    <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">Open a subject to see its topics. Each topic has a one-screen summary, and the main ones have a full printable chapter.</p>
+    <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">{CHAPTERS.length} full chapters and {CONCEPTS.length} one-screen topic summaries, plus formula sheets, grammar guides and a test-day handbook. Open a subject to see its topics.</p>
     <div className="mt-4 flex flex-wrap items-end gap-3">
      <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={exam} onChange={e=>setPicked(e.target.value as ExamId|'all')} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
       <option value="all">{t(state.lang,'reviewer.all')}</option>{(Object.keys(EXAMS) as ExamId[]).map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
@@ -73,20 +69,17 @@ export function ReviewerLibrary(){
     </div>}
     {norm?<>
      <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {scope?EXAMS[scope].name+' section':'subject'}</p>
-     {!!chapters.length&&<><h3 className="mt-5 text-xl font-extrabold">Full chapters</h3><ul className="mt-3 grid gap-3 md:grid-cols-2">{chapters.map(c=><li key={c.id} className="flex items-start gap-3 rounded-2xl border-2 border-mint-line p-4"><Oval filled size={26} className="mt-1"/><div className="flex-1"><Link href={`/reviewer/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-sm text-ink-soft">{label(c.subtest,filipino(c.concept))} · {c.examples.length} worked examples · {c.recall.length} recall cards</p></div><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
-     {!!concepts.length&&<><h3 className="mt-6 text-xl font-extrabold">Topic summaries</h3><ul className="mt-3 grid gap-2 md:grid-cols-2">{concepts.map(c=><li key={c.id} className="flex items-center gap-3 rounded-2xl px-2 py-1 hover:bg-mint"><Oval size={22}/><Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{c.title}<span className="block text-sm font-normal text-ink-soft">{label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · {c.area}</span></Link><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
+     {block(chapters,concepts,false)}
      {!chapters.length&&!concepts.length&&<p className="mt-6 text-ink-soft">Nothing matches “{q}”. Try a shorter word.</p>}
     </>:<ul className="mt-5 grid gap-2">
-     {groups.map((g,i)=>{const sets=areas(g),count=sets.reduce((n,[,x])=>n+x.length,0);return <li key={g.key}>{count?<details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
-      {summary(i+1,g.label,`${count} topic${count===1?'':'s'}`)}
-      <div className="grid gap-5 border-t border-line px-4 pb-5 pt-4 sm:px-6">{sets.map(([area,items],j)=><section key={area}>
-       {sets.length>1&&<h3 className="text-base font-bold leading-snug text-ink-soft">{String.fromCharCode(97+j)}. {area}</h3>}
-       <ul className={cx('grid gap-0.5',sets.length>1&&'mt-1.5 pl-4')}>{items.map(c=>{const full=chaptersOf(c.id);return <li key={c.id} className="flex gap-3 py-2">{dot}<span className="min-w-0"><Link href={`/learn/${c.id}`} className="font-semibold hover:underline">{c.title}</Link>{full.map(ch=><Link key={ch.id} href={`/reviewer/${ch.id}`} aria-label={`Full chapter: ${ch.title}`} className="ml-3 inline-block whitespace-nowrap text-sm font-semibold text-ink-soft underline decoration-green decoration-2 underline-offset-4 hover:text-navy">{full.length>1?`Chapter: ${ch.title}`:'Full chapter'}</Link>)}</span></li>;})}</ul>
-      </section>)}</div>
-     </details>:<div className={cx(row,'rounded-xl border-2 border-dashed border-line')}><span className="flex-1 text-lg font-extrabold">{i+1}. {g.label}</span><span className="text-sm font-semibold text-ink-soft">No material yet</span></div>}</li>;})}
-     {!!saved.length&&<li><details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
-      {summary(groups.length+1,'Saved',`${saved.length} saved`)}
-      <ul className="grid gap-0.5 border-t border-line px-4 pb-5 pt-4 sm:px-6">{saved.map(x=><li key={x.id} className="flex min-h-10 items-start gap-3 py-1">{dot}<Link href={x.href} className="flex-1 font-semibold hover:underline">{x.title}</Link><button aria-label={`Remove ${x.title} from saved`} onClick={()=>mark(x.id)} className="min-h-10 rounded-lg px-3 text-sm font-bold text-navy hover:bg-sky">Remove</button></li>)}</ul>
+     {groups.map((g,i)=>{const chs=g.empty?[]:CHAPTERS.filter(c=>g.match(c.subtest,filipino(c.concept))),cs=g.empty?[]:CONCEPTS.filter(c=>g.match(c.subtest,c.area===FILIPINO_CONCEPT_AREA));
+      return <li key={g.key}>{cs.length?<details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
+       {summary(i+1,g.label,`${cs.length} topic${cs.length===1?'':'s'}`)}
+       <div className="border-t border-line px-3 pb-5 sm:px-5">{block(chs,cs,true)}</div>
+      </details>:<div className={cx(row,'rounded-xl border-2 border-dashed border-line')}><span className="flex-1 text-lg font-extrabold">{i+1}. {g.label}</span><span className="text-sm font-semibold text-ink-soft">No material yet</span></div>}</li>;})}
+     {savedCount>0&&<li><details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
+      {summary(groups.length+1,'Saved',`${savedCount} saved`)}
+      <div className="border-t border-line px-3 pb-5 sm:px-5">{block(savedChapters,savedConcepts,false)}</div>
      </details></li>}
     </ul>}
    </Sheet>
