@@ -15,6 +15,7 @@ import {itemById} from '@/lib/mock/forms';
 import {khanUrl,KHAN_UNITS} from '@/lib/program/khan-units';
 import {EXTRAS} from '@/content/reviewer/extras';
 import {StudyTools} from './StudyTools';
+import {t} from '@/lib/i18n';
 import {EXAMS,type ExamId} from '@/lib/program/admissions';
 import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection} from '@/lib/program/exam-coverage';
 import {examTargets,learnerGoal} from '@/lib/program/personalization';
@@ -50,8 +51,8 @@ export function ReviewerLibrary(){
     <h2 className="text-2xl font-extrabold">The reviewer</h2>
     <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">{CHAPTERS.length} full chapters and {CONCEPTS.length} one-screen topic summaries, plus formula sheets, grammar guides and a test-day handbook. Free, printable, and easy to revisit.</p>
     <div className="mt-4 flex flex-wrap items-end gap-3">
-     <label className="grid gap-1 text-sm font-semibold">Reviewing for<select value={exam} onChange={e=>{setPicked(e.target.value as ExamId|'all');setSub('all');}} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
-      <option value="all">All CETs</option>{(Object.keys(EXAMS) as ExamId[]).map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
+     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={exam} onChange={e=>{setPicked(e.target.value as ExamId|'all');setSub('all');}} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
+      <option value="all">{t(state.lang,'reviewer.all')}</option>{(Object.keys(EXAMS) as ExamId[]).map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
      </select></label>
      <label className="block min-w-0 max-w-xl flex-1 basis-64"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-lg border-2 border-line-strong bg-white px-4 text-navy placeholder:text-ink-soft focus:border-green focus:outline-none"/></label>
     </div>

@@ -4,6 +4,12 @@
 export type Lang='en'|'fil';
 const EN={
  'nav.today':'Home','nav.plan':'Plan','nav.study':'Study','nav.plan.bridge':'College','nav.mocks':'Mocks','nav.reviewer':'Reviewer','nav.calendar':'Calendar','nav.group':'Group','nav.me':'Me','nav.side':'Study goal',
+ 'nav.main':'Main','nav.all':'All pages','nav.sectionPages':'{section} pages','nav.home':'Khanpanion, Home','nav.guide':'Guide','nav.search':'Search','nav.create':'Create a study pack','nav.changeGoalRoutine':'Change goal or routine',
+ 'nav.openMenu':'Open menu','nav.closeMenu':'Close menu','nav.menu':'Menu','nav.expand':'Expand sidebar','nav.collapse':'Collapse sidebar','nav.shortcuts':'Shortcuts','nav.studyTools':'Study tools',
+ 'nav.yourExams':'Your exams','nav.yourProgram':'Your program','nav.yourTopic':'Your topic','nav.yourGoal':'Your goal','nav.generalCet':'General CET review','nav.moreInPlan':'{n} more in your plan','nav.editExams':'Add or edit exams','nav.changeGoal':'Change my goal','nav.setGoal':'Set a study goal',
+ 'page.college':'College map','page.topic':'My topic','page.plan':'My plan','page.calendar':'Calendar','page.dates':'Exam dates','page.reviewer':'Reviewer','page.mocks':'Practice exams','page.recall':'Daily recall','page.packs':'Study packs',
+ 'search.label':'Search Khanpanion','search.placeholder':'Search topics, reviewer, practice','search.results':'Search results','search.none':'No matches yet. Try a topic like “fractions” or an exam like “UPCAT”.','search.loading':'Loading…',
+ 'reviewer.for':'Reviewing for','reviewer.all':'All CETs',
  'side.admission.short':'Exam prep','side.bridge.short':'College prep',
  'side.admission':'Getting into college','side.bridge':'Starting college',
  'me.pledge':'My study plan','me.calendar':'Calendar','me.admissions':'Exam dates','me.bridge':'College preparation','me.settings':'Settings and backups','me.about':'About Khanpanion','me.language':'Language',
