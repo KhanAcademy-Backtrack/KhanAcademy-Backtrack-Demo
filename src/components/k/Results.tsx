@@ -6,6 +6,7 @@ import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {Explanation,WhyPanel,PassageView} from './Question';
+import {RelatedVideo} from './RelatedVideo';
 import {TldrCard} from './TldrCard';
 import {PageBand,Sheet,btn,cx,pageBody,Pill} from './ui';
 import {Companion} from '@/components/study/Companion';
@@ -91,6 +92,7 @@ export function Results(){
        {!showKey&&<button className={btn.ghost} onClick={()=>setOpen(o=>o.includes(id)?o.filter(x=>x!==id):[...o,id])}>{revealed?'Hide answer':'Reveal answer'}</button>}
        <button className={btn.ghost} aria-expanded={isOpen} onClick={()=>setOpen(o=>o.includes(`x:${id}`)?o.filter(x=>x!==`x:${id}`):[...o,`x:${id}`])}>{isOpen?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
       </div>
+      {revealed&&<RelatedVideo item={it} compact className="mt-2"/>}
       {!right&&revealed&&<div className="mt-3 grid gap-3"><WhyPanel item={it} chosen={chosen} lang={lang}/>
        <fieldset><legend className="text-sm font-semibold">Why did you miss it?</legend><div className="mt-1 flex flex-wrap gap-2">{(Object.keys(TRIAGE) as Triage[]).map(k=><button key={k} aria-pressed={attempt.triage[id]===k} onClick={()=>setTriage(id,k)} className="min-h-11 rounded-lg border-2 border-line bg-white px-3 text-sm font-semibold text-navy hover:border-line-strong aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white">{TRIAGE[k]}</button>)}</div></fieldset></div>}
       {isOpen&&<div className="mt-3"><Explanation item={it}/></div>}

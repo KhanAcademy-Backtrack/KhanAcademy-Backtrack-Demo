@@ -6,6 +6,7 @@ import {AnimatePresence,motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
 import {Question,PassageView,FixLinks} from './Question';
+import {RelatedVideo} from './RelatedVideo';
 import {btn,cx,Wordmark} from './ui';
 import {Companion} from '@/components/study/Companion';
 import {formFromKey,formItems,itemById,formMinutes,type Form} from '@/lib/mock/forms';
@@ -73,9 +74,14 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   const first=a.index===0&&a.section===0,back=()=>a.index>0?go(a.section,a.index-1):go(a.section-1,form.sections[a.section-1].itemIds.length-1);
   const nextLabel=lastInSection?(lastSection?t(lang,'mock.submit'):'Finish section'):t(lang,'mock.next');
   // Back and Next live in the question card, at the end of its answer row (beside Show
-  // explanation once a practice answer is checked). After a miss the fix links move into
-  // the side panel on wide screens.
+  // explanation once a practice answer is checked). Once checked, right or wrong, the
+  // Work on this panel (the matched Khan video, plus the fix links after a miss) sits in
+  // the side panel on wide screens and below the feedback on narrow ones. Never before
+  // the answer is checked, so a video cannot help an answer that is then counted.
   const shown=practice&&revealed.includes(id),missed=shown&&(a.answers[id]??null)!==item.answerIndex;
+  const work=(heading:string,stacked:boolean)=><><h2 id={heading} className="text-sm font-semibold text-ink-soft">Work on this</h2>
+   <RelatedVideo key={id} item={item} className="mt-2"/>
+   {missed&&<FixLinks item={item} chosen={a.answers[id]??null} lang={lang} stacked={stacked} className="mt-1"/>}</>;
   const backButton=!first&&<button className={btn.ghost} onClick={back}>{t(lang,'mock.prev')}</button>;
   const remaining=section.minutes*60-now/1000;
   const unanswered=formItems(form).filter(x=>a.answers[x]==null&&!a.idk.includes(x)).length;
@@ -115,6 +121,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
      {item.passageId&&<div className="mb-5 lg:mb-0"><PassageView id={item.passageId} compact/></div>}
      <motion.div key={id} initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={tween(reduced,DUR.fast)}>
       <Question key={id} keys={!paused&&!confirm&&!nav} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])} linksBeside
+       panel={shown&&<section aria-labelledby="work-on-this-inline" className="rounded-xl border border-line bg-white p-4 lg:hidden">{work('work-on-this-inline',false)}</section>}
        actions={<>{backButton}<button className={btn.primary} onClick={next}>{nextLabel}</button></>}
        checkActions={<>{backButton}<button className={btn.ghost} onClick={next}>{nextLabel}</button></>}/>
       <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-line pt-4">
@@ -129,10 +136,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
       <div className="grid grid-cols-6 gap-1.5 lg:grid-cols-5">{sec.itemIds.map((x,xi)=>{const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
        className={cx('relative grid h-11 place-items-center rounded-lg border-2 text-xs font-bold text-navy',answered?'border-green bg-green':'border-line bg-white hover:border-line-strong',cur&&'ring-2 ring-navy ring-offset-2 ring-offset-white')}>{xi+1}{a.flags.includes(x)&&<span className="absolute right-1 top-1 h-1.5 w-1.5 bg-navy"/>}</button>;})}</div></div>)}
      <p className="mt-3 text-xs text-ink-soft">Green is answered. A dark corner mark is flagged.</p>
-     {missed&&<section aria-labelledby="work-on-this" className="hidden border-t border-line bg-white pb-1 pt-4 lg:sticky lg:bottom-0 lg:mt-4 lg:block">
-      <h2 id="work-on-this" className="text-sm font-semibold text-ink-soft">Work on this</h2>
-      <FixLinks item={item} chosen={a.answers[id]??null} lang={lang} stacked className="mt-1"/>
-     </section>}
+     {shown&&<section aria-labelledby="work-on-this" className="hidden border-t border-line bg-white pb-1 pt-4 lg:sticky lg:bottom-0 lg:mt-4 lg:block">{work('work-on-this',true)}</section>}
     </aside>
    </div>
    <footer className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]">

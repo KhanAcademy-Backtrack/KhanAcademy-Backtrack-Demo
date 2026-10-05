@@ -38,7 +38,7 @@ export function FixLinks({item,chosen,lang='en',stacked=false,className}:{item:M
 }
 
 /** What went wrong and where to fix it, for one chosen answer. With `linksBeside`, the
- *  links move to the page's side panel on wide screens and stay here on narrow ones. */
+ *  page shows the links in its own Work on this panel instead. */
 export function WhyPanel({item,chosen,lang='en',linksBeside=false}:{item:MockItem;chosen:number|null;lang?:Lang;linksBeside?:boolean}){
  const mid=chosen!==null?item.misconceptions[chosen]:null,m=mid?misconception(mid):undefined;
  const rationale=chosen!==null?item.rationales?.[chosen]:undefined;
@@ -46,7 +46,7 @@ export function WhyPanel({item,chosen,lang='en',linksBeside=false}:{item:MockIte
   {m?<><p className="font-bold">{m.label}</p><p className="mt-1"><span className="font-semibold">{t(lang,'result.why')}: </span>{m.why}</p><p className="mt-2">{m.fix}</p></>
    :rationale&&chosen!==item.answerIndex?<p>{rationale}</p>
    :chosen===null?<p>No answer yet is an honest place to start. The worked steps below show the whole method.</p>:null}
-  <FixLinks item={item} chosen={chosen} lang={lang} className={cx('mt-3',linksBeside&&'lg:hidden')}/>
+  {!linksBeside&&<FixLinks item={item} chosen={chosen} lang={lang} className="mt-3"/>}
  </div>;
 }
 
@@ -59,7 +59,7 @@ export function Explanation({item}:{item:MockItem}){
  </div>;
 }
 
-type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean;keys?:boolean;actions?:ReactNode;checkActions?:ReactNode;linksBeside?:boolean};
+type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean;keys?:boolean;actions?:ReactNode;checkActions?:ReactNode;linksBeside?:boolean;panel?:ReactNode};
 
 /** Typing in a field or holding a modifier must never pick an answer. */
 const typing=(e:KeyboardEvent)=>{const el=e.target as HTMLElement|null;return e.ctrlKey||e.metaKey||e.altKey||!!el?.closest('input,textarea,select,[contenteditable="true"]');};
@@ -69,8 +69,9 @@ const typing=(e:KeyboardEvent)=>{const el=e.target as HTMLElement|null;return e.
  *  The small label above the choices becomes the feedback line after Check, so the
  *  page does not jump. With `keys`, 1–4 or A–D choose an answer. `actions` (such as
  *  Back and Next) sit at the end of the answer row in the exam hall, and beside Show
- *  explanation once a practice answer is checked; `checkActions` sit just before Check. */
-export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false,keys=false,actions,checkActions,linksBeside=false}:Props){
+ *  explanation once a practice answer is checked; `checkActions` sit just before Check.
+ *  `panel` follows the feedback once a practice answer is checked, right or wrong. */
+export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false,keys=false,actions,checkActions,linksBeside=false,panel}:Props){
  const reduced=useQuietMotion(),[explain,setExplain]=useState(false);
  const locked=mode==='practice'&&revealed;
  const right=revealed&&chosen===item.answerIndex;
@@ -104,6 +105,7 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
   </div>
   <AnimatePresence initial={false}>{mode==='practice'&&revealed&&<motion.div key="fb" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={reduced?{duration:0}:SPRING} className="mt-5 space-y-3">
    {!right&&<WhyPanel item={item} chosen={chosen} lang={lang} linksBeside={linksBeside}/>}
+   {panel}
    <div className="flex flex-wrap items-center gap-3">
     <button className={btn.ghost} aria-expanded={explain} onClick={()=>setExplain(!explain)}>{explain?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
     {actions&&<div className="ml-auto flex flex-wrap items-center gap-3">{actions}</div>}
