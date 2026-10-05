@@ -72,9 +72,11 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   const next=()=>{if(!lastInSection)return go(a.section,a.index+1);if(!lastSection){stopClock();setBreakFor(a.section+1);return;}setConfirm(true);};
   const first=a.index===0&&a.section===0,back=()=>a.index>0?go(a.section,a.index-1):go(a.section-1,form.sections[a.section-1].itemIds.length-1);
   const nextLabel=lastInSection?(lastSection?t(lang,'mock.submit'):'Finish section'):t(lang,'mock.next');
-  // Once a practice answer is checked, Back and Next sit beside Show explanation and the
-  // fix links move into the side panel on wide screens.
+  // Back and Next live in the question card, at the end of its answer row (beside Show
+  // explanation once a practice answer is checked). After a miss the fix links move into
+  // the side panel on wide screens.
   const shown=practice&&revealed.includes(id),missed=shown&&(a.answers[id]??null)!==item.answerIndex;
+  const backButton=!first&&<button className={btn.ghost} onClick={back}>{t(lang,'mock.prev')}</button>;
   const remaining=section.minutes*60-now/1000;
   const unanswered=formItems(form).filter(x=>a.answers[x]==null&&!a.idk.includes(x)).length;
   function submit(){
@@ -113,7 +115,8 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
      {item.passageId&&<div className="mb-5 lg:mb-0"><PassageView id={item.passageId} compact/></div>}
      <motion.div key={id} initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={tween(reduced,DUR.fast)}>
       <Question key={id} keys={!paused&&!confirm&&!nav} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])} linksBeside
-       actions={shown?<>{!first&&<button className={btn.ghost} onClick={back}>{t(lang,'mock.prev')}</button>}<button className={btn.primary} onClick={next}>{nextLabel}</button></>:undefined}/>
+       actions={<>{backButton}<button className={btn.primary} onClick={next}>{nextLabel}</button></>}
+       checkActions={<>{backButton}<button className={btn.ghost} onClick={next}>{nextLabel}</button></>}/>
       <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-line pt-4">
        <button aria-pressed={a.flags.includes(id)} onClick={flag} className="min-h-11 rounded-lg border-2 border-line px-4 text-sm font-bold text-navy hover:border-line-strong aria-pressed:border-navy aria-pressed:bg-sky">{a.flags.includes(id)?t(lang,'mock.flagged'):t(lang,'mock.flag')}</button>
        <button aria-pressed={a.sure[id]==='sure'} onClick={sure} disabled={a.answers[id]==null} className="min-h-11 rounded-lg border-2 border-line px-4 text-sm font-bold text-navy hover:border-line-strong aria-pressed:border-green aria-pressed:bg-mint disabled:opacity-40">{t(lang,'mock.sure')}</button>
@@ -133,12 +136,8 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     </aside>
    </div>
    <footer className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]">
-    <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-8">
-     {shown?<><span className="flex-1"/><button className="min-h-11 rounded-lg px-4 font-semibold text-ink-soft hover:bg-sky hover:text-navy" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button></>
-     :<><button className={cx(btn.ghost,'disabled:opacity-40')} disabled={first} onClick={back}>{t(lang,'mock.prev')}</button>
-     <span className="flex-1"/>
-     <button className="hidden min-h-11 rounded-lg px-4 font-semibold text-ink-soft hover:bg-sky hover:text-navy sm:block" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button>
-     <button className={btn.primary} onClick={next}>{nextLabel}</button></>}
+    <div className="mx-auto flex max-w-6xl items-center justify-end gap-3 px-4 py-3 sm:px-8">
+     <button className="min-h-11 rounded-lg px-4 font-semibold text-ink-soft hover:bg-sky hover:text-navy" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button>
     </div>
    </footer>
    <AnimatePresence>{paused&&<motion.div key="pause" role="dialog" aria-modal="true" aria-labelledby="pause-title" className="fixed inset-0 z-50 grid place-items-center bg-canvas px-6 text-center text-navy" initial={reduced?false:{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:DUR.base}}>

@@ -59,7 +59,7 @@ export function Explanation({item}:{item:MockItem}){
  </div>;
 }
 
-type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean;keys?:boolean;actions?:ReactNode;linksBeside?:boolean};
+type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean;keys?:boolean;actions?:ReactNode;checkActions?:ReactNode;linksBeside?:boolean};
 
 /** Typing in a field or holding a modifier must never pick an answer. */
 const typing=(e:KeyboardEvent)=>{const el=e.target as HTMLElement|null;return e.ctrlKey||e.metaKey||e.altKey||!!el?.closest('input,textarea,select,[contenteditable="true"]');};
@@ -68,8 +68,9 @@ const typing=(e:KeyboardEvent)=>{const el=e.target as HTMLElement|null;return e.
  *  explanation straight away; in the exam hall answers stay hidden until the end.
  *  The small label above the choices becomes the feedback line after Check, so the
  *  page does not jump. With `keys`, 1–4 or A–D choose an answer. `actions` (such as
- *  Back and Next) sit beside Show explanation once the answer is checked. */
-export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false,keys=false,actions,linksBeside=false}:Props){
+ *  Back and Next) sit at the end of the answer row in the exam hall, and beside Show
+ *  explanation once a practice answer is checked; `checkActions` sit just before Check. */
+export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false,keys=false,actions,checkActions,linksBeside=false}:Props){
  const reduced=useQuietMotion(),[explain,setExplain]=useState(false);
  const locked=mode==='practice'&&revealed;
  const right=revealed&&chosen===item.answerIndex;
@@ -98,7 +99,8 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
   </div>
   <div className="mt-4 flex flex-wrap items-center gap-3">
    <button aria-pressed={idk} disabled={locked} onClick={onIdk} className={cx('min-h-11 rounded-lg border-2 px-4 text-[15px] font-semibold',idk?'border-navy bg-navy text-white':'border-line bg-white text-navy hover:border-line-strong')}>{t(lang,'mock.idk')}</button>
-   {mode==='practice'&&!revealed&&<button className={cx(btn.primary,'ml-auto')} disabled={chosen===null&&!idk} onClick={onReveal}>{t(lang,'mock.check')}</button>}
+   {mode==='practice'&&!revealed&&<div className="ml-auto flex flex-wrap items-center gap-3">{checkActions}<button className={btn.primary} disabled={chosen===null&&!idk} onClick={onReveal}>{t(lang,'mock.check')}</button></div>}
+   {mode==='exam'&&actions&&<div className="ml-auto flex flex-wrap items-center gap-3">{actions}</div>}
   </div>
   <AnimatePresence initial={false}>{mode==='practice'&&revealed&&<motion.div key="fb" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={reduced?{duration:0}:SPRING} className="mt-5 space-y-3">
    {!right&&<WhyPanel item={item} chosen={chosen} lang={lang} linksBeside={linksBeside}/>}
