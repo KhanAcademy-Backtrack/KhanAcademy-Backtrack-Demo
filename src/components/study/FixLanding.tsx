@@ -7,6 +7,7 @@ import {Companion} from './Companion';
 import {useStudy} from './StudyProvider';
 import {prepareRound,type StudySession,type StudyTask} from '@/lib/study';
 import {LABELS,TOPICS} from '@/lib/recovery';
+import {Rich} from '@/components/math/Math';
 
 /** The page a "Find my missing skill" button lands on, before the lesson opens.
  *  It explains the step and the route, and starting writes nothing: the round's
@@ -31,7 +32,7 @@ export function FixLanding({session,task,onStart}:{session:StudySession;task:Stu
      <p className="mt-2 max-w-xl text-[17px] leading-relaxed text-ink-soft">One short lesson on this step, then fresh questions that bring you back to {goal}.</p>
     </div>
    </div>
-   {task.reason&&<div className="mt-5 rounded-lg bg-sky px-4 py-3"><p className="text-sm font-semibold text-ink-soft">Why this step</p><p className="mt-0.5 font-semibold">{task.reason}</p></div>}
+   {task.reason&&<div className="mt-5 rounded-lg bg-sky px-4 py-3"><p className="text-sm font-semibold text-ink-soft">Why this step</p><p className="mt-0.5 font-semibold"><Rich>{task.reason}</Rich></p></div>}
    <h2 className="mt-6 text-lg font-extrabold">How it works</h2>
    <ol className="mt-3 grid gap-3">{steps.map(([title,body],i)=><li key={title} className="flex gap-3"><span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-mint text-sm font-extrabold">{i+1}</span><div><p className="font-bold">{title}</p><p className="text-[15px] text-ink-soft">{body}</p></div></li>)}</ol>
    <p className="mt-6 text-sm font-semibold text-ink-soft">About {session.minutes} minutes · Saved in this browser · Stop whenever you like</p>

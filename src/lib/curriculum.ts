@@ -98,7 +98,7 @@ export const SKILLS: Record<SkillId, Skill> = {
   },
   factor: {
     id: 'factor',
-    label: 'Factoring x² + bx + c',
+    label: 'Factoring $x^2 + bx + c$',
     short: 'Factoring',
     minutes: 6,
     why: 'Today’s lesson solves the equation by factoring it first. This is the step it stands on.',

@@ -10,6 +10,7 @@ import {khanUrl,KHAN_UNITS} from '@/lib/program/khan-units';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
 import {TOPICS,NEXT_SKILL} from '@/lib/recovery';
 import {TOPIC_CHECK} from '@/lib/mock/blueprint';
+import {Rich} from '@/components/math/Math';
 
 export function LearnConcept({id}:{id:string}){
  const {state,today}=useProgram(),fix=useFix();
@@ -18,7 +19,7 @@ export function LearnConcept({id}:{id:string}){
  const chapter=CHAPTER_IDS.has(c.chapter)?CHAPTER_BY_ID[c.chapter]:undefined;
  const seed=`${today.replace(/-/g,'')}${checks.length}`;
  return <>
-  <PageBand title={c.title} lead={c.blurb}><div className="mt-4 flex flex-wrap gap-2"><Pill tone="green">{SUBTEST_LABEL[c.subtest]}</Pill><Pill tone="sky">{c.area}</Pill>{last&&<Pill tone="mint">Last check: {last.correct} of {last.total}</Pill>}</div></PageBand>
+  <PageBand title={c.title} lead={<Rich>{c.blurb}</Rich>}><div className="mt-4 flex flex-wrap gap-2"><Pill tone="green">{SUBTEST_LABEL[c.subtest]}</Pill><Pill tone="sky">{c.area}</Pill>{last&&<Pill tone="mint">Last check: {last.correct} of {last.total}</Pill>}</div></PageBand>
   <div className={pageBody}>
    <TldrCard tldr={c.tldr}/>
    <div className="mt-5 grid gap-5 lg:grid-cols-[1.3fr_1fr]">

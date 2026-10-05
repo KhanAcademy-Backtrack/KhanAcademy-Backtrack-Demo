@@ -1,4 +1,4 @@
-import {rng,fmt} from '../prng.ts';
+import {rng,fmt,tex} from '../prng.ts';
 import type {Family,MockItem} from '../types.ts';
 import {MATH_FAMILIES} from './math.ts';
 import {SCIENCE_FAMILIES} from './science.ts';
@@ -15,7 +15,7 @@ export function generateItem(familyId:string,seed:number|string):MockItem{
  for(let attempt=0;attempt<60;attempt++){
   const d=family.build(r);
   if(!d||d.wrong.length<3)continue;
-  const show=d.show??((v:number)=>fmt(v));
+  const show=d.show??((v:number)=>tex(fmt(v)));
   const wrong=d.wrong.slice(0,3);
   if(![d.answer,...wrong.map(w=>w.value)].every(Number.isFinite))continue;
   const texts=[show(d.answer),...wrong.map(w=>show(w.value))];

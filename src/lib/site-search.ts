@@ -3,6 +3,7 @@ import {SUBTEST_LABEL} from './mock/types.ts';
 import {TOPICS,type Topic} from './recovery.ts';
 import {CHAPTERS} from '../content/reviewer/index.ts';
 import {EXTRAS} from '../content/reviewer/extras.ts';
+import {plainText} from './notation.ts';
 
 /** One place a learner can go from the header search. Everything here is a real,
  *  statically exported route; nothing is fetched, so search works offline. */
@@ -25,7 +26,7 @@ const PAGES:[string,string,string,string][]=[
 ];
 
 export const SEARCH_INDEX:SearchEntry[]=[
- ...CONCEPTS.map(c=>({kind:'Topic' as const,title:c.title,detail:`${SUBTEST_LABEL[c.subtest]} · ${c.area}`,href:`/learn/${c.id}`,words:`${c.title} ${c.area} ${SUBTEST_LABEL[c.subtest]} ${c.blurb}`.toLowerCase()})),
+ ...CONCEPTS.map(c=>({kind:'Topic' as const,title:c.title,detail:`${SUBTEST_LABEL[c.subtest]} · ${c.area}`,href:`/learn/${c.id}`,words:`${c.title} ${c.area} ${SUBTEST_LABEL[c.subtest]} ${plainText(c.blurb)}`.toLowerCase()})),
  ...CHAPTERS.map(c=>({kind:'Reviewer' as const,title:c.title,detail:`Reviewer chapter · ${SUBTEST_LABEL[c.subtest]}`,href:`/reviewer/${c.id}`,words:`${c.title} ${SUBTEST_LABEL[c.subtest]} reviewer chapter`.toLowerCase()})),
  ...EXTRAS.map(x=>({kind:'Reviewer' as const,title:x.title,detail:'Reviewer handbook',href:`/reviewer/${x.id}`,words:`${x.title} handbook sheet reviewer`.toLowerCase()})),
  ...(Object.keys(TOPICS) as Topic[]).map(t=>({kind:'Fix a gap' as const,title:TOPICS[t].label,detail:`BACKTRACK · ${TOPICS[t].description}`,href:`/start/${t}`,words:`${TOPICS[t].label} ${TOPICS[t].goal} backtrack fix gap ${TOPICS[t].subject}`.toLowerCase()})),

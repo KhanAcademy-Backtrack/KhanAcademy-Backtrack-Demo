@@ -9,6 +9,7 @@ import {programTourJourneys} from './test-program-tour.mjs';
 import {liveGroupJourneys} from './test-live-groups.mjs';
 import {dailyJourneys} from './test-daily-practice.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
+import {speakText} from '../src/lib/notation.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const origin='http://127.0.0.1:3050';
@@ -32,7 +33,7 @@ const routeOf=(page,topic)=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)|
 async function answerCurrent(page,topic){
   const p=problemFor(await routeOf(page,topic));
   for(let i=0;i<p.labels.length;i++){
-    const unit=p.fields?.[i]?.unit,name=unit?`${p.labels[i]} in ${unit}`:p.labels[i];
+    const unit=p.fields?.[i]?.unit,name=unit?`${speakText(p.labels[i])} in ${speakText(unit)}`:speakText(p.labels[i]);
     await page.getByRole('textbox',{name,exact:true}).fill(String(p.expected[i]));
   }
   await page.getByRole('button',{name:'Check my answer'}).click();
@@ -50,7 +51,7 @@ try{
    await page.goto(origin+'/challenge?code=FQ1');await page.getByLabel('First number',{exact:true}).fill('2');await page.getByLabel('Second number',{exact:true}).fill('6');await page.getByRole('button',{name:'Check this answer',exact:true}).click();
    await page.getByRole('button',{name:'Try a fresh question'}).click();await page.locator('.question-stage').waitFor();
    assert.equal(await page.getByText('Comeback check',{exact:true}).count(),0);
-   for(let i=0;i<2;i++){const st=await saved(page),r=st.routes.quadratics,p=problemFor(r);for(let j=0;j<p.labels.length;j++)await page.getByRole('textbox',{name:p.labels[j],exact:true}).fill(String(p.expected[j]));await page.getByRole('button',{name:'Check my answer'}).click();if(i===0)await page.getByRole('button',{name:'Continue',exact:true}).click();}
+   for(let i=0;i<2;i++){const st=await saved(page),r=st.routes.quadratics,p=problemFor(r);for(let j=0;j<p.labels.length;j++)await page.getByRole('textbox',{name:speakText(p.labels[j]),exact:true}).fill(String(p.expected[j]));await page.getByRole('button',{name:'Check my answer'}).click();if(i===0)await page.getByRole('button',{name:'Continue',exact:true}).click();}
    await page.getByRole('button',{name:'Continue my session'}).click();
    await page.getByRole('heading',{name:'You used it on fresh problems.'}).waitFor();await page.getByRole('textbox',{name:'Note to future you'}).fill('Check both the sum and the product.');await page.getByRole('button',{name:'Save my note'}).click();
    const before=await saved(page);assert.equal(before.xp,10);assert.equal(Object.keys(before.review).length,1);assert.ok(before.review['skill:factor'].dueAt>Date.now());

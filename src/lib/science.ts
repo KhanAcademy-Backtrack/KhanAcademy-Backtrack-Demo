@@ -27,7 +27,8 @@ export const ATOMIC_MASS:Record<string,number>={H:1.008,C:12.011,N:14.007,O:15.9
 export const ELEMENT_NAMES:Record<string,string>={H:'hydrogen',C:'carbon',N:'nitrogen',O:'oxygen',Na:'sodium',Mg:'magnesium',S:'sulfur',Cl:'chlorine',K:'potassium',Ca:'calcium',Fe:'iron',Cu:'copper',Zn:'zinc'};
 
 export type Composition=Record<string,number>;
-/** `plain` is screen text, `latex` is typeset notation, `speak` is the authored spoken form. */
+/** `plain` is the formula as ordinary characters, for controls that cannot hold typeset notation;
+ *  `latex` is the notation every prompt and explanation uses; `speak` is the authored spoken form. */
 export type Species={plain:string;latex:string;speak:string;parts:Composition};
 
 export const round=(value:number,decimals:number)=>Math.round(value*10**decimals)/10**decimals;
@@ -101,34 +102,38 @@ const spokenNewtons=(n:number)=>`${n<0?'minus ':''}${Math.abs(n)} newton${Math.a
 /** Render a signed quantity with a typographic minus, never a hyphen. */
 export const signed=(n:number)=>n<0?`−${Math.abs(n)}`:`${n}`;
 const num=(field:string,unit?:string):AnswerField=>({label:field,kind:'number',unit});
+/** A formula, an equation or a quantity in running text: LaTeX between dollar signs. */
+const tx=(latex:string)=>`$${latex}$`;
+/** A signed number in LaTeX source, with a plain hyphen the typesetter sets as a minus. */
+const texSigned=(n:number)=>`${n}`;
 
 function atomCount(v:number,id:string):Problem{
  const c=COMPOUNDS[v%COMPOUNDS.length],k=1+Math.floor(v/COMPOUNDS.length)%20;
  const elements=Object.keys(c.parts),el=elements[v%elements.length],per=c.parts[el],name=ELEMENT_NAMES[el];
  return {id,expression:`${k}\\,${c.latex}`,speak:`${k} ${c.speak}`,
-  prompt:`How many ${name} atoms are in ${k} formula units of ${c.plain}?`,
+  prompt:`How many ${name} atoms are in ${k} formula units of ${tx(c.latex)}?`,
   labels:[`${name.charAt(0).toUpperCase()+name.slice(1)} atoms`],fields:[num(`${name.charAt(0).toUpperCase()+name.slice(1)} atoms`)],expected:[k*per],
-  hint:`A subscript counts atoms inside one unit, and the number in front counts the units. One ${c.plain} unit holds ${per} ${name} atom${per===1?'':'s'}.`,
-  explanation:`The subscript and the coefficient do different jobs. The subscript ${per} belongs to ${name} inside one ${c.plain} unit; the coefficient ${k} says how many of those units there are. Changing either one changes the substance or the amount, so they multiply: ${k} × ${per} = ${k*per} ${name} atoms.`};
+  hint:`A subscript counts atoms inside one unit, and the number in front counts the units. One ${tx(c.latex)} unit holds ${per} ${name} atom${per===1?'':'s'}.`,
+  explanation:`The subscript and the coefficient do different jobs. The subscript ${per} belongs to ${name} inside one ${tx(c.latex)} unit; the coefficient ${k} says how many of those units there are. Changing either one changes the substance or the amount, so they multiply: ${tx(`${k} \\times ${per} = ${k*per}`)} ${name} atoms.`};
 }
 
 function formulaMassItem(v:number,id:string):Problem{
  const c=COMPOUNDS[v%COMPOUNDS.length],n=1+Math.floor(v/COMPOUNDS.length)%20,M=formulaMass(c.parts);
- const table=Object.keys(c.parts).map(el=>`${el} = ${ATOMIC_MASS[el]}`).join(', ');
+ const table=Object.keys(c.parts).map(el=>tx(`\\mathrm{${el}} = ${ATOMIC_MASS[el]}`)).join(', ');
  return {id,expression:`${n}\\,\\mathrm{mol}\\,${c.latex}`,speak:`${n} moles of ${c.speak}`,
-  prompt:`What is the mass of ${n} mol of ${c.plain}? Relative atomic masses: ${table}. Give your answer in grams to 2 decimal places.`,
+  prompt:`What is the mass of ${n} mol of ${tx(c.latex)}? Relative atomic masses: ${table}. Give your answer in grams to 2 decimal places.`,
   labels:['Mass'],fields:[num('Mass','g')],expected:[round(n*M,2)],decimals:2,tolerance:toleranceFor(2),
   hint:`A formula mass counts every atom in one unit. Add each element's mass times its subscript to get the mass of one mole, then scale by ${n}.`,
-  explanation:`One mole of ${c.plain} is every atom in the formula counted once: ${Object.entries(c.parts).map(([el,q])=>`${q} × ${ATOMIC_MASS[el]}`).join(' + ')} = ${M} g/mol. Mass is proportional to amount, so ${n} mol has ${n} × ${M} = ${round(n*M,2)} g. Adding instead of multiplying would treat the amount as an extra substance.`};
+  explanation:`One mole of ${tx(c.latex)} is every atom in the formula counted once: ${tx(`${Object.entries(c.parts).map(([el,q])=>`${q} \\times ${ATOMIC_MASS[el]}`).join(' + ')} = ${M}\\,\\mathrm{g/mol}`)}. Mass is proportional to amount, so ${n} mol has ${tx(`${n} \\times ${M} = ${round(n*M,2)}\\,\\mathrm{g}`)}. Adding instead of multiplying would treat the amount as an extra substance.`};
 }
 
 function molesGoal(v:number,id:string):Problem{
  const c=COMPOUNDS[v%COMPOUNDS.length],mass=10+5*(Math.floor(v/COMPOUNDS.length)%20),M=formulaMass(c.parts);
  return {id,expression:`${mass}\\,\\mathrm{g}\\,${c.latex}`,speak:`${mass} grams of ${c.speak}`,
-  prompt:`How many moles are in ${mass} g of ${c.plain}? Its molar mass is ${M} g/mol. Give your answer to 2 decimal places.`,
+  prompt:`How many moles are in ${mass} g of ${tx(c.latex)}? Its molar mass is ${M} g/mol. Give your answer to 2 decimal places.`,
   labels:['Amount'],fields:[num('Amount','mol')],expected:[round(mass/M,2)],decimals:2,tolerance:toleranceFor(2),
   hint:`Molar mass is the mass of one mole. Ask how many of those one-mole portions fit inside ${mass} g.`,
-  explanation:`Molar mass links mass to amount: one mole of ${c.plain} weighs ${M} g. So the number of moles is how many times ${M} g fits into ${mass} g: ${mass} ÷ ${M} = ${round(mass/M,2)} mol. Multiplying instead would answer a different question: the mass of ${mass} moles.`};
+  explanation:`Molar mass links mass to amount: one mole of ${tx(c.latex)} weighs ${M} g. So the number of moles is how many times ${M} g fits into ${mass} g: ${tx(`${mass} \\div ${M} = ${round(mass/M,2)}\\,\\mathrm{mol}`)}. Multiplying instead would answer a different question: the mass of ${mass} moles.`};
 }
 
 function balancingGoal(v:number,id:string):Problem{
@@ -140,10 +145,10 @@ function balancingGoal(v:number,id:string):Problem{
  const unknown=e.species.map((sp,i)=>({sp,i})).filter(x=>x.i!==given);
  return {id,expression:`${side(0,e.reactants)} → ${side(e.reactants,e.species.length)}`,
   speak:`${e.species.slice(0,e.reactants).map((sp,i)=>`${i===given?coefficients[i]:'what'} ${sp.speak}`).join(' plus ')} yields ${e.species.slice(e.reactants).map((sp,i)=>`${i+e.reactants===given?coefficients[i+e.reactants]:'what'} ${sp.speak}`).join(' plus ')}`,
-  prompt:`Complete the balanced equation. The coefficient of ${e.species[given].plain} is ${coefficients[given]}.`,
-  labels:unknown.map(x=>`Coefficient of ${x.sp.plain}`),fields:unknown.map(x=>num(`Coefficient of ${x.sp.plain}`)),expected:unknown.map(x=>coefficients[x.i]),
+  prompt:`Complete the balanced equation. The coefficient of ${tx(e.species[given].latex)} is ${coefficients[given]}.`,
+  labels:unknown.map(x=>`Coefficient of ${tx(x.sp.latex)}`),fields:unknown.map(x=>num(`Coefficient of ${tx(x.sp.latex)}`)),expected:unknown.map(x=>coefficients[x.i]),
   hint:`Atoms are rearranged, never created or destroyed, so each element must appear the same number of times on both sides. Only the coefficients may change; changing a subscript would change the substance.`,
-  explanation:`The invariant is the atom count: every element has the same total on both sides. With ${e.species[given].plain} fixed at ${coefficients[given]}, the only set that balances is ${e.species.map((sp,i)=>`${coefficients[i]} ${sp.plain}`).slice(0,e.reactants).join(' + ')} → ${e.species.map((sp,i)=>`${coefficients[i]} ${sp.plain}`).slice(e.reactants).join(' + ')}. Editing a subscript to make the numbers fit would silently swap the substance for a different one.`};
+  explanation:`The invariant is the atom count: every element has the same total on both sides. With ${tx(e.species[given].latex)} fixed at ${coefficients[given]}, the only set that balances is ${tx(`${e.species.map((sp,i)=>`${coefficients[i]}\\,${sp.latex}`).slice(0,e.reactants).join(' + ')} \\to ${e.species.map((sp,i)=>`${coefficients[i]}\\,${sp.latex}`).slice(e.reactants).join(' + ')}`)}. Editing a subscript to make the numbers fit would silently swap the substance for a different one.`};
 }
 
 function unitConvert(v:number,id:string):Problem{
@@ -152,26 +157,26 @@ function unitConvert(v:number,id:string):Problem{
   return {id,expression:`${speed}\\,\\mathrm{km/h}`,speak:`${speed} kilometres per hour`,
    prompt:`Convert ${speed} km/h to metres per second. Give your answer to 2 decimal places.`,
    labels:['Speed'],fields:[num('Speed','m/s')],expected:[answer],decimals:2,tolerance:toleranceFor(2),
-   hint:`One kilometre is 1000 m and one hour is 3600 s, so the same speed in m/s is the km/h figure scaled by 1000/3600.`,
-   explanation:`A conversion changes the units, never the speed itself. 1 km/h = 1000 m ÷ 3600 s = 1/3.6 m/s, so ${speed} ÷ 3.6 = ${answer} m/s. Multiplying by 3.6 would give the number a larger unit deserves, describing a faster motion than the one you were given.`};}
+   hint:`One kilometre is 1000 m and one hour is 3600 s, so the same speed in m/s is the km/h figure scaled by ${tx('\\frac{1000}{3600}')}.`,
+   explanation:`A conversion changes the units, never the speed itself. ${tx('1\\,\\mathrm{km/h} = 1000\\,\\mathrm{m} \\div 3600\\,\\mathrm{s} = \\frac{1}{3.6}\\,\\mathrm{m/s}')}, so ${tx(`${speed} \\div 3.6 = ${answer}\\,\\mathrm{m/s}`)}. Multiplying by 3.6 would give the number a larger unit deserves, describing a faster motion than the one you were given.`};}
  if(type===1){const speed=1+i,answer=round(speed*3.6,1);
   return {id,expression:`${speed}\\,\\mathrm{m/s}`,speak:`${speed} metres per second`,
    prompt:`Convert ${speed} m/s to kilometres per hour. Give your answer to 1 decimal place.`,
    labels:['Speed'],fields:[num('Speed','km/h')],expected:[answer],decimals:1,tolerance:toleranceFor(1),
    hint:`In one hour there are 3600 s, and 1000 m make a kilometre. The same motion covers 3.6 times as many kilometres per hour as metres per second.`,
-   explanation:`The motion is unchanged; only its description changes. 1 m/s = 3600 m per hour = 3.6 km/h, so ${speed} × 3.6 = ${answer} km/h. Dividing by 3.6 reverses the conversion and would describe a much slower motion.`};}
+   explanation:`The motion is unchanged; only its description changes. ${tx('1\\,\\mathrm{m/s} = 3600\\text{ m per hour} = 3.6\\,\\mathrm{km/h}')}, so ${tx(`${speed} \\times 3.6 = ${answer}\\,\\mathrm{km/h}`)}. Dividing by 3.6 reverses the conversion and would describe a much slower motion.`};}
  if(type===2){const tenths=5+i,answer=tenths*100;
   return {id,expression:`${(tenths/10).toFixed(1)}\\,\\mathrm{km}`,speak:`${(tenths/10).toFixed(1)} kilometres`,
    prompt:`Convert ${(tenths/10).toFixed(1)} km to metres.`,
    labels:['Distance'],fields:[num('Distance','m')],expected:[answer],
    hint:`A metre is a smaller unit than a kilometre, so the same distance needs a larger number of them: 1000 for every kilometre.`,
-   explanation:`The distance is fixed; the unit decides the size of the number. Smaller unit, bigger count: ${(tenths/10).toFixed(1)} × 1000 = ${answer} m. Dividing by 1000 would shrink the number and the distance with it.`};}
+   explanation:`The distance is fixed; the unit decides the size of the number. Smaller unit, bigger count: ${tx(`${(tenths/10).toFixed(1)} \\times 1000 = ${answer}\\,\\mathrm{m}`)}. Dividing by 1000 would shrink the number and the distance with it.`};}
  const tenths=10+i,answer=tenths*6;
  return {id,expression:`${(tenths/10).toFixed(1)}\\,\\mathrm{min}`,speak:`${(tenths/10).toFixed(1)} minutes`,
   prompt:`Convert ${(tenths/10).toFixed(1)} minutes to seconds.`,
   labels:['Time'],fields:[num('Time','s')],expected:[answer],
   hint:`A second is smaller than a minute, so the same interval counts 60 of them for every minute.`,
-  explanation:`The interval does not change; only the unit does. ${(tenths/10).toFixed(1)} × 60 = ${answer} s. Because a second is the smaller unit, the number must grow. Dividing would describe a much shorter interval.`};
+  explanation:`The interval does not change; only the unit does. ${tx(`${(tenths/10).toFixed(1)} \\times 60 = ${answer}\\,\\mathrm{s}`)}. Because a second is the smaller unit, the number must grow. Dividing would describe a much shorter interval.`};
 }
 
 function netForce(v:number,id:string):Problem{
@@ -182,22 +187,22 @@ function netForce(v:number,id:string):Problem{
   prompt:`Two forces act on a block along one straight line. Taking right as positive and left as negative, what is the net force?`,
   labels:['Net force'],fields:[num('Net force','N')],expected:[net],
   hint:`Forces on one line combine by addition once each carries its own sign. The sign of the total tells you which way the block is pushed.`,
-  explanation:`Forces are not separate effects to be judged one at a time; along a line they add as signed quantities. ${signed(first)} + ${signed(second)} = ${signed(net)} N. ${net===0?'The two cancel exactly, so the block has no net push at all. That is balance, not the absence of forces.':`The sign says the block is pushed to the ${net>0?'right':'left'}.`} Adding the sizes while ignoring the signs would describe two forces pulling the same way, which is a different situation.`};
+  explanation:`Forces are not separate effects to be judged one at a time; along a line they add as signed quantities. ${tx(`${texSigned(first)} + (${texSigned(second)}) = ${texSigned(net)}\\,\\mathrm{N}`)}. ${net===0?'The two cancel exactly, so the block has no net push at all. That is balance, not the absence of forces.':`The sign says the block is pushed to the ${net>0?'right':'left'}.`} Adding the sizes while ignoring the signs would describe two forces pulling the same way, which is a different situation.`};
 }
 
-const RELATIONS=['F = m × a','m = F ÷ a','a = F ÷ m'];
+const RELATIONS=['$F = m \\times a$','$m = F \\div a$','$a = F \\div m$'];
 function forcesGoal(v:number,id:string):Problem{
  const mass=2+v%10,accel=1+Math.floor(v/10)%8,which=Math.floor(v/80)%3,force=mass*accel;
  const shown=which===0?`m = ${mass}\\,\\mathrm{kg},\\,a = ${accel}\\,\\mathrm{m/s^{2}}`:which===1?`F = ${force}\\,\\mathrm{N},\\,a = ${accel}\\,\\mathrm{m/s^{2}}`:`F = ${force}\\,\\mathrm{N},\\,m = ${mass}\\,\\mathrm{kg}`;
  const speak=which===0?`m equals ${mass} kilograms, a equals ${accel} metres per second squared`:which===1?`F equals ${force} newtons, a equals ${accel} metres per second squared`:`F equals ${force} newtons, m equals ${mass} kilograms`;
- const wanted=which===0?{label:'Force',unit:'N',value:force}:which===1?{label:'Mass',unit:'kg',value:mass}:{label:'Acceleration',unit:'m/s²',value:accel};
+ const wanted=which===0?{label:'Force',unit:'N',value:force}:which===1?{label:'Mass',unit:'kg',value:mass}:{label:'Acceleration',unit:'$\\mathrm{m/s^{2}}$',value:accel};
  return {id,expression:shown,speak,
-  prompt:`A single net force acts on a block. Work out the missing quantity, then say which rearrangement of F = ma you used.`,
+  prompt:`A single net force acts on a block. Work out the missing quantity, then say which rearrangement of $F = ma$ you used.`,
   labels:[wanted.label,'Rearrangement used'],
   fields:[num(wanted.label,wanted.unit),{label:'Rearrangement used',kind:'choice',options:RELATIONS}],
   expected:[wanted.value,which],
-  hint:`F = ma ties the three quantities together, so any one of them can be found from the other two. Decide which one is missing before you calculate, and rearrange for that one.`,
-  explanation:`The relationship F = ma is one statement, not three separate formulas: a net force of ${force} N on ${mass} kg produces ${accel} m/s². Here ${wanted.label.toLowerCase()} was missing, so the useful rearrangement is ${RELATIONS[which]}, giving ${wanted.value} ${wanted.unit}. Reaching for F = ma every time and multiplying whatever numbers appear would answer whichever question the numbers happened to fit, not the one that was asked.`};
+  hint:`$F = ma$ ties the three quantities together, so any one of them can be found from the other two. Decide which one is missing before you calculate, and rearrange for that one.`,
+  explanation:`The relationship $F = ma$ is one statement, not three separate formulas: a net force of ${force} N on ${mass} kg produces ${tx(`${accel}\\,\\mathrm{m/s^{2}}`)}. Here ${wanted.label.toLowerCase()} was missing, so the useful rearrangement is ${RELATIONS[which]}, giving ${wanted.unit.startsWith('$')?tx(`${wanted.value}\\,\\mathrm{m/s^{2}}`):`${wanted.value} ${wanted.unit}`}. Reaching for $F = ma$ every time and multiplying whatever numbers appear would answer whichever question the numbers happened to fit, not the one that was asked.`};
 }
 
 /** Science item families. Returns undefined for every mathematics (topic, skill) pair. */
@@ -217,8 +222,8 @@ function motionGoal(v:number,id:string):Problem{
  const u=2+v%8,a=1+Math.floor(v/8)%6,t=2+Math.floor(v/48)%5;
  return {id,expression:`u = ${u}\\,\\mathrm{m/s},\\,a = ${a}\\,\\mathrm{m/s^{2}},\\,t = ${t}\\,\\mathrm{s}`,
   speak:`u equals ${u} metres per second, a equals ${a} metres per second squared, t equals ${t} seconds`,
-  prompt:`A cart is already moving at ${u} m/s and speeds up steadily at ${a} m/s² for ${t} s. What is its final speed?`,
+  prompt:`A cart is already moving at ${u} m/s and speeds up steadily at ${tx(`${a}\\,\\mathrm{m/s^{2}}`)} for ${t} s. What is its final speed?`,
   labels:['Final speed'],fields:[num('Final speed','m/s')],expected:[u+a*t],
-  hint:`Acceleration is how much speed is added each second, so ${t} seconds add ${a} × ${t}. The cart was already moving, so that gain is added to the speed it started with.`,
-  explanation:`Steady acceleration means a fixed gain in speed every second: v = u + at. The ${a} m/s² adds ${a*t} m/s over ${t} s, on top of the ${u} m/s it already had, giving ${u+a*t} m/s. Using at alone would describe a cart starting from rest, a different journey with the same acceleration.`};
+  hint:`Acceleration is how much speed is added each second, so ${t} seconds add ${tx(`${a} \\times ${t}`)}. The cart was already moving, so that gain is added to the speed it started with.`,
+  explanation:`Steady acceleration means a fixed gain in speed every second: $v = u + at$. The ${tx(`${a}\\,\\mathrm{m/s^{2}}`)} adds ${a*t} m/s over ${t} s, on top of the ${u} m/s it already had, giving ${u+a*t} m/s. Using $at$ alone would describe a cart starting from rest, a different journey with the same acceleration.`};
 }

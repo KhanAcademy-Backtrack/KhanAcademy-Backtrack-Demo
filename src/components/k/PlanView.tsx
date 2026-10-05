@@ -17,6 +17,7 @@ import {EXAMS} from '@/lib/program/admissions';
 import {SUBTEST_LABEL,SUBTESTS,type Subtest} from '@/lib/mock/types';
 import {khanLabel} from '@/lib/program/khan-units';
 import {DUR} from '@/lib/motion-tokens';
+import {Rich} from '@/components/math/Math';
 
 const short=(d:string)=>parseDay(d).toLocaleDateString('en-PH',{month:'short',day:'numeric'});
 
@@ -62,7 +63,7 @@ export function PlanView(){
     <div role="tablist" aria-label="Subjects" className="sticky top-16 z-20 -mx-2 mt-5 grid grid-cols-4 gap-1 rounded-2xl bg-white p-2 shadow-sheet sm:flex sm:flex-wrap sm:gap-2">{SUBTESTS.map(sub=><button key={sub} role="tab" aria-selected={tab===sub} onClick={()=>setTab(sub)} className={cx('min-h-11 rounded-full border-2 px-1 text-xs font-bold sm:px-4 sm:text-base',tab===sub?'border-navy bg-navy text-white':'border-navy/15 text-navy')}>{sub==='language'?'Language':sub==='reading'?'Reading':sub==='math'?'Math':'Science'}</button>)}</div>
     <ul role="tabpanel" className="mt-4 divide-y divide-mint-line">
      {conceptsOf(tab).map(c=>{const r=byId.get(c.id)!,st=statusOf(r);return <li key={c.id} className="grid gap-3 py-4 sm:grid-cols-[1fr_auto] sm:items-center">
-      <div className="flex gap-3"><Oval filled={st==='solid'} size={30} className="mt-1"/><div><p className="text-sm text-ink-soft">{c.area}</p><Link href={`/learn/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-[15px] text-ink-soft">{c.blurb}</p>
+      <div className="flex gap-3"><Oval filled={st==='solid'} size={30} className="mt-1"/><div><p className="text-sm text-ink-soft">{c.area}</p><Link href={`/learn/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-[15px] text-ink-soft"><Rich>{c.blurb}</Rich></p>
        <p className="mt-1 text-sm"><span className={cx('font-semibold',st==='focus here'?'text-navy':'text-ink-soft')}>{st}</span>{r.accuracy!==undefined&&<span className="text-ink-soft"> · {r.accuracy}% lately</span>}{c.khan[0]?<span className="text-ink-soft"> · Khan: {khanLabel(c.khan[0])}</span>:<span className="text-ink-soft"> · taught in Khanpanion</span>}</p></div></div>
       <div className="flex flex-wrap gap-2 sm:justify-end"><Link href={`/learn/${c.id}`} className={btn.ghost}>Learn</Link><Link href={`/mock/take?f=topic~${c.id}|${today.replace(/-/g,'')}&mode=practice`} className={btn.dark}>Topic check</Link></div>
      </li>;})}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {initialRecovery,problemFor,recoveryReducer as reduce,isCorrect,answerInputIssue,validRecovery,TOPICS,ORDER,subjectOf} from '../src/lib/recovery.ts';
 import {ATOMIC_MASS,COMPOUNDS,EQUATIONS,formulaMass,round} from '../src/lib/science.ts';
 import {visualKind,visualReserveThrough} from '../src/lib/concept-labs.ts';
-import {speakMath} from '../src/lib/notation.ts';
+import {speakMath,plainText} from '../src/lib/notation.ts';
 import {initialStudy,prepareRound,completeStudyTask,planSession,beginSession,validStudy,PACKS,STUDY_KEY} from '../src/lib/study.ts';
 import {loadStudy} from '../src/lib/study-storage.ts';
 
@@ -117,7 +117,7 @@ test('every generated balancing item is genuinely balanced, element by element',
     const e=EQUATIONS[serial%EQUATIONS.length];
     // Rebuild the full coefficient list from the one shown plus the expected answers.
     const shown=Number(p.prompt.match(/is (\d+)\.$/)[1]);
-    const givenIndex=e.species.findIndex(sp=>p.prompt.includes(`coefficient of ${sp.plain} is`));
+    const givenIndex=e.species.findIndex(sp=>p.prompt.includes(`coefficient of $${sp.latex}$ is`));
     assert.ok(givenIndex>=0,p.id);
     const coefficients=[];let next=0;
     for(let i=0;i<e.species.length;i++)coefficients.push(i===givenIndex?shown:p.expected[next++]);
@@ -147,13 +147,13 @@ test('the reviewed skeletons themselves balance before any scaling',()=>{
 test('every kinematics item satisfies v = u + at',()=>{
   for(let serial=0;serial<240;serial++){
     const p=problemFor({...initialRecovery('motion'),active:'goal',serial});
-    const [,u,a,t]=p.prompt.match(/at (\d+) m\/s and speeds up steadily at (\d+) m\/s² for (\d+) s/).map(Number);
+    const [,u,a,t]=plainText(p.prompt).match(/at (\d+) m\/s and speeds up steadily at (\d+) m\/s² for (\d+) s/).map(Number);
     assert.equal(p.expected[0],u+a*t,p.id);
   }
 });
 
 test('every F = ma item is consistent whichever quantity is unknown',()=>{
-  const relations=['F = m × a','m = F ÷ a','a = F ÷ m'];
+  const relations=['$F = m \\times a$','$m = F \\div a$','$a = F \\div m$'];
   for(let serial=0;serial<240;serial++){
     const p=problemFor({...initialRecovery('forces'),active:'goal',serial});
     const numbers=[...p.expression.matchAll(/(\w) = (\d+)/g)].map(m=>[m[1],Number(m[2])]);
@@ -163,7 +163,7 @@ test('every F = ma item is consistent whichever quantity is unknown',()=>{
     assert.equal(all.F,all.m*all.a,p.id);
     assert.equal(p.fields[1].kind,'choice');
     assert.deepEqual(p.fields[1].options,relations);
-    assert.equal(p.fields[0].unit,['N','kg','m/s²'][choice]);
+    assert.equal(p.fields[0].unit,['N','kg','$\\mathrm{m/s^{2}}$'][choice]);
   }
 });
 

@@ -5,6 +5,7 @@ import {Companion} from '@/components/study/Companion';
 import {useMotionPolicy} from '@/components/motion/MotionPolicy';
 import {DUR,tween} from '@/lib/motion-tokens';
 import {exploreValue,type ExploreItem,type ExploreState} from '@/lib/explore';
+import {Rich} from '@/components/math/Math';
 
 export function ExploreScene({item,history,onValue,active,still}:{item:ExploreItem;history:ExploreState;onValue:(key:string,value:number)=>void;active:boolean;still:boolean}){
  const {off}=useMotionPolicy(still||!active);
@@ -42,6 +43,6 @@ export function ExploreScene({item,history,onValue,active,still}:{item:ExploreIt
    <motion.g initial={false} animate={{x:55+value*58,y:235-(6+2*value)*11}} transition={transition}><circle r="9" fill="#14bf96" stroke="#0a2a66"/></motion.g>
    <rect x="401" y="49" width="88" height="187" rx="8" fill="#eef8f5" stroke="#0a2a66" strokeWidth="2"/><g transform="translate(404,233)"><motion.rect initial={false} animate={{scaleY:(6+2*value)/18}} style={{originX:0,originY:1}} transition={transition} x="0" y="-180" width="82" height="180" rx="5" fill="#14bf96"/></g><text x="445" y="268" textAnchor="middle">{6+2*value} L</text>
   </svg>}
-  {item.scene==='factors'&&<p className="explore-proportion-note">The picture uses x = 5.</p>}<div className="explore-scene-controls">{isToggle?<button type="button" className="explore-action" aria-pressed={!!value} onClick={()=>change(value?0:1)}>{item.scene==='factors'?(value?'Bring the pieces together':'Separate the four pieces'):(value?'Put them back in groups':'Open and regroup')}</button>:<label>{label} <strong>{value}{item.scene==='mixture'?'×':item.scene==='graph'?' min':''}</strong><input type="range" min={min} max={max} step="1" value={value} onChange={e=>change(Number(e.target.value))}/></label>}</div>
+  {item.scene==='factors'&&<p className="explore-proportion-note">The picture uses <Rich>{'$x = 5$'}</Rich>.</p>}<div className="explore-scene-controls">{isToggle?<button type="button" className="explore-action" aria-pressed={!!value} onClick={()=>change(value?0:1)}>{item.scene==='factors'?(value?'Bring the pieces together':'Separate the four pieces'):(value?'Put them back in groups':'Open and regroup')}</button>:<label>{label} <strong>{value}{item.scene==='mixture'?'×':item.scene==='graph'?' min':''}</strong><input type="range" min={min} max={max} step="1" value={value} onChange={e=>change(Number(e.target.value))}/></label>}</div>
  </div>;
 }

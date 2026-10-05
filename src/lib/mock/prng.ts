@@ -32,20 +32,21 @@ export function fmt(value:number,places=4):string{
 
 export function gcd(a:number,b:number):number{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
 
-/** A fraction `n/d` in lowest terms, as text. Whole numbers print without a denominator. */
+/** Wraps LaTeX for running text: every equation on the site is LaTeX between dollar signs. */
+export const tex=(latex:string)=>`$${latex}$`;
+
+/** A fraction `n/d` in lowest terms, as LaTeX. Whole numbers print without a denominator. */
 export function fracText(n:number,d:number):string{
  if(d===0)throw Error('Zero denominator');
  if(d<0){n=-n;d=-d;}
  const g=gcd(n,d);n/=g;d/=g;
- return d===1?String(n):`${n}/${d}`;
+ return d===1?String(n):`${n<0?'-':''}\\frac{${Math.abs(n)}}{${d}}`;
 }
 
-/** Recovers a fraction from a value whose denominator is at most `limit`. */
+/** Recovers a fraction, as LaTeX, from a value whose denominator is at most `limit`. */
 export function asFraction(value:number,limit=400):string{
  for(let d=1;d<=limit;d++){const n=Math.round(value*d);if(Math.abs(n/d-value)<1e-9)return fracText(n,d);}
  return fmt(value);
 }
 
-const SUP:Record<string,string>={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
-export const sup=(n:number|string)=>String(n).split('').map(c=>SUP[c]??c).join('');
 export const peso=(v:number)=>`₱${fmt(v,2)}`;

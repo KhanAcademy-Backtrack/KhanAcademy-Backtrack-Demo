@@ -3,6 +3,7 @@ import {useEffect,useRef,useState} from 'react';
 import {animate,motion,useMotionValue,useMotionValueEvent,useTransform,type AnimationPlaybackControls} from 'motion/react';
 import {useMotionPolicy} from '@/components/motion/MotionPolicy';
 import {DUR,tween} from '@/lib/motion-tokens';
+import {Rich} from '@/components/math/Math';
 const BOTTOM=226,BASE_HEIGHT=56,fmt=(n:number)=>String(Math.round(n*10)/10);
 /** Both layers share one scale, so their two-fifths share survives every frame. */
 export function MixtureScene({value,active,still}:{value:number;active:boolean;still:boolean}){
@@ -28,6 +29,6 @@ export function MixtureScene({value,active,still}:{value:number;active:boolean;s
    </g>;})}
    <text className="mixture-multiplier" x="270" y="137" textAnchor="middle">×{fmt(view.batch)}</text><path d="M246 156h48m-8-7 8 7-8 7" fill="none" stroke="#0a2a66" strokeWidth="2"/>
   </svg>
-  <p className="explore-proportion-note">Both containers use the same volume scale.</p><div className="mixture-footer"><strong>{value===1?'2/5 syrup in both':`2/5 = ${2*value}/${5*value} syrup`}</strong><button type="button" className="mixture-replay" aria-label="Replay recipe animation" disabled={off||filling} onClick={replay}>Replay</button></div>
+  <p className="explore-proportion-note">Both containers use the same volume scale.</p><div className="mixture-footer"><strong>{value===1?<Rich>{'$\\frac{2}{5}$ syrup in both'}</Rich>:<Rich>{`$\\frac{2}{5} = \\frac{${2*value}}{${5*value}}$ syrup`}</Rich>}</strong><button type="button" className="mixture-replay" aria-label="Replay recipe animation" disabled={off||filling} onClick={replay}>Replay</button></div>
  </div>;
 }

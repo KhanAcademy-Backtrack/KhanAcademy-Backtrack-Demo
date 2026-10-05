@@ -6,6 +6,7 @@ import {DUR,tween} from '@/lib/motion-tokens';
 import { useState } from 'react';
 import { LABELS, TOPICS, type Recovery, type Skill } from '@/lib/recovery';
 import { buildCubics, resample, polylinePath } from '@/lib/route-geometry';
+import {Rich} from '@/components/math/Math';
 
 export function RouteCanvas({ state, compact = false }: { state: Recovery; compact?: boolean }) {
   const {off}=useMotionPolicy();
@@ -31,6 +32,6 @@ export function RouteCanvas({ state, compact = false }: { state: Recovery; compa
       </svg>
       <ol className="roadmap-stops">{nodes.map(id=><li key={id} data-active={id===state.active}><button onClick={()=>setSelected(selected===id?null:id)} aria-expanded={selected===id}><span>{id===destination?'Today’s goal':LABELS[id]}</span><small>{status(id)}</small></button></li>)}</ol>
     </div>
-    {selected&&nodes.includes(selected)&&<p className="route-reason">{state.routeClue?.skill===selected?state.routeClue.message:selected===destination?`Return to ${(state.goalTitle??TOPICS[state.topic].label).toLowerCase()} with two fresh problems.`:`A useful step toward ${(state.goalTitle??TOPICS[state.topic].label).toLowerCase()}. Pass two fresh checks to skip its review.`}</p>}
+    {selected&&nodes.includes(selected)&&<p className="route-reason">{state.routeClue?.skill===selected?<Rich>{state.routeClue.message}</Rich>:selected===destination?`Return to ${(state.goalTitle??TOPICS[state.topic].label).toLowerCase()} with two fresh problems.`:`A useful step toward ${(state.goalTitle??TOPICS[state.topic].label).toLowerCase()}. Pass two fresh checks to skip its review.`}</p>}
   </div>;
 }

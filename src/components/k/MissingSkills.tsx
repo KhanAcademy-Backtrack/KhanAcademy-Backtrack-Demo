@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import {useEffect,useMemo,useState} from 'react';
 import {useStudy} from '@/components/study/StudyProvider';
-import {MathText} from '@/components/math/Math';
+import {MathText,Rich} from '@/components/math/Math';
 import {useProgram} from './ProgramProvider';
 import {useFix} from './useFix';
 import {PageBand,Sheet,btn,cx,pageBody} from './ui';
@@ -89,7 +89,7 @@ function GapCard({gap,first,context,onFix}:{gap:Gap;first:boolean;context:string
   <div className="min-w-0">
    <h3 className="text-xl font-extrabold">{gap.label}</h3>
    <p className="text-sm font-semibold text-ink-soft">{context}</p>
-   <ul className="mt-3 grid gap-1.5" aria-label={`Why ${gap.label}`}>{gap.reasons.slice(0,3).map((r,i)=><li key={i} className="flex gap-2 text-[15px]"><span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-navy"/><span>{r.text} <span className="text-ink-soft">· {day(r.at)}</span></span></li>)}</ul>
+   <ul className="mt-3 grid gap-1.5" aria-label={`Why ${gap.label}`}>{gap.reasons.slice(0,3).map((r,i)=><li key={i} className="flex gap-2 text-[15px]"><span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-navy"/><span><Rich>{r.text}</Rich> <span className="text-ink-soft">· {day(r.at)}</span></span></li>)}</ul>
   </div>
   <button type="button" className={cx(first?btn.primary:btn.ghost,'sm:mt-1')} onClick={onFix}>Fix {gap.label.toLowerCase()}</button>
  </Sheet>;

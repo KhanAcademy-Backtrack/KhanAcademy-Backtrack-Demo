@@ -40,7 +40,7 @@ export const SCIENCE_ITEMS:MockItem[]=[
   ['Provide energy directly','Enzymes help reactions happen; they are not fuel.']],0),
  energy('cell_06','Which substances does a plant use to make glucose in photosynthesis?',[
   ['Oxygen and glucose','These are products of photosynthesis and raw materials of respiration.'],
-  ['Carbon dioxide and water, using light energy','Correct. CO₂ + H₂O + light → glucose + O₂.'],
+  ['Carbon dioxide and water, using light energy','Correct. $\\mathrm{CO_{2}} + \\mathrm{H_{2}O} + \\text{light} \\to \\text{glucose} + \\mathrm{O_{2}}$.'],
   ['Nitrogen and water','Plants use nitrogen for proteins, not to make glucose.'],
   ['Carbon dioxide and oxygen','Oxygen is released, not used.']],1),
  energy('cell_07','A student says “plants do photosynthesis instead of respiration.” What is wrong with this?',[

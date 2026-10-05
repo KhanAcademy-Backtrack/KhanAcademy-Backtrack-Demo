@@ -12,6 +12,8 @@ import {DUR,SPRING} from '@/lib/motion-tokens';
 import {btn,cx,KhanLink} from './ui';
 import {useFix} from './useFix';
 import {t,type Lang} from '@/lib/i18n';
+import {Rich} from '@/components/math/Math';
+import {speakText} from '@/lib/notation';
 
 const LETTERS=['A','B','C','D'];
 
@@ -43,8 +45,8 @@ export function WhyPanel({item,chosen,lang='en',linksBeside=false}:{item:MockIte
  const mid=chosen!==null?item.misconceptions[chosen]:null,m=mid?misconception(mid):undefined;
  const rationale=chosen!==null?item.rationales?.[chosen]:undefined;
  return <div className="rounded-xl border border-line bg-white p-4 text-[15px] leading-relaxed text-navy">
-  {m?<><p className="font-bold">{m.label}</p><p className="mt-1"><span className="font-semibold">{t(lang,'result.why')}: </span>{m.why}</p><p className="mt-2">{m.fix}</p></>
-   :rationale&&chosen!==item.answerIndex?<p>{rationale}</p>
+  {m?<><p className="font-bold"><Rich>{m.label}</Rich></p><p className="mt-1"><span className="font-semibold">{t(lang,'result.why')}: </span><Rich>{m.why}</Rich></p><p className="mt-2"><Rich>{m.fix}</Rich></p></>
+   :rationale&&chosen!==item.answerIndex?<p><Rich>{rationale}</Rich></p>
    :chosen===null?<p>No answer yet is an honest place to start. The worked steps below show the whole method.</p>:null}
   {!linksBeside&&<FixLinks item={item} chosen={chosen} lang={lang} className="mt-3"/>}
  </div>;
@@ -53,9 +55,9 @@ export function WhyPanel({item,chosen,lang='en',linksBeside=false}:{item:MockIte
 export function Explanation({item}:{item:MockItem}){
  return <div className="rounded-xl bg-sky/70 p-4 text-[15px] leading-relaxed text-navy sm:p-5">
   <p className="font-bold">Worked solution</p>
-  <ol className="mt-2 list-decimal space-y-1 pl-5 font-serif text-[17px]">{item.solutionSteps.map((s,i)=><li key={i}>{s}</li>)}</ol>
+  <ol className="mt-2 list-decimal space-y-1 pl-5 font-serif text-[17px]">{item.solutionSteps.map((s,i)=><li key={i}><Rich>{s}</Rich></li>)}</ol>
   <p className="mt-4 font-bold">Every choice</p>
-  <ul className="mt-2 space-y-2">{item.choices.map((c,i)=>{const m=item.misconceptions[i]?misconception(item.misconceptions[i]!):undefined;return <li key={i} className="flex gap-3"><span className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',i===item.answerIndex?'bg-green':'bg-white')}>{LETTERS[i]}</span><span><span className="font-serif">{c}</span>{' '}<span className="text-ink-soft">{i===item.answerIndex?'Correct.':m?`${m.label}. ${m.why}`:item.rationales?.[i]??''}</span></span></li>;})}</ul>
+  <ul className="mt-2 space-y-2">{item.choices.map((c,i)=>{const m=item.misconceptions[i]?misconception(item.misconceptions[i]!):undefined;return <li key={i} className="flex gap-3"><span className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',i===item.answerIndex?'bg-green':'bg-white')}>{LETTERS[i]}</span><span><span className="font-serif"><Rich>{c}</Rich></span>{' '}<span className="text-ink-soft"><Rich>{i===item.answerIndex?'Correct.':m?`${m.label}. ${m.why}`:item.rationales?.[i]??''}</Rich></span></span></li>;})}</ul>
  </div>;
 }
 
@@ -82,18 +84,18 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
  const feedback=mode==='practice'&&revealed?(right?'Correct.':idk?'Good call being honest. Here is how it works.':'Not this time. Here is why.'):null;
  return <div className="text-navy">
   {showPassage&&item.passageId&&<div className="mb-5"><PassageView id={item.passageId}/></div>}
-  <div className={cx(spacious&&'flex min-h-24 items-center py-2 sm:min-h-28')}><p className={cx('font-serif leading-[1.5]',spacious?'max-w-3xl text-[24px] sm:text-[28px]':'text-[21px] sm:text-[23px]')}>{number!==undefined&&<span className="mr-2 font-sans text-base font-bold text-ink-soft">{number}.</span>}{item.stem}</p></div>
+  <div className={cx(spacious&&'flex min-h-24 items-center py-2 sm:min-h-28')}><p className={cx('font-serif leading-[1.5]',spacious?'max-w-3xl text-[24px] sm:text-[28px]':'text-[21px] sm:text-[23px]')}>{number!==undefined&&<span className="mr-2 font-sans text-base font-bold text-ink-soft">{number}.</span>}<Rich>{item.stem}</Rich></p></div>
   <p aria-live="polite" className={cx('mb-3 mt-5 text-sm font-semibold',feedback?(right?'text-green-deep':'text-navy'):'text-ink-soft')}>{feedback??<>Choose an answer{keys&&<span className="hidden font-normal sm:inline"> · or press 1–{item.choices.length}</span>}</>}</p>
   <div role="radiogroup" aria-label="Choices" className={cx('grid gap-3',spacious&&'sm:grid-cols-2')}>
    {item.choices.map((c,i)=>{
     const picked=chosen===i,isKey=i===item.answerIndex;
     const state=!revealed?(picked?'picked':'idle'):isKey?'key':picked?'wrong':'dim';
-    return <motion.button key={i} role="radio" aria-label={c} aria-checked={picked} aria-keyshortcuts={keys?`${i+1} ${LETTERS[i]}`:undefined} disabled={locked} onClick={()=>onChoose(i)} style={{scale:i===item.answerIndex?settle:1}}
+    return <motion.button key={i} role="radio" aria-label={speakText(c)} aria-checked={picked} aria-keyshortcuts={keys?`${i+1} ${LETTERS[i]}`:undefined} disabled={locked} onClick={()=>onChoose(i)} style={{scale:i===item.answerIndex?settle:1}}
      animate={{opacity:state==='dim'?.5:1}} transition={reduced?{duration:0}:{duration:DUR.base}}
      className={cx('group flex w-full items-center gap-4 rounded-lg border-2 px-4 py-3 text-left text-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',spacious?'min-h-16 sm:min-h-20':'min-h-14',
       state==='picked'?'border-navy bg-mint':state==='key'?'border-green bg-mint':state==='wrong'?'border-dashed border-navy bg-white':'border-line bg-white hover:border-line-strong')}>
      <span aria-hidden="true" className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',state==='picked'||state==='key'?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span>
-     <span className="flex-1 font-serif text-[19px] leading-snug">{c}</span>
+     <span className="flex-1 font-serif text-[19px] leading-snug"><Rich>{c}</Rich></span>
      {state==='key'&&<svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0 text-green-deep" aria-label="Correct answer"><motion.path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" initial={reduced||!right?false:{pathLength:0}} animate={{pathLength:1}} transition={reduced?{duration:0}:{duration:DUR.base}}/></svg>}
      {state==='wrong'&&<svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-navy" aria-label="Your answer"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"/></svg>}
     </motion.button>;})}

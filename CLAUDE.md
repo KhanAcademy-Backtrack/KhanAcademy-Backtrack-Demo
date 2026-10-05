@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 155 tests
+npm test          # node --test, currently 161 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 106 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -121,7 +121,7 @@ is submitted (results), never before answering, and opening it writes nothing: i
 - `src/lib/program/exam-outline.ts` — per-exam sub-subjects and topics (UPCAT and DCAT so far), following what established review books and sites agree the exam covers, in our own words; providers' names stay off the site. Each topic lists the summaries that teach it; one without stays greyed as "Not written yet". Section names must match `EXAM_COVERAGE`, and every summary in the exam's coverage must appear (`tests/exam-outline.test.mjs`). Sources in `docs/research/2026-10-05/UPCAT_TOPIC_OUTLINE.md` and `DCAT_TOPIC_OUTLINE.md`. Do not rebuild it from the DepEd curriculum guides; the owner found them too broad.
 - `src/lib/recovery.ts` — routing policy, item generation, answer checking. The whole product keys on `Topic`.
 - `src/lib/science.ts` — reviewed chemistry and physics constants, item families, rounding policy.
-- `src/lib/notation.ts` — notation tokeniser and spoken form (JSX-free so tests can assert it).
+- `src/lib/notation.ts` — LaTeX tokeniser, spoken form and plain form (JSX-free so tests can assert it). See "Equations are LaTeX" below.
 - `src/lib/study.ts` — packs, sessions, reviewer, exposure ledger, `validStudy`.
 - `src/components/study/ScienceLab.tsx`, `ConceptLab.tsx` — original interactive explanations.
 - `src/components/product/AnswerFields.tsx` — number and choice fields; units sit beside the box, never in it.
@@ -195,3 +195,34 @@ Every "Find my missing skill" / "Fix this" button goes through `useFix`, which s
 ## Find my missing skill, 6 October 2026
 
 `/start` is now `MissingSkills.tsx`: only the skills this learner's own answers point to, from `findGaps` in `src/lib/gaps.ts` (pure, read-only, tested in `tests/gaps.test.mjs`). Signals: submitted practice-exam misses whose misconception has a `recovery`, "I don't know yet" on concepts with an `engine`, route `suspected` steps not yet `passed`, and reviewer `lastDifficulty`, `lastAssisted` and Khan "still difficult" reports. Paused reviewer items are left out. A skill clears when its reviewer item has `streak>=2`; a later miss reopens it. Clearing never comes from activity. A gap whose prerequisite (transitively, `skillDependencies`) is also missing waits under *After that*. With no gaps the page offers the Sprint check, and the topic chooser (`[data-destination]` links) sits in a `<details>`, open only when the list is empty. Fix buttons use `useFix`, so they open the fix landing with the first reason. Three views share the component: `/start` (everything), `/start/cet` (`CET_SCOPE`: non-placement exam forms, topics CET concepts route to; context names the CET subject and topics) and `/start/college` (`collegeScope(program)`: that field's placement checks only, topics from `programTopics`; context names the first-year courses; before a field is chosen every field counts). Routes and reviewer evidence count in every view. `cet` and `college` are not topics; never add a topic with those ids. Research: `docs/research/2026-10-06/BACKTRACK_PREREQUISITE_ROUTING.md`.
+
+## Equations are LaTeX, 6 October 2026
+
+Owner request: every equation is written in LaTeX so the notation is unified. In running text an equation,
+variable, formula or chemical formula sits between dollar signs: `'Solve $2x + 3 = 11$ for $x$.'`, written
+`\\frac`, `\\times` in TS strings. `<Rich>` (`src/components/math/Math.tsx`) typesets the `$…$` parts
+inline with the house typesetter (STIX Two Text; no KaTeX, no new font or dependency) and gives each a spoken
+`aria-label`. `MathText` takes a whole expression without dollar signs. `speakText` makes accessible names,
+`plainText` makes one-line text for page titles, search, shared messages and button names tests rely on.
+
+- Any component that shows learning content (stems, choices, steps, rationales, misconceptions, reviewer,
+  TL;DR cards, BACKTRACK prompts, hints, explanations, answer labels and units, explore cards, challenges)
+  renders it through `<Rich>`. An `aria-label` built from such text uses `speakText` (or `plainText` for a
+  button whose name a browser test matches). Never lowercase or slice LaTeX source; lowercase the spoken form.
+- Inside `$…$` use commands, not Unicode look-alikes (`\\times` not `×`, `-` not `−`, `x^2` not `x²`,
+  `\\mathrm{H_{2}O}` for formulas, `8{,}000` for a thousands separator, `\\text{…}` for words).
+  `tests/latex-notation.test.mjs` fails on plain-text maths outside `$…$`, on Unicode inside it, on an
+  unclosed `$` and on a command the tokeniser does not know; add new commands to `notation.ts` first.
+- Money (`₱1,200`), plain quantities (`36 km/h`, `5 kg`) and counts may stay in prose. Language and verbal
+  material is not linted: it names letters as letters.
+- BACKTRACK `expression` strings, explore `exposures` and `TOPICS.example` are exempt and must stay byte for
+  byte: saved fingerprints and the exposure ledger compare them. They already render through the same
+  typesetter. `factorText`/`quadraticText`/`signedTerm` keep their Unicode output for that reason; use
+  `texFactor`/`texQuadratic`/`texSignedTerm` in anything a learner reads around an expression.
+- Mock family strings changed from plain text to LaTeX without changing any draw from `r`; every form,
+  daily key, key position and distractor is unchanged (checked against a 900-day snapshot). Keep it so.
+- SVG `<text>` labels inside the visual scenes cannot host typeset HTML and stay plain; the legacy
+  `HomeExperience.tsx` is untouched.
+- Older CSS rules restyle every nested `span` in some containers (`.hint-note span`, `.sample-answers span`).
+  The `.math-inline` rules in `calm.css` restate the typesetting in the later layer; keep them together.
+

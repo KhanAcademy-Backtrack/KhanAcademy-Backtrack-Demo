@@ -42,9 +42,21 @@ const SIZES = {
 
 export type MathSize = keyof typeof SIZES;
 
-import { parse, speakMath, type Node } from '@/lib/notation';
+import { parse, speakMath, splitMath, speakText, type Node } from '@/lib/notation';
 
 /* --- rendering ---------------------------------------------------------- */
+
+/** A sign at the start, after another operator or after an opening bracket is unary:
+ *  it sits against its number, as in -3 or (-2), instead of taking binary spacing. */
+function unary(nodes: Node[], i: number): boolean {
+  const n = nodes[i];
+  if (n.t !== 'op' || (n.v !== '−' && n.v !== '+')) return false;
+  let j = i - 1;
+  while (j >= 0 && nodes[j].t === 'space') j--;
+  if (j < 0) return true;
+  const prev = nodes[j];
+  return prev.t === 'op' || (prev.t === 'text' && /^[([{,]$/.test(prev.v));
+}
 
 function render(nodes: Node[], keyBase = 'm'): ReactNode[] {
   return nodes.map((n, i) => {
@@ -52,21 +64,21 @@ function render(nodes: Node[], keyBase = 'm'): ReactNode[] {
     switch (n.t) {
       case 'sup':
         return (
-          <span key={key} className="sup">
-            {n.v}
+          <span key={key} className={n.body.length === 1 && n.body[0].t === 'text' && n.body[0].v === '°' ? 'deg' : 'sup'}>
+            {render(n.body, `${key}s`)}
           </span>
         );
       case 'sub':
         return (
           <span key={key} className="sub">
-            {n.v}
+            {render(n.body, `${key}s`)}
           </span>
         );
       case 'space':
         return <span key={key} className="thin" />;
       case 'op':
         return (
-          <span key={key} className="op">
+          <span key={key} className={unary(nodes, i) ? 'op unary' : 'op'}>
             {n.v}
           </span>
         );
@@ -86,11 +98,18 @@ function render(nodes: Node[], keyBase = 'm'): ReactNode[] {
       case 'sqrt':
         return (
           <span key={key} className="rad">
+            {n.index && <span className="rad-index">{render(n.index, `${key}i`)}</span>}
             <span className="rad-sign">√</span>
             <span className="rad-body">{render(n.body, `${key}b`)}</span>
           </span>
         );
       default:
+        if (n.v === ',' && !n.sep)
+          return (
+            <span key={key} className="punct">
+              ,
+            </span>
+          );
         return <Fragment key={key}>{n.v}</Fragment>;
     }
   });
@@ -126,3 +145,27 @@ export function MathText({
 export function MathInline({ children }: { children: string }) {
   return <span aria-hidden="true">{render(parse(children))}</span>;
 }
+
+/** Running text whose equations are written in LaTeX between dollar signs:
+ *  "Solve $2x + 3 = 11$." Each equation is typeset inline at the size of the
+ *  surrounding text and carries its own spoken form. */
+export function Rich({ children }: { children: string }) {
+  const parts = splitMath(children);
+  if (!parts.some((p) => p.math)) return <>{children}</>;
+  return (
+    <>
+      {parts.map((p, i) =>
+        p.math ? (
+          <span key={i} className="math math-inline" role="math" aria-label={speakMath(p.v)}>
+            <span aria-hidden="true">{render(parse(p.v), `r${i}`)}</span>
+          </span>
+        ) : (
+          <Fragment key={i}>{p.v}</Fragment>
+        ),
+      )}
+    </>
+  );
+}
+
+/** The accessible name of running text with inline math, for an aria-label. */
+export const richLabel = speakText;

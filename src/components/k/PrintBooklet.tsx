@@ -7,6 +7,7 @@ import {btn,Oval,cx,Wordmark} from './ui';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
 import {newAttempt} from '@/lib/program/store';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
+import {Rich} from '@/components/math/Math';
 
 const LETTERS=['A','B','C','D'];
 
@@ -26,7 +27,7 @@ export function PrintBooklet(){
    {!entry?<>
     <header className="mt-6 border-b-2 border-navy pb-3 print:mt-0"><h1 className="text-2xl font-extrabold">{form.title}</h1><p className="text-sm">Khanpanion practice booklet · {ids.length} questions · khanpanion.vercel.app</p></header>
     {form.sections.map((sec,si)=><section key={si} className="mt-6 break-inside-avoid-page"><h2 className="text-xl font-bold">{SUBTEST_LABEL[sec.subtest]} · {sec.minutes} minutes</h2>
-     <ol className="mt-3 grid gap-5">{sec.itemIds.map((id,xi)=>{const it=itemById(id)!;n++;const showPassage=it.passageId&&(xi===0||itemById(sec.itemIds[xi-1])?.passageId!==it.passageId);return <li key={id} className="break-inside-avoid">{showPassage&&<div className="mb-3"><PassageView id={it.passageId!}/></div>}<p className="font-serif text-[16px] leading-snug print:text-[11pt]"><b className="font-sans">{n}.</b> {it.stem}</p><ol className="mt-1 grid gap-0.5 pl-6 font-serif text-[15px] print:text-[10.5pt] sm:grid-cols-2">{it.choices.map((c,i)=><li key={i}>{LETTERS[i]}. {c}</li>)}</ol></li>;})}</ol></section>)}
+     <ol className="mt-3 grid gap-5">{sec.itemIds.map((id,xi)=>{const it=itemById(id)!;n++;const showPassage=it.passageId&&(xi===0||itemById(sec.itemIds[xi-1])?.passageId!==it.passageId);return <li key={id} className="break-inside-avoid">{showPassage&&<div className="mb-3"><PassageView id={it.passageId!}/></div>}<p className="font-serif text-[16px] leading-snug print:text-[11pt]"><b className="font-sans">{n}.</b> <Rich>{it.stem}</Rich></p><ol className="mt-1 grid gap-0.5 pl-6 font-serif text-[15px] print:text-[10.5pt] sm:grid-cols-2">{it.choices.map((c,i)=><li key={i}>{LETTERS[i]}. <Rich>{c}</Rich></li>)}</ol></li>;})}</ol></section>)}
     <section className="mt-10 break-before-page"><h2 className="text-xl font-bold">Answer sheet</h2><p className="text-sm">Shade one oval per question.</p><div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-4 print:grid-cols-4">{ids.map((id,i)=><div key={id} className="flex items-center gap-1"><span className="w-7 text-right text-sm font-bold">{i+1}</span>{LETTERS.map(l=><Oval key={l} label={l} size={24}/>)}</div>)}</div></section>
     <section className="mt-10 break-before-page"><h2 className="text-xl font-bold">Answer key</h2><p className="text-sm">Cut this page off before handing out the booklet.</p><div className="mt-3 grid grid-cols-5 gap-1 text-sm sm:grid-cols-10">{ids.map((id,i)=><span key={id}>{i+1}. {LETTERS[itemById(id)!.answerIndex]}</span>)}</div></section>
    </>:<div className="mt-6"><h1 className="text-2xl font-extrabold">Enter answers from paper</h1><p className="mt-1 text-ink-soft">Tap the oval each question was shaded with. Leave blanks empty.</p>

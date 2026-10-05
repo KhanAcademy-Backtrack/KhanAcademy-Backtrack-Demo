@@ -1,5 +1,7 @@
 'use client';
 import type {Problem} from '@/lib/recovery';
+import {Rich} from '@/components/math/Math';
+import {speakText} from '@/lib/notation';
 
 /**
  * One answer field. Units are shown beside the box and spoken in its accessible
@@ -10,14 +12,15 @@ import type {Problem} from '@/lib/recovery';
 export function AnswerField({p,index,value,onChange,ariaLabel,stepper=false}:{p:Problem;index:number;value:string;onChange:(v:string)=>void;ariaLabel?:string;stepper?:boolean}){
   const label=p.labels[index],field=p.fields?.[index],unit=field?.unit;
   if(field?.kind==='choice'&&field.options)return <fieldset className="choice-field grid gap-2 [&_button]:min-h-14 [&_button]:rounded-lg [&_button]:border-2 [&_button]:border-line [&_button]:hover:border-line-strong [&_button]:bg-white [&_button]:text-navy [&_button]:aria-pressed:border-navy [&_button]:aria-pressed:bg-mint">
-    <legend>{label}</legend>
-    {field.options.map((option,i)=><label key={option}><input type="radio" name={`${p.id}-${index}`} value={String(i)} checked={value===String(i)} onChange={()=>onChange(String(i))}/><span>{option}</span></label>)}
+    <legend><Rich>{label}</Rich></legend>
+    {field.options.map((option,i)=><label key={option}><input type="radio" name={`${p.id}-${index}`} value={String(i)} checked={value===String(i)} onChange={()=>onChange(String(i))}/><span><Rich>{option}</Rich></span></label>)}
   </fieldset>;
-  const name=ariaLabel??label,input=<input aria-label={unit?`${name} in ${unit}`:name} value={value} onChange={e=>onChange(e.target.value)} inputMode="text" autoComplete="off" maxLength={18}/>;
+  /* Labels and units may hold LaTeX; the accessible name reads it in words. */
+  const name=speakText(ariaLabel??label),input=<input aria-label={unit?`${name} in ${speakText(unit)}`:name} value={value} onChange={e=>onChange(e.target.value)} inputMode="text" autoComplete="off" maxLength={18}/>;
   return <label className={`number-field ${stepper?'stepper':''}`}>
-    <span>{label}</span>
+    <span><Rich>{label}</Rich></span>
     {stepper||unit
-      ?<div>{stepper&&<button type="button" aria-label={`Decrease ${label.toLowerCase()}`} onClick={()=>onChange(String(Number(value||0)-1))}>−</button>}{input}{stepper&&<button type="button" aria-label={`Increase ${label.toLowerCase()}`} onClick={()=>onChange(String(Number(value||0)+1))}>+</button>}{unit&&<small className="field-unit" aria-hidden="true">{unit}</small>}</div>
+      ?<div>{stepper&&<button type="button" aria-label={`Decrease ${speakText(label).toLowerCase()}`} onClick={()=>onChange(String(Number(value||0)-1))}>−</button>}{input}{stepper&&<button type="button" aria-label={`Increase ${speakText(label).toLowerCase()}`} onClick={()=>onChange(String(Number(value||0)+1))}>+</button>}{unit&&<small className="field-unit" aria-hidden="true"><Rich>{unit}</Rich></small>}</div>
       :input}
   </label>;
 }

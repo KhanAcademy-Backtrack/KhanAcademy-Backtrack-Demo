@@ -21,6 +21,7 @@ import {chapterHref} from '@/lib/program/links';
 
 import {DUR,EASE} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
+import {Rich} from '@/components/math/Math';
 
 const LETTERS=['A','B','C','D'];
 const TRIAGE:Record<Triage,string>={didnt_know:'Didn’t know yet',careless:'Careless slip',out_of_time:'Ran out of time'};
@@ -86,8 +87,8 @@ export function Results(){
     <ol className="mt-5 grid gap-4">{ids.map((id,n)=>{const it=itemById(id)!,chosen=attempt.answers[id]??null,right=chosen===it.answerIndex,revealed=showKey||open.includes(id),isOpen=open.includes(`x:${id}`);const prevPassage=n>0&&itemById(ids[n-1])?.passageId===it.passageId;
      return <li key={id} id={`q-${n+1}`} className="scroll-mt-24 rounded-2xl border-2 border-line p-4 sm:p-5">
       {it.passageId&&!prevPassage&&<details className="mb-3"><summary className="min-h-11 cursor-pointer py-2 font-semibold">Show the passage</summary><PassageView id={it.passageId}/></details>}
-      <div className="flex flex-wrap items-start justify-between gap-2"><p className="font-serif text-[19px] leading-snug"><span className="mr-2 font-sans text-sm font-bold text-ink-soft">{n+1}.</span>{it.stem}</p>{revealed&&<Pill tone={right?'green':'sky'}>{right?'Right':attempt.idk.includes(id)?'Didn’t know yet':chosen===null?'Blank':'Missed'}</Pill>}</div>
-      <ul className="mt-3 grid gap-1.5">{it.choices.map((c,i)=><li key={i} className={cx('flex items-center gap-3 rounded-xl px-2 py-1.5',revealed&&i===it.answerIndex&&'bg-mint')}><span aria-hidden="true" className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',chosen===i?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span><span className="font-serif text-[17px]">{c}</span>{revealed&&i===it.answerIndex&&<span className="ml-auto text-sm font-bold">Answer</span>}{chosen===i&&<span className={cx('text-sm text-ink-soft',!(revealed&&i===it.answerIndex)&&'ml-auto')}>Your pick</span>}</li>)}</ul>
+      <div className="flex flex-wrap items-start justify-between gap-2"><p className="font-serif text-[19px] leading-snug"><span className="mr-2 font-sans text-sm font-bold text-ink-soft">{n+1}.</span><Rich>{it.stem}</Rich></p>{revealed&&<Pill tone={right?'green':'sky'}>{right?'Right':attempt.idk.includes(id)?'Didn’t know yet':chosen===null?'Blank':'Missed'}</Pill>}</div>
+      <ul className="mt-3 grid gap-1.5">{it.choices.map((c,i)=><li key={i} className={cx('flex items-center gap-3 rounded-xl px-2 py-1.5',revealed&&i===it.answerIndex&&'bg-mint')}><span aria-hidden="true" className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',chosen===i?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span><span className="font-serif text-[17px]"><Rich>{c}</Rich></span>{revealed&&i===it.answerIndex&&<span className="ml-auto text-sm font-bold">Answer</span>}{chosen===i&&<span className={cx('text-sm text-ink-soft',!(revealed&&i===it.answerIndex)&&'ml-auto')}>Your pick</span>}</li>)}</ul>
       <div className="mt-3 flex flex-wrap gap-2">
        {!showKey&&<button className={btn.ghost} onClick={()=>setOpen(o=>o.includes(id)?o.filter(x=>x!==id):[...o,id])}>{revealed?'Hide answer':'Reveal answer'}</button>}
        <button className={btn.ghost} aria-expanded={isOpen} onClick={()=>setOpen(o=>o.includes(`x:${id}`)?o.filter(x=>x!==`x:${id}`):[...o,`x:${id}`])}>{isOpen?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>

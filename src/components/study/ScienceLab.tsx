@@ -76,7 +76,7 @@ function BalanceLab({state,store}:{state?:Recovery;store:Store}){
   return <>
     <h3>Atoms are rearranged, never created.</h3>
     <p>Change the numbers in front. Watch the counts on both sides. a coefficient changes how many units there are, and every atom inside them moves with it.</p>
-    <div className="lab-equation"><MathText size="md">{`${side(0,e.reactants)} → ${side(e.reactants,e.species.length)}`}</MathText></div>
+    <div className="lab-equation"><MathText size="md">{`${side(0,e.reactants)} \\to ${side(e.reactants,e.species.length)}`}</MathText></div>
     <div className="science-buddy-note"><Companion size={82} pose={balanced?'aha':'thinking'}/><p>Compare each element separately. A matching total alone is not enough.</p></div>
     <svg className="balance-figure element-comparison" viewBox={`0 0 400 ${55+elements.length*59}`} role="img" aria-label={`Atom counts: ${elements.map(el=>`${ELEMENT_NAMES[el]}, left ${left(el)}, right ${right(el)}`).join('; ')}. ${balanced?'Every element matches.':'Some elements still differ.'}`}>
       <text x="100" y="20" textAnchor="middle">Reactants</text><text x="280" y="20" textAnchor="middle">Products</text>
@@ -122,9 +122,9 @@ function MolesLab({state,store}:{state?:Recovery;store:Store}){
     <dl className="lab-readout" aria-live="polite">
       <div><dt>Mass</dt><dd>{grams} g</dd></div>
       <div><dt>Amount</dt><dd>{moles} mol</dd></div>
-      <div><dt>Particles (approx.)</dt><dd><MathText size="sm" speak={`${particles} times ten to the power 23 particles`}>{`${particles} × 10^{23}`}</MathText></dd></div>
+      <div><dt>Particles (approx.)</dt><dd><MathText size="sm" speak={`${particles} times ten to the power 23 particles`}>{`${particles} \\times 10^{23}`}</MathText></dd></div>
     </dl>
-    <div className="lab-equation">{massMode?<MathText size="md" speak={`Mass equals ${amount} moles times ${M} grams per mole, giving ${grams} grams.`}>{`m = nM = ${amount} × ${M} = ${grams}\\,\\mathrm{g}`}</MathText>:<MathText size="md" speak={`n equals m over M, ${grams} over ${M}, approximately ${moles} moles.`}>{`n = \\frac{m}{M} = \\frac{${grams}}{${M}} ≈ ${moles}\\,\\mathrm{mol}`}</MathText>}</div>
+    <div className="lab-equation">{massMode?<MathText size="md" speak={`Mass equals ${amount} moles times ${M} grams per mole, giving ${grams} grams.`}>{`m = nM = ${amount} \\times ${M} = ${grams}\\,\\mathrm{g}`}</MathText>:<MathText size="md" speak={`n equals m over M, ${grams} over ${M}, approximately ${moles} moles.`}>{`n = \\frac{m}{M} = \\frac{${grams}}{${M}} ≈ ${moles}\\,\\mathrm{mol}`}</MathText>}</div>
     <p className="concept-invariant">The rate stays the same when the quantity changes. Doubling the mass doubles the moles and doubles the particles; the {M} g per mole never moves.</p>
     <p className="concept-explanation">{massMode?`One mole weighs ${M} g according to this table. Each additional mole adds another ${M} g, so multiply molar mass by the number of moles.`:<>This is why dividing is the right move: you are asking how many whole-mole portions fit inside the mass you have. Multiplying by {M} answers a different question. the mass of {grams} moles.</>}</p>
   </>;
@@ -154,7 +154,7 @@ function MotionLab({store}:{store:Store}){
       {[0,1,2,3,4,5,6].map(n=><text key={n} x={22+n*46} y="128" textAnchor="middle" fontSize="9">{n*27}</text>)}<text x="160" y="143" textAnchor="middle" fontSize="9">position of the cart’s centre (m)</text>
     </svg>
     <div className="lab-steppers">{step('Starting speed',u,setU,0,9)}{step('Acceleration',a,setA,1,6)}{step('Seconds',t,setT,1,6)}</div>
-    <div className="lab-equation"><MathText size="md" speak={`v equals u plus a t equals ${u} plus ${a} times ${t} equals ${speed}`}>{`v = u + at = ${u} + ${a} × ${t} = ${speed}`}</MathText></div>
+    <div className="lab-equation"><MathText size="md" speak={`v equals u plus a t equals ${u} plus ${a} times ${t} equals ${speed}`}>{`v = u + at = ${u} + ${a} \\times ${t} = ${speed}`}</MathText></div>
     <p className="concept-invariant" aria-live="polite">The speed increases by {a} m/s each second. The chart uses the same scale as you change the controls. The final speed is {speed} m/s: the {u} m/s it already had, plus the {a*t} m/s the acceleration added.</p>
     <p className="concept-explanation">Dropping the starting speed and using at alone describes a different cart. one that began at rest. The acceleration would be identical; the journey would not.</p>
   </>;
@@ -202,7 +202,7 @@ export function ScienceLab({kind,onContinue,state,onExpose,reserve,initial,onSav
   useEffect(()=>{if(exposed.current||!state||reserve===undefined)return;exposed.current=true;onExpose?.(reserve);},[state,reserve,onExpose]);
   const predict=kind==='balancing'?{question:'If you double every number in front of a balanced equation, is it still balanced?',options:['No. the amounts change','Yes. both sides double together','Only if nothing has a subscript'],answer:1}
     :kind==='moles'?{question:'Two beakers hold the same mass: one of water, one of glucose. Do they hold the same number of moles?',options:['Yes. the mass is the same','No. a mole of each weighs a different amount','Only if both are pure'],answer:1}
-    :kind==='motion'?{question:'A cart already moving at 4 m/s accelerates at 2 m/s² for 3 s. Is its final speed 6 m/s?',options:['Yes. 2 × 3 = 6','No. the 4 m/s it already had still counts','Only if it started from rest'],answer:1}
+    :kind==='motion'?{question:'A cart already moving at 4 m/s accelerates at $2\\,\\mathrm{m/s^{2}}$ for 3 s. Is its final speed 6 m/s?',options:['Yes. $2 \\times 3 = 6$','No. the 4 m/s it already had still counts','Only if it started from rest'],answer:1}
     :{question:'A block is pushed with 10 N right and 10 N left. Is it accelerating?',options:['Yes. two forces are acting','No. the forces cancel, so there is no net force','Only if the block is light'],answer:1};
   return <MotionScope still={s.static}><section className="concept-lab science-lab">
     <div className="repair-kicker"><span>Khanpanion visual guide</span></div><SceneMotionToggle still={s.static} onChange={staticMode=>set(v=>({...v,static:staticMode}))}/>
