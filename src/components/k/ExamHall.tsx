@@ -5,7 +5,7 @@ import {useRouter,useSearchParams} from 'next/navigation';
 import {AnimatePresence,motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
-import {Question,PassageView} from './Question';
+import {Question,PassageView,FixLinks} from './Question';
 import {btn,cx,Wordmark} from './ui';
 import {Companion} from '@/components/study/Companion';
 import {formFromKey,formItems,itemById,formMinutes,type Form} from '@/lib/mock/forms';
@@ -70,6 +70,11 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   const sure=()=>save({...a,sure:{...a.sure,[id]:a.sure[id]==='sure'?'unsure':'sure'}});
   const lastInSection=a.index===section.itemIds.length-1,lastSection=a.section===form.sections.length-1;
   const next=()=>{if(!lastInSection)return go(a.section,a.index+1);if(!lastSection){stopClock();setBreakFor(a.section+1);return;}setConfirm(true);};
+  const first=a.index===0&&a.section===0,back=()=>a.index>0?go(a.section,a.index-1):go(a.section-1,form.sections[a.section-1].itemIds.length-1);
+  const nextLabel=lastInSection?(lastSection?t(lang,'mock.submit'):'Finish section'):t(lang,'mock.next');
+  // Once a practice answer is checked, Back and Next sit beside Show explanation and the
+  // fix links move into the side panel on wide screens.
+  const shown=practice&&revealed.includes(id),missed=shown&&(a.answers[id]??null)!==item.answerIndex;
   const remaining=section.minutes*60-now/1000;
   const unanswered=formItems(form).filter(x=>a.answers[x]==null&&!a.idk.includes(x)).length;
   function submit(){
@@ -107,7 +112,8 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
      className={cx('min-w-0 self-start rounded-2xl bg-white p-5 text-navy shadow-sheet sm:p-8',item.passageId&&'lg:grid lg:grid-cols-2 lg:gap-8')}>
      {item.passageId&&<div className="mb-5 lg:mb-0"><PassageView id={item.passageId} compact/></div>}
      <motion.div key={id} initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={tween(reduced,DUR.fast)}>
-      <Question key={id} keys={!paused&&!confirm&&!nav} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])}/>
+      <Question key={id} keys={!paused&&!confirm&&!nav} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])} linksBeside
+       actions={shown?<>{!first&&<button className={btn.ghost} onClick={back}>{t(lang,'mock.prev')}</button>}<button className={btn.primary} onClick={next}>{nextLabel}</button></>:undefined}/>
       <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-line pt-4">
        <button aria-pressed={a.flags.includes(id)} onClick={flag} className="min-h-11 rounded-lg border-2 border-line px-4 text-sm font-bold text-navy hover:border-line-strong aria-pressed:border-navy aria-pressed:bg-sky">{a.flags.includes(id)?t(lang,'mock.flagged'):t(lang,'mock.flag')}</button>
        <button aria-pressed={a.sure[id]==='sure'} onClick={sure} disabled={a.answers[id]==null} className="min-h-11 rounded-lg border-2 border-line px-4 text-sm font-bold text-navy hover:border-line-strong aria-pressed:border-green aria-pressed:bg-mint disabled:opacity-40">{t(lang,'mock.sure')}</button>
@@ -120,14 +126,19 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
       <div className="grid grid-cols-6 gap-1.5 lg:grid-cols-5">{sec.itemIds.map((x,xi)=>{const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
        className={cx('relative grid h-11 place-items-center rounded-lg border-2 text-xs font-bold text-navy',answered?'border-green bg-green':'border-line bg-white hover:border-line-strong',cur&&'ring-2 ring-navy ring-offset-2 ring-offset-white')}>{xi+1}{a.flags.includes(x)&&<span className="absolute right-1 top-1 h-1.5 w-1.5 bg-navy"/>}</button>;})}</div></div>)}
      <p className="mt-3 text-xs text-ink-soft">Green is answered. A dark corner mark is flagged.</p>
+     {missed&&<section aria-labelledby="work-on-this" className="hidden border-t border-line bg-white pb-1 pt-4 lg:sticky lg:bottom-0 lg:mt-4 lg:block">
+      <h2 id="work-on-this" className="text-sm font-semibold text-ink-soft">Work on this</h2>
+      <FixLinks item={item} chosen={a.answers[id]??null} lang={lang} stacked className="mt-1"/>
+     </section>}
     </aside>
    </div>
    <footer className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]">
     <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-8">
-     <button className={cx(btn.ghost,'disabled:opacity-40')} disabled={a.index===0&&a.section===0} onClick={()=>a.index>0?go(a.section,a.index-1):go(a.section-1,form.sections[a.section-1].itemIds.length-1)}>{t(lang,'mock.prev')}</button>
+     {shown?<><span className="flex-1"/><button className="min-h-11 rounded-lg px-4 font-semibold text-ink-soft hover:bg-sky hover:text-navy" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button></>
+     :<><button className={cx(btn.ghost,'disabled:opacity-40')} disabled={first} onClick={back}>{t(lang,'mock.prev')}</button>
      <span className="flex-1"/>
      <button className="hidden min-h-11 rounded-lg px-4 font-semibold text-ink-soft hover:bg-sky hover:text-navy sm:block" onClick={()=>setConfirm(true)}>{t(lang,'mock.submit')}</button>
-     <button className={btn.primary} onClick={next}>{lastInSection?(lastSection?t(lang,'mock.submit'):'Finish section'):t(lang,'mock.next')}</button>
+     <button className={btn.primary} onClick={next}>{nextLabel}</button></>}
     </div>
    </footer>
    <AnimatePresence>{paused&&<motion.div key="pause" role="dialog" aria-modal="true" aria-labelledby="pause-title" className="fixed inset-0 z-50 grid place-items-center bg-canvas px-6 text-center text-navy" initial={reduced?false:{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:DUR.base}}>

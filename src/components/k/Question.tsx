@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef,useState,type ReactNode} from 'react';
 import Link from 'next/link';
 import {AnimatePresence,animate,motion,useMotionValue} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
@@ -24,21 +24,29 @@ export function PassageView({id,compact=false}:{id:string;compact?:boolean}){
  </article>;
 }
 
-/** What went wrong and where to fix it, for one chosen answer. */
-export function WhyPanel({item,chosen,lang='en'}:{item:MockItem;chosen:number|null;lang?:Lang}){
+/** Where to go next for one chosen answer: the missing skill, the reviewer and a Khan unit.
+ *  `stacked` lists them one per line for a narrow side panel. */
+export function FixLinks({item,chosen,lang='en',stacked=false,className}:{item:MockItem;chosen:number|null;lang?:Lang;stacked?:boolean;className?:string}){
  const fix=useFix();
  const mid=chosen!==null?item.misconceptions[chosen]:null,m=mid?misconception(mid):undefined;
- const rationale=chosen!==null?item.rationales?.[chosen]:undefined;
  const khan=m?.khan??item.khanRef;
+ return <div className={cx(stacked?'grid justify-items-start gap-1':'flex flex-wrap gap-x-5 gap-y-1',className)}>
+  {m?.recovery&&<button className={btn.text} onClick={()=>fix(m.recovery!.topic,m.recovery!.skill,m.recovery!.routeClue)}>{t(lang,'result.fix')}: find the missing skill</button>}
+  <Link className={btn.text} href={chapterHref(m?.chapter??item.reviewerChapter,item.concept)}>Read the reviewer</Link>
+  {khan&&<KhanLink href={khanUrl(khan)}>{khanLabel(khan)}</KhanLink>}
+ </div>;
+}
+
+/** What went wrong and where to fix it, for one chosen answer. With `linksBeside`, the
+ *  links move to the page's side panel on wide screens and stay here on narrow ones. */
+export function WhyPanel({item,chosen,lang='en',linksBeside=false}:{item:MockItem;chosen:number|null;lang?:Lang;linksBeside?:boolean}){
+ const mid=chosen!==null?item.misconceptions[chosen]:null,m=mid?misconception(mid):undefined;
+ const rationale=chosen!==null?item.rationales?.[chosen]:undefined;
  return <div className="rounded-xl border border-line bg-white p-4 text-[15px] leading-relaxed text-navy">
   {m?<><p className="font-bold">{m.label}</p><p className="mt-1"><span className="font-semibold">{t(lang,'result.why')}: </span>{m.why}</p><p className="mt-2">{m.fix}</p></>
    :rationale&&chosen!==item.answerIndex?<p>{rationale}</p>
    :chosen===null?<p>No answer yet is an honest place to start. The worked steps below show the whole method.</p>:null}
-  <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
-   {m?.recovery&&<button className={btn.text} onClick={()=>fix(m.recovery!.topic,m.recovery!.skill,m.recovery!.routeClue)}>{t(lang,'result.fix')}: find the missing skill</button>}
-   <Link className={btn.text} href={chapterHref(m?.chapter??item.reviewerChapter,item.concept)}>Read the reviewer</Link>
-   {khan&&<KhanLink href={khanUrl(khan)}>{khanLabel(khan)}</KhanLink>}
-  </div>
+  <FixLinks item={item} chosen={chosen} lang={lang} className={cx('mt-3',linksBeside&&'lg:hidden')}/>
  </div>;
 }
 
@@ -51,7 +59,7 @@ export function Explanation({item}:{item:MockItem}){
  </div>;
 }
 
-type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean;keys?:boolean};
+type Props={item:MockItem;number?:number;chosen:number|null;idk:boolean;onChoose:(i:number)=>void;onIdk:()=>void;mode:'practice'|'exam';revealed?:boolean;onReveal?:()=>void;lang?:Lang;showPassage?:boolean;spacious?:boolean;keys?:boolean;actions?:ReactNode;linksBeside?:boolean};
 
 /** Typing in a field or holding a modifier must never pick an answer. */
 const typing=(e:KeyboardEvent)=>{const el=e.target as HTMLElement|null;return e.ctrlKey||e.metaKey||e.altKey||!!el?.closest('input,textarea,select,[contenteditable="true"]');};
@@ -59,8 +67,9 @@ const typing=(e:KeyboardEvent)=>{const el=e.target as HTMLElement|null;return e.
 /** One question. In practice mode the learner checks each answer and can open the
  *  explanation straight away; in the exam hall answers stay hidden until the end.
  *  The small label above the choices becomes the feedback line after Check, so the
- *  page does not jump. With `keys`, 1–4 or A–D choose an answer. */
-export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false,keys=false}:Props){
+ *  page does not jump. With `keys`, 1–4 or A–D choose an answer. `actions` (such as
+ *  Back and Next) sit beside Show explanation once the answer is checked. */
+export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=false,onReveal,lang='en',showPassage=true,spacious=false,keys=false,actions,linksBeside=false}:Props){
  const reduced=useQuietMotion(),[explain,setExplain]=useState(false);
  const locked=mode==='practice'&&revealed;
  const right=revealed&&chosen===item.answerIndex;
@@ -92,8 +101,11 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
    {mode==='practice'&&!revealed&&<button className={cx(btn.primary,'ml-auto')} disabled={chosen===null&&!idk} onClick={onReveal}>{t(lang,'mock.check')}</button>}
   </div>
   <AnimatePresence initial={false}>{mode==='practice'&&revealed&&<motion.div key="fb" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={reduced?{duration:0}:SPRING} className="mt-5 space-y-3">
-   {!right&&<WhyPanel item={item} chosen={chosen} lang={lang}/>}
-   <button className={btn.ghost} aria-expanded={explain} onClick={()=>setExplain(!explain)}>{explain?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
+   {!right&&<WhyPanel item={item} chosen={chosen} lang={lang} linksBeside={linksBeside}/>}
+   <div className="flex flex-wrap items-center gap-3">
+    <button className={btn.ghost} aria-expanded={explain} onClick={()=>setExplain(!explain)}>{explain?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
+    {actions&&<div className="ml-auto flex flex-wrap items-center gap-3">{actions}</div>}
+   </div>
    {explain&&<Explanation item={item}/>}
   </motion.div>}</AnimatePresence>
  </div>;
