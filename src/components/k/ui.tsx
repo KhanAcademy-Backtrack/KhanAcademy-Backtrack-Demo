@@ -14,14 +14,15 @@ export const btn={
  dark:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[15px] font-bold text-white hover:bg-navy-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green disabled:opacity-45',
  ghost:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-line bg-white px-5 py-2 text-[15px] font-semibold text-navy hover:border-line-strong hover:bg-sky focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
  quiet:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-[15px] font-semibold text-navy underline decoration-line-strong decoration-2 underline-offset-4 hover:bg-sky hover:decoration-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
+ chip:'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-sky px-4 py-2 text-[15px] font-semibold text-navy hover:bg-mint focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',
  text:'inline-flex min-h-11 items-center gap-1 font-semibold text-navy underline decoration-green decoration-2 underline-offset-4 hover:decoration-navy'
 };
 
 /** The site mark: the bookmark buddy and the name, readable on navy or white. */
-export function Wordmark({onDark=false,small=false}:{onDark?:boolean;small?:boolean}){
+export function Wordmark({onDark=false,small=false,compact=false}:{onDark?:boolean;small?:boolean;compact?:boolean}){
  return <span className={cx('inline-flex items-center gap-2 font-extrabold tracking-[-.03em]',small?'text-xl':'text-2xl',onDark?'text-white':'text-navy')}>
   <svg viewBox="12 3 42 58" className={small?'h-7 w-auto':'h-8 w-auto'} aria-hidden="true"><path d="M15 10Q15 5 20 5H41L51 15V55Q51 59 47 56L33 48 19 56Q15 59 15 54Z" fill="#14bf96"/><path d="M41 5V16H51" fill="#96e6d2"/><circle cx="26" cy="27" r="2.6" fill="#0a2a66"/><circle cx="40" cy="27" r="2.6" fill="#0a2a66"/><path d="M26 36C29 43 39 43 42 36" fill="none" stroke="#0a2a66" strokeWidth="2.4" strokeLinecap="round"/></svg>
-  Khanpanion
+  <span className={compact?'hidden sm:inline':undefined}>Khanpanion</span>
  </span>;
 }
 

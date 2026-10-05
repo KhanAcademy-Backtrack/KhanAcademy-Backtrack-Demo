@@ -6,36 +6,96 @@ import {PageBand,Sheet,btn,Oval,cx,pageBody,Pill,KhanLink} from './ui';
 import {TldrCard} from './TldrCard';
 import {Question} from './Question';
 import {useFix} from './useFix';
-import {CHAPTERS,CHAPTER_BY_ID} from '@/content/reviewer';
+import {CHAPTER_BY_ID} from '@/content/reviewer';
 import {CONCEPTS,CONCEPT_BY_ID} from '@/lib/program/concepts';
-import {SUBTEST_LABEL,SUBTESTS,type Subtest} from '@/lib/mock/types';
+import {SUBTEST_LABEL,type Subtest} from '@/lib/mock/types';
 import {misconception} from '@/lib/mock/misconceptions';
 import {generateItem} from '@/lib/mock/families';
 import {itemById} from '@/lib/mock/forms';
 import {khanUrl,KHAN_UNITS} from '@/lib/program/khan-units';
 import {EXTRAS} from '@/content/reviewer/extras';
+import {StudyTools} from './StudyTools';
+import {t} from '@/lib/i18n';
+import {EXAMS,EXAM_IDS,type ExamId} from '@/lib/program/admissions';
+import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection,listNames as list} from '@/lib/program/exam-coverage';
+import {EXAM_OUTLINES,OUTLINE_BY_KEY,topicKey,type OutlineGroup} from '@/lib/program/exam-outline';
+import {firstExam} from '@/lib/program/personalization';
 
-/** The library: complete chapters and every concept summary, by subtest, with
- *  search and bookmarks. Offline caching is scheduled for Phase B. */
+/** Handbooks by subject; the test-day handbook has none and always shows. */
+const EXTRA_SUBJECT:Record<string,Subtest>={x_formulas_math:'math',x_formulas_science:'science',x_grammar_en:'language',x_grammar_fil:'language',x_vocab:'language',x_reading:'reading'};
+type Group={key:string;label:string;match:(subtest:Subtest,fil:boolean)=>boolean;empty?:boolean};
+const row='flex min-h-14 items-center gap-3 px-4 py-3';
+
+/** Study: practice exams and daily recall first, then the reviewer library. The library lists the chosen exam's
+ *  sections, closed until one is opened; each opens to its topics (the exam's outline where there is one, else its
+ *  summaries). A search shows matching summaries from the whole exam. Full chapters open from each topic's page.
+ *  Offline caching is scheduled for Phase B. */
 export function ReviewerLibrary(){
  const {state,update}=useProgram();
- const [q,setQ]=useState(''),[sub,setSub]=useState<Subtest|'all'|'saved'>('all');
+ const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId>();
  const norm=q.trim().toLowerCase();
- const concepts=CONCEPTS.filter(c=>(sub==='all'||sub===c.subtest||(sub==='saved'&&state.bookmarks.includes(c.id)))&&(!norm||[c.title,c.blurb,c.area,...c.tldr.must].join(' ').toLowerCase().includes(norm)));
- const chapters=CHAPTERS.filter(c=>(sub==='all'||sub===c.subtest||(sub==='saved'&&state.bookmarks.includes(c.id)))&&(!norm||[c.title,c.summary.intro,...c.summary.sections.flatMap(x=>[x.heading,...x.body])].join(' ').toLowerCase().includes(norm)));
+ /** Always one exam: the learner's first named exam, else the first in the list. */
+ const scope=picked??firstExam(state)??EXAM_IDS[0],cover=EXAM_COVERAGE[scope];
+ const groups:Group[]=cover.sections.map((x,i)=>({key:'s'+i,label:x.name,match:(t:Subtest,f:boolean)=>inSection(x,t,f),empty:!x.reviewer.length}));
+ const label=(t:Subtest,f:boolean)=>groups.find(g=>g.match(t,f))?.label??SUBTEST_LABEL[t];
+ const concepts=norm?CONCEPTS.filter(c=>inCoverage(scope,c.subtest,c.area===FILIPINO_CONCEPT_AREA)&&[c.title,c.blurb,c.area,...c.tldr.must].join(' ').toLowerCase().includes(norm)):[];
+ const extras=EXTRAS.filter(x=>!EXTRA_SUBJECT[x.id]||(FILIPINO_EXTRAS.has(x.id)?hasFilipino(scope):inCoverage(scope,EXTRA_SUBJECT[x.id],false)));
+ const missing=cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name);
  const mark=(id:string)=>update(s=>({...s,bookmarks:s.bookmarks.includes(id)?s.bookmarks.filter(x=>x!==id):[...s.bookmarks,id]}));
+ /** One reviewer line: the circle saves it under its own key (filled when saved), the title opens its page.
+  *  A line with nowhere to go keeps a faded circle that does nothing. */
+ type Line={key:string;title:string;note:string;href?:string};
+ const lines=(items:Line[])=><ul className="mt-3 grid gap-2 md:grid-cols-2">{items.map(x=>{const on=state.bookmarks.includes(x.key);return <li key={x.key} className="flex items-center gap-1 rounded-2xl py-1 pr-2">
+  {x.href?<button type="button" aria-pressed={on} aria-label={`Save ${x.title}`} title={on?'Saved. Select to remove':'Save for later'} onClick={()=>mark(x.key)} className="grid h-11 w-11 shrink-0 place-items-center rounded-lg hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy"><Oval filled={on} size={22}/></button>
+  :<span className="grid h-11 w-11 shrink-0 place-items-center"><Oval size={22} className="opacity-40"/></span>}
+  {x.href?<Link href={x.href} className="min-h-11 flex-1 py-2 font-semibold hover:underline">{x.title}<span className="block text-sm font-normal text-ink-soft">{x.note}</span></Link>
+  :<span className="min-h-11 flex-1 py-2 font-semibold text-ink-soft">{x.title}<span className="block text-sm font-normal">{x.note}</span></span>}</li>;})}</ul>;
+ const summaryLines=(list:typeof CONCEPTS,inside:boolean)=>lines(list.map(c=>({key:c.id,title:c.title,href:`/learn/${c.id}`,note:inside?c.area:`${label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · ${c.area}`})));
+ /** An outlined exam lists every topic reviewers report, sub-subject by sub-subject. Each topic saves on its own,
+  *  even when another topic shares its summary. A topic without a summary stays greyed out and says so. */
+ const outline=EXAM_OUTLINES[scope];
+ const outlineRows=(sub:OutlineGroup[])=>sub.map((o,j)=><section key={o.name}><h3 className="mt-5 text-lg font-extrabold">{String.fromCharCode(97+j)}. {o.name}</h3>{o.less&&<p className="mt-1 text-sm text-ink-soft">Only some reviewers report this part.</p>}
+  {lines(o.topics.map(x=>({key:topicKey(scope,x.title),title:x.title,...(x.concepts?.length?{href:`/learn/${x.concepts[0]}`,note:`Summary: ${x.concepts.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}`}:{note:'Not written yet'})})))}</section>);
+ const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-xl hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
+ /** Everything saved, from any exam: outline topics, summaries, and chapters saved before chapters left this list. */
+ const saved:Line[]=state.bookmarks.flatMap(k=>{const o=OUTLINE_BY_KEY.get(k),c=CONCEPT_BY_ID[k],ch=CHAPTER_BY_ID[k];
+  return o?[{key:k,title:o.topic.title,href:o.topic.concepts?.length?`/learn/${o.topic.concepts[0]}`:undefined,note:`${EXAMS[o.exam].name} · ${o.section}`}]:c?[{key:k,title:c.title,href:`/learn/${c.id}`,note:`Summary · ${c.area}`}]:ch?[{key:k,title:ch.title,href:`/reviewer/${ch.id}`,note:'Full chapter'}]:[];});
  return <>
-  <PageBand title="The reviewer" lead={`${CHAPTERS.length} full chapters and ${CONCEPTS.length} one-screen topic summaries, plus formula sheets, grammar guides and a test-day handbook. Free, printable, and easy to revisit.`}>
-   <label className="mt-6 block max-w-xl"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-full border-2 border-white/25 bg-white/10 px-5 text-white placeholder:text-white/55 focus:border-green focus:outline-none"/></label>
-  </PageBand>
+  <PageBand title="Study" lead="Practice exams, daily recall and the full CET reviewer in one place."/>
   <div className={pageBody}>
-   <Sheet>
-    <div role="tablist" aria-label="Filter" className="flex flex-wrap gap-2">{(['all',...SUBTESTS,'saved'] as const).map(x=><button key={x} role="tab" aria-selected={sub===x} onClick={()=>setSub(x)} className={cx('min-h-11 rounded-full border-2 px-4 font-bold',sub===x?'border-navy bg-navy text-white':'border-navy/15 text-navy')}>{x==='all'?'Everything':x==='saved'?`Saved (${state.bookmarks.length})`:SUBTEST_LABEL[x]}</button>)}</div>
-    {!!chapters.length&&<><h2 className="mt-7 text-xl font-extrabold">Full chapters</h2><ul className="mt-3 grid gap-3 md:grid-cols-2">{chapters.map(c=><li key={c.id} className="flex items-start gap-3 rounded-2xl border-2 border-mint-line p-4"><Oval filled size={26} className="mt-1"/><div className="flex-1"><Link href={`/reviewer/${c.id}`} className="text-lg font-bold hover:underline">{c.title}</Link><p className="text-sm text-ink-soft">{SUBTEST_LABEL[c.subtest]} · {c.examples.length} worked examples · {c.recall.length} recall cards</p></div><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-full px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
-    {!!concepts.length&&<><h2 className="mt-7 text-xl font-extrabold">Topic summaries</h2><ul className="mt-3 grid gap-2 md:grid-cols-2">{concepts.map(c=><li key={c.id} className="flex items-center gap-3 rounded-2xl px-2 py-1 hover:bg-mint"><Oval size={22}/><Link href={`/learn/${c.id}`} className="min-h-11 flex-1 py-2 font-semibold">{c.title}<span className="block text-sm font-normal text-ink-soft">{SUBTEST_LABEL[c.subtest]} · {c.area}</span></Link><button aria-pressed={state.bookmarks.includes(c.id)} aria-label={`Save ${c.title}`} onClick={()=>mark(c.id)} className="min-h-11 rounded-full px-3 text-sm font-bold aria-pressed:bg-mint text-navy">{state.bookmarks.includes(c.id)?'Saved':'Save'}</button></li>)}</ul></>}
-    {!chapters.length&&!concepts.length&&<p className="mt-6 text-ink-soft">Nothing matches “{q}”. Try a shorter word.</p>}
+   <StudyTools/>
+   <Sheet className="mt-8">
+    <h2 className="text-2xl font-extrabold">The reviewer</h2>
+    <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">{CONCEPTS.length} one-screen topic summaries, plus formula sheets, grammar guides and a test-day handbook. Open a subject to see its topics.</p>
+    <div className="mt-4 flex flex-wrap items-end gap-3">
+     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={scope} onChange={e=>setPicked(e.target.value as ExamId)} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
+      {EXAM_IDS.map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
+     </select></label>
+     <label className="block min-w-0 max-w-xl flex-1 basis-64"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-lg border-2 border-line-strong bg-white px-4 text-navy placeholder:text-ink-soft focus:border-green focus:outline-none"/></label>
+    </div>
+    <div className="mt-4 max-w-3xl rounded-lg bg-sky px-4 py-3 text-sm leading-relaxed text-navy">
+     <p><span className="font-bold">{EXAMS[scope].full}:</span> {list(cover.sections.map(x=>x.name))}.</p>
+     {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
+     <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
+     {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Greyed topics have no Khanpanion summary yet.</p>}
+    </div>
+    {norm?<>
+     <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {EXAMS[scope].name} section</p>
+     {concepts.length?<><h3 className="mt-5 text-lg font-extrabold">Topic summaries</h3>{summaryLines(concepts,false)}</>:<p className="mt-6 text-ink-soft">Nothing matches “{q}”. Try a shorter word.</p>}
+    </>:<ul className="mt-5 grid gap-2">
+     {groups.map((g,i)=>{const cs=g.empty?[]:CONCEPTS.filter(c=>g.match(c.subtest,c.area===FILIPINO_CONCEPT_AREA)),sub=outline?.sections[g.label];
+      const all=sub?.flatMap(o=>o.topics),note=all?`${all.filter(x=>x.concepts?.length).length} of ${all.length} topics written`:`${cs.length} topic${cs.length===1?'':'s'}`;
+      return <li key={g.key}>{cs.length?<details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
+       {summary(i+1,g.label,note)}
+       <div className="border-t border-line px-3 pb-5 sm:px-5">{sub?outlineRows(sub):<><h3 className="mt-5 text-lg font-extrabold">Topic summaries</h3>{summaryLines(cs,true)}</>}</div>
+      </details>:<div className={cx(row,'rounded-xl border-2 border-dashed border-line')}><span className="flex-1 text-lg font-extrabold">{i+1}. {g.label}</span><span className="text-sm font-semibold text-ink-soft">No material yet</span></div>}</li>;})}
+     {saved.length>0&&<li><details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
+      {summary(groups.length+1,'Saved',`${saved.length} saved`)}
+      <div className="border-t border-line px-3 pb-5 sm:px-5">{lines(saved)}</div>
+     </details></li>}
+    </ul>}
    </Sheet>
-   <Sheet className="mt-5"><h2 className="text-xl font-extrabold">Handbooks and sheets</h2><ul className="mt-3 grid gap-2 md:grid-cols-2">{EXTRAS.map(x=><li key={x.id}><Link href={`/reviewer/${x.id}`} className="flex min-h-14 items-center gap-3 rounded-2xl border-2 border-mint-line px-4 py-3 hover:bg-mint"><span className="flex-1"><span className="block font-bold">{x.title}</span><span className="text-sm text-ink-soft">{x.blurb}</span></span></Link></li>)}</ul></Sheet>
+   <Sheet className="mt-5"><h2 className="text-xl font-extrabold">Handbooks and sheets</h2><ul className="mt-3 grid gap-2 md:grid-cols-2">{extras.map(x=><li key={x.id}><Link href={`/reviewer/${x.id}`} className="flex min-h-14 items-center gap-3 rounded-2xl border-2 border-mint-line px-4 py-3 hover:bg-mint"><span className="flex-1"><span className="block font-bold">{x.title}</span><span className="text-sm text-ink-soft">{x.blurb}</span></span></Link></li>)}</ul></Sheet>
   </div>
  </>;
 }

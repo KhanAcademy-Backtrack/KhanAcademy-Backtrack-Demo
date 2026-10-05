@@ -43,6 +43,7 @@
  .map-goal{border-left:3px solid #14bf96}
  .goal-bar .session-label{margin-left:auto}
  .goal-bar>.goal-progress{flex:0 1 300px;flex-basis:300px;width:auto}
+ .setup-stage>.button-primary+.button-text{margin-left:20px}
 }
 @media(max-width:780px){
  .goal-bar{position:static}

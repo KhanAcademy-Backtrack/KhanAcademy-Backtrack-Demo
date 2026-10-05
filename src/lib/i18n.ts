@@ -3,7 +3,13 @@
  *  Missing Filipino falls back to English, never to a raw key. */
 export type Lang='en'|'fil';
 const EN={
- 'nav.today':'Today','nav.plan':'Plan','nav.plan.bridge':'College','nav.mocks':'Mocks','nav.reviewer':'Reviewer','nav.calendar':'Calendar','nav.group':'Group','nav.me':'Me','nav.side':'Study goal',
+ 'nav.today':'Home','nav.plan':'Plan','nav.study':'Study','nav.plan.bridge':'College','nav.mocks':'Mocks','nav.reviewer':'Reviewer','nav.calendar':'Calendar','nav.group':'Group','nav.me':'Me','nav.side':'Study goal',
+ 'nav.main':'Main','nav.all':'All pages','nav.sectionPages':'{section} pages','nav.home':'Khanpanion, Home','nav.guide':'Guide','nav.search':'Search','nav.create':'Create a study pack','nav.changeGoalRoutine':'Change goal or routine',
+ 'nav.openMenu':'Open menu','nav.closeMenu':'Close menu','nav.menu':'Menu','nav.expand':'Expand sidebar','nav.collapse':'Collapse sidebar','nav.shortcuts':'Shortcuts','nav.studyTools':'Study tools',
+ 'nav.yourExams':'Your exams','nav.yourProgram':'Your program','nav.yourTopic':'Your topic','nav.yourGoal':'Your goal','nav.generalCet':'General CET review','nav.moreInPlan':'{n} more in your plan','nav.editExams':'Add or edit exams','nav.changeGoal':'Change my goal','nav.setGoal':'Set a study goal',
+ 'page.college':'College map','page.topic':'My topic','page.plan':'My plan','page.calendar':'Calendar','page.dates':'Exam dates','page.reviewer':'CET Reviewers','page.courses':'Courses','page.mocks':'Practice exams','page.recall':'Daily recall','page.packs':'Study packs',
+ 'search.label':'Search Khanpanion','search.placeholder':'Search topics, reviewer, practice','search.results':'Search results','search.none':'No matches yet. Try a topic like “fractions” or an exam like “UPCAT”.','search.loading':'Loading…',
+ 'reviewer.for':'Reviewing for',
  'side.admission.short':'Exam prep','side.bridge.short':'College prep',
  'side.admission':'Getting into college','side.bridge':'Starting college',
  'me.pledge':'My study plan','me.calendar':'Calendar','me.admissions':'Exam dates','me.bridge':'College preparation','me.settings':'Settings and backups','me.about':'About Khanpanion','me.language':'Language',
@@ -15,7 +21,7 @@ const EN={
 } as const;
 export type Key=keyof typeof EN;
 const FIL:Partial<Record<Key,string>>={
- 'nav.today':'Ngayon','nav.plan':'Plano','nav.plan.bridge':'Kolehiyo','nav.mocks':'Mock','nav.reviewer':'Reviewer','nav.calendar':'Kalendaryo','nav.group':'Grupo','nav.me':'Ako','nav.side':'Aling panig',
+ 'nav.plan':'Plano','nav.plan.bridge':'Kolehiyo','nav.mocks':'Mock','nav.reviewer':'Reviewer','nav.calendar':'Kalendaryo','nav.group':'Grupo','nav.me':'Ako','nav.side':'Aling panig',
  'side.admission.short':'Makapasok','side.bridge.short':'Magsimula nang malakas',
  'side.admission':'Pagpasok sa kolehiyo','side.bridge':'Pagsisimula sa kolehiyo',
  'me.pledge':'Aking plano sa pag-aaral','me.calendar':'Kalendaryo','me.admissions':'Mga petsa ng exam','me.bridge':'Paghahanda sa kolehiyo','me.settings':'Settings at backup','me.about':'Tungkol sa Khanpanion','me.language':'Wika',

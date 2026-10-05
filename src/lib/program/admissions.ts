@@ -1,12 +1,19 @@
 /** Exam dates shown on /admissions and in the calendar. Each links to the official
  *  page it was checked against, with the date it was checked. */
-export type ExamId='upcat'|'dcat'|'dostsei'|'pupcet';
+/** Append new exams; saved plans and targets refer to these ids. */
+export const EXAM_IDS=['upcat','dcat','dostsei','pupcet','ustet','acet','plmat','tupstat','msusase'] as const;
+export type ExamId=typeof EXAM_IDS[number];
 export type ExamDate={id:string;exam:ExamId;title:string;start:string;end?:string;window?:boolean;place?:string;note:string;link:string;checked:string};
 export const EXAMS:Record<ExamId,{name:string;full:string;link:string;practice:string}>={
  upcat:{name:'UPCAT',full:'University of the Philippines College Admission Test',link:'https://upcat.up.edu.ph/',practice:'Full UPCAT-style review'},
  dcat:{name:'DCAT',full:'De La Salle University College Admission Test',link:'https://www.dlsu.edu.ph/admission/undergraduate-admissions/',practice:'Practice sets for DCAT'},
  dostsei:{name:'DOST-SEI',full:'DOST-SEI Undergraduate Scholarship Qualifying Examination',link:'https://www.sei.dost.gov.ph/',practice:'Practice sets for DOST-SEI'},
- pupcet:{name:'PUPCET',full:'PUP College Entrance Test',link:'https://www.pup.edu.ph/iapply/',practice:'Practice sets for PUPCET'}
+ pupcet:{name:'PUPCET',full:'PUP College Entrance Test',link:'https://www.pup.edu.ph/iapply/',practice:'Practice sets for PUPCET'},
+ ustet:{name:'USTET',full:'University of Santo Tomas Entrance Test',link:'https://ustet.ust.edu.ph/',practice:'Practice sets for USTET'},
+ acet:{name:'ACET',full:'Ateneo College Entrance Test',link:'https://www.ateneo.edu/college/admissions/acet',practice:'Practice sets for ACET'},
+ plmat:{name:'PLMAT',full:'Pamantasan ng Lungsod ng Maynila Admission Test',link:'https://plm.edu.ph/',practice:'Practice sets for PLMAT'},
+ tupstat:{name:'TUPSTAT',full:'TUP Scholastic and Technical Aptitude Test',link:'https://www.tup.edu.ph/',practice:'Practice sets for TUPSTAT'},
+ msusase:{name:'MSU-SASE',full:'MSU System Admission and Scholarship Examination',link:'https://www.msumain.edu.ph/admissionsoffice/',practice:'Practice sets for MSU-SASE'}
 };
 const CHECKED='2026-09-30';
 export const EXAM_DATES:ExamDate[]=[
@@ -19,4 +26,4 @@ export const EXAM_NOTICES=[
  {exam:'pupcet' as const,note:'PUPCET schedules vary by campus. No January to March 2027 window is confirmed here; check the official page for your campus.'}
 ];
 /** Only announced future dates are prefilled. Others are chosen by the learner. */
-export const DEFAULT_EXAM_DATE:Record<ExamId,string>={upcat:'',dcat:'',dostsei:'2026-11-14',pupcet:''};
+export const DEFAULT_EXAM_DATE:Record<ExamId,string>={upcat:'',dcat:'',dostsei:'2026-11-14',pupcet:'',ustet:'',acet:'',plmat:'',tupstat:'',msusase:''};

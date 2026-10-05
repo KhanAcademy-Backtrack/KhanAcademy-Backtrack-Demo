@@ -14,8 +14,8 @@ import {btn,cx} from './ui';
 function tourSteps(state:ReturnType<typeof useProgram>['state'],browsing:boolean){
  if(browsing)return [
  {tab:'today',title:'Look around first.',body:'You can browse without setting a routine or answering questions. Choose a subject, read a topic or explore an interactive idea.',preview:['Browse by subject','Read an explanation','Try an idea if you want'],href:'/',action:'Open the topic browser'},
- {tab:'reviewer',title:'Find something useful.',body:'Search the reviewer for a topic, save a useful page or print it. Practice is there when you want it; it is not required to browse.',preview:['Search a topic','Save a page','Read at your own pace'],href:'/reviewer',action:'Open the reviewer'},
- {tab:'calendar',title:'Keep your own dates here.',body:'You can use the calendar without a study plan. Add a date from your week, edit it or just look around. You can continue the guide without adding anything.',preview:['Pick a day','Add an event if you want','Continue whenever you are ready'],href:'/calendar',action:'Open the calendar'},
+ {tab:'study',title:'Find something useful.',body:'Study holds the reviewer and every practice tool. Search for a topic, save a useful page or print it. Practice is there when you want it; it is not required to browse.',preview:['Search a topic','Save a page','Read at your own pace'],href:'/reviewer',action:'Open Study'},
+ {tab:'calendar',title:'Keep your own dates here.',body:'The calendar lives under Plan, and you can use it without a study plan. Add a date from your week, edit it or just look around. You can continue the guide without adding anything.',preview:['Pick a day','Add an event if you want','Continue whenever you are ready'],href:'/calendar',action:'Open the calendar'},
  {tab:'today',title:'Choose a goal whenever you want.',body:'The home page keeps your subject browser close. Use Choose my goal when you want a personalized routine. Guide stays in the header if you need another look.',preview:['Keep browsing','Choose a goal later','Your existing work stays saved'],href:'/',action:'Return to browsing'}
  ];
  const goal=learnerGoal(state),label=goalLabel(state),setup=state.setup,topic=setup?.concept,program=PROGRAM_BY_ID[state.bridgeProgram??''];
@@ -23,8 +23,8 @@ function tourSteps(state:ReturnType<typeof useProgram>['state'],browsing:boolean
  return [
   {tab:'today',title:'This space is yours.',body:'You chose '+label+'. Your home page now brings the relevant topics and your study week together.',preview:[label,(setup?.weekdays.length??3)+' study days a week',(setup?.minutes??30)+' minutes per session'],href:'/',action:'Open my home page'},
   {tab:'plan',title:goal==='college'?program?'Start with your foundations.':'Explore a college field.':goal==='topic'?'Your chosen topic is close by.':'A routine you can adjust.',body:goal==='college'?program?'Your program map connects first-year topics to foundations you can review. A placement check can help you choose where to begin.':'Start with general foundations. You can browse degree groups and choose a field when you are ready.':goal==='topic'?'Open your topic summary, follow a reviewed lesson where available, and try the practice questions when you are ready.':'Your plan follows your study days. You can change the routine or add a target date whenever you have one.',preview:goal==='college'?program?['Your program','Useful foundations','Placement check']:['General foundations','Browse college fields','Choose your field later']:goal==='topic'?['Read the summary','Learn with an example','Try it yourself']:['Your study days','A manageable session','Your planning target, if known'],href:next,action:goal==='college'?program?'Open my program map':'Explore college fields':goal==='topic'?'Open my topic':'Open my plan'},
-  {tab:'calendar',title:'Use your real study calendar.',body:'Your chosen days already have sessions. Pick a date, edit a session or add something from your own week. Let’s try the calendar itself.',preview:['Pick a day','Edit or add a session','Move it when plans change'],href:'/calendar',action:'Open my calendar'},
-  {tab:'reviewer',title:'Come back when you need help.',body:'The reviewer is there when a topic needs another look. Search by subject, save a useful page, or return to your home page for the next session.',preview:['Search a topic','Save a useful explanation','Keep your routine flexible'],href:'/reviewer',action:'Open the reviewer'}
+  {tab:'calendar',title:'Use your real study calendar.',body:'The calendar lives under Plan, with your exam dates. Your chosen days already have sessions. Pick a date, edit a session or add something from your own week. Let’s try the calendar itself.',preview:['Pick a day','Edit or add a session','Move it when plans change'],href:'/calendar',action:'Open my calendar'},
+  {tab:'study',title:'Come back when you need help.',body:'Study is there when a topic needs another look. It holds the reviewer, practice exams, BACKTRACK, daily recall and your mistake notebook.',preview:['Search the reviewer','Fix a gap with BACKTRACK','Keep your routine flexible'],href:'/reviewer',action:'Open Study'}
  ];
 }
 type Rect={x:number;y:number;w:number;h:number};
@@ -34,17 +34,20 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
  const [rect,setRect]=useState<Rect>(),[position,setPosition]=useState({top:90,left:14});
  const dialog=useRef<HTMLDivElement>(null),heading=useRef<HTMLHeadingElement>(null),{off}=useMotionPolicy(),{state}=useProgram();
  const STEPS=tourSteps(state,browsing),current=STEPS[Math.min(step,STEPS.length-1)],href=current.href;
- const labels=browsing?['Explore','Reviewer','Calendar','Your goal']:['Home','Your focus','Calendar','Reviewer'];
+ const labels=browsing?['Explore','Study','Calendar','Your goal']:['Home','Your focus','Calendar','Study'];
+ /** The calendar is part of Plan, so its step highlights the Plan tab. */
+ const highlight=current.tab==='calendar'?'plan':current.tab;
  useLayoutEffect(()=>{
   const measure=()=>{
-   const target=[...document.querySelectorAll<HTMLElement>(`[data-program-tour="${current.tab}"]`)].find(el=>el.getBoundingClientRect().width>0);
+   const target=[...document.querySelectorAll<HTMLElement>(`[data-program-tour="${highlight}"]`)].find(el=>el.getBoundingClientRect().width>0);
    const box=target?.getBoundingClientRect(),width=Math.min(420,innerWidth-28),height=Math.min(dialog.current?.getBoundingClientRect().height??430,innerHeight-112);
    const r=box?{x:Math.max(3,box.x-3),y:Math.max(3,box.y-3),w:Math.min(innerWidth-6,box.width+6),h:Math.min(innerHeight-6,box.height+6)}:undefined;
-   setRect(r);setPosition({left:r?Math.min(innerWidth-width-14,Math.max(14,r.x)):Math.max(14,(innerWidth-width)/2),top:r?Math.max(14,Math.min(innerHeight-height-14,r.y>innerHeight/2?r.y-height-16:r.y+r.h+16)):Math.max(14,(innerHeight-height)/2)});
+   const side=!!target?.closest('[data-sidebar]');
+   setRect(r);setPosition(r&&side?{left:Math.min(innerWidth-width-14,r.x+r.w+16),top:Math.max(14,Math.min(innerHeight-height-14,r.y-12))}:{left:r?Math.min(innerWidth-width-14,Math.max(14,r.x)):Math.max(14,(innerWidth-width)/2),top:r?Math.max(14,Math.min(innerHeight-height-14,r.y>innerHeight/2?r.y-height-16:r.y+r.h+16)):Math.max(14,(innerHeight-height)/2)});
   };
   measure();const observer=new ResizeObserver(measure);if(dialog.current)observer.observe(dialog.current);
   window.addEventListener('resize',measure);return()=>{observer.disconnect();window.removeEventListener('resize',measure);};
- },[current.tab]);
+ },[highlight]);
  useEffect(()=>{if(dialog.current)dialog.current.scrollTop=0;heading.current?.focus({preventScroll:true});},[step]);
  function trap(e:React.KeyboardEvent){
   if(e.key!=='Tab')return;
@@ -57,7 +60,7 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
    <div className="absolute inset-x-0 bottom-0 bg-navy-night/55" style={{top:rect.y+rect.h}}/>
    <div className="absolute left-0 bg-navy-night/55" style={{top:rect.y,width:rect.x,height:rect.h}}/>
    <div className="absolute right-0 bg-navy-night/55" style={{top:rect.y,left:rect.x+rect.w,height:rect.h}}/>
-   <div data-tour-highlight={current.tab} className="pointer-events-none absolute rounded-2xl border-[3px] border-green" style={{left:rect.x,top:rect.y,width:rect.w,height:rect.h}}/>
+   <div data-tour-highlight={highlight} className="pointer-events-none absolute rounded-2xl border-[3px] border-green" style={{left:rect.x,top:rect.y,width:rect.w,height:rect.h}}/>
   </>:<div className="absolute inset-0 bg-navy-night/55"/>}
   <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="program-tour-title" aria-describedby="program-tour-body" onKeyDown={trap} className="absolute w-[calc(100%-28px)] max-w-[420px] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-[22px] bg-white p-5 text-navy shadow-sheet sm:p-6" style={position}>
    <div className="flex items-center justify-between gap-3"><p className="text-sm font-semibold text-ink-soft">Step {step+1} of {STEPS.length} · {labels[step]}</p><button aria-label="Close guide" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-0 text-navy hover:bg-sky focus-visible:outline-2 focus-visible:outline-navy" onClick={onClose}><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
