@@ -6,9 +6,9 @@ export const VERIFIED_CLIPS:Record<string,VideoClip>={
  CLWpkv6ccpA:{start:69,end:136,label:'Combine the x terms'},
  Jp25LHI9wII:{start:51,end:139,label:'Multiply every term inside'}
 };
-export function videoSource(id:string,origin:string,mode:ClipMode='focus',clip?:VideoClip):string{
+export function videoSource(id:string,origin:string,mode:ClipMode='focus',clip?:VideoClip,autoplay=true):string{
  if(!/^[A-Za-z0-9_-]{11}$/.test(id))throw Error('Invalid video ID');
- const p=new URLSearchParams({controls:'1',enablejsapi:'1',rel:'0',cc_load_policy:'1',autoplay:'1',origin});
+ const p=new URLSearchParams({controls:'1',enablejsapi:'1',rel:'0',cc_load_policy:'1',autoplay:autoplay?'1':'0',origin});
  if(clip){if(!Number.isInteger(clip.start)||!Number.isInteger(clip.end)||clip.start<0||clip.end<=clip.start)throw Error('Invalid clip range');p.set('start',String(mode==='continue'?clip.end:mode==='full'?0:clip.start));if(mode==='focus')p.set('end',String(clip.end));}
  return `https://www.youtube-nocookie.com/embed/${id}?${p}`;
 }

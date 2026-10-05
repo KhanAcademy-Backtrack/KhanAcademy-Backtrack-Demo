@@ -72,17 +72,17 @@ export async function programJourneys({scenario,origin,root}){
    for(const route of routes){const response=await page.goto(origin+route);assert.equal(response.status(),200,route);await page.locator('h1').first().waitFor();await shot(page,route.replace(/[^\w]/g,'-'),width);if(route==='/packs')assert.ok((await page.locator('.pack-library > article').evaluateAll(cards=>cards.map(c=>c.children.length))).every(n=>n===8),'Every pack keeps eight direct children');}
   },viewport);
   await scenario(`program practice video after check ${width}`,async page=>{
-   // The matched Khan video appears only once an answer is checked, loads nothing until pressed, and writes nothing.
+   // The matched Khan video is embedded, paused, only once an answer is checked, once per page, and writes nothing.
    await page.route('https://www.youtube-nocookie.com/**',r=>r.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Video</title>'}));
    await page.goto(`${origin}/mock/take?f=${encodeURIComponent('topic~geometry|r1')}&mode=practice`);await page.getByRole('button',{name:'Enter the exam hall'}).click();await page.getByRole('radiogroup',{name:'Choices'}).waitFor();
-   const watch=page.getByRole('button',{name:/^Watch the Khan Academy video: /});
-   assert.equal(await watch.count(),0,'No video before the answer is checked');
-   await page.getByRole('radio').nth(1).click();await page.getByRole('button',{name:'Check',exact:true}).click();await page.getByText(/Correct\.|Not this time/).first().waitFor();
-   const shown=watch.filter({visible:true});assert.equal(await shown.count(),1);
-   assert.equal(await shown.evaluate(el=>!!el.closest('aside')),width===1280,'Side panel on wide screens, below the feedback on phones');
-   assert.equal(await page.locator('aside').count(),1);assert.equal(await page.locator('iframe').count(),0,'Nothing loads before the learner presses the video');
-   const before=await data(page);await shown.click();await page.locator('iframe[src^="https://www.youtube-nocookie.com/embed/"]').waitFor();const after=await data(page);
-   for(const k of ['concepts','recall','notebook','studyDays','missions'])assert.deepEqual(after[k],before[k],`${k} unchanged by watching`);
+   const player=page.locator('iframe[src^="https://www.youtube-nocookie.com/embed/"]'),watch=page.getByRole('button',{name:/^Watch the Khan Academy video: /});
+   assert.equal(await player.count(),0,'No video before the answer is checked');
+   await page.getByRole('radio').nth(1).click();const before=await data(page);await page.getByRole('button',{name:'Check',exact:true}).click();await page.getByText(/Correct\.|Not this time/).first().waitFor();
+   await player.waitFor();assert.equal(await player.count(),1,'One player, not one per layout');
+   assert.equal(new URL(await player.getAttribute('src')).searchParams.get('autoplay'),'0','Embedded paused');
+   assert.equal(await player.evaluate(el=>!!el.closest('aside')),width===1280,'Side panel on wide screens, below the feedback on phones');
+   assert.equal(await page.getByRole('button',{name:'Close video',exact:true}).count(),0);assert.equal(await page.locator('aside').count(),1);
+   const after=await data(page);for(const k of ['concepts','recall','notebook','studyDays','missions'])assert.deepEqual(after[k],before[k],`${k} unchanged by the video`);
    await shot(page,'practice-video',width);
    // Exam mode keeps videos for the results page, where each question has one or says plainly it has none.
    await exam(page,'topic~usage|r1');await page.getByRole('radio').first().click();assert.equal(await watch.count(),0,'No video during the exam');await submit(page);

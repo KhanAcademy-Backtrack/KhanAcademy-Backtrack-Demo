@@ -15,6 +15,9 @@ test('every matched video has a YouTube id, a Khan video page and a check date',
   assert.ok(v.title.trim().length>0);
   assert.doesNotThrow(()=>videoSource(v.id,'https://khanpanion.vercel.app'));
  }
+ const paused=new URL(videoSource(all[0].id,'https://khanpanion.vercel.app','focus',undefined,false));
+ assert.equal(paused.hostname,'www.youtube-nocookie.com');assert.equal(paused.searchParams.get('autoplay'),'0','the embedded panel player waits for play');
+ assert.equal(new URL(videoSource(all[0].id,'https://khanpanion.vercel.app')).searchParams.get('autoplay'),'1','pressed players still start at once');
  const byId=new Map();for(const v of all){const seen=byId.get(v.id);if(seen)assert.equal(seen.url,v.url,`${v.id} points at one page`);byId.set(v.id,v);}
  const byUrl=new Map();for(const v of all){const seen=byUrl.get(v.url);if(seen)assert.equal(seen.id,v.id,`${v.url} has one video`);byUrl.set(v.url,v);}
 });

@@ -101,8 +101,10 @@ full Khan videos: `FAMILY_VIDEOS` (by `familyId`), `ITEM_VIDEOS` (authored item 
 and `NO_VIDEO` for what was searched and has no match. `videoFor`: a generated item gets its own
 family's video or none, never another family's; an authored item gets its own, then its concept's.
 `tests/khan-videos.test.mjs` requires every family and concept to be mapped or in `NO_VIDEO`, and every
-id and URL to be in the third-party log. `RelatedVideo` shows one the way Khan lists a lesson's videos,
-loading `KhanPlayer` only when pressed. It appears only after an answer is checked (practice) or the exam
+id and URL to be in the third-party log. In the Work on this panel `RelatedVideo` embeds `KhanPlayer`
+straight away but paused (`autoplay=0`; owner's choice, 6 October), and the exam hall renders that panel
+once, in the aside or inline, so the player loads once. The results key keeps a one-line row that loads
+the player when pressed. Neither has a Close video control. It appears only after an answer is checked (practice) or the exam
 is submitted (results), never before answering, and opening it writes nothing: it is activity, not evidence.
 
 ## Where things live
@@ -160,7 +162,7 @@ The owner asked for a Quizlet-like interface that is not overwhelming, easy to u
 - `btn.quiet` replaced `btn.onDark`. Use one green primary per view. Controls are `rounded-lg`, never pills.
 - `Question`: plain 2 px tiles; a small "Choose an answer" label becomes the feedback line ("Correct." / "Not this time…") after Check. The key gets a green check and a wrong pick gets a dashed navy border and ✕. `keys` (1–4 or A–D) is on only in the exam hall and `Sprint`, never where several questions render. The stem stays the radiogroup's preceding `div` sibling (the daily test reads it).
 - The exam hall is a light focus mode: white top bar with a thin answered-progress line, white question card, white navigator `aside` (it must stay the only `aside`), white bottom bar holding Submit.
-- Exam hall, every form and mode: Back and Next sit in the question card at the end of the answer row (`Question`'s `actions`; in practice before Check, `checkActions` puts Back and a quiet Next before Check; after Check they sit beside Show explanation). The bottom bar keeps only Submit. After Check, right or wrong, a Work on this panel holds the question's Khan video (`RelatedVideo`) and, after a miss, the fix links (`FixLinks`). On `lg` it sits in the navigator `aside` as a trailing `section` (not a `div`: the full-form test indexes `aside > div`); narrower screens show it inline below the feedback, so `WhyPanel` with `linksBeside` carries no links. The results page lists each revealed question's video (`compact`).
+- Exam hall, every form and mode: Back and Next sit in the question card at the end of the answer row (`Question`'s `actions`; in practice before Check, `checkActions` puts Back and a quiet Next before Check; after Check they sit beside Show explanation). The bottom bar keeps only Submit. After Check, right or wrong, a Work on this panel holds the question's Khan video (`RelatedVideo`) and, after a miss, the fix links (`FixLinks`). On `lg` it sits in the navigator `aside` as a trailing `section` (not a `div`: the full-form test indexes `aside > div`); narrower screens show it inline below the feedback, so `WhyPanel` with `linksBeside` carries no links. The navigator column is 320 px at `lg` and 380 px at `xl` so the video is a usable size. The results page lists each revealed question's video (`compact`).
 - BACKTRACK: the goal bar is a white card, sticky below the 64 px header on desktop and static on phones. The session toolbar is static. Stage scrolling measures every sticky bar. Overrides of the legacy route and study CSS live in `src/app/calm.css` (`@layer components`).
 - Layout (owner request: Quizlet-style shell, light theme). `AppShell` in `AppNav.tsx` renders the top bar, a fixed left sidebar at 1024 px and wider, and offsets `main` and the footer. The sidebar is icons-only from 1024 to 1279 px and full width from 1280 px; the hamburger narrows it, remembered under `backtrack.sidebar.v1`. Below 1280 px the hamburger opens a drawer. The sidebar's `nav[aria-label=Main]` and the phone bottom bar hold four sections (see below) with their `data-program-tour` hooks. Under them is the learner's exams or goal.
 
