@@ -167,3 +167,11 @@ The active section's pages show nested under it in the full-width sidebar, and a
 - Name collisions matter to the tests. The sidebar's no-goal action is "Set a study goal", not "Choose my goal". The home keeps exactly one "Change goal or routine" button, in its Personalize card.
 - Header search (`SiteSearch.tsx`) is a `role=combobox` (never `searchbox`, which the reviewer test owns). It lazy-loads `src/lib/site-search.ts`, whose routes are tested in `tests/site-search.test.mjs`.
 - Homes (`PersonalHome`, `BrowseHome`) are one column of `Section` labels over `FeatureCard`s (`HomeCards.tsx`). Keep `data-program-tour-content` on the topic and week cards, in that order.
+
+## Courses page, 5 October 2026
+
+Owner request: make Courses (`/bridge`, `/bridge/<program>`) less text-heavy, borrowing the course-and-lesson flow of a visual learning app. Keep competitor names out of learner-facing copy.
+
+- `CourseArt.tsx` holds original, palette-only course illustrations (one per `PROGRAMS` id; an unknown id falls back to the natural sciences scene) and the `SubjectMark` stroke icons. All are decorative and `aria-hidden`. A new program needs its own scene.
+- Hub: an optional "Jump back in" card for the saved `bridgeProgram`, then illustrated field cards showing a title, a foundation count and progress. The card buttons' accessible names must start with the program title (the browser suites match `/^Health sciences/` and `/Computer Science/`). Degree examples now appear only on the course page.
+- Course page: a course card (sticky on desktop) with progress, the single `Take the placement check` link and first-year course chips. Beside it, a lesson path: foundations deduplicated in `assumes` order, with an "Up next" card on the first non-solid one, and Khan units as numbered tick nodes. Ticks remain the learner's own notes, never learning evidence. The eight-week pace is collapsed in a `<details>`. "Work through a class topic" keeps its heading and `<topic> assumes:` text, which the tour test reads.
