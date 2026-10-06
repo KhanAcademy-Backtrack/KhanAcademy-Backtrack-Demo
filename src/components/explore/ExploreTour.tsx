@@ -7,7 +7,7 @@ const STEPS=[
  {selector:'.explore-filters',title:'Find an idea that interests you',body:'Choose a topic, scroll through the collection, or use Previous and Next. Motion on switches to a still view whenever you prefer.'},
  {selector:'#idea-same-mix .explore-scene-controls',title:'Change something and see why',body:'Move the slider or use the model’s controls. Make a prediction, then open the explanation. You can choose “I don’t know yet” at any time.'},
  {selector:'#idea-same-mix .idea-topline > div',title:'Keep an idea or share it',body:'Save keeps the idea in your Saved list and on Today. Share copies a link to this idea. Your answers stay private.'},
- {selector:'#idea-khan-open-brackets .explore-video-cover',title:'Learn with Khan Academy',body:'Khan clips are clearly labelled. Press Play when you want to watch. You can continue the video or open the full original lesson.'},
+ {selector:'#idea-khan-open-brackets .explore-khan-video',title:'Learn with Khan Academy',body:'Khan clips are clearly labelled and wait, paused, until you press play. You can continue the video or open the full original lesson.'},
  {selector:'#idea-khan-open-brackets .idea-continue',title:'Practise, then come back',body:'Practise on Khan opens the related exercise in another tab. Return here to say how it went, get help, or try a fresh question. Your place is saved.'},
  {selector:'a[href="/review"]',title:'Give the idea another look',body:'Fresh study questions build your reviewer. Review brings earlier ideas back for another try. Your saved discoveries stay in Explore and Today.'}
 ];

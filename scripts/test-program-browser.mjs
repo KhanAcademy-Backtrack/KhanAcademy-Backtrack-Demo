@@ -78,7 +78,7 @@ export async function programJourneys({scenario,origin,root}){
    // The matched Khan video is embedded, paused, only once an answer is checked, once per page, and writes nothing.
    await page.route('https://www.youtube-nocookie.com/**',r=>r.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Video</title>'}));
    await page.goto(`${origin}/mock/take?f=${encodeURIComponent('topic~geometry|r1')}&mode=practice`);await page.getByRole('button',{name:'Enter the exam hall'}).click();await page.getByRole('radiogroup',{name:'Choices'}).waitFor();
-   const player=page.locator('iframe[src^="https://www.youtube-nocookie.com/embed/"]'),watch=page.getByRole('button',{name:/^Watch the Khan Academy video: /});
+   const player=page.locator('iframe[src^="https://www.youtube-nocookie.com/embed/"]');
    assert.equal(await player.count(),0,'No video before the answer is checked');
    await page.getByRole('radio').nth(1).click();const before=await data(page);await page.getByRole('button',{name:'Check',exact:true}).click();await page.getByText(/Correct\.|Not this time/).first().waitFor();
    await player.waitFor();assert.equal(await player.count(),1,'One player, not one per layout');
@@ -88,9 +88,9 @@ export async function programJourneys({scenario,origin,root}){
    const after=await data(page);for(const k of ['concepts','recall','notebook','studyDays','missions'])assert.deepEqual(after[k],before[k],`${k} unchanged by the video`);
    await shot(page,'practice-video',width);
    // Exam mode keeps videos for the results page, where each question has one or says plainly it has none.
-   await exam(page,'topic~usage|r1');await page.getByRole('radio').first().click();assert.equal(await watch.count(),0,'No video during the exam');await submit(page);
-   for(const li of await page.locator('#key ol > li').all())assert.ok(await li.getByRole('button',{name:/^Watch the Khan Academy video: /}).count()===1||await li.getByText('No Khan Academy video matches this question yet.').count()===1);
-   assert.ok(await watch.count()>0);
+   await exam(page,'topic~usage|r1');await page.getByRole('radio').first().click();assert.equal(await player.count(),0,'No video during the exam');await submit(page);
+   for(const li of await page.locator('#key ol > li').all())assert.ok(await li.locator('iframe[src*="autoplay=0"]').count()===1||await li.getByText('No Khan Academy video matches this question yet.').count()===1,'Each answered question shows its paused video or says it has none');
+   assert.ok(await page.locator('#key iframe').count()>0);
   },viewport);
  }
  const messenger='Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.82 Mobile Safari/537.36 [FBAN/Orca-Android;FBAV/477.0.0.39.110;]';

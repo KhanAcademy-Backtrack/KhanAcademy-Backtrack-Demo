@@ -217,7 +217,7 @@ export function BridgeSubjectPage({program,subject}:{program:string;subject:stri
 
     <Section title="Watch first">
      <p className="mt-1 text-sm text-ink-soft">{s.videos.length===1?'A Khan Academy video that opens this subject.':'Khan Academy videos that open this subject.'} Watching is your own study and is not recorded as a result.</p>
-     <div className="mt-4 grid gap-4">{s.videos.map(v=><div key={v.id} className="[&_.khan-player]:my-0"><KhanPlayer id={v.id} title={v.title} source={v.url} onOpen={()=>{}}/></div>)}</div>
+     <div className="mt-4 grid gap-4">{s.videos.map(v=><div key={v.id} className="[&_.khan-player]:my-0"><KhanPlayer id={v.id} title={v.title} source={v.url}/></div>)}</div>
     </Section>
 
     <Section title="Khan Academy units" meta={<p role="status" className="text-sm font-semibold text-ink-soft">{ticked} of {s.units.length} ticked</p>}>

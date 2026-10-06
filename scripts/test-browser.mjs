@@ -70,8 +70,8 @@ try{
  });
  await scenario('supported Khan activity clip and preserved return',async page=>{
    await page.route('https://www.youtube-nocookie.com/**',route=>route.fulfill({contentType:'text/html',body:'<title>Player parameter check</title>'}));
-   await page.goto(origin+'/khan');await page.getByRole('button',{name:'Learn it first',exact:true}).first().click();await page.getByRole('button',{name:/Khan explanation/}).click();await page.locator('.khan-player-cover').click();
-   const frame=page.locator('.khan-player iframe');await frame.waitFor();let url=new URL(await frame.getAttribute('src'));assert.equal(url.searchParams.get('start'),'142');assert.equal(url.searchParams.get('end'),'236');
+   await page.goto(origin+'/khan');await page.getByRole('button',{name:'Learn it first',exact:true}).first().click();await page.getByRole('button',{name:/Khan explanation/}).click();assert.equal(await page.locator('.khan-player-cover').count(),0,'The video shows straight away, with no cover to press');
+   const frame=page.locator('.khan-player iframe');await frame.waitFor();let url=new URL(await frame.getAttribute('src'));assert.equal(url.searchParams.get('autoplay'),'0','Paused until play');assert.equal(url.searchParams.get('start'),'142');assert.equal(url.searchParams.get('end'),'236');
    await page.getByRole('button',{name:'Continue watching',exact:true}).click();url=new URL(await frame.getAttribute('src'));assert.equal(url.searchParams.get('start'),'236');assert.equal(url.searchParams.has('end'),false);
    const practice=page.locator('.khan-practice-stop a[target=_blank]').first();assert.match(await practice.getAttribute('href'),/khanacademy.org/);
    await practice.click({noWaitAfter:true});await page.getByRole('button',{name:'I completed it',exact:true}).click();assert.equal((await saved(page)).pendingKhan.feedback,'completed');assert.equal((await saved(page)).seen.length,0);

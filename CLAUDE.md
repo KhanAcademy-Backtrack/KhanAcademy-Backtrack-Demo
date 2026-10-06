@@ -103,8 +103,10 @@ family's video or none, never another family's; an authored item gets its own, t
 `tests/khan-videos.test.mjs` requires every family and concept to be mapped or in `NO_VIDEO`, and every
 id and URL to be in the third-party log. In the Work on this panel `RelatedVideo` embeds `KhanPlayer`
 straight away but paused (`autoplay=0`; owner's choice, 6 October), and the exam hall renders that panel
-once, in the aside or inline, so the player loads once. The results key keeps a one-line row that loads
-the player when pressed. Neither has a Close video control. It appears only after an answer is checked (practice) or the exam
+once, in the aside or inline, so the player loads once. The results key shows the same paused player
+under each revealed question. Since 7 October (owner) `KhanPlayer` has no click-to-load cover anywhere:
+every Khan video (question panel, results, Courses subjects, BACKTRACK's Khan explanation, the open Explore
+card) is the player itself, paused (`autoplay=0`) and lazily loaded. Neither has a Close video control. It appears only after an answer is checked (practice) or the exam
 is submitted (results), never before answering, and opening it writes nothing: it is activity, not evidence.
 
 ## Where things live
@@ -204,7 +206,7 @@ subjects; Arts and humanities is removed and Business and economics is replaced 
   rebuilds their saved placement checks. Never delete a retired entry.
 - Field page: a Subjects section (kind filter buttons, cards linking to `/bridge/<field>/<subject>`), then
   "Foundations from high school", the eight-week pace and Work through a class topic. Subject page: topics,
-  Watch first (`KhanPlayer`, loads only when pressed), Khan units with tick nodes (`concepts['khan_<unit>']`,
+  Watch first (`KhanPlayer`, shown paused), Khan units with tick nodes (`concepts['khan_<unit>']`,
   own notes only), Builds on and More in the field. Header search lists fields and subjects as `College`.
 - Every unit was rendered in the in-app browser through Khan's own router and its title matched; every video
   page's title and youtube-nocookie id were read. `tests/college-courses.test.mjs` requires each in
