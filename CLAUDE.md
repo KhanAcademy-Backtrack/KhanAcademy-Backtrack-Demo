@@ -18,9 +18,9 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 161 tests
+npm test          # node --test, currently 168 tests
 npm run typecheck # tsc --noEmit
-npm run build     # static export, currently 106 generated pages (including 404)
+npm run build     # static export, currently 188 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
 npm start         # serve the static build on http://127.0.0.1:3047
 ```
@@ -187,6 +187,28 @@ Owner request: make Courses (`/bridge`, `/bridge/<program>`) less text-heavy, bo
 - `CourseArt.tsx` holds original, palette-only course illustrations (one per `PROGRAMS` id; an unknown id falls back to the natural sciences scene) and the `SubjectMark` stroke icons. All are decorative and `aria-hidden`. A new program needs its own scene.
 - Hub: an optional "Jump back in" card for the saved `bridgeProgram`, then illustrated field cards showing a title, a foundation count and progress. The card buttons' accessible names must start with the program title (the browser suites match `/^Health sciences/` and `/Computer Science/`). Degree examples now appear only on the course page.
 - Course page: a course card (sticky on desktop) with progress, the single `Take the placement check` link and first-year course chips. Beside it, a lesson path: foundations deduplicated in `assumes` order, with an "Up next" card on the first non-solid one, and Khan units as numbered tick nodes. Ticks remain the learner's own notes, never learning evidence. The eight-week pace is collapsed in a `<details>`. "Work through a class topic" keeps its heading and `<topic> assumes:` text, which the tour test reads.
+
+## College subjects, 6 October 2026
+
+Owner request: Courses must be college level, not a copy of the CET reviewer, with a variety of subjects per
+field and Khan Academy videos and materials; Computer Science and IT leads with calculus and many coding
+subjects; Arts and humanities is removed and Business and economics is replaced by Statistics.
+
+- `src/lib/program/college-courses.ts` holds `SUBJECTS` (44), `COLLEGE_UNITS` (160 Khan college/AP units,
+  separate from the senior high `KHAN_UNITS`) and `COLLEGE_VIDEOS` (47 full videos). Each subject has a kind,
+  level, our-own-words topics, units, one or two videos, `buildsOn` reviewer concepts and an optional `engine`
+  for Find my missing skill. A topic Khan does not teach is stated in `gap`. Append subjects; ids match `w+`.
+- `PROGRAMS` (`bridge.ts`) are now `cs_it`, `engineering`, `health`, `natural_sciences`, `statistics`,
+  `social_sciences`, each with `subjects` in display order. `RETIRED_PROGRAMS` keeps `business` and `arts`:
+  `/bridge/business` and `/bridge/arts` still build and say where the field went, and `placementForm` still
+  rebuilds their saved placement checks. Never delete a retired entry.
+- Field page: a Subjects section (kind filter buttons, cards linking to `/bridge/<field>/<subject>`), then
+  "Foundations from high school", the eight-week pace and Work through a class topic. Subject page: topics,
+  Watch first (`KhanPlayer`, loads only when pressed), Khan units with tick nodes (`concepts['khan_<unit>']`,
+  own notes only), Builds on and More in the field. Header search lists fields and subjects as `College`.
+- Every unit was rendered in the in-app browser through Khan's own router and its title matched; every video
+  page's title and youtube-nocookie id were read. `tests/college-courses.test.mjs` requires each in
+  `docs/THIRD_PARTY_MATERIALS.md` ("College subjects").
 
 ## Fix-a-gap landing, 6 October 2026
 

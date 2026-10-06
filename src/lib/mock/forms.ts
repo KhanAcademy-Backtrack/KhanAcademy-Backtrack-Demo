@@ -3,7 +3,7 @@ import {FAMILIES,FAMILY_BY_ID,generateItem} from './families/index.ts';
 import {LANGUAGE_ITEMS} from '../../content/mock/language.ts';
 import {READING_ITEMS,PASSAGES} from '../../content/mock/reading.ts';
 import {SCIENCE_ITEMS} from '../../content/mock/science.ts';
-import {PROGRAM_BY_ID} from '../program/bridge.ts';
+import {PROGRAM_BY_ID,RETIRED_PROGRAMS} from '../program/bridge.ts';
 import {UPCAT_BLUEPRINT,SECTION_ORDER,SPRINT,TOPIC_CHECK,BREAK_MINUTES} from './blueprint.ts';
 import type {MockItem,Subtest} from './types.ts';
 
@@ -156,9 +156,10 @@ export function fixedForm(letter:typeof FIXED_FORMS[number]):Form{
 /** A freshman bridge placement check: one question from each family the program's
  *  first year leans on, grouped by subtest. */
 export function placementForm(programId:string,seed:string):Form|undefined{
- const p=PROGRAM_BY_ID[programId];if(!p)return undefined;
+ const live=Object.hasOwn(PROGRAM_BY_ID,programId)?PROGRAM_BY_ID[programId]:undefined,retired=Object.hasOwn(RETIRED_PROGRAMS,programId)?RETIRED_PROGRAMS[programId]:undefined;
+ const p=live?{title:live.title,families:live.placement.families}:retired;if(!p)return undefined;
  const bySub=new Map<Subtest,string[]>();
- for(const f of p.placement.families){const fam=FAMILY_BY_ID[f];if(!fam)continue;bySub.set(fam.subtest,[...(bySub.get(fam.subtest)??[]),`${f}:${seed}-p`]);}
+ for(const f of p.families){const fam=FAMILY_BY_ID[f];if(!fam)continue;bySub.set(fam.subtest,[...(bySub.get(fam.subtest)??[]),`${f}:${seed}-p`]);}
  return {id:`placement-${programId}-${seed}`,kind:'placement',title:`Placement check: ${p.title}`,seed,official:false,breakMinutes:0,sections:[...bySub].map(([subtest,itemIds])=>({subtest,minutes:itemIds.length*2,itemIds}))};
 }
 

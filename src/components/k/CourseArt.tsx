@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
 import type {Subtest} from '@/lib/mock/types';
+import type {SubjectKind} from '@/lib/program/college-courses';
 
 /** Original course illustrations and subject marks, drawn only in the Khanpanion palette.
  *  Decorative: every one is aria-hidden, and the course title carries the meaning. */
@@ -35,11 +36,12 @@ const SCENES:Record<string,ReactNode>={
   <path d="M112 62h32l5 10a5 5 0 0 1-5 7h-26a5 5 0 0 1-5-7Z" fill={G}/>
   <circle cx="124" cy="52" r="2.6" fill={GL}/><circle cx="131" cy="44" r="2" fill={GL}/>
  </>,
- business:<>
-  <path d="M22 84h116" stroke={N} strokeWidth="3" strokeLinecap="round"/>
-  <rect x="32" y="60" width="16" height="24" rx="3" fill={F}/><rect x="56" y="48" width="16" height="36" rx="3" fill={GL}/><rect x="80" y="36" width="16" height="48" rx="3" fill={G}/><rect x="104" y="24" width="16" height="60" rx="3" fill={N}/>
-  <path d="M30 50 58 34l20 8 40-26" fill="none" stroke={GD} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/><path d="M106 14h13v13" fill="none" stroke={GD} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/>
-  <circle cx="138" cy="44" r="12" fill={G}/><text x="138" y="49" textAnchor="middle" fontSize="14" fontWeight="800" fill={N} fontFamily="Arial">₱</text>
+ statistics:<>
+  <path d="M18 84h124" stroke={N} strokeWidth="3" strokeLinecap="round"/>
+  {[[26,70,14],[40,58,26],[54,42,42],[68,30,54],[82,28,56],[96,38,46],[110,54,30],[124,68,16]].map(([x,y,h],i)=><rect key={i} x={x} y={y} width="12" height={h} rx="2.5" fill={i===3||i===4?G:i%2?GL:F}/>)}
+  <path d="M22 80C46 78 52 30 80 26s34 52 58 54" fill="none" stroke={N} strokeWidth="3.2" strokeLinecap="round"/>
+  <path d="M80 22v62" stroke={GD} strokeWidth="2.4" strokeDasharray="4 4"/>
+  <circle cx="134" cy="22" r="9" fill={M} stroke={N} strokeWidth="2.8"/><path d="m140.5 28.5 7 7" stroke={N} strokeWidth="3.4" strokeLinecap="round"/><circle cx="134" cy="22" r="3" fill={G}/>
  </>,
  social_sciences:<>
   <path d="M22 22h62a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H46l-12 11v-11h-12a8 8 0 0 1-8-8V30a8 8 0 0 1 8-8Z" fill={G}/>
@@ -47,13 +49,6 @@ const SCENES:Record<string,ReactNode>={
   <path d="M138 36H90a8 8 0 0 0-8 8v18a8 8 0 0 0 8 8h30l11 9v-9h7a8 8 0 0 0 8-8V44a8 8 0 0 0-8-8Z" fill={W} stroke={N} strokeWidth="2.8"/>
   <circle cx="100" cy="53" r="3.2" fill={N}/><circle cx="112" cy="53" r="3.2" fill={N}/><circle cx="124" cy="53" r="3.2" fill={N}/>
   <circle cx="30" cy="84" r="5" fill={GL}/><circle cx="46" cy="86" r="3" fill={F}/>
- </>,
- arts:<>
-  <path d="M80 30C66 22 46 20 28 24v54c18-4 38-2 52 6 14-8 34-10 52-6V24c-18-4-38-2-52 6Z" fill={W} stroke={N} strokeWidth="2.8" strokeLinejoin="round"/>
-  <path d="M80 30v54" stroke={N} strokeWidth="2.8"/>
-  <path d="M38 38c10-2 22-1 32 3M38 48c10-2 22-1 32 3M38 58c10-2 22-1 32 3" stroke={F} strokeWidth="3" strokeLinecap="round" fill="none"/>
-  <path d="M92 64c8-14 20-24 34-30" stroke={G} strokeWidth="8" strokeLinecap="round" fill="none"/>
-  <path d="M120 22l14-8 4 6-12 10Z" fill={N}/><circle cx="96" cy="44" r="4" fill={GD}/><circle cx="110" cy="70" r="3" fill={GL}/>
  </>
 };
 
@@ -75,5 +70,18 @@ export function SubjectMark({subject,className='h-6 w-6'}:{subject:Subtest|'khan
   :subject==='reading'?<><path {...p} d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5Zm0 0v13"/></>
   :subject==='language'?<><path {...p} d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-7l-4 3v-3H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/><path {...p} d="M8 13l2-5 2 5M8.7 11.4h2.6M14 9.5h3M15.5 8v1.5"/></>
   :<><path {...p} d="M12 3 4 7.5v9L12 21l8-4.5v-9Z"/><path {...p} d="m8.5 12 2.5 2.5 4.5-5"/></>
+ }</svg>;
+}
+
+/** A small stroke mark for each kind of college subject. */
+export function KindMark({kind,className='h-6 w-6'}:{kind:SubjectKind;className?:string}){
+ const p={fill:'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round' as const,strokeLinejoin:'round' as const};
+ return <svg viewBox="0 0 24 24" className={className} aria-hidden="true">{
+  kind==='math'?<path {...p} d="M5 19c3 0 3-14 6-14M4 12h6M14 9l5 6M19 9l-5 6"/>
+  :kind==='statistics'?<><path {...p} d="M4 20h16"/><path {...p} d="M7 20v-5M11 20V8M15 20v-8M19 20v-3"/></>
+  :kind==='programming'?<><path {...p} d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></>
+  :kind==='computing'?<><rect {...p} x="4" y="5" width="16" height="11" rx="1.5"/><path {...p} d="M9 20h6M12 16v4"/></>
+  :kind==='science'?<><path {...p} d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3M7.5 14h9"/></>
+  :<><circle {...p} cx="9" cy="8" r="3"/><circle {...p} cx="17" cy="9" r="2.4"/><path {...p} d="M3.5 19c.8-3.4 3-5 5.5-5s4.7 1.6 5.5 5M14.5 14.5c2.6-.4 4.8.9 5.8 4"/></>
  }</svg>;
 }

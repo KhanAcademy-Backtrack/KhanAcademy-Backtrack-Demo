@@ -110,6 +110,227 @@ The BACKTRACK route steps in `khan-materials.ts`'s `UNMATCHED` set are unchanged
 - [Inferences | Worked example](https://www.khanacademy.org/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-information-and-ideas/x07a01ed1f1ffc4bd:inferences/v/inferences-worked-example). Video id `mDJuTM4mqhs`. Checked 2026-10-05. Used for: `inference`.
 - [Text structure and purpose | Worked example](https://www.khanacademy.org/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-craft-and-structure/x07a01ed1f1ffc4bd:text-structure-and-purpose/v/text-structure-and-purpose-video). Video id `lbZjD48fWd8`. Checked 2026-10-05. Used for: `author_purpose`.
 
+## College subjects, checked 2026-10-06
+
+`src/lib/program/college-courses.ts` gives each Courses field (`/bridge/<field>`) its college subjects, and each subject a page (`/bridge/<field>/<subject>`) with its topics, one or two Khan Academy videos and the Khan Academy units that teach it. These are college and AP®︎/College courses, not the senior high courses the CET reviewer uses. The subject topics are written in Khanpanion's own words from common Philippine first- and second-year course outlines and are on the faculty review list.
+
+Method. Each course was found from Khan Academy's own rendered subject pages (Math, Science, Computing, Social studies and Test prep: MCAT) in the in-app browser on 6 October 2026, never by guessing a URL. Every unit below was then rendered in that browser by Khan Academy's own client router and its document title and page heading were read and matched to the unit name listed here; all 160 matched. Every video page below was opened in the same browser: its document title named the video as "(video)" on Khan Academy and its player was a youtube-nocookie embed of the listed id. These are full videos; no clip range is set, because a focused clip needs its captions watched first. The players load only when pressed. Watching a video or ticking a unit is activity only and never learning evidence.
+
+Gaps said plainly: Khan Academy's course listings on 6 October 2026 showed no course on logic, sets and proof, so the Discrete mathematics subject says so on its page. Economics, business and the arts and humanities fields were removed from Courses on the owner's request (6 October 2026); their old addresses now say so, and a learner's saved placement checks for them still rebuild.
+
+### Videos
+
+- [Introducing limits](https://www.khanacademy.org/math/calculus-1/cs1-limits-and-continuity/cs1-limits-intro/v/introduction-to-limits-hd). Video id `riXcZT2ICjA`. Checked 2026-10-06. Used for: `calculus1`.
+- [Introducing u-substitution](https://www.khanacademy.org/math/calculus-2/cs2-integration-techniques/cs2-integrating-with-u-substitution/v/u-substitution). Video id `b76wePnIBdU`. Checked 2026-10-06. Used for: `calculus2`.
+- [Multivariable functions](https://www.khanacademy.org/math/multivariable-calculus/thinking-about-multivariable-function/introduction-to-multivariable-calculus/v/multivariable-functions). Video id `TrcCbdWwCBc`. Checked 2026-10-06. Used for: `multivariable`.
+- [Introducing differential equations](https://www.khanacademy.org/math/differential-equations/first-order-differential-equations/differential-equations-intro/v/differential-equation-introduction). Video id `6o7b9yyhH7k`. Checked 2026-10-06. Used for: `diffeq`.
+- [Vector intro for linear algebra](https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/v/vector-introduction-linear-algebra). Video id `br7tS1t2SFE`. Checked 2026-10-06. Used for: `linear_algebra`.
+- [Plotting numbers on the complex plane](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:complex/x9e81a4f98389efdf:complex-plane/v/plotting-complex-numbers-on-the-complex-plane). Video id `kGzXIbauGQk`. Checked 2026-10-06. Used for: `precalculus`.
+- [Permutation formula](https://www.khanacademy.org/math/statistics-probability/counting-permutations-and-combinations/permutation-lib/v/permutation-formula). Video id `DROZVHObeko`. Checked 2026-10-06. Used for: `discrete`.
+- [Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/random-variables). Video id `3v9w79NhsfI`. Checked 2026-10-06. Used for: `probability`.
+- [Qualitative sense of normal distributions](https://www.khanacademy.org/math/statistics-probability/modeling-distributions-of-data/normal-distributions-library/v/ck12-org-normal-distribution-problems-qualitative-sense-of-normal-distributions). Video id `79duxPXpyKQ`. Checked 2026-10-06. Used for: `describing_data`.
+- [Confidence intervals and margin of error](https://www.khanacademy.org/math/statistics-probability/confidence-intervals-one-sample/introduction-to-confidence-intervals/v/confidence-intervals-and-margin-of-error). Video id `hlM7zdf7zwU`. Checked 2026-10-06. Used for: `inference`.
+- [Simple hypothesis testing](https://www.khanacademy.org/math/statistics-probability/significance-tests-one-sample/idea-of-significance-tests/v/simple-hypothesis-testing). Video id `5D1gV37bKXY`. Checked 2026-10-06. Used for: `inference`.
+- [Example: Correlation coefficient intuition](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data/scatterplots-and-correlation/v/correlation-coefficient-intuition-examples). Video id `-Y-M9aD_ccQ`. Checked 2026-10-06. Used for: `regression`.
+- [Reasonable samples](https://www.khanacademy.org/math/statistics-probability/designing-studies/sampling-and-surveys/v/reasonable-samples). Video id `aKAw-DyZa6g`. Checked 2026-10-06. Used for: `study_design`.
+- [ANOVA 1: Calculating SST (total sum of squares)](https://www.khanacademy.org/math/statistics-probability/analysis-of-variance-anova-library/analysis-of-variance-anova/v/anova-1-calculating-sst-total-sum-of-squares). Video id `EFdlFoHI_0I`. Checked 2026-10-06. Used for: `anova`.
+- [What is computer science?](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:computational-thinking-with-variables/x5279a44ae0ab15d6:the-programming-platform/v/what-is-computer-science). Video id `5LeZflr8Zfs`. Checked 2026-10-06. Used for: `python`.
+- [What is Programming?](https://www.khanacademy.org/computing/computer-programming/programming/intro-to-programming/v/programming-intro). Video id `FCMxA3m_Imc`. Checked 2026-10-06. Used for: `javascript`.
+- [Classes and objects](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:building-software-with-classes/x5279a44ae0ab15d6:attributes/v/classes-and-objects). Video id `ocWCzDAH5lI`. Checked 2026-10-06. Used for: `oop`.
+- [What is an algorithm and why should you care?](https://www.khanacademy.org/computing/computer-science/algorithms/intro-to-algorithms/v/what-are-algorithms). Video id `CvSOaYi89B4`. Checked 2026-10-06. Used for: `algorithms`.
+- [Welcome to the web!](https://www.khanacademy.org/computing/computer-programming/html-css/intro-to-html/v/making-webpages-intro). Video id `jHPr-CuvHhs`. Checked 2026-10-06. Used for: `web_dev`.
+- [Welcome to SQL](https://www.khanacademy.org/computing/computer-programming/sql/sql-basics/v/welcome-to-sql). Video id `IXycPq7MnwE`. Checked 2026-10-06. Used for: `databases`.
+- [Datasets and data structures](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:analyzing-data-with-dictionaries/x5279a44ae0ab15d6:dictionaries/v/datasets-and-data-structures). Video id `WZQRJjeG6lo`. Checked 2026-10-06. Used for: `data_analysis`.
+- [Hair simulation overview](https://www.khanacademy.org/computing/pixar/simulation/hair-simulation-101/v/hair-simulation-intro). Video id `YeYW8TIWLG8`. Checked 2026-10-06. Used for: `graphics`.
+- [What is the Internet?](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:the-internet/xcae6f4a7ff015e7d:introducing-the-internet/v/what-is-the-internet). Video id `Dxcc6ycZ73M`. Checked 2026-10-06. Used for: `systems`.
+- [What is cryptography?](https://www.khanacademy.org/computing/computer-science/cryptography/crypt/v/intro-to-cryptography). Video id `Kf9KjCKmDcU`. Checked 2026-10-06. Used for: `security`.
+- [Public key cryptography: What is it?](https://www.khanacademy.org/computing/computer-science/cryptography/modern-crypt/v/diffie-hellman-key-exchange-part-1). Video id `MsqqpO9R5Hc`. Checked 2026-10-06. Used for: `security`.
+- [Dynamic equilibrium](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:equilibrium/x2eef969c74e0d802:introduction-to-equilibrium/v/dynamic-equilibrium). Video id `zaHM74k9Z1w`. Checked 2026-10-06. Used for: `gen_chem`.
+- [sp3 hybridized orbitals and sigma bonds](https://www.khanacademy.org/science/organic-chemistry/gen-chem-review/hybrid-orbitals-jay/v/sp3-hybridized-orbitals-and-sigma-bonds). Video id `u1eGSL6J6Fo`. Checked 2026-10-06. Used for: `organic_chem`.
+- [Amino acid structure](https://www.khanacademy.org/test-prep/mcat/biomolecules/amino-acids-and-proteins1/v/amino-acid-structure). Video id `BbZB-WBVFSk`. Checked 2026-10-06. Used for: `biochemistry`.
+- [Organelles in eukaryotic cells](https://www.khanacademy.org/science/ap-biology/cell-structure-and-function/cell-structures-and-their-functions/v/organelles-in-eukaryotic-cells). Video id `bWPQvxElpLY`. Checked 2026-10-06. Used for: `cell_bio`.
+- [Phases of meiosis I](https://www.khanacademy.org/science/ap-biology/heredity/meiosis-and-genetic-diversity/v/phases-of-meiosis-i). Video id `XGWL9jfPHJ8`. Checked 2026-10-06. Used for: `genetics`.
+- [Introduction to evolution and natural selection](https://www.khanacademy.org/science/ap-biology/natural-selection/natural-selection-ap/v/introduction-to-evolution-and-natural-selection). Video id `GcjgWov7mTM`. Checked 2026-10-06. Used for: `evolution_ecology`.
+- [Bacteria](https://www.khanacademy.org/science/biology/bacteria-archaea/prokaryote-structure/v/bacteria). Video id `TDoGrbpJJ14`. Checked 2026-10-06. Used for: `microbiology`.
+- [Meet the heart!](https://www.khanacademy.org/science/health-and-medicine/human-anatomy-and-physiology/heart-introduction/v/meet-the-heart). Video id `Vi1JK6IYVt8`. Checked 2026-10-06. Used for: `anatomy`.
+- [Introduction to AP Physics 1](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:kinematics/xf557a762645cccc5:scalars-and-vectors-in-1d/v/introduction-to-ap-physics-1). Video id `21p-yiQ9xy4`. Checked 2026-10-06. Used for: `physics_mechanics`.
+- [Electric charge and electric force](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:electric-force-field-and-potential/x0e2f5a2c:electric-charge-and-electric-force/v/electric-charge-and-electric-force). Video id `lU8qZ0UyZUk`. Checked 2026-10-06. Used for: `physics_em`.
+- [The kinetic molecular theory of gases](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:thermodynamics/x0e2f5a2c:gases/v/the-kinetic-molecular-theory-of-gases). Video id `HkSXiHz9vUc`. Checked 2026-10-06. Used for: `thermodynamics`.
+- [Ideal circuit elements](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ideal-circuit-elements). Video id `l-h72j2-X0o`. Checked 2026-10-06. Used for: `circuits`.
+- [Fluid flow](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:fluids/xf557a762645cccc5:fluid-flow/v/fluid-flow). Video id `ZBvQfi3P0l4`. Checked 2026-10-06. Used for: `health_physics`.
+- [The carbon cycle](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:the-living-world-ecosystems-and-biodiversity/x0b0e430a38ebd23f:biogeochemical-cycles/v/carbon-cycle). Video id `_dYkByQ9Kmg`. Checked 2026-10-06. Used for: `environmental`.
+- [Scale of the large](https://www.khanacademy.org/science/cosmology-and-astronomy/universe-scale-topic/scale-earth-galaxy-tutorial/v/scale-of-the-large). Video id `5FEjrStgcF8`. Checked 2026-10-06. Used for: `astronomy`.
+- [Weber’s law and thresholds](https://www.khanacademy.org/test-prep/mcat/processing-the-environment/sensory-perception/v/webers-law-and-thresholds). Video id `O_nY1TM2RZM`. Checked 2026-10-06. Used for: `psychology`.
+- [Structure of the nervous system](https://www.khanacademy.org/test-prep/mcat/behavior/biological-basis-of-behavior-ner/v/structure-of-the-nervous-system). Video id `jmD0LBdAvlE`. Checked 2026-10-06. Used for: `biopsych`.
+- [Piaget’s stages of cognitive development](https://www.khanacademy.org/science/health-and-medicine/executive-systems-of-the-brain/cognition-lesson/v/piagets-stages-of-cognitive-development). Video id `Jt3-PIC2nCs`. Checked 2026-10-06. Used for: `development`.
+- [Self concept, self identity, and social identity](https://www.khanacademy.org/test-prep/mcat/individuals-and-society/self-identity/v/self-concept-self-identity-social-identity). Video id `PaA0mLVQd3k`. Checked 2026-10-06. Used for: `social_psych`.
+- [Macrosociology vs microsociology](https://www.khanacademy.org/test-prep/mcat/society-and-culture/social-structures/v/macrosociology-vs-microsociology). Video id `-BVeSykcQeE`. Checked 2026-10-06. Used for: `sociology`.
+- [Overview of social inequality](https://www.khanacademy.org/test-prep/mcat/social-inequality/social-class/v/overview-of-social-inequality). Video id `JYxspCbwZVs`. Checked 2026-10-06. Used for: `sociology`.
+- [Globalization I: The Upside](https://www.khanacademy.org/humanities/world-history/x66f79d8a:globalization/x66f79d8a:is-globalization-good-or-bad-9-2/v/globalization-i-the-upside-crash-course-world-history-41-beta). Video id `5SnR-e0S6Ic`. Checked 2026-10-06. Used for: `world_history`.
+
+### Units
+
+- [Calculus 1: Limits and continuity](https://www.khanacademy.org/math/calculus-1/cs1-limits-and-continuity). Checked 2026-10-06. Used for: `calculus1`.
+- [Calculus 1: Derivatives: definition and basic rules](https://www.khanacademy.org/math/calculus-1/cs1-derivatives-definition-and-basic-rules). Checked 2026-10-06. Used for: `calculus1`.
+- [Calculus 1: Derivatives: chain rule and other advanced topics](https://www.khanacademy.org/math/calculus-1/cs1-derivatives-chain-rule-and-other-advanced-topics). Checked 2026-10-06. Used for: `calculus1`.
+- [Calculus 1: Applications of derivatives](https://www.khanacademy.org/math/calculus-1/cs1-applications-of-derivatives). Checked 2026-10-06. Used for: `calculus1`.
+- [Calculus 1: Analyzing functions](https://www.khanacademy.org/math/calculus-1/cs1-analyzing-functions). Checked 2026-10-06. Used for: `calculus1`.
+- [Calculus 1: Integrals](https://www.khanacademy.org/math/calculus-1/cs1-integrals). Checked 2026-10-06. Used for: `calculus1`.
+- [Calculus 2: Integration techniques](https://www.khanacademy.org/math/calculus-2/cs2-integration-techniques). Checked 2026-10-06. Used for: `calculus2`.
+- [Calculus 2: Differential equations](https://www.khanacademy.org/math/calculus-2/cs2-differential-equations). Checked 2026-10-06. Used for: `calculus2`, `diffeq`.
+- [Calculus 2: Applications of integrals](https://www.khanacademy.org/math/calculus-2/cs2-applications-of-integrals). Checked 2026-10-06. Used for: `calculus2`.
+- [Calculus 2: Parametric equations, polar coordinates, and vector-valued functions](https://www.khanacademy.org/math/calculus-2/cs2-parametric-equations-polar-coordinates-and-vector-valued-functions). Checked 2026-10-06. Used for: `calculus2`.
+- [Calculus 2: Series](https://www.khanacademy.org/math/calculus-2/cs2-series). Checked 2026-10-06. Used for: `calculus2`.
+- [Multivariable calculus: Thinking about multivariable functions](https://www.khanacademy.org/math/multivariable-calculus/thinking-about-multivariable-function). Checked 2026-10-06. Used for: `multivariable`.
+- [Multivariable calculus: Derivatives of multivariable functions](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives). Checked 2026-10-06. Used for: `multivariable`.
+- [Multivariable calculus: Applications of multivariable derivatives](https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives). Checked 2026-10-06. Used for: `multivariable`.
+- [Multivariable calculus: Integrating multivariable functions](https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions). Checked 2026-10-06. Used for: `multivariable`.
+- [Multivariable calculus: Green’s, Stokes’, and the divergence theorems](https://www.khanacademy.org/math/multivariable-calculus/greens-theorem-and-stokes-theorem). Checked 2026-10-06. Used for: `multivariable`.
+- [Differential equations: First order differential equations](https://www.khanacademy.org/math/differential-equations/first-order-differential-equations). Checked 2026-10-06. Used for: `diffeq`.
+- [Differential equations: Second order linear equations](https://www.khanacademy.org/math/differential-equations/second-order-differential-equations). Checked 2026-10-06. Used for: `diffeq`.
+- [Differential equations: Laplace transform](https://www.khanacademy.org/math/differential-equations/laplace-transform). Checked 2026-10-06. Used for: `diffeq`.
+- [Linear algebra: Vectors and spaces](https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces). Checked 2026-10-06. Used for: `linear_algebra`.
+- [Linear algebra: Matrix transformations](https://www.khanacademy.org/math/linear-algebra/matrix-transformations). Checked 2026-10-06. Used for: `linear_algebra`.
+- [Linear algebra: Alternate coordinate systems (bases)](https://www.khanacademy.org/math/linear-algebra/alternate-bases). Checked 2026-10-06. Used for: `linear_algebra`.
+- [College Algebra: Functions](https://www.khanacademy.org/math/college-algebra/xa5dd2923c88e7aa8:functions). Checked 2026-10-06. Used for: `precalculus`.
+- [College Algebra: Logarithms](https://www.khanacademy.org/math/college-algebra/xa5dd2923c88e7aa8:logarithms). Checked 2026-10-06. Used for: `precalculus`.
+- [Precalculus: Trigonometry](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:trig). Checked 2026-10-06. Used for: `precalculus`.
+- [Precalculus: Complex numbers](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:complex). Checked 2026-10-06. Used for: `precalculus`.
+- [Precalculus: Conic sections](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:conics). Checked 2026-10-06. Used for: `precalculus`.
+- [Precalculus: Vectors](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:vectors). Checked 2026-10-06. Used for: `linear_algebra`.
+- [Precalculus: Matrices](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:matrices). Checked 2026-10-06. Used for: `linear_algebra`.
+- [Precalculus: Probability and combinatorics](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:prob-comb). Checked 2026-10-06. Used for: `discrete`.
+- [Precalculus: Series](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:series). Checked 2026-10-06. Used for: `precalculus`, `discrete`.
+- [Statistics and probability: Analyzing categorical data](https://www.khanacademy.org/math/statistics-probability/analyzing-categorical-data). Checked 2026-10-06. Used for: `describing_data`.
+- [Statistics and probability: Displaying and comparing quantitative data](https://www.khanacademy.org/math/statistics-probability/displaying-describing-data). Checked 2026-10-06. Used for: `describing_data`.
+- [Statistics and probability: Summarizing quantitative data](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data). Checked 2026-10-06. Used for: `describing_data`.
+- [Statistics and probability: Modeling data distributions](https://www.khanacademy.org/math/statistics-probability/modeling-distributions-of-data). Checked 2026-10-06. Used for: `describing_data`.
+- [Statistics and probability: Exploring bivariate numerical data](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data). Checked 2026-10-06. Used for: `regression`.
+- [Statistics and probability: Study design](https://www.khanacademy.org/math/statistics-probability/designing-studies). Checked 2026-10-06. Used for: `study_design`.
+- [Statistics and probability: Probability](https://www.khanacademy.org/math/statistics-probability/probability-library). Checked 2026-10-06. Used for: `probability`.
+- [Statistics and probability: Counting, permutations, and combinations](https://www.khanacademy.org/math/statistics-probability/counting-permutations-and-combinations). Checked 2026-10-06. Used for: `discrete`, `probability`.
+- [Statistics and probability: Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library). Checked 2026-10-06. Used for: `probability`.
+- [Statistics and probability: Sampling distributions](https://www.khanacademy.org/math/statistics-probability/sampling-distributions-library). Checked 2026-10-06. Used for: `inference`.
+- [Statistics and probability: Confidence intervals](https://www.khanacademy.org/math/statistics-probability/confidence-intervals-one-sample). Checked 2026-10-06. Used for: `inference`.
+- [Statistics and probability: Significance tests (hypothesis testing)](https://www.khanacademy.org/math/statistics-probability/significance-tests-one-sample). Checked 2026-10-06. Used for: `inference`.
+- [Statistics and probability: Two-sample inference for the difference between groups](https://www.khanacademy.org/math/statistics-probability/significance-tests-confidence-intervals-two-samples). Checked 2026-10-06. Used for: `inference`, `anova`.
+- [Statistics and probability: Inference for categorical data (chi-square tests)](https://www.khanacademy.org/math/statistics-probability/inference-categorical-data-chi-square-tests). Checked 2026-10-06. Used for: `inference`.
+- [Statistics and probability: Advanced regression (inference and transforming)](https://www.khanacademy.org/math/statistics-probability/advanced-regression-inference-transforming). Checked 2026-10-06. Used for: `regression`.
+- [Statistics and probability: Analysis of variance (ANOVA)](https://www.khanacademy.org/math/statistics-probability/analysis-of-variance-anova-library). Checked 2026-10-06. Used for: `anova`.
+- [AP®︎/College Statistics: Exploring one-variable data and collecting data](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:exploring-one-variable-data-and-collecting-data). Checked 2026-10-06. Used for: `study_design`.
+- [AP®︎/College Statistics: Probability, random variables, and probability distributions](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:probability-random-variables-and-probability-distributions). Checked 2026-10-06. Used for: `probability`.
+- [AP®︎/College Statistics: Regression analysis](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:regression-analysis). Checked 2026-10-06. Used for: `regression`.
+- [Intro to computer science - Python: Computational thinking with variables](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:computational-thinking-with-variables). Checked 2026-10-06. Used for: `python`.
+- [Intro to computer science - Python: Designing algorithms with conditionals](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:designing-algorithms-with-conditionals). Checked 2026-10-06. Used for: `python`.
+- [Intro to computer science - Python: Simulating phenomena with loops](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:simulating-phenomena-with-loops). Checked 2026-10-06. Used for: `python`.
+- [Intro to computer science - Python: Playing games with functions](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:playing-games-with-functions). Checked 2026-10-06. Used for: `python`.
+- [Intro to computer science - Python: Automating tasks with lists](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:automating-tasks-with-lists). Checked 2026-10-06. Used for: `python`, `algorithms`.
+- [Intro to computer science - Python: Analyzing data with dictionaries](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:analyzing-data-with-dictionaries). Checked 2026-10-06. Used for: `algorithms`, `data_analysis`.
+- [Intro to computer science - Python: Building software with classes](https://www.khanacademy.org/computing/intro-to-python-fundamentals/x5279a44ae0ab15d6:building-software-with-classes). Checked 2026-10-06. Used for: `oop`.
+- [Computer programming: Intro to JS: Drawing & Animation](https://www.khanacademy.org/computing/computer-programming/programming). Checked 2026-10-06. Used for: `javascript`.
+- [Computer programming: Advanced JS: Games & Visualizations](https://www.khanacademy.org/computing/computer-programming/programming-games-visualizations). Checked 2026-10-06. Used for: `javascript`, `oop`.
+- [Computer programming: Advanced JS: Natural Simulations](https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations). Checked 2026-10-06. Used for: `graphics`.
+- [Computer programming: Intro to HTML/CSS: Making webpages](https://www.khanacademy.org/computing/computer-programming/html-css). Checked 2026-10-06. Used for: `web_dev`.
+- [Computer programming: HTML/JS: Making webpages interactive](https://www.khanacademy.org/computing/computer-programming/html-css-js). Checked 2026-10-06. Used for: `web_dev`.
+- [Computer programming: HTML/JS: Making webpages interactive with jQuery](https://www.khanacademy.org/computing/computer-programming/html-js-jquery). Checked 2026-10-06. Used for: `web_dev`.
+- [Computer programming: Intro to SQL: Querying and managing data](https://www.khanacademy.org/computing/computer-programming/sql). Checked 2026-10-06. Used for: `databases`, `data_analysis`.
+- [Computer science theory: Algorithms](https://www.khanacademy.org/computing/computer-science/algorithms). Checked 2026-10-06. Used for: `discrete`, `algorithms`.
+- [Computer science theory: Cryptography](https://www.khanacademy.org/computing/computer-science/cryptography). Checked 2026-10-06. Used for: `discrete`, `security`.
+- [Computer science theory: Information theory](https://www.khanacademy.org/computing/computer-science/informationtheory). Checked 2026-10-06. Used for: `systems`.
+- [Computers and the Internet: Digital information](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:digital-information). Checked 2026-10-06. Used for: `systems`.
+- [Computers and the Internet: Computers](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:computers). Checked 2026-10-06. Used for: `systems`.
+- [Computers and the Internet: The Internet](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:the-internet). Checked 2026-10-06. Used for: `systems`.
+- [Computers and the Internet: Online data security](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security). Checked 2026-10-06. Used for: `security`.
+- [AP®︎/College Computer Science Principles: Data analysis](https://www.khanacademy.org/computing/ap-computer-science-principles/data-analysis-101). Checked 2026-10-06. Used for: `data_analysis`.
+- [AP®︎/College Computer Science Principles: Simulations](https://www.khanacademy.org/computing/ap-computer-science-principles/x2d2f703b37b450a3:simulations). Checked 2026-10-06. Used for: `graphics`.
+- [Pixar in a Box: Simulation](https://www.khanacademy.org/computing/pixar/simulation). Checked 2026-10-06. Used for: `graphics`.
+- [AP®︎/College Chemistry: Atomic structure and properties](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:atomic-structure-and-properties). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Molecular and ionic compound structure and properties](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:molecular-and-ionic-compound-structure-and-properties). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Intermolecular forces and properties](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:intermolecular-forces-and-properties). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Chemical reactions](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:chemical-reactions). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Kinetics](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:kinetics). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Thermodynamics](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:thermodynamics). Checked 2026-10-06. Used for: `gen_chem`, `thermodynamics`.
+- [AP®︎/College Chemistry: Equilibrium](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:equilibrium). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Acids and bases](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:acids-and-bases). Checked 2026-10-06. Used for: `gen_chem`.
+- [AP®︎/College Chemistry: Applications of thermodynamics](https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:applications-of-thermodynamics). Checked 2026-10-06. Used for: `thermodynamics`.
+- [Organic chemistry: Structure and bonding](https://www.khanacademy.org/science/organic-chemistry/gen-chem-review). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Resonance and acid-base chemistry](https://www.khanacademy.org/science/organic-chemistry/organic-structures). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Alkanes, cycloalkanes, and functional groups](https://www.khanacademy.org/science/organic-chemistry/bond-line-structures-alkanes-cycloalkanes). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Stereochemistry](https://www.khanacademy.org/science/organic-chemistry/stereochemistry-topic). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Substitution and elimination reactions](https://www.khanacademy.org/science/organic-chemistry/substitution-elimination-reactions). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Aromatic compounds](https://www.khanacademy.org/science/organic-chemistry/aromatic-compounds). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Aldehydes and ketones](https://www.khanacademy.org/science/organic-chemistry/aldehydes-ketones). Checked 2026-10-06. Used for: `organic_chem`.
+- [Organic chemistry: Spectroscopy](https://www.khanacademy.org/science/organic-chemistry/spectroscopy-jay). Checked 2026-10-06. Used for: `organic_chem`.
+- [AP®︎/College Biology: Chemistry of life](https://www.khanacademy.org/science/ap-biology/chemistry-of-life). Checked 2026-10-06. Used for: `biochemistry`.
+- [AP®︎/College Biology: Cells](https://www.khanacademy.org/science/ap-biology/cell-structure-and-function). Checked 2026-10-06. Used for: `cell_bio`.
+- [AP®︎/College Biology: Cellular energetics](https://www.khanacademy.org/science/ap-biology/cellular-energetics). Checked 2026-10-06. Used for: `cell_bio`.
+- [AP®︎/College Biology: Cell communication and cell cycle](https://www.khanacademy.org/science/ap-biology/cell-communication-and-cell-cycle). Checked 2026-10-06. Used for: `cell_bio`.
+- [AP®︎/College Biology: Heredity](https://www.khanacademy.org/science/ap-biology/heredity). Checked 2026-10-06. Used for: `genetics`.
+- [AP®︎/College Biology: Gene expression and regulation](https://www.khanacademy.org/science/ap-biology/gene-expression-and-regulation). Checked 2026-10-06. Used for: `cell_bio`.
+- [AP®︎/College Biology: Natural selection](https://www.khanacademy.org/science/ap-biology/natural-selection). Checked 2026-10-06. Used for: `evolution_ecology`.
+- [AP®︎/College Biology: Ecology](https://www.khanacademy.org/science/ap-biology/ecology-ap). Checked 2026-10-06. Used for: `evolution_ecology`.
+- [Biology archive: Macromolecules](https://www.khanacademy.org/science/biology/macromolecules). Checked 2026-10-06. Used for: `biochemistry`.
+- [Biology archive: Energy and enzymes](https://www.khanacademy.org/science/biology/energy-and-enzymes). Checked 2026-10-06. Used for: `biochemistry`.
+- [Biology archive: Classical and molecular genetics](https://www.khanacademy.org/science/biology/classical-genetics). Checked 2026-10-06. Used for: `genetics`.
+- [Biology archive: Central dogma (DNA to RNA to protein)](https://www.khanacademy.org/science/biology/gene-expression-central-dogma). Checked 2026-10-06. Used for: `genetics`.
+- [Biology archive: Biotechnology](https://www.khanacademy.org/science/biology/biotech-dna-technology). Checked 2026-10-06. Used for: `cell_bio`.
+- [Biology archive: Bacteria and archaea](https://www.khanacademy.org/science/biology/bacteria-archaea). Checked 2026-10-06. Used for: `microbiology`.
+- [Biology archive: Viruses](https://www.khanacademy.org/science/biology/biology-of-viruses). Checked 2026-10-06. Used for: `microbiology`.
+- [Biology archive: Evolution and the tree of life](https://www.khanacademy.org/science/biology/her). Checked 2026-10-06. Used for: `evolution_ecology`.
+- [Biology archive: Biodiversity and conservation](https://www.khanacademy.org/science/biology/biodiversity-and-conservation). Checked 2026-10-06. Used for: `evolution_ecology`.
+- [Health and medicine: Introduction to human body systems](https://www.khanacademy.org/science/health-and-medicine/human-anatomy-and-physiology). Checked 2026-10-06. Used for: `anatomy`.
+- [Health and medicine: Circulatory system anatomy and physiology](https://www.khanacademy.org/science/health-and-medicine/circulatory-system). Checked 2026-10-06. Used for: `anatomy`.
+- [Health and medicine: Respiratory system anatomy and physiology](https://www.khanacademy.org/science/health-and-medicine/respiratory-system). Checked 2026-10-06. Used for: `anatomy`.
+- [Health and medicine: Endocrine system physiology and disease](https://www.khanacademy.org/science/health-and-medicine/advanced-endocrine-system). Checked 2026-10-06. Used for: `anatomy`.
+- [Health and medicine: Nervous system physiology and disease](https://www.khanacademy.org/science/health-and-medicine/nervous-system-and-sensory-infor). Checked 2026-10-06. Used for: `anatomy`, `biopsych`.
+- [Health and medicine: Brain function and mental health](https://www.khanacademy.org/science/health-and-medicine/executive-systems-of-the-brain). Checked 2026-10-06. Used for: `psychology`, `biopsych`, `development`.
+- [Health and medicine: Gastrointestinal system physiology and disease](https://www.khanacademy.org/science/health-and-medicine/gastro-intestinal-system). Checked 2026-10-06. Used for: `anatomy`.
+- [Health and medicine: Musculoskeletal system physiology and disease](https://www.khanacademy.org/science/health-and-medicine/advanced-muscular-system). Checked 2026-10-06. Used for: `anatomy`.
+- [Health and medicine: Infectious diseases](https://www.khanacademy.org/science/health-and-medicine/infectious-diseases). Checked 2026-10-06. Used for: `microbiology`.
+- [MCAT: Foundation 1: Biomolecules](https://www.khanacademy.org/test-prep/mcat/biomolecules). Checked 2026-10-06. Used for: `biochemistry`.
+- [MCAT: Foundation 3: Organ systems](https://www.khanacademy.org/test-prep/mcat/organ-systems). Checked 2026-10-06. Used for: `microbiology`, `anatomy`.
+- [MCAT: Foundation 4: Physical processes](https://www.khanacademy.org/test-prep/mcat/physical-processes). Checked 2026-10-06. Used for: `health_physics`.
+- [MCAT: Foundation 6: Processing the environment](https://www.khanacademy.org/test-prep/mcat/processing-the-environment). Checked 2026-10-06. Used for: `psychology`, `development`.
+- [MCAT: Foundation 7: Behavior](https://www.khanacademy.org/test-prep/mcat/behavior). Checked 2026-10-06. Used for: `psychology`, `biopsych`.
+- [MCAT: Foundation 8: Individuals and society](https://www.khanacademy.org/test-prep/mcat/individuals-and-society). Checked 2026-10-06. Used for: `development`, `social_psych`.
+- [MCAT: Foundation 9: Society and culture](https://www.khanacademy.org/test-prep/mcat/society-and-culture). Checked 2026-10-06. Used for: `social_psych`, `sociology`.
+- [MCAT: Foundation 10: Social inequality](https://www.khanacademy.org/test-prep/mcat/social-inequality). Checked 2026-10-06. Used for: `sociology`.
+- [AP®︎/College Physics 1: Kinematics](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:kinematics). Checked 2026-10-06. Used for: `physics_mechanics`.
+- [AP®︎/College Physics 1: Force and translational dynamics](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:force-and-translational-dynamics). Checked 2026-10-06. Used for: `physics_mechanics`.
+- [AP®︎/College Physics 1: Work, energy, and power](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:work-energy-and-power). Checked 2026-10-06. Used for: `physics_mechanics`.
+- [AP®︎/College Physics 1: Linear momentum](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:linear-momentum). Checked 2026-10-06. Used for: `physics_mechanics`.
+- [AP®︎/College Physics 1: Torque and rotational dynamics](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:torque-and-rotational-dynamics). Checked 2026-10-06. Used for: `physics_mechanics`.
+- [AP®︎/College Physics 1: Oscillations](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:oscillations). Checked 2026-10-06. Used for: `physics_mechanics`, `health_physics`.
+- [AP®︎/College Physics 1: Fluids](https://www.khanacademy.org/science/ap-college-physics-1/xf557a762645cccc5:fluids). Checked 2026-10-06. Used for: `health_physics`.
+- [AP®︎/College Physics C: Mechanics](https://www.khanacademy.org/science/ap-physics-c-mechanics). Checked 2026-10-06. Used for: `physics_mechanics`.
+- [AP®︎/College Physics 2: Thermodynamics](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:thermodynamics). Checked 2026-10-06. Used for: `thermodynamics`.
+- [AP®︎/College Physics 2: Electric force, field, and potential](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:electric-force-field-and-potential). Checked 2026-10-06. Used for: `physics_em`.
+- [AP®︎/College Physics 2: Electric circuits](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:electric-circuits). Checked 2026-10-06. Used for: `physics_em`.
+- [AP®︎/College Physics 2: Magnetism and electromagnetism](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:magnetism-and-electromagnetism). Checked 2026-10-06. Used for: `physics_em`.
+- [AP®︎/College Physics 2: Geometric optics](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:geometric-optics). Checked 2026-10-06. Used for: `physics_em`, `health_physics`.
+- [AP®︎/College Physics 2: Waves, sound, and physical optics](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:waves-sound-and-physical-optics). Checked 2026-10-06. Used for: `physics_em`, `health_physics`.
+- [AP®︎/College Physics 2: Modern physics](https://www.khanacademy.org/science/ap-physics-2/x0e2f5a2c:modern-physics). Checked 2026-10-06. Used for: `physics_em`, `health_physics`.
+- [Electrical engineering: Introduction to electrical engineering](https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee). Checked 2026-10-06. Used for: `circuits`.
+- [Electrical engineering: Circuit analysis](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic). Checked 2026-10-06. Used for: `circuits`.
+- [Electrical engineering: Amplifiers](https://www.khanacademy.org/science/electrical-engineering/ee-amplifiers). Checked 2026-10-06. Used for: `circuits`.
+- [Electrical engineering: Semiconductor devices](https://www.khanacademy.org/science/electrical-engineering/ee-semiconductor-devices). Checked 2026-10-06. Used for: `circuits`.
+- [Electrical engineering: Signals and systems](https://www.khanacademy.org/science/electrical-engineering/ee-signals). Checked 2026-10-06. Used for: `circuits`.
+- [AP®︎/College Environmental science: The living world: ecosystems and biodiversity](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:the-living-world-ecosystems-and-biodiversity). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Populations](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:populations). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Earth systems and resources](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:earth-systems-and-resources). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Land and water use](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:land-and-water-use). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Energy resources and consumption](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:energy-resources-and-consumption). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Atmospheric pollution](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:atmospheric-pollution). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Aquatic and terrestrial pollution](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:aquatic-and-terrestrial-pollution). Checked 2026-10-06. Used for: `environmental`.
+- [AP®︎/College Environmental science: Global change](https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f:global-change). Checked 2026-10-06. Used for: `environmental`.
+- [Cosmology and astronomy: Scale of the universe](https://www.khanacademy.org/science/cosmology-and-astronomy/universe-scale-topic). Checked 2026-10-06. Used for: `astronomy`.
+- [Cosmology and astronomy: Stars, black holes and galaxies](https://www.khanacademy.org/science/cosmology-and-astronomy/stellar-life-topic). Checked 2026-10-06. Used for: `astronomy`.
+- [Cosmology and astronomy: Earth geological and climatic history](https://www.khanacademy.org/science/cosmology-and-astronomy/earth-history-topic). Checked 2026-10-06. Used for: `astronomy`.
+- [Cosmology and astronomy: Life on earth and in the universe](https://www.khanacademy.org/science/cosmology-and-astronomy/life-earth-universe). Checked 2026-10-06. Used for: `astronomy`.
+- [World history: The Long Nineteenth Century (1750 to 1914 CE)](https://www.khanacademy.org/humanities/world-history/x66f79d8a:the-long-nineteenth-century). Checked 2026-10-06. Used for: `world_history`.
+- [World history: Global Conflict (1914 to 1991 CE)](https://www.khanacademy.org/humanities/world-history/x66f79d8a:global-conflict). Checked 2026-10-06. Used for: `world_history`.
+- [World history: Globalization (1900 CE to the Present)](https://www.khanacademy.org/humanities/world-history/x66f79d8a:globalization). Checked 2026-10-06. Used for: `world_history`.
+
 ## Presentation assets
 
 The current deck uses an original abstract street-map background, blue route graphics, and a green BACKTRACK return-route monogram. These are BACKTRACK-authored vectors. The mark draws a lowercase b as a route that turns back toward an earlier step. Its wordmark uses outlined DM Sans Bold. The map is illustrative and does not depict a real campus or Google Maps data. The QR code encodes the professional demo URL in docs/deployment.json.

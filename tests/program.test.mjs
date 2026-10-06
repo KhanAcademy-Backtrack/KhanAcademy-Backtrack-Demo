@@ -93,7 +93,8 @@ test('calendar merges plan, own events and exams; ics is well formed', ()=>{
 });
 
 test('bridge maps reference real concepts, families, engine topics and Khan units', ()=>{
- assert.equal(PROGRAMS.length,7);
+ assert.equal(PROGRAMS.length,6);
+ assert.deepEqual(PROGRAMS.map(p=>p.id),['cs_it','engineering','health','natural_sciences','statistics','social_sciences']);
  for(const p of PROGRAMS){
   for(const a of p.assumes){for(const c of a.concepts)assert.ok(CONCEPT_BY_ID[c],`${p.id} ${c}`);if(a.engine)assert.ok(TOPICS[a.engine]);}
   for(const f of p.placement.families)assert.ok(FAMILY_BY_ID[f],`${p.id} family ${f}`);

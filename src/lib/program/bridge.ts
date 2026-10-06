@@ -1,12 +1,13 @@
 import type {KhanUnitId} from './khan-units.ts';
 import type {Topic} from '../recovery.ts';
 
-/** Freshman bridge maps: what a first year in each program assumes you already know.
+/** Freshman bridge maps: what a first year in each program assumes you already know, and
+ *  (in `subjects`) the college subjects the field actually takes, from college-courses.ts.
  *  Drafted by Khanpanion from common first-year course content; every map is on the
  *  faculty review list before the pilot. */
 export type Assumption={text:string;concepts:string[];engine?:Topic};
 export type Rescue={id:string;topic:string;needs:string;concepts:string[];engine?:Topic;khan:KhanUnitId[]};
-export type BridgeProgram={id:string;title:string;examples:string;firstYear:string[];assumes:Assumption[];placement:{families:string[];engine:Topic[]};khanPath:KhanUnitId[];rescue:string[]};
+export type BridgeProgram={id:string;title:string;examples:string;firstYear:string[];subjects:string[];assumes:Assumption[];placement:{families:string[];engine:Topic[]};khanPath:KhanUnitId[];rescue:string[]};
 
 export const RESCUES:Rescue[]=[
  {id:'limits',topic:'Limits',needs:'Factoring, simplifying fractions with variables, reading function values from a graph.',concepts:['exponents_polynomials','lines_functions'],engine:'quadratics',khan:['grc_limits','calc_limits']},
@@ -22,14 +23,17 @@ export const RESCUES:Rescue[]=[
  {id:'genetics_prob',topic:'Genetics crosses',needs:'Probability of combined events, fractions.',concepts:['statistics_probability','genetics'],khan:['bio2_q3']},
  {id:'statistics',topic:'Statistics in research courses',needs:'Mean, median, reading graphs, percent.',concepts:['statistics_probability','percent_fractions'],khan:['g7m_q3','statprob']},
  {id:'discrete',topic:'Discrete math and logic',needs:'Sequences, counting, careful reading of conditions.',concepts:['sequences','statistics_probability'],khan:['g8m_q4','precalc_series']},
- {id:'business_math',topic:'Interest and business math',needs:'Percent, ratio, simple and compound interest.',concepts:['percent_fractions','word_problems'],khan:['genmath_business','g10m_q4']},
- {id:'graphs_econ',topic:'Supply, demand and graphs',needs:'Slope, lines, reading intersections.',concepts:['lines_functions','linear_equations'],engine:'graphs',khan:['g9m_q1']},
- {id:'academic_reading',topic:'Reading academic texts',needs:'Main idea, inference, author purpose.',concepts:['main_idea','inference','author_purpose'],khan:['eng9_q3','eng9_q2']}
+ {id:'academic_reading',topic:'Reading academic texts',needs:'Main idea, inference, author purpose.',concepts:['main_idea','inference','author_purpose'],khan:['eng9_q3','eng9_q2']},
+ {id:'regression',topic:'Correlation and regression',needs:'Slope and intercept, reading a line from a graph, mean and spread.',concepts:['lines_functions','statistics_probability'],engine:'graphs',khan:['g9m_q1','statprob']},
+ {id:'hypothesis',topic:'Hypothesis tests and confidence intervals',needs:'Probability, percent, the normal curve and reading a table.',concepts:['statistics_probability','percent_fractions'],engine:'fractions',khan:['g10m_q2','statprob']},
+ {id:'programming',topic:'Programming logic',needs:'Variables as unknowns, following a rule step by step, sequences and careful reading.',concepts:['linear_equations','sequences','word_problems'],engine:'brackets',khan:['g8m_q1','precalc_series']},
+ {id:'circuits',topic:'Circuits',needs:'Ohm’s law, solving for one unknown, systems of equations.',concepts:['electricity_waves','linear_equations'],khan:['phys2_q3','g8m_q3']}
 ];
 
 export const PROGRAMS:BridgeProgram[]=[
  {id:'cs_it',title:'Computer Science and IT',examples:'BS Computer Science, BS Information Technology, BS Computer Engineering',
-  firstYear:['College algebra and trigonometry','Calculus I','Introduction to programming','Discrete mathematics'],
+  firstYear:['Calculus I','Introduction to programming','Discrete mathematics','Computer systems'],
+  subjects:['python','javascript','oop','algorithms','web_dev','databases','data_analysis','graphics','systems','security','discrete','precalculus','calculus1','calculus2','linear_algebra','probability'],
   assumes:[
    {text:'You can simplify and factor polynomials without a calculator.',concepts:['exponents_polynomials'],engine:'brackets'},
    {text:'You can solve linear equations and systems quickly.',concepts:['linear_equations'],engine:'graphs'},
@@ -40,9 +44,10 @@ export const PROGRAMS:BridgeProgram[]=[
    {text:'You can read a long problem statement carefully and pull out what is asked.',concepts:['word_problems','main_idea']}],
   placement:{families:['m_linear_solve','m_exponents','m_expand_square','m_quad_root','m_slope','m_func_eval','m_arith_seq','m_prob_draw'],engine:['brackets','quadratics','graphs']},
   khanPath:['grp_polynomials','grp_functions','g9m_q1','g9m_q3','grp_trig','precalc_series','grc_limits','calc_limits','calc_derivatives'],
-  rescue:['limits','derivatives','discrete','logs']},
+  rescue:['programming','limits','derivatives','discrete','logs']},
  {id:'engineering',title:'Engineering',examples:'BS Civil, Electrical, Mechanical, Chemical and Industrial Engineering',
   firstYear:['Calculus I and II','Physics for engineers (mechanics)','General chemistry','Engineering drawing'],
+  subjects:['precalculus','calculus1','calculus2','multivariable','diffeq','linear_algebra','physics_mechanics','physics_em','thermodynamics','circuits','gen_chem','python','probability','environmental'],
   assumes:[
    {text:'Algebra is automatic: factoring, rational expressions, solving for a variable.',concepts:['exponents_polynomials','linear_equations'],engine:'brackets'},
    {text:'Trigonometry: SOH CAH TOA, special angles and identities.',concepts:['trigonometry']},
@@ -53,9 +58,10 @@ export const PROGRAMS:BridgeProgram[]=[
    {text:'Unit conversion without hesitation.',concepts:['matter_measurement'],engine:'motion'}],
   placement:{families:['m_linear_solve','m_quad_root','m_trig_ratio','m_func_eval','s_acceleration','s_newton2','s_kinetic','s_moles'],engine:['quadratics','forces','motion','moles']},
   khanPath:['grp_polynomials','g9m_q3','grp_trig','precalc_trig','precalc_analytic','grc_limits','calc_limits','calc_derivatives','calc_integrals','phys1_q1','phys1_q2','chem1_q1'],
-  rescue:['limits','derivatives','integrals','vectors','kinematics','newton','stoichiometry']},
+  rescue:['limits','derivatives','integrals','vectors','kinematics','newton','stoichiometry','circuits']},
  {id:'health',title:'Health sciences',examples:'BS Nursing, Pharmacy, Medical Technology, Physical Therapy, Public Health',
-  firstYear:['General chemistry','General biology','College algebra or statistics','Physics for health sciences'],
+  firstYear:['General chemistry','Anatomy and physiology','Biostatistics','Physics for health sciences'],
+  subjects:['gen_chem','organic_chem','biochemistry','cell_bio','anatomy','microbiology','genetics','health_physics','describing_data','inference','psychology','biopsych'],
   assumes:[
    {text:'Cells, organelles, transport and energy.',concepts:['cells_life']},
    {text:'Genetics and simple crosses.',concepts:['genetics']},
@@ -65,9 +71,10 @@ export const PROGRAMS:BridgeProgram[]=[
    {text:'Reading data and basic statistics.',concepts:['statistics_probability']}],
   placement:{families:['m_ratio_share','m_pct_change','m_frac_add','s_molarity','s_moles','s_ph','s_punnett','m_mean_missing'],engine:['ratios','fractions','moles']},
   khanPath:['g7m_q1','bio1_q1','bio1_q2','bio2_q3','bio2_q4','chem1_q1','chem2_q1','chem2_q2','statprob'],
-  rescue:['stoichiometry','solutions','logs','genetics_prob','statistics']},
+  rescue:['stoichiometry','solutions','logs','genetics_prob','statistics','hypothesis']},
  {id:'natural_sciences',title:'Natural sciences',examples:'BS Biology, Chemistry, Physics, Mathematics, Molecular Biology',
   firstYear:['Calculus I','General chemistry with laboratory','General biology or physics','Scientific writing'],
+  subjects:['calculus1','calculus2','gen_chem','organic_chem','cell_bio','genetics','evolution_ecology','biochemistry','physics_mechanics','physics_em','linear_algebra','diffeq','describing_data','environmental','astronomy'],
   assumes:[
    {text:'Algebra and functions, including quadratics.',concepts:['exponents_polynomials','quadratics','lines_functions'],engine:'quadratics'},
    {text:'Units, measurement and significant figures.',concepts:['matter_measurement'],engine:'motion'},
@@ -78,19 +85,23 @@ export const PROGRAMS:BridgeProgram[]=[
   placement:{families:['m_quad_root','m_func_eval','m_slope','s_moles','s_molarity','s_newton2','s_half_life','s_punnett'],engine:['quadratics','graphs','moles','forces']},
   khanPath:['grp_polynomials','grp_functions','g9m_q3','precalc_trig','calc_limits','calc_derivatives','chem1_q1','chem1_q2','bio1_q1','bio2_q3','phys1_q1'],
   rescue:['limits','derivatives','stoichiometry','solutions','kinematics','genetics_prob']},
- {id:'business',title:'Business and economics',examples:'BS Accountancy, Business Administration, Economics, Management',
-  firstYear:['Mathematics in the modern world','Business mathematics or college algebra','Principles of economics','Statistics'],
+ {id:'statistics',title:'Statistics and data science',examples:'BS Statistics, Applied Mathematics, Data Science, Actuarial Science',
+  firstYear:['Calculus I and II','Probability','Descriptive statistics','Introduction to programming'],
+  subjects:['describing_data','probability','study_design','inference','regression','anova','calculus1','calculus2','multivariable','linear_algebra','discrete','python','data_analysis','databases'],
   assumes:[
-   {text:'Percent, markup, discount and interest.',concepts:['percent_fractions','word_problems'],engine:'fractions'},
-   {text:'Ratios and rates.',concepts:['ratio_rate'],engine:'ratios'},
-   {text:'Lines and slope for supply and demand graphs.',concepts:['lines_functions','linear_equations'],engine:'graphs'},
-   {text:'Mean, median and reading charts.',concepts:['statistics_probability']},
-   {text:'Reading arguments and spotting claims.',concepts:['author_purpose','inference']}],
-  placement:{families:['m_pct_change','m_simple_interest','m_ratio_share','m_slope','m_system','m_mean_missing','m_linear_solve','m_frac_add'],engine:['fractions','ratios','graphs']},
-  khanPath:['g7m_q1','g8m_q2','g8m_q3','g9m_q1','genmath_business','g10m_q4','statprob'],
-  rescue:['business_math','graphs_econ','statistics']},
+   {text:'Mean, median, spread and reading every kind of chart.',concepts:['statistics_probability'],engine:'fractions'},
+   {text:'Probability of single and combined events, and counting cases.',concepts:['statistics_probability']},
+   {text:'Percent, fractions and ratios without a calculator.',concepts:['percent_fractions','ratio_rate'],engine:'ratios'},
+   {text:'Lines, slope and function notation for fitting models.',concepts:['lines_functions','linear_equations'],engine:'graphs'},
+   {text:'Exponent rules and algebra for the formulas in calculus and probability.',concepts:['exponents_polynomials','quadratics'],engine:'brackets'},
+   {text:'Sequences and sums.',concepts:['sequences']},
+   {text:'Reading a research question carefully and judging a claim.',concepts:['inference','author_purpose']}],
+  placement:{families:['m_mean_missing','m_prob_draw','m_pct_change','m_ratio_share','m_slope','m_func_eval','m_exponents','m_arith_seq'],engine:['fractions','ratios','graphs','brackets']},
+  khanPath:['g8m_q4','g9m_q4','g10m_q2','g10m_q3','statprob','grp_functions','grc_limits','calc_limits','calc_derivatives'],
+  rescue:['statistics','hypothesis','regression','limits','derivatives','discrete']},
  {id:'social_sciences',title:'Social sciences',examples:'BA Psychology, Political Science, Sociology, Communication',
-  firstYear:['Purposive communication','Mathematics in the modern world','Introduction to the discipline','Statistics for the social sciences'],
+  firstYear:['Introduction to psychology','Introduction to sociology','Research methods','Statistics for the social sciences'],
+  subjects:['psychology','sociology','social_psych','development','biopsych','world_history','study_design','describing_data','inference','regression'],
   assumes:[
    {text:'Reading long academic texts and summarising them.',concepts:['main_idea','details']},
    {text:'Making careful inferences from evidence.',concepts:['inference']},
@@ -98,19 +109,15 @@ export const PROGRAMS:BridgeProgram[]=[
    {text:'Percent, charts and basic statistics.',concepts:['percent_fractions','statistics_probability'],engine:'fractions'}],
   placement:{families:['m_pct_change','m_mean_missing','m_prob_draw','m_ratio_share'],engine:['fractions','ratios']},
   khanPath:['eng9_q2','eng9_q3','eng10_q2','g7m_q3','g8m_q4','statprob'],
-  rescue:['academic_reading','statistics']},
- {id:'arts',title:'Arts and humanities',examples:'BA Philippine Studies, Literature, Art Studies, History, Fine Arts',
-  firstYear:['Purposive communication','Readings in Philippine history','Art appreciation','Mathematics in the modern world'],
-  assumes:[
-   {text:'Reading literature closely: tone, purpose, figurative language.',concepts:['inference','author_purpose']},
-   {text:'Writing clear, correct sentences in English and Filipino.',concepts:['sentence_structure','usage','filipino_gramatika']},
-   {text:'Building an argument from sources.',concepts:['main_idea','author_purpose']},
-   {text:'Everyday numbers: percent and ratios.',concepts:['percent_fractions','ratio_rate'],engine:'fractions'}],
-  placement:{families:['m_pct_change','m_ratio_share','m_frac_add'],engine:['fractions','ratios']},
-  khanPath:['eng7_q1','eng10_q1','eng9_q2','eng9_q3','g7m_q1'],
-  rescue:['academic_reading']}
+  rescue:['academic_reading','statistics','hypothesis']}
 ];
 export const PROGRAM_BY_ID:Record<string,BridgeProgram>=Object.fromEntries(PROGRAMS.map(p=>[p.id,p]));
+/** Fields offered before 6 October 2026. Their old pages say where they went, and a
+ *  learner's saved placement checks for them still open, so these keep their families. */
+export const RETIRED_PROGRAMS:Record<string,{title:string;movedTo?:string;families:string[]}>={
+ business:{title:'Business and economics',movedTo:'statistics',families:['m_pct_change','m_simple_interest','m_ratio_share','m_slope','m_system','m_mean_missing','m_linear_solve','m_frac_add']},
+ arts:{title:'Arts and humanities',families:['m_pct_change','m_ratio_share','m_frac_add']}
+};
 export const RESCUE_BY_ID:Record<string,Rescue>=Object.fromEntries(RESCUES.map(r=>[r.id,r]));
 
 /** An eight-week summer bridge: the program's Khan path spread across weeks, with a
