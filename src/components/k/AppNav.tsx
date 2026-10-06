@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
-import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 'react';
+import {createContext,useContext,useEffect,useId,useRef,useState,type ReactNode} from 'react';
 import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
@@ -18,8 +18,8 @@ import {CONCEPT_BY_ID} from '@/lib/program/concepts';
 type Key='today'|'plan'|'study'|'group';
 type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'courses'|'folder'|'plus'|'goal';
 /** A page inside a main section, listed under it in the sidebar and in the section bar. `label` is an interface text key. */
-export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string;match:(p:string)=>boolean};
-type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[]};
+export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string;match:(p:string)=>boolean;children?:Sub[];hint?:TextKey};
+type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[];bar?:Sub[]};
 
 /** Study tools in the sidebar's Study list and the home shortcuts, CET practice first. */
 type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates';
@@ -28,12 +28,22 @@ export const STUDY_TOOLS:Sub[]=[
  {key:'recall',href:'/review',label:'page.recall',icon:'recall',blurb:'A quick look at the ideas that are due today.',match:p=>p==='/review'},
  {key:'packs',href:'/packs',label:'page.packs',icon:'packs',blurb:'Topic packs that start short BACKTRACK rounds.',match:p=>p.startsWith('/packs')||p.startsWith('/create')}
 ];
-/** Fix a gap, the mistake notebook and explore ideas left the menus on 4 October at the owner's
- *  request. Their addresses still work, are found by search and still belong to Study. */
-const OFF_MENU_STUDY=(p:string)=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')||p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
-const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:p=>p.startsWith('/reviewer')||p.startsWith('/learn/')};
+/** Find my missing skill: the learner's own gaps and each topic's route. In the sidebar, CET
+ *  Reviewers and Courses are toggles: each opens to its own page and its view of Find my missing
+ *  skill (CET or college), and opens by itself while one of them is current. The section bar keeps
+ *  both as plain pages and lists Find my missing skill once. */
+const FIX:Sub={key:'fix',href:'/start',label:'page.fix',icon:'start',match:p=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')};
+/** The mistake notebook and explore ideas left the menus on 4 October at the owner's request.
+ *  Their addresses still work, are found by search and still belong to Study. */
+const OFF_MENU_STUDY=(p:string)=>p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
+const IN_REVIEWER=(p:string)=>p.startsWith('/reviewer')||p.startsWith('/learn/'),IN_COURSES=(p:string)=>p.startsWith('/bridge');
+const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:IN_REVIEWER,children:[
+ {key:'reviewer-topics',href:'/reviewer',label:'page.reviewerTopics',icon:'reviewer',match:IN_REVIEWER},
+ {...FIX,key:'fix-cet',href:'/start/cet',hint:'nav.forCet',match:p=>p==='/start/cet'}]};
 /** College foundations: each field's first-year courses and the math and science they build on. */
-const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:p=>p.startsWith('/bridge')};
+const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:IN_COURSES,children:[
+ {key:'courses-all',href:'/bridge',label:'page.coursesAll',icon:'courses',match:IN_COURSES},
+ {...FIX,key:'fix-college',href:'/start/college',hint:'nav.forCollege',match:p=>p==='/start/college'}]};
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
 /** Four sections. Plan holds the goal page, the routine and the calendar with its exam dates;
@@ -47,7 +57,7 @@ function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{
  return [
  {href:'/',key:'today',match:p=>p==='/',subs:[]},
  {href:plan[0].href,key:'plan',match:p=>plan.some(x=>x.match(p)),subs:plan},
- {href:'/reviewer',key:'study',match:p=>OFF_MENU_STUDY(p)||[REVIEWER,COURSES,...STUDY_TOOLS].some(x=>x.match(p)),subs:[REVIEWER,COURSES,...STUDY_TOOLS]},
+ {href:'/reviewer',key:'study',match:p=>OFF_MENU_STUDY(p)||[REVIEWER,COURSES,...STUDY_TOOLS,FIX].some(x=>x.match(p)),subs:[REVIEWER,COURSES,...STUDY_TOOLS],bar:[FIX]},
  {href:'/group',key:'group',match:p=>p.startsWith('/group')||p.startsWith('/together')||p.startsWith('/challenge'),subs:[]}
 ];}
 
@@ -98,15 +108,17 @@ function useSections(){
  return {list,active:list.find(x=>x.match(path))?.key,path,goal,lang:state.lang,label:(x:Tab)=>t(state.lang,`nav.${x.key}`)};
 }
 
+const subLink=(current:boolean)=>cx('flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 text-[14px] font-semibold hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',current?'bg-white text-navy shadow-sheet':'text-ink-soft hover:text-navy');
+
 /** The current section's pages as a row of tabs, shown whenever the sidebar is not
  *  wide enough to list them: on phones, tablets and with the sidebar narrowed. */
 function SectionBar({rail}:{rail:boolean}){
  const {list,active,path,lang,label}=useSections(),tab=list.find(x=>x.key===active),bar=useRef<HTMLUListElement>(null);
  useEffect(()=>{bar.current?.querySelector('[aria-current=page]')?.scrollIntoView({block:'nearest',inline:'nearest'});},[path]);
  if(!tab?.subs.length)return null;
- const sub=tab.subs.find(y=>y.match(path));
+ const pages=[...tab.subs,...(tab.bar??[])],sub=pages.find(y=>y.match(path));
  return <nav aria-label={t(lang,'nav.sectionPages').replace('{section}',label(tab))} className={cx('print:hidden mx-auto max-w-6xl px-4 pt-3 sm:px-8',!rail&&'xl:hidden')}>
-  <ul ref={bar} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]">{tab.subs.map(y=><li key={y.key} className="shrink-0">
+  <ul ref={bar} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]">{pages.map(y=><li key={y.key} className="shrink-0">
    <Link href={y.href} aria-current={sub===y?'page':undefined} className={cx('relative flex min-h-11 items-center gap-2 whitespace-nowrap rounded-t-lg px-3 text-[14px] font-semibold focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',sub===y?'text-navy':'text-ink-soft hover:text-navy')}>
     <NavIcon small k={y.icon}/>{t(lang,y.label)}{sub===y&&<span aria-hidden="true" className="absolute inset-x-2 bottom-0 h-[3px] rounded-t-sm bg-green"/>}
    </Link></li>)}</ul>
@@ -115,7 +127,9 @@ function SectionBar({rail}:{rail:boolean}){
 
 type Rail='always'|'below-xl'|'never';
 function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false}:{rail:Rail;list:Tab[];active?:Key;path:string;goal:ReturnType<typeof learnerGoal>;lang:Lang;label:(x:Tab)=>string;onPick?:()=>void;main?:boolean}){
- const {state}=useProgram(),guide=useProgramGuide(),reduced=useQuietMotion();
+ const {state}=useProgram(),guide=useProgramGuide(),reduced=useQuietMotion(),uid=useId();
+ /* A toggle the learner opened or closed holds until the page changes; then each opens by itself while it holds the current page. */
+ const [toggled,setToggled]=useState<Record<string,boolean>>({});useEffect(()=>setToggled({}),[path]);
  const hide=rail==='always'?'sr-only':rail==='below-xl'?'sr-only xl:not-sr-only':'';
  const center=rail==='always'?'justify-center px-0':rail==='below-xl'?'justify-center px-0 xl:justify-start xl:px-3':'px-3';
  const heading=cx('px-3 pb-1.5 pt-1 text-sm font-semibold text-ink-soft',rail==='always'?'hidden':rail==='below-xl'?'hidden xl:block':'');
@@ -125,13 +139,24 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
  const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/plan',title:t(lang,'nav.generalCet')}]:[]),...targets.slice(0,5).map(x=>({href:'/plan',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
  return <>
   <nav aria-label={t(lang,main?'nav.main':'nav.all')} className="grid gap-1">
-   {list.map(x=>{const on=active===x.key,sub=on?x.subs.find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
+   {list.map(x=>{const on=active===x.key,sub=on?x.subs.flatMap(y=>y.children??[y]).find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
     <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={item(on,main)}>
      {main&&on&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
      <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><span className={hide}>{label(x)}</span></span>
     </Link>
     {on&&rail!=='always'&&x.subs.length>0&&<ul aria-label={label(x)} className={cx('mb-1 ml-6 gap-0.5 border-l border-line pl-2',rail==='below-xl'?'hidden xl:grid':'grid')}>
-     {x.subs.map(y=><li key={y.key}><Link href={y.href} onClick={onPick} aria-current={sub===y?'page':undefined} className={cx('flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 text-[14px] font-semibold hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',sub===y?'bg-white text-navy shadow-sheet':'text-ink-soft hover:text-navy')}><NavIcon small k={y.icon}/>{t(lang,y.label)}</Link></li>)}
+     {x.subs.map(y=>{
+      if(!y.children)return <li key={y.key}><Link href={y.href} onClick={onPick} aria-current={sub===y?'page':undefined} className={subLink(sub===y)}><NavIcon small k={y.icon}/>{t(lang,y.label)}</Link></li>;
+      const holds=y.children.some(c=>c===sub),open=toggled[y.key]??holds,id=`${uid}-${y.key}`;
+      return <li key={y.key}>
+       <button type="button" aria-expanded={open} aria-controls={id} onClick={()=>setToggled(o=>({...o,[y.key]:!open}))} className={cx('flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-[14px] font-semibold hover:bg-white hover:text-navy focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',holds?'text-navy':'text-ink-soft')}>
+        <NavIcon small k={y.icon}/><span className="flex-1">{t(lang,y.label)}</span>
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" className={cx('shrink-0 motion-safe:transition-transform',open&&'rotate-90')}><path d="m6 4 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+       </button>
+       <ul id={id} aria-label={t(lang,y.label)} className={cx('ml-5 mt-0.5 gap-0.5 border-l border-line pl-2',open?'grid':'hidden')}>
+        {y.children.map(c=><li key={c.key}><Link href={c.href} onClick={onPick} aria-current={sub===c?'page':undefined} className={cx(subLink(sub===c),'min-h-9 text-[13.5px]')}><NavIcon small k={c.icon}/><span>{t(lang,c.label)}{c.hint&&<span className="sr-only">{t(lang,c.hint)}</span>}</span></Link></li>)}
+       </ul>
+      </li>;})}
     </ul>}
    </div>;})}
   </nav>

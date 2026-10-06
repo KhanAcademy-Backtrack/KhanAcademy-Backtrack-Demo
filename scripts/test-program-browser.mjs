@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {formFromKey,formItems,itemById} from '../src/lib/mock/forms.ts';
 import {misconception} from '../src/lib/mock/misconceptions.ts';
+import {LABELS} from '../src/lib/recovery.ts';
 import {PROGRAM_KEY,initialProgram,newAttempt} from '../src/lib/program/store.ts';
 import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {CHAPTERS} from '../src/content/reviewer/index.ts';
@@ -42,7 +43,9 @@ export async function programJourneys({scenario,origin,root}){
    // At phone width reach the last item through the navigator, then submit.
    if(width===375)await page.getByRole('button',{name:'Questions',exact:true}).click();await page.locator('aside').getByRole('button',{name:'Question 50',exact:true}).click();await submit(page);await shot(page,'results',width);
    const answerLabels=page.getByText('Answer',{exact:true});assert.ok(await answerLabels.count()>0);await page.getByRole('button',{name:'Hide answers',exact:true}).click();assert.equal(await answerLabels.count(),0);await page.getByRole('button',{name:'Show answers',exact:true}).click();assert.ok(await answerLabels.count()>0);
-   await page.getByRole('button',{name:/Fix this: find the missing skill/}).first().click();await page.waitForURL('**/study/session');await page.locator('.learning-stage').waitFor();const study=await page.evaluate(()=>JSON.parse(localStorage.getItem('backtrack.study.v1')));assert.equal(study.activeSession.tasks.length,1);const expected=misconception(itemById(ids[1]).misconceptions[wrong]).recovery;assert.equal(study.activeSession.tasks[0].topic,expected.topic);assert.equal(study.activeSession.tasks[0].skill,expected.skill);assert.equal(study.activeSession.complete,false);await shot(page,'study-session',width);
+   await page.getByRole('button',{name:/Fix this: find the missing skill/}).first().click();await page.waitForURL('**/study/session');await page.locator('.fix-landing').waitFor();await shot(page,'fix-landing',width);await page.getByRole('button',{name:'Start the lesson',exact:true}).click();await page.locator('.learning-stage').waitFor();const study=await page.evaluate(()=>JSON.parse(localStorage.getItem('backtrack.study.v1')));assert.equal(study.activeSession.tasks.length,1);const expected=misconception(itemById(ids[1]).misconceptions[wrong]).recovery;assert.equal(study.activeSession.tasks[0].topic,expected.topic);assert.equal(study.activeSession.tasks[0].skill,expected.skill);assert.equal(study.activeSession.complete,false);await shot(page,'study-session',width);
+   // The same miss is listed on Find my missing skill until two fresh answers clear it.
+   await page.goto(origin+'/start');await page.getByText(LABELS[expected.skill],{exact:true}).first().waitFor();assert.match(await page.locator('main').innerText(),/Missed \d+ questions? in /);await shot(page,'missing-skills',width);
   },viewport);
   await scenario(`program full form resumes the same section ${width}`,async page=>{
    const key='full~20260930';await exam(page,key);if(width===1280){assert.ok(await page.locator('aside').evaluate(el=>el.getBoundingClientRect().height<innerHeight),'Navigator is bounded by the viewport');assert.ok(await page.locator('aside').locator('xpath=preceding-sibling::div[1]').evaluate(el=>el.getBoundingClientRect().height<innerHeight),'Question sheet has its own natural height');}if(width===375)await page.getByRole('button',{name:'Questions',exact:true}).click();

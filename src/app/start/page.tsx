@@ -1,3 +1,3 @@
-import { StartExperience } from '@/components/product/StartExperience';
-export const metadata={title:'Choose your destination'};
-export default function Start(){return <StartExperience/>}
+import {MissingSkills} from '@/components/k/MissingSkills';
+export const metadata={title:'Find my missing skill'};
+export default function Start(){return <MissingSkills/>}
