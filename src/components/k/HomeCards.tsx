@@ -9,16 +9,19 @@ export function Section({label,children,className}:{label:string;children:ReactN
 
 /** One thing to do: an icon, a title, a line of context and one full-width action,
  *  with a quiet illustration beside it on wider screens. */
-export function FeatureCard({icon,title,body,action,art,children,className,...rest}:{icon?:ReactNode;title:ReactNode;body?:ReactNode;action?:ReactNode;art?:ReactNode;children?:ReactNode;className?:string}&Record<`data-${string}`,string>){
- return <Sheet {...rest} className={cx('home-feature-card grid min-w-0 gap-5 p-4 sm:p-5',!!art&&'sm:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)]',className)}>
+export function FeatureCard({icon,title,body,action,art,artLayout='side',children,className,...rest}:{icon?:ReactNode;title:ReactNode;body?:ReactNode;action?:ReactNode;art?:ReactNode;artLayout?:'side'|'strip';children?:ReactNode;className?:string}&Record<`data-${string}`,string>){
+ return <Sheet {...rest} className={cx('home-feature-card grid min-w-0 gap-5 p-4 sm:p-5',!!art&&artLayout==='side'&&'sm:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)]',className)}>
   <div className="flex min-w-0 flex-col sm:p-1">
+   <div className={artLayout==='strip'?'flex items-center gap-3':undefined}>
    {icon&&<span className="grid h-10 w-10 place-items-center rounded-lg bg-mint text-navy">{icon}</span>}
-   <h2 className={cx('text-xl font-extrabold leading-tight tracking-[-.015em]',!!icon&&'mt-3')}><Headline>{title}</Headline></h2>
-   {body&&<p className="mt-1.5 leading-relaxed text-ink-soft">{body}</p>}
+   <h2 className={cx('text-xl font-extrabold leading-tight tracking-[-.015em]',!!icon&&artLayout==='side'&&'mt-3')}><Headline>{title}</Headline></h2>
+   </div>
+   {body&&<p className={cx('mt-1.5 leading-relaxed text-ink-soft',artLayout==='strip'&&'text-sm')}>{body}</p>}
+   {art&&artLayout==='strip'&&<div aria-hidden="true" className="home-card-art home-card-art-strip overflow-hidden rounded-xl bg-mint">{art}</div>}
    {action&&<div className="mt-auto flex flex-wrap gap-2 pt-5 [&>*]:flex-1">{action}</div>}
    {children}
   </div>
-  {art&&<div aria-hidden="true" className="home-card-art hidden min-h-44 overflow-hidden rounded-xl bg-mint sm:block">{art}</div>}
+  {art&&artLayout==='side'&&<div aria-hidden="true" className="home-card-art hidden min-h-44 overflow-hidden rounded-xl bg-mint sm:block">{art}</div>}
  </Sheet>;
 }
 
@@ -52,13 +55,13 @@ export function RouteArt(){
  </svg>;
 }
 
-/** The learner's own study days, Monday first. */
-export function WeekArt({days}:{days:number[]}){
- const order=[1,2,3,4,5,6,0],names=['M','T','W','T','F','S','S'];
- return <svg viewBox="0 0 240 180" className="h-full w-full" preserveAspectRatio="xMidYMid meet">
-  <rect x="24" y="36" width="192" height="108" rx="12" fill="#fff"/>
-  {order.map((d,i)=><g key={d}><text x={42+i*26.5} y="66" textAnchor="middle" fontSize="12" fontWeight="700" fill="#475e7c" fontFamily="var(--font-instrument-sans),Arial">{names[i]}</text>
-   <rect x={31+i*26.5} y="80" width="22" height="44" rx="6" fill={days.includes(d)?'#14bf96':'#eef3fa'}/></g>)}
+/** The learner's own study days, Sunday first. */
+export function WeekArt({days,compact=false}:{days:number[];compact?:boolean}){
+ const order=[0,1,2,3,4,5,6],names=['S','M','T','W','T','F','S'];
+ return <svg viewBox={compact?'0 0 240 68':'0 0 240 180'} className="h-full w-full" preserveAspectRatio="xMidYMid meet">
+  <rect x="24" y={compact?4:36} width="192" height={compact?60:108} rx="12" fill="#fff"/>
+  {order.map((d,i)=><g key={d}><text x={42+i*26.5} y={compact?24:66} textAnchor="middle" fontSize="12" fontWeight="700" fill="#475e7c" fontFamily="var(--font-instrument-sans),Arial">{names[i]}</text>
+   <rect x={31+i*26.5} y={compact?34:80} width="22" height={compact?20:44} rx="6" fill={days.includes(d)?'#14bf96':'#eef3fa'}/></g>)}
  </svg>;
 }
 

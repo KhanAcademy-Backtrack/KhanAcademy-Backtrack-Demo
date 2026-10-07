@@ -217,4 +217,8 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Validate Manila dates, empty state, duplicate Daily 3 records, keyboard interaction and real completion/reload.
 - [x] Finish the full browser regression suite and verify the owner's follow-up adjustments on the feature branch.
 - [x] Incorporate the owner's preview feedback: activity/momentum above next actions, lowercase “of”, fixed square cells, one yearly heatmap, “Khanpanion Profile:” and a complete seven-day illustration.
+- [x] Balance the closed Home cards and use a full-width topic picker to prevent tall empty columns when opened.
+- [x] Show January–December of the current year, with hover/focus date and exact activity count, muted future dates and current-day positioning on phones.
+- [x] Use headline title styling on the Plan starting-point choices and browsing action.
+- [x] Match Home's desktop column widths and next-step bottom edges; show S M T W T F S in the weekly illustration.
 - [ ] Any later merge/publication; main remains outside this pass.

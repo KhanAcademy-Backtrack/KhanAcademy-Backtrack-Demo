@@ -3,7 +3,7 @@ import {validDay} from './store.ts';
 import type {StudyState} from '../study.ts';
 import {addDays,weekday} from './planner.ts';
 
-export type ActivityDay={day:string;sets:number;checks:number;review:boolean;recorded:boolean;level:number};
+export type ActivityDay={day:string;sets:number;checks:number;review:boolean;recorded:boolean;count:number;level:number};
 const manilaDay=(at:number)=>Number.isFinite(at)&&at>0?new Date(at).toLocaleDateString('en-CA',{timeZone:'Asia/Manila'}):'';
 
 /** Participation only. Resource opens, planned sessions, confidence and scores
@@ -13,7 +13,7 @@ export function studyActivity(program:ProgramState,study:StudyState,today:string
  const get=(day:string)=>{
   if(!validDay(day)||day>today)return undefined;
   let entry=byDay.get(day);
-  if(!entry){entry={day,sets:0,checks:0,review:false,recorded:false,level:0};byDay.set(day,entry);}
+  if(!entry){entry={day,sets:0,checks:0,review:false,recorded:false,count:0,level:0};byDay.set(day,entry);}
   return entry;
  };
  for(const day of new Set(program.studyDays)){const e=get(day);if(e)e.recorded=true;}
@@ -47,7 +47,7 @@ export function studyActivity(program:ProgramState,study:StudyState,today:string
    const e=get(manilaDay(attempt.at));if(e)e.checks++;
   }
  }
- for(const e of byDay.values())e.level=Math.min(4,e.sets+e.checks+(e.review?1:0)||(e.recorded?1:0));
+ for(const e of byDay.values()){e.count=e.sets+e.checks+(e.review?1:0)||(e.recorded?1:0);e.level=Math.min(4,e.count);}
  const days=[...byDay.values()].filter(e=>e.level>0).sort((a,b)=>a.day.localeCompare(b.day));
  const active=new Set(days.map(e=>e.day));
  let streak=0,cursor=active.has(today)?today:addDays(today,-1);
@@ -58,9 +58,12 @@ export function studyActivity(program:ProgramState,study:StudyState,today:string
  return {byDay,days,activeDays:days.length,sets:days.reduce((n,e)=>n+e.sets,0),checks:days.reduce((n,e)=>n+e.checks,0),streak,best,weekDays:days.filter(e=>e.day>=weekStart).length};
 }
 
-/** Whole Monday-first columns, ending at today; future cells remain empty. */
-export function activityWeeks(today:string,count=53){
- const monday=addDays(today,-((weekday(today)+6)%7));
- const start=addDays(monday,-(count-1)*7);
+/** Whole Monday-first columns covering January through December. Dates outside
+ * the calendar year are padding; future dates never gain recorded activity. */
+export function activityWeeks(today:string){
+ const year=today.slice(0,4),first=`${year}-01-01`,last=`${year}-12-31`;
+ const start=addDays(first,-((weekday(first)+6)%7));
+ const end=addDays(last,6-((weekday(last)+6)%7));
+ const count=Math.floor((Date.parse(end)-Date.parse(start))/86400000/7)+1;
  return Array.from({length:count},(_,w)=>Array.from({length:7},(_,d)=>addDays(start,w*7+d)));
 }

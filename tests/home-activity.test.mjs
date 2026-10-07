@@ -43,12 +43,22 @@ test('streaks tolerate today before studying, preserve personal best and dedupli
  p.studyDays.push(today);assert.equal(studyActivity(p,initialStudy(),today).streak,3);
  assert.equal(studyActivity(p,initialStudy(),'2026-10-09').streak,0);
 });
-test('heatmap columns stay Monday first through leap days and the end of a year',()=>{
- for(const day of ['2026-01-01','2024-02-29',today]){
-  const weeks=activityWeeks(day,53);assert.equal(weeks.length,53);assert.equal(new Set(weeks.flat()).size,371);
+test('heatmap covers exactly the current calendar year, including leap years needing 54 columns',()=>{
+ for(const [day,count,dates] of [['2026-01-01',53,365],['2024-02-29',53,366],['2012-12-31',54,366],[today,53,365]]){
+  const weeks=activityWeeks(day),year=day.slice(0,4);assert.equal(weeks.length,count);assert.equal(new Set(weeks.flat()).size,count*7);
   for(const w of weeks){assert.equal(w.length,7);assert.equal(new Date(w[0]+'T12:00:00Z').getUTCDay(),1);}
-  assert.ok(weeks.at(-1).includes(day));
+  const inYear=weeks.flat().filter(d=>d.startsWith(year));
+  assert.equal(inYear.length,dates);assert.equal(inYear[0],`${year}-01-01`);assert.equal(inYear.at(-1),`${year}-12-31`);assert.ok(inYear.includes(day));
  }
+});
+test('activity counts remain exact above the colour scale and do not double recorded study days',()=>{
+ const p=initialProgram(),s=initialStudy(),r=initialRecovery('fractions'),at=Date.parse(today+'T08:00:00Z');
+ p.studyDays=[today,today];p.daily[today]={correct:2,total:3};p.missions[today]={recall:at};
+ p.attempts=[{...newAttempt('section~math|count',false,1),submittedAt:at}];
+ r.evidence=Array.from({length:6},(_,i)=>({id:`count:${i}`,skill:'goal',answer:['2'],correct:false,at:at+i,purpose:'route'}));s.routes.fractions=r;
+ const day=studyActivity(p,s,today).byDay.get(today);
+ assert.equal(day.count,9);assert.equal(day.level,4);assert.equal(day.sets,2);assert.equal(day.checks,6);
+ const legacy=initialProgram();legacy.studyDays=[today];assert.equal(studyActivity(legacy,initialStudy(),today).byDay.get(today).count,1);
 });
 test('meaningful completed sessions retain activity when their route is replaced, without doubling answers',()=>{
  const s=initialStudy(),at=Date.parse(today+'T03:00:00Z');
