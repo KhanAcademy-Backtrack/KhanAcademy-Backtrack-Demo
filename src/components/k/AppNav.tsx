@@ -2,7 +2,7 @@
 import {Headline} from './Headline';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
-import {createContext,useContext,useEffect,useId,useRef,useState,type ReactNode} from 'react';
+import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 'react';
 import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {useProgram} from './ProgramProvider';
@@ -18,33 +18,26 @@ import {CONCEPT_BY_ID} from '@/lib/program/concepts';
 
 type Key='today'|'plan'|'study'|'group';
 type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'courses'|'folder'|'plus'|'goal';
-/** A page inside a main section, listed under it in the sidebar and in the section bar. `label` is an interface text key. */
-export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string;match:(p:string)=>boolean;children?:Sub[];hint?:TextKey};
+/** A page inside a main section, listed in its horizontal section bar. `label` is an interface text key. */
+export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string;match:(p:string)=>boolean};
 type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[];bar?:Sub[]};
 
-/** Study tools in the sidebar's Study list and the home shortcuts, CET practice first. */
+/** Study tools in the section bar and the home shortcuts, CET practice first. */
 type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates';
 export const STUDY_TOOLS:Sub[]=[
  {key:'mocks',href:'/mock',label:'page.mocks',icon:'mocks',blurb:'Full CET-style sets, timed or untimed, with an answer key.',match:p=>p.startsWith('/mock')},
  {key:'recall',href:'/review',label:'page.recall',icon:'recall',blurb:'A quick look at the ideas that are due today.',match:p=>p==='/review'},
  {key:'packs',href:'/packs',label:'page.packs',icon:'packs',blurb:'Topic packs that start short BACKTRACK rounds.',match:p=>p.startsWith('/packs')||p.startsWith('/create')}
 ];
-/** Find my missing skill: the learner's own gaps and each topic's route. In the sidebar, CET
- *  Reviewers and Courses are toggles: each opens to its own page and its view of Find my missing
- *  skill (CET or college), and opens by itself while one of them is current. The section bar keeps
- *  both as plain pages and lists Find my missing skill once. */
+/** The section's pages stay in its page-level navigation; the global menu stays flat. */
 const FIX:Sub={key:'fix',href:'/start',label:'page.fix',icon:'start',match:p=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')};
 /** The mistake notebook and explore ideas left the menus on 4 October at the owner's request.
  *  Their addresses still work, are found by search and still belong to Study. */
 const OFF_MENU_STUDY=(p:string)=>p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
 const IN_REVIEWER=(p:string)=>p.startsWith('/reviewer')||p.startsWith('/learn/'),IN_COURSES=(p:string)=>p.startsWith('/bridge');
-const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:IN_REVIEWER,children:[
- {key:'reviewer-topics',href:'/reviewer',label:'page.reviewerTopics',icon:'reviewer',match:IN_REVIEWER},
- {...FIX,key:'fix-cet',href:'/start/cet',hint:'nav.forCet',match:p=>p==='/start/cet'}]};
+const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:IN_REVIEWER};
 /** College foundations: each field's first-year courses and the math and science they build on. */
-const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:IN_COURSES,children:[
- {key:'courses-all',href:'/bridge',label:'page.coursesAll',icon:'courses',match:IN_COURSES},
- {...FIX,key:'fix-college',href:'/start/college',hint:'nav.forCollege',match:p=>p==='/start/college'}]};
+const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:IN_COURSES};
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
 /** Four sections, in this order: Home, Study, Plan, Group. Plan holds the goal page and the
@@ -98,7 +91,7 @@ export function AppShell({children}:{children:ReactNode}){
  const setRail=(v:boolean)=>{setRailState(v);try{localStorage.setItem(SIDEBAR_KEY,v?'rail':'open');}catch{}};
  return <Shell.Provider value={{rail,setRail}}>
   <AppNav/>
-  <div className={cx('transition-[padding] duration-200 motion-reduce:transition-none print:pl-0',!focus&&(rail?'lg:pl-[76px]':'lg:pl-[76px] xl:pl-60'))}><main id="main">{!focus&&<SectionBar rail={rail}/>}{children}</main><SiteFooter/></div>
+  <div className={cx('transition-[padding] duration-200 motion-reduce:transition-none print:pl-0',!focus&&(rail?'lg:pl-[76px]':'lg:pl-[76px] xl:pl-60'))}><main id="main">{!focus&&<SectionBar/>}{children}</main><SiteFooter/></div>
  </Shell.Provider>;
 }
 
@@ -110,16 +103,13 @@ function useSections(){
  return {list,active:list.find(x=>x.match(path))?.key,path,goal,lang:state.lang,label:(x:Tab)=>t(state.lang,`nav.${x.key}`)};
 }
 
-const subLink=(current:boolean)=>cx('flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 text-[14px] font-semibold hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',current?'bg-white text-navy shadow-sheet':'text-ink-soft hover:text-navy');
-
-/** The current section's pages as a row of tabs, shown whenever the sidebar is not
- *  wide enough to list them: on phones, tablets and with the sidebar narrowed. */
-function SectionBar({rail}:{rail:boolean}){
+/** The current section's pages belong in the page, on every screen width. */
+function SectionBar(){
  const {list,active,path,lang,label}=useSections(),tab=list.find(x=>x.key===active),bar=useRef<HTMLUListElement>(null);
  useEffect(()=>{bar.current?.querySelector('[aria-current=page]')?.scrollIntoView({block:'nearest',inline:'nearest'});},[path]);
  if(!tab?.subs.length)return null;
  const pages=[...tab.subs,...(tab.bar??[])],sub=pages.find(y=>y.match(path));
- return <nav aria-label={t(lang,'nav.sectionPages').replace('{section}',label(tab))} className={cx('print:hidden mx-auto max-w-6xl px-4 pt-3 sm:px-8',!rail&&'xl:hidden')}>
+ return <nav aria-label={t(lang,'nav.sectionPages').replace('{section}',label(tab))} className="print:hidden mx-auto max-w-6xl px-4 pt-3 sm:px-8">
   <ul ref={bar} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]">{pages.map(y=><li key={y.key} className="shrink-0">
    <Link href={y.href} aria-current={sub===y?'page':undefined} className={cx('relative flex min-h-11 items-center gap-2 whitespace-nowrap rounded-t-lg px-3 text-[14px] font-semibold focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',sub===y?'text-navy':'text-ink-soft hover:text-navy')}>
     <NavIcon small k={y.icon}/><Headline>{t(lang,y.label)}</Headline>{sub===y&&<span aria-hidden="true" className="absolute inset-x-2 bottom-0 h-[3px] rounded-t-sm bg-green"/>}
@@ -129,9 +119,7 @@ function SectionBar({rail}:{rail:boolean}){
 
 type Rail='always'|'below-xl'|'never';
 function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false}:{rail:Rail;list:Tab[];active?:Key;path:string;goal:ReturnType<typeof learnerGoal>;lang:Lang;label:(x:Tab)=>string;onPick?:()=>void;main?:boolean}){
- const {state}=useProgram(),guide=useProgramGuide(),reduced=useQuietMotion(),uid=useId();
- /* A toggle the learner opened or closed holds until the page changes; then each opens by itself while it holds the current page. */
- const [toggled,setToggled]=useState<Record<string,boolean>>({});useEffect(()=>setToggled({}),[path]);
+ const {state}=useProgram(),guide=useProgramGuide(),reduced=useQuietMotion();
  const hide=rail==='always'?'sr-only':rail==='below-xl'?'sr-only xl:not-sr-only':'';
  const center=rail==='always'?'justify-center px-0':rail==='below-xl'?'justify-center px-0 xl:justify-start xl:px-3':'px-3';
  const heading=cx('px-3 pb-1.5 pt-1 text-sm font-semibold text-ink-soft',rail==='always'?'hidden':rail==='below-xl'?'hidden xl:block':'');
@@ -144,26 +132,10 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
  const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/reviewer',title:t(lang,'nav.generalCet')}]:[]),...targets.slice(0,5).map(x=>({href:'/admissions',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
  return <>
   <nav aria-label={t(lang,main?'nav.main':'nav.all')} className="grid gap-1">
-   {list.map(x=>{const on=active===x.key,sub=on?x.subs.flatMap(y=>y.children??[y]).find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
-    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={section(on,main)}>
+   {list.map(x=>{const on=active===x.key;return <Link key={x.key} href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} aria-current={on?(x.href===path?'page':'true'):undefined} className={section(on,main)}>
      {main&&on&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
      <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><Headline>{label(x)}</Headline></span>
-    </Link>
-    {on&&rail!=='always'&&x.subs.length>0&&<ul aria-label={label(x)} className={cx('mb-1 ml-6 gap-0.5 border-l border-line pl-2',rail==='below-xl'?'hidden xl:grid':'grid')}>
-     {x.subs.map(y=>{
-      if(!y.children)return <li key={y.key}><Link href={y.href} onClick={onPick} aria-current={sub===y?'page':undefined} className={subLink(sub===y)}><NavIcon small k={y.icon}/><Headline>{t(lang,y.label)}</Headline></Link></li>;
-      const holds=y.children.some(c=>c===sub),open=toggled[y.key]??holds,id=`${uid}-${y.key}`;
-      return <li key={y.key}>
-       <button type="button" aria-expanded={open} aria-controls={id} onClick={()=>setToggled(o=>({...o,[y.key]:!open}))} className={cx('flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-[14px] font-semibold hover:bg-white hover:text-navy focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',holds?'text-navy':'text-ink-soft')}>
-        <NavIcon small k={y.icon}/><span className="flex-1"><Headline>{t(lang,y.label)}</Headline></span>
-        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" className={cx('shrink-0 motion-safe:transition-transform',open&&'rotate-90')}><path d="m6 4 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-       </button>
-       <ul id={id} aria-label={t(lang,y.label)} className={cx('ml-5 mt-0.5 gap-0.5 border-l border-line pl-2',open?'grid':'hidden')}>
-        {y.children.map(c=><li key={c.key}><Link href={c.href} onClick={onPick} aria-current={sub===c?'page':undefined} className={cx(subLink(sub===c),'min-h-9 text-[13.5px]')}><NavIcon small k={c.icon}/><span><Headline>{t(lang,c.label)}</Headline>{c.hint&&<span className="sr-only">{t(lang,c.hint)}</span>}</span></Link></li>)}
-       </ul>
-      </li>;})}
-    </ul>}
-   </div>;})}
+    </Link>;})}
   </nav>
   <hr className="my-3 border-line"/>
   <p className={heading}>{t(lang,goal==='exam'?'nav.yourExams':goal==='college'?'nav.yourProgram':goal==='topic'?'nav.yourTopic':'nav.yourGoal')}</p>
@@ -177,22 +149,38 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
 }
 
 export function AppNav(){
- const openTour=useProgramTour(),guide=useProgramGuide(),{rail,setRail}=useContext(Shell);
+ const openTour=useProgramTour(),guide=useProgramGuide(),{rail}=useContext(Shell);
  const {state,update}=useProgram(),reduced=useQuietMotion(),{list,active,path,goal,lang,label}=useSections();
  const [menu,setMenu]=useState(false),button=useRef<HTMLButtonElement>(null),panel=useRef<HTMLDivElement>(null);
- const [drawer,setDrawer]=useState(false),[searching,setSearching]=useState(false),[wide,setWide]=useState(false),[scrolled,setScrolled]=useState(false);
+ const [drawer,setDrawer]=useState(false),[searching,setSearching]=useState(false),[scrolled,setScrolled]=useState(false);
  const burger=useRef<HTMLButtonElement>(null),drawerPanel=useRef<HTMLDivElement>(null);
  useEffect(()=>{setMenu(false);setDrawer(false);setSearching(false);},[path]);
- useEffect(()=>{const q=matchMedia('(min-width:1280px)'),sync=()=>setWide(q.matches);sync();q.addEventListener('change',sync);const scroll=()=>setScrolled(scrollY>4);scroll();addEventListener('scroll',scroll,{passive:true});return()=>{q.removeEventListener('change',sync);removeEventListener('scroll',scroll);};},[]);
+ useEffect(()=>{const scroll=()=>setScrolled(scrollY>4);scroll();addEventListener('scroll',scroll,{passive:true});return()=>removeEventListener('scroll',scroll);},[]);
  useEffect(()=>{if(!menu)return;const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){setMenu(false);button.current?.focus();}};const click=(e:MouseEvent)=>{if(!panel.current?.contains(e.target as Node)&&!button.current?.contains(e.target as Node))setMenu(false);};document.addEventListener('keydown',key);document.addEventListener('mousedown',click);return()=>{document.removeEventListener('keydown',key);document.removeEventListener('mousedown',click);};},[menu]);
- useEffect(()=>{if(!drawer)return;drawerPanel.current?.querySelector<HTMLElement>('a,button')?.focus();const key=(e:KeyboardEvent)=>{if(e.key==='Escape')close();};document.addEventListener('keydown',key);return()=>document.removeEventListener('keydown',key);},[drawer]);
+ useEffect(()=>{
+  if(!drawer)return;
+  const previousOverflow=document.body.style.overflow;
+  document.body.style.overflow='hidden';
+  drawerPanel.current?.querySelector<HTMLElement>('a,button')?.focus();
+  const key=(e:KeyboardEvent)=>{
+   if(e.key==='Escape'){e.preventDefault();close();}
+   if(e.key!=='Tab')return;
+   const items=drawerPanel.current?.querySelectorAll<HTMLElement>('a[href],button:not([disabled])');
+   if(!items?.length)return;
+   const first=items[0],last=items[items.length-1];
+   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  };
+  document.addEventListener('keydown',key);
+  return()=>{document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',key);};
+ },[drawer]);
  const close=()=>{setDrawer(false);burger.current?.focus();};
  if(FOCUS.some(r=>r.test(path)))return null;
  const move=reduced?{duration:0}:SPRING;
  return <>
   <header className={cx('print:hidden sticky top-0 z-40 border-b bg-canvas text-navy',scrolled?'border-line':'border-transparent')}>
    <div className="flex h-16 items-center gap-1 px-2 sm:gap-2 sm:px-4">
-    <button ref={burger} type="button" aria-label={t(lang,wide?(rail?'nav.expand':'nav.collapse'):'nav.openMenu')} aria-expanded={wide?!rail:drawer} onClick={()=>wide?setRail(!rail):setDrawer(true)} className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-navy hover:bg-white focus-visible:outline-3 focus-visible:outline-navy">
+    <button ref={burger} type="button" aria-label={t(lang,'nav.openMenu')} aria-expanded={drawer} onClick={()=>setDrawer(true)} className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-navy hover:bg-white focus-visible:outline-3 focus-visible:outline-navy">
      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <Link href="/" aria-label={t(lang,'nav.home')} className="rounded-lg px-1 focus-visible:outline-3 focus-visible:outline-navy"><Wordmark small compact/></Link>

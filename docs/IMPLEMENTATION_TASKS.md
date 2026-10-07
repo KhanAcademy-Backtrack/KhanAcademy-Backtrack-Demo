@@ -224,4 +224,7 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Use Sunday-first heatmap rows labeled S M T W T F S, with date positions matched to every label.
 - [x] Prepare the approved integration with main: preserve Home, follow main's navigation and remove My plan with its obsolete links.
 - [x] Verify the integrated version: 61 browser checks, 188 domain tests, type checking and the 690-page production export pass.
-- [ ] Publish to main after the owner's separate push approval.
+- [x] Publish the verified Home/main integration after the owner's push approval.
+- [x] Prepare the owner's flat-menu follow-up in an isolated worktree: direct section buttons, no nested menu lists, and section links within the page on all screen widths.
+- [x] Verify the flat menu, desktop/phone drawer and horizontal section links: 27 browser checks, 209 domain tests and the 690-page production build pass; manually verify focus wrapping, Escape and destination navigation.
+- [x] Publish the flat-menu follow-up after the owner's approval, preserving the Home refinements and main's route-map work.

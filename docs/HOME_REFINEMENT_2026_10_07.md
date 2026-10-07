@@ -18,7 +18,11 @@ Owner request: add a study heatmap and refine Home using the supplied spacious p
 
 Navigation follows main: Home, Study, Plan, Group, with section labels visible when the sidebar is narrow. The My plan page and its unused components are removed. Calendar and Exam dates remain under Plan; exam editing opens the existing goal picker from Home and the menu. Search and guided-tour destinations no longer point to the removed page.
 
-Main's header/sidebar overscroll fix and course illustration corrections are retained. Home keeps the complete layout, heatmap, momentum, Sunday-first labels and responsive card refinements described here. The integration is prepared on the feature branch; publication awaits the owner's final approval.
+Main's header/sidebar overscroll fix and course illustration corrections are retained. Home keeps the complete layout, heatmap, momentum, Sunday-first labels and responsive card refinements described here. The integration has been published on main.
+
+The owner then requested flat global navigation. The sidebar and menu drawer now contain direct Home, Study, Plan and Group links plus personal goal shortcuts, without nested lists or dropdowns. Section destinations remain in the horizontal page-level tabs at every screen width; topic and course hierarchies remain on their destination pages. The hamburger opens the full drawer on desktop as well as phones, with keyboard focus kept inside it until it closes. This follow-up was verified on a review branch and approved for publication by the owner.
+
+Direct inspection of the production Home page confirms that the profile header, current-calendar-year heatmap and momentum cards are already deployed. The menu follow-up preserves those Home changes and main's subsequent route-map work.
 
 ## Activity contract
 
@@ -39,5 +43,6 @@ The heatmap has a single keyboard entry point. Arrow keys move between recorded 
 - The Sunday-first heatmap follow-up passes all eight activity domain tests and eight Home browser cases. Every rendered date matches its weekday row, including leap years and blank padding outside the calendar year.
 - The integrated main/Home version passes all 61 Edge browser cases and 188 domain tests. The browser checks confirm My plan returns 404, goal editing remains available from Home, saved work survives setup changes, and the Home heatmap, tooltips, keyboard controls and card geometry still work across phone and desktop widths.
 - Desktop and phone screenshots were inspected. Test screenshots use disposable QA activity; no sample history is installed in the application.
+- The flat-menu follow-up retains main's newer route-map work and passes 209 domain tests, 27 relevant Edge browser cases, type checking and the 690-page production export. Direct browser checks cover the desktop and phone drawer, focus wrapping, Escape return, scroll lock, drawer links and horizontal Courses navigation. Production Home was also inspected directly.
 
 Local captures are under `.refs/home-review/`. Private working files and reference images are not part of this release.
