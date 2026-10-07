@@ -13,34 +13,34 @@ const SCENES:Record<string,ReactNode>={
   <circle cx="44" cy="24.5" r="2.4" fill={G}/><circle cx="52" cy="24.5" r="2.4" fill={GL}/><circle cx="60" cy="24.5" r="2.4" fill={F}/>
   <path d="M50 46 42 53l8 7M74 46l8 7-8 7M67 43l-10 21" fill="none" stroke={G} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/>
   <rect x="90" y="44" width="26" height="4" rx="2" fill={GL}/><rect x="90" y="53" width="18" height="4" rx="2" fill={F}/><rect x="90" y="62" width="22" height="4" rx="2" fill={GL}/>
-  <text x="14" y="34" fontSize="11" fontWeight="700" fill={GD} fontFamily="ui-monospace,monospace">1</text><text x="138" y="76" fontSize="11" fontWeight="700" fill={GD} fontFamily="ui-monospace,monospace">0</text><text x="140" y="30" fontSize="11" fontWeight="700" fill={F} fontFamily="ui-monospace,monospace">1</text>
+  <circle cx="20" cy="76" r="5" fill={GL}/><circle cx="142" cy="26" r="3.5" fill={F}/>
  </>,
  engineering:<>
-  <path d="M18 80h124" stroke={N} strokeWidth="3" strokeLinecap="round"/>
-  <path d="M26 80 48 46l22 34 22-34 22 34 22-34" fill="none" stroke={N} strokeWidth="3.4" strokeLinejoin="round"/>
-  <path d="M48 46h88" stroke={N} strokeWidth="3.4" strokeLinecap="round"/>
-  <g transform="translate(40 30)"><circle r="15" fill={G}/><circle r="5.5" fill={M}/>{[0,45,90,135,180,225,270,315].map(a=><rect key={a} x="-3.5" y="-20" width="7" height="8" rx="1.5" fill={G} transform={`rotate(${a})`}/>)}</g>
-  <rect x="104" y="20" width="40" height="10" rx="2" fill={GL} transform="rotate(-8 124 25)"/>
-  {[0,1,2,3,4].map(i=><path key={i} d={`M${108+i*7} ${19.5-i}v4`} stroke={N} strokeWidth="1.6" transform="rotate(-8 124 25)"/>)}
+  <path d="M20 80h120" stroke={N} strokeWidth="3" strokeLinecap="round"/>
+  <path d="M26 80 44 50l18 30 18-30 18 30 18-30 18 30" fill="none" stroke={N} strokeWidth="3.4" strokeLinejoin="round" strokeLinecap="round"/>
+  <path d="M44 50h72" stroke={N} strokeWidth="3.4" strokeLinecap="round"/>
+  <g transform="translate(34 27)"><circle r="13" fill={G}/><circle r="5" fill={M}/>{[0,45,90,135,180,225,270,315].map(a=><rect key={a} x="-3" y="-17.5" width="6" height="7" rx="1.2" fill={G} transform={`rotate(${a})`}/>)}</g>
+  <g transform="rotate(-8 121 27)"><rect x="100" y="22" width="42" height="10" rx="2" fill={GL}/>{[0,1,2,3,4,5].map(i=><path key={i} d={`M${104+i*7} 22v${i%2?3:5}`} stroke={N} strokeWidth="1.6" strokeLinecap="round"/>)}</g>
  </>,
  health:<>
   <path d="M80 84C52 66 38 52 38 38c0-10 8-18 18-18 10 0 18 6 24 15 6-9 14-15 24-15 10 0 18 8 18 18 0 14-14 28-42 46Z" fill={G}/>
   <path d="M30 50h26l6-12 9 24 7-16 5 8h47" fill="none" stroke={N} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/>
-  <g transform="rotate(-35 130 76)"><rect x="114" y="69" width="34" height="14" rx="7" fill={W} stroke={N} strokeWidth="2.6"/><path d="M131 69h10a7 7 0 0 1 0 14h-10Z" fill={N}/></g>
+  <g transform="rotate(-35 136 75)"><rect x="119" y="68" width="34" height="14" rx="7" fill={W} stroke={N} strokeWidth="2.6"/><path d="M136 68h10a7 7 0 0 1 0 14h-10Z" fill={N}/></g>
   <circle cx="26" cy="26" r="5" fill={GL}/><circle cx="140" cy="24" r="3.5" fill={F}/>
  </>,
  natural_sciences:<>
   <g transform="translate(62 50)" fill="none" stroke={N} strokeWidth="2.8"><ellipse rx="34" ry="12"/><ellipse rx="34" ry="12" transform="rotate(60)"/><ellipse rx="34" ry="12" transform="rotate(-60)"/></g>
   <circle cx="62" cy="50" r="7" fill={G}/><circle cx="96" cy="50" r="4" fill={GD}/><circle cx="45" cy="21" r="4" fill={GD}/>
-  <path d="M116 22h20M120 22v20l-12 30a5 5 0 0 0 5 7h26a5 5 0 0 0 5-7l-12-30V22" fill={W} stroke={N} strokeWidth="2.8" strokeLinejoin="round"/>
-  <path d="M112 62h32l5 10a5 5 0 0 1-5 7h-26a5 5 0 0 1-5-7Z" fill={G}/>
-  <circle cx="124" cy="52" r="2.6" fill={GL}/><circle cx="131" cy="44" r="2" fill={GL}/>
+  <path d="M120 22v20l-12 30a5 5 0 0 0 5 7h26a5 5 0 0 0 5-7l-12-30V22Z" fill={W}/>
+  <path d="M112 62h28l4 10a5 5 0 0 1-5 7h-26a5 5 0 0 1-5-7Z" fill={G}/>
+  <path d="M116 22h20M120 22v20l-12 30a5 5 0 0 0 5 7h26a5 5 0 0 0 5-7l-12-30V22" fill="none" stroke={N} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+  <circle cx="124" cy="53" r="2.6" fill={GL}/><circle cx="128" cy="45" r="2" fill={GL}/>
  </>,
  statistics:<>
+  {[76,61.6,43.2,30.3,43.2,61.6,76].map((y,i)=><rect key={i} x={29+i*15} y={y} width="12" height={84-y} rx="2.5" fill={i===3?G:i%2?F:GL}/>)}
   <path d="M18 84h124" stroke={N} strokeWidth="3" strokeLinecap="round"/>
-  {[[26,70,14],[40,58,26],[54,42,42],[68,30,54],[82,28,56],[96,38,46],[110,54,30],[124,68,16]].map(([x,y,h],i)=><rect key={i} x={x} y={y} width="12" height={h} rx="2.5" fill={i===3||i===4?G:i%2?GL:F}/>)}
-  <path d="M22 80C46 78 52 30 80 26s34 52 58 54" fill="none" stroke={N} strokeWidth="3.2" strokeLinecap="round"/>
-  <path d="M80 22v62" stroke={GD} strokeWidth="2.4" strokeDasharray="4 4"/>
+  <path d="M20 78.2C21.7 77.2 26.7 74.7 30 72.2C33.3 69.7 36.7 66.6 40 63.1C43.3 59.6 46.7 55.3 50 51.3C53.3 47.3 56.7 42.7 60 39.1C63.3 35.4 66.7 31.8 70 29.6C73.3 27.4 76.7 26 80 26C83.3 26 86.7 27.4 90 29.6C93.3 31.8 96.7 35.4 100 39.1C103.3 42.7 106.7 47.3 110 51.3C113.3 55.3 116.7 59.6 120 63.1C123.3 66.6 126.7 69.7 130 72.2C133.3 74.7 138.3 77.2 140 78.2" fill="none" stroke={N} strokeWidth="3.2" strokeLinecap="round"/>
+  <path d="M80 16v8" stroke={GD} strokeWidth="2.4" strokeLinecap="round"/><path d="M80 31v50" stroke={W} strokeWidth="1.8" strokeDasharray="3 3" opacity=".9"/>
   <circle cx="134" cy="22" r="9" fill={M} stroke={N} strokeWidth="2.8"/><path d="m140.5 28.5 7 7" stroke={N} strokeWidth="3.4" strokeLinecap="round"/><circle cx="134" cy="22" r="3" fill={G}/>
  </>,
  social_sciences:<>
