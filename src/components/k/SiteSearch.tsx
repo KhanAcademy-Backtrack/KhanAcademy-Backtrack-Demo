@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import {useEffect,useId,useRef,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import type {SearchEntry} from '@/lib/site-search';
@@ -33,7 +34,7 @@ export function SiteSearch({className,autoFocus=false,onDone}:{className?:string
   {shown&&<div className="absolute inset-x-0 top-12 z-50 overflow-hidden rounded-xl border border-line bg-white shadow-lift">
    {results.length?<ul id={`${id}-list`} role="listbox" aria-label={t(lang,'search.results')} className="max-h-[60vh] overflow-y-auto p-1.5">{results.map((r,i)=><li key={r.kind+r.href+r.title} id={`${id}-${i}`} role="option" aria-selected={i===active} onMouseEnter={()=>setActive(i)} onMouseDown={e=>{e.preventDefault();go(r);}}
     className={cx('flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5',i===active&&'bg-sky')}>
-    <span className="min-w-0 flex-1"><span className="block truncate font-semibold text-navy">{r.title}</span><span className="block truncate text-sm text-ink-soft">{r.detail}</span></span>
+    <span className="min-w-0 flex-1"><span className="block truncate font-semibold text-navy"><Headline>{r.title}</Headline></span><span className="block truncate text-sm text-ink-soft">{r.detail}</span></span>
     <span className="shrink-0 rounded-md bg-canvas px-2 py-0.5 text-xs font-semibold text-ink-soft">{r.kind}</span>
    </li>)}</ul>
    :<p id={`${id}-list`} role="status" className="px-4 py-3 text-sm text-ink-soft">{t(lang,search?'search.none':'search.loading')}</p>}

@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import Link from 'next/link';
 import {AnimatePresence,animate,motion,useMotionValue} from 'motion/react';
@@ -21,7 +22,7 @@ const LETTERS=['A','B','C','D'];
 export function PassageView({id,compact=false}:{id:string;compact?:boolean}){
  const p=passageById(id);if(!p)return null;
  return <article aria-label={`Passage: ${p.title}`} className={cx('rounded-xl bg-sky/70 p-5 font-serif text-[18px] leading-[1.7] text-navy sm:p-6',compact?'max-h-[46vh] overflow-y-auto':'')}>
-  <h3 className="mb-3 font-sans text-base font-bold">{p.title} <span className="font-normal text-ink-soft">· {p.kind}</span></h3>
+  <h3 className="mb-3 font-sans text-base font-bold"><Headline>{p.title} <span className="font-normal text-ink-soft">· {p.kind}</span></Headline></h3>
   {p.paragraphs.map((x,i)=><p key={i} className="mb-3 last:mb-0">{x}</p>)}
  </article>;
 }
@@ -33,8 +34,8 @@ export function FixLinks({item,chosen,lang='en',stacked=false,className}:{item:M
  const mid=chosen!==null?item.misconceptions[chosen]:null,m=mid?misconception(mid):undefined;
  const khan=m?.khan??item.khanRef;
  return <div className={cx(stacked?'grid justify-items-start gap-1':'flex flex-wrap gap-x-5 gap-y-1',className)}>
-  {m?.recovery&&<button className={btn.text} onClick={()=>fix(m.recovery!.topic,m.recovery!.skill,m.recovery!.routeClue)}>{t(lang,'result.fix')}: find the missing skill</button>}
-  <Link className={btn.text} href={chapterHref(m?.chapter??item.reviewerChapter,item.concept)}>Read the reviewer</Link>
+  {m?.recovery&&<button className={btn.text} onClick={()=>fix(m.recovery!.topic,m.recovery!.skill,m.recovery!.routeClue)}><Headline>{t(lang,'result.fix')}: find the missing skill</Headline></button>}
+  <Link className={btn.text} href={chapterHref(m?.chapter??item.reviewerChapter,item.concept)}><Headline>Read the reviewer</Headline></Link>
   {khan&&<KhanLink href={khanUrl(khan)}>{khanLabel(khan)}</KhanLink>}
  </div>;
 }
@@ -102,14 +103,14 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
   </div>
   <div className="mt-4 flex flex-wrap items-center gap-3">
    <button aria-pressed={idk} disabled={locked} onClick={onIdk} className={cx('min-h-11 rounded-lg border-2 px-4 text-[15px] font-semibold',idk?'border-navy bg-navy text-white':'border-line bg-white text-navy hover:border-line-strong')}>{t(lang,'mock.idk')}</button>
-   {mode==='practice'&&!revealed&&<div className="ml-auto flex flex-wrap items-center gap-3">{checkActions}<button className={btn.primary} disabled={chosen===null&&!idk} onClick={onReveal}>{t(lang,'mock.check')}</button></div>}
+   {mode==='practice'&&!revealed&&<div className="ml-auto flex flex-wrap items-center gap-3">{checkActions}<button className={btn.primary} disabled={chosen===null&&!idk} onClick={onReveal}><Headline>{t(lang,'mock.check')}</Headline></button></div>}
    {mode==='exam'&&actions&&<div className="ml-auto flex flex-wrap items-center gap-3">{actions}</div>}
   </div>
   <AnimatePresence initial={false}>{mode==='practice'&&revealed&&<motion.div key="fb" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={reduced?{duration:0}:SPRING} className="mt-5 space-y-3">
    {!right&&<WhyPanel item={item} chosen={chosen} lang={lang} linksBeside={linksBeside}/>}
    {panel}
    <div className="flex flex-wrap items-center gap-3">
-    <button className={btn.ghost} aria-expanded={explain} onClick={()=>setExplain(!explain)}>{explain?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</button>
+    <button className={btn.ghost} aria-expanded={explain} onClick={()=>setExplain(!explain)}><Headline>{explain?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</Headline></button>
     {actions&&<div className="ml-auto flex flex-wrap items-center gap-3">{actions}</div>}
    </div>
    {explain&&<Explanation item={item}/>}

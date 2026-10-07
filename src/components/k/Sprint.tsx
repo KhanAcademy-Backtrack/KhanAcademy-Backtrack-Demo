@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
 import {useProgram} from './ProgramProvider';
@@ -30,6 +31,6 @@ export function Sprint({formKey,lang='en',onFinish,finishLabel='See how you did'
    onChoose={c=>{setAnswers(a=>({...a,[id]:c}));setIdk(x=>x.filter(y=>y!==id));}}
    onIdk={()=>{setIdk(x=>x.includes(id)?x.filter(y=>y!==id):[...x,id]);setAnswers(a=>({...a,[id]:null}));}}
    onReveal={()=>setRevealed(r=>[...r,id])}/>
-  {revealed.includes(id)&&<div className="mt-5 flex justify-end">{last?<button autoFocus className={btn.primary} onClick={finish}>{finishLabel}</button>:<button autoFocus className={btn.primary} onClick={()=>setI(i+1)}>Next question</button>}</div>}
+  {revealed.includes(id)&&<div className="mt-5 flex justify-end">{last?<button autoFocus className={btn.primary} onClick={finish}><Headline>{finishLabel}</Headline></button>:<button autoFocus className={btn.primary} onClick={()=>setI(i+1)}><Headline>Next question</Headline></button>}</div>}
  </div>;
 }

@@ -6,6 +6,7 @@ import {EXTRAS} from '../content/reviewer/extras.ts';
 import {plainText} from './notation.ts';
 import {PROGRAMS} from './program/bridge.ts';
 import {SUBJECTS,KIND_LABEL} from './program/college-courses.ts';
+import {TOPIC_LESSONS,lessonHref} from './program/topic-lessons.ts';
 
 /** One place a learner can go from the header search. Everything here is a real,
  *  statically exported route; nothing is fetched, so search works offline. */
@@ -34,6 +35,7 @@ export const SEARCH_INDEX:SearchEntry[]=[
  ...PROGRAMS.map(p=>({kind:'College' as const,title:p.title,detail:`College field · ${p.subjects.length} subjects`,href:`/bridge/${p.id}`,words:`${p.title} ${p.examples} college course field degree`.toLowerCase()})),
  ...SUBJECTS.flatMap(x=>{const p=PROGRAMS.find(p=>p.subjects.includes(x.id));return p?[{kind:'College' as const,title:x.title,detail:`${KIND_LABEL[x.kind]} · ${x.level} · ${p.title}`,href:`/bridge/${p.id}/${x.id}`,words:`${x.title} ${KIND_LABEL[x.kind]} ${x.topics.join(' ')} college subject course`.toLowerCase()}]:[];}),
  ...PAGES.map(([title,detail,href,words])=>({kind:'Page' as const,title,detail,href,words:`${title} ${words}`.toLowerCase()})),
+ ...TOPIC_LESSONS.map(l=>({kind:l.subject?'College' as const:'Topic' as const,title:l.title,detail:l.exam?l.exam.toUpperCase()+' · '+l.group:l.section,href:lessonHref(l.id),words:plainText(l.title+' '+l.section+' '+(l.exam??'college')+' '+l.group).toLowerCase()})),
 ];
 
 /** Every word of the query must appear. Title matches rank first, then title

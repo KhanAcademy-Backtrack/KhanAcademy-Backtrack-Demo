@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import Link from 'next/link';
 import {useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
@@ -41,7 +42,7 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
   const measure=()=>{
    const target=[...document.querySelectorAll<HTMLElement>(`[data-program-tour="${highlight}"]`)].find(el=>el.getBoundingClientRect().width>0);
    const box=target?.getBoundingClientRect(),width=Math.min(420,innerWidth-28),height=Math.min(dialog.current?.getBoundingClientRect().height??430,innerHeight-112);
-   const r=box?{x:Math.max(3,box.x-3),y:Math.max(3,box.y-3),w:Math.min(innerWidth-6,box.width+6),h:Math.min(innerHeight-6,box.height+6)}:undefined;
+   const r=box?{x:box.x,y:box.y,w:box.width,h:box.height}:undefined;
    const side=!!target?.closest('[data-sidebar]');
    setRect(r);setPosition(r&&side?{left:Math.min(innerWidth-width-14,r.x+r.w+16),top:Math.max(14,Math.min(innerHeight-height-14,r.y-12))}:{left:r?Math.min(innerWidth-width-14,Math.max(14,r.x)):Math.max(14,(innerWidth-width)/2),top:r?Math.max(14,Math.min(innerHeight-height-14,r.y>innerHeight/2?r.y-height-16:r.y+r.h+16)):Math.max(14,(innerHeight-height)/2)});
   };
@@ -55,23 +56,18 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
   e.preventDefault();controls[index<0?(e.shiftKey?controls.length-1:0):(index+(e.shiftKey?-1:1)+controls.length)%controls.length]?.focus({preventScroll:true});
  }
  return createPortal(<div className="fixed inset-0 z-[70] print:hidden">
-  {rect?<>
-   <div className="absolute inset-x-0 top-0 bg-navy-night/55" style={{height:rect.y}}/>
-   <div className="absolute inset-x-0 bottom-0 bg-navy-night/55" style={{top:rect.y+rect.h}}/>
-   <div className="absolute left-0 bg-navy-night/55" style={{top:rect.y,width:rect.x,height:rect.h}}/>
-   <div className="absolute right-0 bg-navy-night/55" style={{top:rect.y,left:rect.x+rect.w,height:rect.h}}/>
-   <div data-tour-highlight={highlight} className="pointer-events-none absolute rounded-2xl border-[3px] border-green" style={{left:rect.x,top:rect.y,width:rect.w,height:rect.h}}/>
-  </>:<div className="absolute inset-0 bg-navy-night/55"/>}
+  <div className="absolute inset-0 bg-navy-night/10"/>
+  {rect&&<div data-tour-highlight={highlight} className="pointer-events-none absolute rounded-lg bg-green/25" style={{left:rect.x,top:rect.y,width:rect.w,height:rect.h}}/>}
   <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="program-tour-title" aria-describedby="program-tour-body" onKeyDown={trap} className="absolute w-[calc(100%-28px)] max-w-[420px] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-[22px] bg-white p-5 text-navy shadow-sheet sm:p-6" style={position}>
    <div className="flex items-center justify-between gap-3"><p className="text-sm font-semibold text-ink-soft">Step {step+1} of {STEPS.length} · {labels[step]}</p><button aria-label="Close guide" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-0 text-navy hover:bg-sky focus-visible:outline-2 focus-visible:outline-navy" onClick={onClose}><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
    <ol aria-label="Guide progress" className="mb-5 mt-2 grid grid-cols-4 gap-2">{labels.map((label,i)=><li key={label} aria-current={i===step?'step':undefined}><span className={cx('block h-1 rounded-sm',i===step?'bg-green':i<step?'bg-navy':'bg-navy/10')}/><span className={cx('mt-2 block text-[11px]',i===step?'font-bold text-navy':'text-ink-soft')}>{label}</span></li>)}</ol>
    <motion.div key={step} initial={off?false:{opacity:0}} animate={{opacity:1}} transition={tween(off,DUR.fast)}>
-    <div className="mt-2 flex items-start gap-3"><Companion size={56} pose="point"/><h2 ref={heading} id="program-tour-title" tabIndex={-1} className="pt-1 text-[1.6rem] font-extrabold leading-tight tracking-[-.03em] focus:outline-none">{current.title}</h2></div>
+    <div className="mt-2 flex items-start gap-3"><Companion size={56} pose="point"/><h2 ref={heading} id="program-tour-title" tabIndex={-1} className="pt-1 text-[1.6rem] font-extrabold leading-tight tracking-[-.03em] focus:outline-none"><Headline>{current.title}</Headline></h2></div>
     <p id="program-tour-body" className="mt-4 text-[16px] leading-relaxed text-ink-soft">{current.body}</p>
     <div className="mt-4 rounded-xl bg-sky p-4"><p className="text-xs font-semibold text-ink-soft">On this page</p><ul aria-label="What you can do" className="mt-3 grid gap-2">{current.preview.map(line=><li key={line} className="flex items-start gap-3 text-sm font-semibold"><span aria-hidden="true" className="mt-1.5 h-1 w-1 shrink-0 bg-navy/40"/>{line}</li>)}</ul></div>
     {current.tab!=='calendar'&&<Link href={href} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy focus-visible:outline-2 focus-visible:outline-navy" onClick={onClose}><span className="border-b-2 border-green pb-0.5">{current.action} <span aria-hidden="true">→</span></span></Link>}
    </motion.div>
-   <div className="sticky bottom-0 z-10 mt-3 flex items-center gap-2 border-t border-navy/10 bg-white pb-2 pt-4">{step>0&&<button className={btn.ghost} onClick={()=>onStep(step-1)}>Back</button>}<button className={cx(btn.primary,'ml-auto')} onClick={()=>current.tab==='calendar'?onCalendar():step===STEPS.length-1?onClose():onStep(step+1)}>{current.tab==='calendar'?'Try my calendar':step===STEPS.length-1?'Finish guide':'Next'}</button></div>
+   <div className="sticky bottom-0 z-10 mt-3 flex items-center gap-2 border-t border-navy/10 bg-white pb-2 pt-4">{step>0&&<button className={btn.ghost} onClick={()=>onStep(step-1)}><Headline>Back</Headline></button>}<button className={cx(btn.primary,'ml-auto')} onClick={()=>current.tab==='calendar'?onCalendar():step===STEPS.length-1?onClose():onStep(step+1)}><Headline>{current.tab==='calendar'?'Try my calendar':step===STEPS.length-1?'Finish guide':'Next'}</Headline></button></div>
    <p className="mt-3 text-right text-xs leading-relaxed text-ink-soft">Open Guide any time from the header.</p>
   </div>
  </div>,document.body);

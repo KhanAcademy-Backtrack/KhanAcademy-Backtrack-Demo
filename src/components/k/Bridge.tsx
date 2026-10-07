@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import Link from 'next/link';
 import {useState,type ReactNode} from 'react';
 import {useRouter} from 'next/navigation';
@@ -9,8 +10,9 @@ import {PageBand,Sheet,btn,cx,pageBody,KhanLink,Pill} from './ui';
 import {useFix} from './useFix';
 import {useQuietMotion} from './useQuietMotion';
 import {KhanPlayer} from '@/components/product/KhanPlayer';
-import {subjectTopicVideo} from '@/lib/program/topic-videos';
-import {VideoToggle,VideoPanel} from './TopicVideo';
+
+import {LessonSequence} from './TopicLesson';
+import {subjectLessons} from '@/lib/program/topic-lessons';
 import {PROGRAMS,PROGRAM_BY_ID,RESCUES,RESCUE_BY_ID,RETIRED_PROGRAMS,summerPlan,type BridgeProgram} from '@/lib/program/bridge';
 import {COLLEGE_UNITS,KIND_LABEL,SUBJECT_BY_ID,collegeUnitUrl,type CollegeSubject,type SubjectKind} from '@/lib/program/college-courses';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
@@ -39,13 +41,13 @@ function Rescue({only}:{only?:string[]}){
  const fix=useFix(),[pick,setPick]=useState<string>('');
  const list=only?RESCUES.filter(r=>only.includes(r.id)):RESCUES,r=pick?RESCUE_BY_ID[pick]:undefined;
  return <Sheet>
-  <h2 className="text-xl font-extrabold sm:text-2xl">Work through a class topic</h2>
+  <h2 className="text-xl font-extrabold sm:text-2xl"><Headline>Work through a class topic</Headline></h2>
   <p className="mt-1 text-ink-soft">Stuck on something from class? Find the ideas it builds on.</p>
   <TopicPicker items={list.map(x=>({id:x.id,label:x.topic,category:RESCUE_SUBJECT[x.id],search:x.needs}))} value={pick} onChoose={setPick}/>
   {r&&<div className="mt-5 rounded-2xl bg-mint p-4 sm:p-5" aria-live="polite">
    <p className="font-bold">{r.topic} assumes:</p><p className="mt-1 font-serif text-lg">{r.needs}</p>
    <div className="mt-4 grid gap-2 sm:grid-cols-2">{r.concepts.map(c=><Link key={c} href={`/learn/${c}`} className="flex min-h-14 items-center gap-3 rounded-xl bg-white px-4 py-2 font-semibold hover:bg-sky"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-sky"><SubjectMark subject={CONCEPT_BY_ID[c].subtest} className="h-5 w-5"/></span>{CONCEPT_BY_ID[c].title}</Link>)}</div>
-   <div className="mt-4 flex flex-wrap gap-3">{r.engine&&<button className={btn.dark} onClick={()=>fix(r.engine!,NEXT_SKILL[r.engine!],`Help with ${r.topic}`)}>Find my missing skill</button>}{r.khan.map(k=><KhanLink key={k} href={khanUrl(k)}>{KHAN_UNITS[k].course}: {KHAN_UNITS[k].unit}</KhanLink>)}</div>
+   <div className="mt-4 flex flex-wrap gap-3">{r.engine&&<button className={btn.dark} onClick={()=>fix(r.engine!,NEXT_SKILL[r.engine!],`Help with ${r.topic}`)}><Headline>Find my missing skill</Headline></button>}{r.khan.map(k=><KhanLink key={k} href={khanUrl(k)}>{KHAN_UNITS[k].course}: {KHAN_UNITS[k].unit}</KhanLink>)}</div>
   </div>}
  </Sheet>;
 }
@@ -63,19 +65,19 @@ export function BridgeHub(){
      <CourseArt id={mine.id} className="block aspect-[12/5] w-full sm:aspect-auto sm:h-full"/>
      <div className="flex flex-col justify-center gap-3 p-5 sm:p-7">
       <p className="text-sm font-semibold text-ink-soft">Jump back in</p>
-      <h2 className="text-xl font-extrabold sm:text-2xl">{mine.title}</h2>
+      <h2 className="text-xl font-extrabold sm:text-2xl"><Headline>{mine.title}</Headline></h2>
       <div className="max-w-sm"><p className="mb-1.5 text-sm font-semibold">{done} of {n} foundations solid</p><Bar value={done} total={n}/></div>
-      <div><Link className={btn.primary} href={`/bridge/${mine.id}`}>Continue</Link></div>
+      <div><Link className={btn.primary} href={`/bridge/${mine.id}`}><Headline>Continue</Headline></Link></div>
      </div>
     </div>
    </Sheet>;})()}
    <section aria-labelledby="fields">
-    <h2 id="fields" className="px-1 text-xl font-extrabold sm:text-2xl">Explore a college field</h2>
+    <h2 id="fields" className="px-1 text-xl font-extrabold sm:text-2xl"><Headline>Explore a college field</Headline></h2>
     <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{PROGRAMS.map(p=>{const n=foundationsOf(p).length,done=solidCount(p,rank),current=mine?.id===p.id;
      return <li key={p.id}><button onClick={()=>choose(p.id)} className={cx('group flex h-full w-full flex-row overflow-hidden rounded-2xl sm:flex-col border-2 bg-white text-left text-navy shadow-sheet focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',current?'border-green':'border-transparent hover:border-line-strong',!still&&'transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0')}>
       <CourseArt id={p.id} className="block aspect-square w-28 shrink-0 self-stretch sm:aspect-[16/9] sm:w-full sm:self-auto"/>
       <span className="flex min-w-0 flex-1 flex-col gap-3 p-4 sm:p-5">
-       <span className="text-lg font-bold leading-snug">{p.title}</span>
+       <span className="text-lg font-bold leading-snug"><Headline>{p.title}</Headline></span>
        <span className="mt-auto flex items-center justify-between gap-3 text-sm text-ink-soft"><span>{p.subjects.length} subjects{done?` · ${done} of ${n} foundations solid`:''}</span>{current&&<Pill tone="green">Your field</Pill>}</span>
        {done>0&&<Bar value={done} total={n}/>}
       </span>
@@ -97,7 +99,7 @@ function Step({node,last,lit,children}:{node:ReactNode;last:boolean;lit:boolean;
 
 function Section({title,meta,children}:{title:string;meta?:ReactNode;children:ReactNode}){
  return <Sheet>
-  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"><h2 className="text-xl font-extrabold sm:text-2xl">{title}</h2>{meta}</div>
+  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"><h2 className="text-xl font-extrabold sm:text-2xl"><Headline>{title}</Headline></h2>{meta}</div>
   {children}
  </Sheet>;
 }
@@ -113,18 +115,18 @@ export function BridgeProgramPage({id}:{id:string}){
  const check=placementForm(p.id,seed),questions=check?formItems(check).length:0,minutes=check?check.sections.reduce((t,s)=>t+s.minutes,0):0;
  const steps=foundationsOf(p),solid=steps.filter(c=>statusIn(rank,c)==='solid').length,next=steps.find(c=>statusIn(rank,c)!=='solid');
  return <div className="mx-auto max-w-6xl px-4 pb-32 pt-5 sm:px-8 lg:pb-20 lg:pt-7">
-  <Link href="/bridge" className={cx(btn.quiet,'-ml-3 no-underline')}><span aria-hidden="true">←</span> All courses</Link>
+  <Link href="/bridge" className={cx(btn.quiet,'-ml-3 no-underline')}><Headline><span aria-hidden="true">←</span> All courses</Headline></Link>
   <div className="mt-3 grid gap-5 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start lg:gap-7">
    <Sheet as="div" className="overflow-hidden p-0 lg:sticky lg:top-24">
     <CourseArt id={p.id} className="block aspect-[12/5] w-full lg:aspect-[16/9]"/>
     <div className="p-5 sm:p-6">
-     <h1 className="text-[1.6rem] font-extrabold leading-tight tracking-[-.02em]">{p.title}</h1>
+     <h1 className="text-[1.6rem] font-extrabold leading-tight tracking-[-.02em]"><Headline>{p.title}</Headline></h1>
      <p className="mt-1.5 text-sm text-ink-soft">{p.examples}</p>
      <div className="mt-5"><p className="mb-1.5 text-sm font-semibold">{solid} of {steps.length} foundations solid</p><Bar value={solid} total={steps.length}/></div>
-     <Link className={cx(btn.primary,'mt-5 w-full')} href={`/mock/take?f=placement~${id}|${seed}&mode=practice`}>{placement?'Take the placement check again':'Take the placement check'}</Link>
+     <Link className={cx(btn.primary,'mt-5 w-full')} href={`/mock/take?f=placement~${id}|${seed}&mode=practice`}><Headline>{placement?'Take the placement check again':'Take the placement check'}</Headline></Link>
      {!!questions&&<p className="mt-2 text-center text-sm text-ink-soft">{questions} questions · about {minutes} min</p>}
      {placeScore!==undefined&&<p className="mt-3 rounded-lg bg-sky px-3 py-2 text-sm">Last check: <strong>{placeScore} of {formItems(placeForm!).length}</strong>. <Link className="font-semibold underline underline-offset-4" href={`/mock/result?a=${placement!.id}`}>See what to fix</Link></p>}
-     <h2 className="mt-6 text-sm font-semibold text-ink-soft">In your first year</h2>
+     <h2 className="mt-6 text-sm font-semibold text-ink-soft"><Headline>In your first year</Headline></h2>
      <ul className="mt-2 flex flex-wrap gap-1.5">{p.firstYear.map(f=><li key={f} className="rounded-md bg-sky px-2.5 py-1 text-[13px] font-semibold">{f}</li>)}</ul>
     </div>
    </Sheet>
@@ -139,12 +141,12 @@ export function BridgeProgramPage({id}:{id:string}){
       return <Step key={c} node={node} last={i===steps.length-1} lit={done}>
        {isNext?<div className="rounded-xl border-2 border-green bg-mint p-4">
          <p className="text-sm font-semibold text-ink-soft">{seen?'Keep going':'Up next'}</p>
-         <p className="mt-0.5 text-lg font-bold leading-snug">{k.title}</p>
+         <p className="mt-0.5 text-lg font-bold leading-snug"><Headline>{k.title}</Headline></p>
          <p className="mt-1 text-sm text-ink-soft">{k.blurb}</p>
-         <Link className={cx(btn.dark,'mt-3')} href={`/learn/${c}`}>Start<span className="sr-only"> {k.title}</span></Link>
+         <Link className={cx(btn.dark,'mt-3')} href={`/learn/${c}`}><Headline>Start<span className="sr-only"><Headline> {k.title}</Headline></span></Headline></Link>
         </div>
        :<Link href={`/learn/${c}`} className="flex min-h-12 items-center justify-between gap-3 rounded-lg px-3 font-semibold hover:bg-sky focus-visible:outline-3 focus-visible:outline-navy">
-         <span>{k.title}</span><span className="shrink-0 text-sm font-normal text-ink-soft">{done?'Solid':seen?'Keep practising':<span className="sr-only">Not started</span>}</span>
+         <span><Headline>{k.title}</Headline></span><span className="shrink-0 text-sm font-normal text-ink-soft">{done?'Solid':seen?'Keep practising':<span className="sr-only">Not started</span>}</span>
         </Link>}
       </Step>;})}</ol>
     </Section>
@@ -187,7 +189,7 @@ function SubjectList({p}:{p:BridgeProgram}){
    return <li key={s.id}><Link href={`/bridge/${p.id}/${s.id}`} className="flex h-full gap-4 rounded-xl border-2 border-line p-4 hover:border-line-strong hover:bg-sky focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy">
     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-mint"><KindMark kind={s.kind}/></span>
     <span className="min-w-0 flex-1">
-     <span className="block font-bold leading-snug">{s.title}</span>
+     <span className="block font-bold leading-snug"><Headline>{s.title}</Headline></span>
      <span className="mt-0.5 block text-[13px] text-ink-soft">{KIND_LABEL[s.kind]} · {s.level}</span>
      <span className="mt-2 block text-sm leading-relaxed text-ink-soft">{s.summary}</span>
      <span className="mt-2 block text-[13px] font-semibold">{s.topics.length} topics · {s.videos.length} {s.videos.length===1?'video':'videos'} · {n?`${n} of ${s.units.length} units ticked`:`${s.units.length} Khan units`}</span>
@@ -197,29 +199,23 @@ function SubjectList({p}:{p:BridgeProgram}){
 }
 
 export function BridgeSubjectPage({program,subject}:{program:string;subject:string}){
- const {state}=useProgram(),fix=useFix(),{done,toggle}=useKhanTicks(),[playing,setPlaying]=useState<string>();
+ const {state}=useProgram(),fix=useFix(),{done,toggle}=useKhanTicks();
  const p=PROGRAM_BY_ID[program],s=SUBJECT_BY_ID[subject];if(!p||!s)return null;
  const rank:Rank=new Map(focusRanking(state).map(r=>[r.concept.id,r]));
  const siblings=subjectsOf(p),at=siblings.findIndex(x=>x.id===s.id),prev=siblings[at-1],next=siblings[at+1];
- const ticked=s.units.filter(done).length,builds=s.buildsOn.filter(c=>CONCEPT_BY_ID[c]),withVideo=s.topics.filter(t=>subjectTopicVideo(s.id,t)).length;
+ const ticked=s.units.filter(done).length,builds=s.buildsOn.filter(c=>CONCEPT_BY_ID[c]);
  return <div className="mx-auto max-w-6xl px-4 pb-32 pt-5 sm:px-8 lg:pb-20 lg:pt-7">
-  <Link href={`/bridge/${p.id}`} className={cx(btn.quiet,'-ml-3 no-underline')}><span aria-hidden="true">←</span> {p.title}</Link>
+  <Link href={`/bridge/${p.id}`} className={cx(btn.quiet,'-ml-3 no-underline')}><Headline><span aria-hidden="true">←</span> {p.title}</Headline></Link>
   <div className="mt-3 grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-7">
    <div className="grid min-w-0 gap-5">
     <Sheet as="div">
      <p className="flex items-center gap-2.5 text-sm font-semibold text-ink-soft"><span className="grid h-9 w-9 place-items-center rounded-lg bg-mint text-navy"><KindMark kind={s.kind} className="h-5 w-5"/></span>{KIND_LABEL[s.kind]} · {s.level}</p>
-     <h1 className="mt-3 text-[1.6rem] font-extrabold leading-tight tracking-[-.02em] sm:text-[1.9rem]">{s.title}</h1>
+     <h1 className="mt-3 text-[1.6rem] font-extrabold leading-tight tracking-[-.02em] sm:text-[1.9rem]"><Headline>{s.title}</Headline></h1>
      <p className="mt-2 max-w-2xl text-[16px] leading-relaxed text-ink-soft">{s.summary}</p>
     </Sheet>
 
-    <Section title="What you’ll learn" meta={<p className="text-sm font-semibold text-ink-soft">{s.topics.length} topics · {withVideo} {withVideo===1?'video':'videos'}</p>}>
-     {withVideo>0&&<p className="mt-1 text-sm text-ink-soft">Each topic with a matching Khan Academy video has a Video button. It opens here, paused, one topic at a time.</p>}
-     <ol className="mt-4 grid gap-2 sm:grid-cols-2">{s.topics.map((t,i)=>{const v=subjectTopicVideo(s.id,t),open=!!v&&playing===t,panel=`topic-video-${i+1}`;
-      return <li key={t} className={cx('flex flex-wrap items-center gap-3 rounded-xl bg-sky p-3',open&&'sm:col-span-2')}><span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white text-sm font-bold">{i+1}</span><span className="min-w-0 flex-1 font-semibold leading-snug">{t}{!v&&<span className="block text-[13px] font-normal text-ink-soft">No matching Khan video</span>}</span>
-       {v&&<VideoToggle open={open} onClick={()=>setPlaying(open?undefined:t)} topic={t} controls={panel}/>}
-       {open&&v&&<VideoPanel id={panel} video={v} className="mt-1"/>}</li>;})}</ol>
-     {s.gap&&<p className="mt-4 text-sm leading-relaxed text-ink-soft">{s.gap}</p>}
-    </Section>
+    <LessonSequence lessons={subjectLessons(s.id)} program={p.id}/>
+    {s.gap&&<p className="text-sm leading-relaxed text-ink-soft">{s.gap}</p>}
 
     <Section title="Watch first">
      <p className="mt-1 text-sm text-ink-soft">{s.videos.length===1?'A Khan Academy video that opens this subject.':'Khan Academy videos that open this subject.'} Watching is your own study and is not recorded as a result.</p>
@@ -238,15 +234,15 @@ export function BridgeSubjectPage({program,subject}:{program:string;subject:stri
 
    <div className="grid min-w-0 gap-5 lg:sticky lg:top-24">
     <Sheet as="div">
-     <h2 className="text-lg font-extrabold">Builds on</h2>
+     <h2 className="text-lg font-extrabold"><Headline>Builds on</Headline></h2>
      {builds.length?<>
       <p className="mt-1 text-sm text-ink-soft">High-school topics this subject takes for granted.</p>
-      <ul className="mt-3 grid gap-1">{builds.map(c=>{const k=CONCEPT_BY_ID[c],st=statusIn(rank,c);return <li key={c}><Link href={`/learn/${c}`} className="flex min-h-11 items-center gap-3 rounded-lg px-2 font-semibold hover:bg-sky focus-visible:outline-3 focus-visible:outline-navy"><span className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-md',st==='solid'?'bg-green':'bg-sky')}>{st==='solid'?<Check className="h-5 w-5"/>:<SubjectMark subject={k.subtest} className="h-4 w-4"/>}</span><span className="min-w-0 flex-1 leading-snug">{k.title}</span>{st==='solid'&&<span className="text-[13px] font-normal text-ink-soft">Solid</span>}</Link></li>;})}</ul>
+      <ul className="mt-3 grid gap-1">{builds.map(c=>{const k=CONCEPT_BY_ID[c],st=statusIn(rank,c);return <li key={c}><Link href={`/learn/${c}`} className="flex min-h-11 items-center gap-3 rounded-lg px-2 font-semibold hover:bg-sky focus-visible:outline-3 focus-visible:outline-navy"><span className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-md',st==='solid'?'bg-green':'bg-sky')}>{st==='solid'?<Check className="h-5 w-5"/>:<SubjectMark subject={k.subtest} className="h-4 w-4"/>}</span><span className="min-w-0 flex-1 leading-snug"><Headline>{k.title}</Headline></span>{st==='solid'&&<span className="text-[13px] font-normal text-ink-soft">Solid</span>}</Link></li>;})}</ul>
      </>:<p className="mt-1 text-sm text-ink-soft">No particular high-school topic. You can start here.</p>}
-     {s.engine&&<button className={cx(btn.dark,'mt-4 w-full')} onClick={()=>fix(s.engine!,NEXT_SKILL[s.engine!],`Before ${s.title}`)}>Find my missing skill<span className="sr-only"> for {s.title}</span></button>}
+     {s.engine&&<button className={cx(btn.dark,'mt-4 w-full')} onClick={()=>fix(s.engine!,NEXT_SKILL[s.engine!],`Before ${s.title}`)}><Headline>Find my missing skill<span className="sr-only"> for {s.title}</span></Headline></button>}
     </Sheet>
     <nav aria-label={`More in ${p.title}`} className="rounded-2xl bg-white p-5 text-navy shadow-sheet sm:p-7">
-     <h2 className="text-lg font-extrabold">More in {p.title}</h2>
+     <h2 className="text-lg font-extrabold"><Headline>More in {p.title}</Headline></h2>
      <ul className="mt-2 grid gap-1">
       {prev&&<li><Link href={`/bridge/${p.id}/${prev.id}`} className="flex min-h-11 items-center gap-2 rounded-lg px-2 font-semibold hover:bg-sky"><span aria-hidden="true">←</span><span className="sr-only">Previous subject: </span>{prev.title}</Link></li>}
       {next&&<li><Link href={`/bridge/${p.id}/${next.id}`} className="flex min-h-11 items-center gap-2 rounded-lg px-2 font-semibold hover:bg-sky"><span className="sr-only">Next subject: </span>{next.title}<span aria-hidden="true">→</span></Link></li>}
@@ -265,7 +261,7 @@ export function RetiredProgram({id}:{id:string}){
   <PageBand title={r.title} lead={to?`This field is no longer in Courses. ${to.title} took its place.`:'This field is no longer in Courses.'}/>
   <div className={pageBody}><Sheet>
    <p className="text-ink-soft">Any placement check you took for it still opens from your results.</p>
-   <div className="mt-4 flex flex-wrap gap-3">{to&&<Link className={btn.primary} href={`/bridge/${to.id}`}>Open {to.title}</Link>}<Link className={btn.ghost} href="/bridge">All courses</Link></div>
+   <div className="mt-4 flex flex-wrap gap-3">{to&&<Link className={btn.primary} href={`/bridge/${to.id}`}><Headline>Open {to.title}</Headline></Link>}<Link className={btn.ghost} href="/bridge"><Headline>All courses</Headline></Link></div>
   </Sheet></div>
  </>;
 }

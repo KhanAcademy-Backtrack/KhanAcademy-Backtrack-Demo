@@ -22,7 +22,7 @@ const T=(title:string,...concepts:string[]):OutlineTopic=>concepts.length?{title
 export const topicKey=(exam:ExamId,title:string)=>`outline:${exam}:${title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}`;
 
 export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
- upcat:{checked:'2026-10-05',sections:{
+ upcat:{checked:'2026-10-07',sections:{
   'Language Proficiency':[
    {name:'English vocabulary',topics:[
     T('Word meaning from context clues','vocabulary_context'),
@@ -30,7 +30,8 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Roots, prefixes and suffixes','vocabulary_context'),
     T('Commonly confused words','usage'),
     T('Spelling'),
-    T('Idioms and figurative expressions')
+    T('Idioms and figurative expressions'),
+    T('Word relationships and analogies')
    ]},
    {name:'English grammar and usage',topics:[
     T('Parts of speech'),
@@ -47,7 +48,9 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Misplaced and dangling modifiers','sentence_structure'),
     T('Parallel structure','sentence_structure'),
     T('Combining and ordering sentences'),
-    T('Direct and reported speech')
+    T('Direct and reported speech'),
+    T('Finding and correcting sentence errors'),
+    T('Organizing paragraphs and transitions')
    ]},
    {name:'Gramatikang Filipino',topics:[
     T('Ng at nang, din at rin, at iba pang madalas mapagpalit','filipino_gramatika'),
@@ -55,7 +58,13 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Pokus ng pandiwa','filipino_gramatika'),
     T('Panghalip'),
     T('Pang-ugnay: pangatnig at pang-ukol'),
-    T('Wastong baybay at bantas')
+    T('Wastong baybay at bantas'),
+    T('Mga bahagi ng pananalita'),
+    T('Panlapi at pagbuo ng salita'),
+    T('Simuno at panaguri'),
+    T('Pagkilala at pagwawasto ng mali'),
+    T('Pag-aayos ng talata at pangungusap'),
+    T('Pagkumpleto ng pangungusap')
    ]},
    {name:'Talasalitaang Filipino',topics:[
     T('Kahulugan ayon sa konteksto','filipino_talasalitaan'),
@@ -69,7 +78,8 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Main idea and best title','main_idea'),
     T('Stated details','details'),
     T('Sequence of events'),
-    T('Fact and opinion')
+    T('Fact and opinion'),
+    T('Comparing ideas in a passage')
    ]},
    {name:'Reasoning from the text',topics:[
     T('Inferences and conclusions','inference'),
@@ -80,14 +90,27 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Purpose and point of view','author_purpose'),
     T('Tone and mood','author_purpose'),
     T('How the passage is organized','author_purpose'),
-    T('Figurative language in a passage')
+    T('Figurative language in a passage'),
+    T('Literary analysis and interpreting evidence')
    ]},
    {name:'Kinds of passages, in English and Filipino',topics:[
     T('Essays and articles'),
     T('Short stories'),
     T('Poems'),
     T('Speeches'),
-    T('Tables, graphs and diagrams')
+    T('Tables, graphs and diagrams'),
+    T('Comic strips'),
+    T('Novel excerpts'),
+    T('Practical texts and visual messages')
+   ]},
+   {name:'Pagbasa sa Filipino',less:true,topics:[
+    T('Pangunahing ideya at buod'),
+    T('Detalye at ebidensiya sa teksto'),
+    T('Paghihinuha at kongklusyon'),
+    T('Layunin, tono at pananaw ng may-akda'),
+    T('Kahulugan ng salita sa binasa'),
+    T('Sanhi, bunga at pagkakasunod-sunod'),
+    T('Paghahambing at pagsusuring pampanitikan')
    ]}
   ],
   'Mathematics':[
@@ -111,7 +134,9 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('The coordinate plane, lines and slope','lines_functions'),
     T('Exponents and logarithms'),
     T('Sequences and series','sequences'),
-    T('Word problems','word_problems')
+    T('Word problems','word_problems'),
+    T('Sets and Venn diagrams'),
+    T('Imaginary and complex numbers')
    ]},
    {name:'Geometry',topics:[
     T('Lines, angles and their properties','geometry'),
@@ -120,18 +145,24 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Perimeter and area of plane figures','geometry'),
     T('Circles','geometry'),
     T('Surface area and volume of solids'),
-    T('Converting units of measurement')
+    T('Converting units of measurement'),
+    T('Geometric reasoning and proofs'),
+    T('Quadrilaterals and polygons')
    ]},
    {name:'Trigonometry',topics:[
     T('The six trigonometric ratios','trigonometry'),
     T('Special angles and the unit circle','trigonometry'),
-    T('Angles of elevation and depression')
+    T('Angles of elevation and depression'),
+    T('Trigonometric identities'),
+    T('Laws of sines and cosines')
    ]},
    {name:'Statistics and probability',topics:[
     T('Mean, median and mode','statistics_probability'),
     T('Permutations and combinations','statistics_probability'),
     T('Probability of events','statistics_probability'),
-    T('Reading tables and graphs')
+    T('Reading tables and graphs'),
+    T('Variance, standard deviation and percentiles'),
+    T('Fundamental counting principle and factorials')
    ]},
    {name:'Logic and calculus basics',less:true,topics:[
     T('Propositions and truth tables'),
@@ -152,7 +183,9 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Classification and biodiversity'),
     T('Human body systems'),
     T('Plant structure and function'),
-    T('Ecosystems and energy flow')
+    T('Ecosystems and energy flow'),
+    T('Enzymes and cellular metabolism'),
+    T('Nutrient cycles in ecosystems')
    ]},
    {name:'Chemistry',topics:[
     T('Matter, its properties and changes'),
@@ -167,7 +200,12 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Acids, bases and pH','solutions_acids'),
     T('Reaction rates and equilibrium'),
     T('Heat in chemical reactions'),
-    T('Carbon compounds and biochemistry')
+    T('Carbon compounds and biochemistry'),
+    T('Accuracy, precision and experimental uncertainty'),
+    T('Elements, compounds and mixtures'),
+    T('Electron configuration and quantum numbers'),
+    T('Oxidation, reduction and electrochemistry'),
+    T('Nuclear reactions')
    ]},
    {name:'Physics',topics:[
     T('Measurement, units and density','matter_measurement'),
@@ -183,7 +221,10 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Light, mirrors and lenses'),
     T('Electric circuits','electricity_waves'),
     T('Magnetism and electromagnetism'),
-    T('Radioactivity and half-life','nuclear')
+    T('Radioactivity and half-life','nuclear'),
+    T('Relative motion and velocities'),
+    T('Thermodynamics and heat transfer'),
+    T('Special relativity')
    ]},
    {name:'Earth science',topics:[
     T('Earth’s layers and composition','earth_space'),
@@ -191,14 +232,18 @@ export const EXAM_OUTLINES:Partial<Record<ExamId,ExamOutline>>={
     T('Plate tectonics, earthquakes and volcanoes','earth_space'),
     T('Weathering, erosion and landforms'),
     T('Fossils and the geologic time scale'),
-    T('Weather, climate and the atmosphere','earth_space')
+    T('Weather, climate and the atmosphere','earth_space'),
+    T('Depositional landforms and bodies of water'),
+    T('Rock layers and relative dating')
    ]},
    {name:'Astronomy',topics:[
     T('The solar system and its planets','earth_space'),
     T('Earth’s rotation, revolution and the seasons'),
     T('Phases of the Moon and eclipses'),
     T('Stars and constellations'),
-    T('The origin of the universe')
+    T('The origin of the universe'),
+    T('The formation of Earth'),
+    T('Galaxies and other objects in space')
    ]}
   ]
  }},

@@ -1,11 +1,12 @@
+import {Headline} from './Headline';
 import type {Tldr} from '@/lib/program/concepts';
 import {Oval,cx} from './ui';
 import {Rich} from '@/components/math/Math';
 
 /** The short "what you need to know" card that opens every concept and chapter. */
-export function TldrCard({tldr,title='What you need to know',compact=false}:{tldr:Tldr;title?:string;compact?:boolean}){
+export function TldrCard({tldr,title='Key Reminders',compact=false}:{tldr:Tldr;title?:string;compact?:boolean}){
  return <div className={cx('rounded-2xl bg-white text-navy shadow-sheet',compact?'p-4':'p-5 sm:p-7')}>
-  <h2 className={cx('font-extrabold tracking-[-.02em]',compact?'text-lg':'text-xl')}>{title}</h2>
+  <h2 className={cx('font-extrabold tracking-[-.02em]',compact?'text-lg':'text-xl')}><Headline>{title}</Headline></h2>
   <ul className="mt-4 grid gap-3">{tldr.must.map(x=><li key={x} className="flex gap-3 text-[16px] leading-relaxed text-navy"><Oval filled size={20} className="mt-1"/><span><Rich>{x}</Rich></span></li>)}</ul>
   <div className={cx('mt-5 grid gap-3',compact?'':'sm:grid-cols-3')}>
    <div className="rounded-xl bg-sky/70 p-4"><p className="text-sm font-semibold text-ink-soft">Remember</p><p className="mt-1 font-serif text-lg leading-snug"><Rich>{tldr.rule}</Rich></p></div>

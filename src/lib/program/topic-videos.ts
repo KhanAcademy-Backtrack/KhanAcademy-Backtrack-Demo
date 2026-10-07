@@ -1,6 +1,6 @@
 import type {ExamId} from './admissions.ts';
-import {VIDEOS as Q,type KhanVideo} from './khan-videos.ts';
-import {EXAM_OUTLINES} from './exam-outline.ts';
+import {VIDEOS as Q,type KhanVideo} from './khan-video-catalog.ts';
+import {EXAM_OUTLINES,topicKey} from './exam-outline.ts';
 export type {KhanVideo};
 
 /** Khan Academy videos for every UPCAT reviewer topic and every college subject topic. Each page
@@ -14,9 +14,25 @@ export type {KhanVideo};
  *  for a Filipino topic (owner, 7 October 2026). Watching is activity, never learning evidence. */
 export const TOPIC_VIDEOS_CHECKED='2026-10-07';
 const KHAN='https://www.khanacademy.org';
-const v=(id:string,title:string,path:string):KhanVideo=>({id,title,url:KHAN+path,checked:TOPIC_VIDEOS_CHECKED});
+// Canonicalize reviewed aliases: practice maps keep their original pages.
+const canonical=new Map(Object.values(Q).map(video=>[video.id,video]));
+const v=(id:string,title:string,path:string):KhanVideo=>{
+ const reused=canonical.get(id);if(reused)return reused;
+ const video={id,title,url:KHAN+path,checked:TOPIC_VIDEOS_CHECKED};canonical.set(id,video);return video;
+};
 
 const T={
+ reportingMeasurements:v('UEe81kJtY8A','Reporting measurements','/science/strengthened-shs-physics-1/x5eb5cea12d2cf683:introduction-to-physics/x5eb5cea12d2cf683:kinematics-measuring-tools/v/reporting-measurements'),
+ quadrilateralProperties:v('5CeBlu260Rw','Quadrilateral properties','/math/4th-grade-philippines/x178724567c9e5e1b:3rd-quarter/x178724567c9e5e1b:relating-triangles-to-quadrilaterals-and-quadrilaterals-to-one-another/v/quadrilateral-properties'),
+ typesOfMixtures:v('rDWfLHn8PDM','Types of mixtures','/science/6th-grade-science-matatag/x1c42f0f13f909d5b:1st-quarter/x1c42f0f13f909d5b:mixtures/v/types-of-mixtures-ms'),
+ oxidationReduction:v('DvYs1HILq1g','Oxidation and reduction','/science/shs-general-chemistry-2/x8e72aa8e889b96da:2nd-quarter/x8e72aa8e889b96da:electrochemistry/v/introduction-to-oxidation-and-reduction'),
+ integerAddition:v('NrVvu7cM8_o','Adding numbers with different signs','/math/7th-grade-matatag/x065dcf1640354e81:3rd-quarter/x065dcf1640354e81:operations-on-integers/v/adding-integers-with-different-signs'),
+ integerProducts:v('mPLCXCscqI8','Interpreting multiplication & division of negative numbers','/math/7th-grade-matatag/x065dcf1640354e81:3rd-quarter/x065dcf1640354e81:operations-on-integers/v/interpreting-multiplication-and-division-of-negative-numbers'),
+ ageProblem:v('KyHvVJWjW6Y','Age word problem: Imran','/math/algebra/x2f8bb11595b61c86:systems-of-equations/x2f8bb11595b61c86:systems-of-equations-word-problems/v/ex-2-age-word-problem'),
+ combiningMixtures:v('xMADEddxSEo','Combining mixtures example','/math/senior-high-school-general-math/xc1934d16446a5789:unit-1/xc1934d16446a5789:rational-functions/v/combining-mixtures-example'),
+ resonanceAndDamping:v('ubFGdZM1ziM','Resonance','/science/ap-physics-c-mechanics/x077f5683c1428fac:oscillations/x077f5683c1428fac:modeling-simple-harmonic-motion/v/resonance-and-damped-oscillations'),
+ personalInformation:v('FwBKZOcn4yI','(PII) Personally Identifiable Information','/college-careers-more/tesda-tesda-information-management/x206412efda04d34b:access-and-maintain-information/x206412efda04d34b:securing-information/v/personally-identifiable-information'),
+ combinedWorkRates:v('gD7A1LA4jO8','Rational equations word problem: combined rates','/math/als-k-to-12-math/x54b4346ef80b5dcc:performance-standard-e/x54b4346ef80b5dcc:rational-algebraic-expressions/v/applying-rational-equations-1'),
  usingContextCluesToFigure:v('CiNggzdWkIo','Using context clues to figure out new words','/ela/pisa-2025-english-supplement/x0fbe4cb2373ed873:7th-grade-reading-vocabulary/x0fbe4cb2373ed873:living-tongues/v/using-context-clues-to-figure-out-new-words-reading'),
  latinAndGreekRootsAnd:v('fiaPqgwJFo4','Latin and Greek roots and affixes','/ela/pisa-2025-english-supplement/x0fbe4cb2373ed873:7th-grade-reading-vocabulary/x0fbe4cb2373ed873:living-tongues/v/latin-and-greek-roots-and-affixes-reading'),
  figurativeLanguage:v('lzKj-bLvrYQ','Figurative language','/ela/pisa-2025-english-supplement/x0fbe4cb2373ed873:8th-grade-reading-vocabulary/x0fbe4cb2373ed873:crossing-the-line/v/figurative-language-reading'),
@@ -345,7 +361,6 @@ export const UPCAT_TOPIC_VIDEOS:Record<string,KhanVideo>={
  'Misplaced and dangling modifiers':T.danglingModifiers,
  'Parallel structure':T.parallelStructure,
  'Combining and ordering sentences':T.simpleAndCompoundSentences,
- 'Direct and reported speech':T.commasInDialogue,
  'Main idea and best title':Q.centralIdeas,
  'Stated details':Q.centralIdeas,
  'Sequence of events':T.theStructuresOfInformationalTexts,
@@ -395,7 +410,7 @@ export const UPCAT_TOPIC_VIDEOS:Record<string,KhanVideo>={
  'Reading tables and graphs':T.readingBarGraphsMovies,
  'Propositions and truth tables':T.conditionalStatementsAndLogicalEquivalence,
  'Limits':T.introducingLimits,
- 'Simple derivatives and integrals':T.derivativeTheDirectionOfA,
+ 'Simple derivatives and integrals':T.exploringAntiderivativesAndIndefiniteIntegrals,
  'Characteristics of life and the scientific method':T.theScientificMethod,
  'Biomolecules':T.introductionToBiomolecules,
  'Cell structure and transport':T.passiveTransportAndSelectivePermeability,
@@ -446,16 +461,110 @@ export const UPCAT_TOPIC_VIDEOS:Record<string,KhanVideo>={
  'Phases of the Moon and eclipses':T.introToMoonPhases,
  'Stars and constellations':T.constellations,
  'The origin of the universe':T.bigBangIntroduction,
+ "Organizing paragraphs and transitions":Q.transitions,
+ "Comparing ideas in a passage":T.theStructuresOfInformationalTexts,
+ "Literary analysis and interpreting evidence":Q.literaryEvidence,
+ "Comic strips":Q.comicMedium,
+ "Sets and Venn diagrams":Q.sets,
+ "Imaginary and complex numbers":Q.imaginary,
+ "Geometric reasoning and proofs":Q.proof,
+ "Quadrilaterals and polygons":Q.quadrilateral,
+ "Trigonometric identities":T.trigAngleAdditionIdentities,
+ "Laws of sines and cosines":Q.sineLaw,
+ "Variance, standard deviation and percentiles":T.measuresOfSpreadRangeVariance,
+ "Fundamental counting principle and factorials":Q.counting,
+ "Enzymes and cellular metabolism":Q.enzymes,
+ "Nutrient cycles in ecosystems":T.theNitrogenCycle,
+ "Elements, compounds and mixtures":Q.matterClassification,
+ "Electron configuration and quantum numbers":Q.electronConfiguration,
+ "Oxidation, reduction and electrochemistry":T.oxidationReduction,
+ "Nuclear reactions":Q.nuclearFission,
+ "Relative motion and velocities":Q.relativeVelocity,
+ "Thermodynamics and heat transfer":T.firstAndSecondLawsOf,
+ "Special relativity":Q.relativity,
+ "Rock layers and relative dating":Q.rockLayers,
+ "The formation of Earth":T.earthFormation,
+ "Galaxies and other objects in space":T.scaleOfTheGalaxy,
 };
 /** UPCAT topics searched on Khan Academy with no fitting video. */
-export const UPCAT_NO_VIDEO:ReadonlySet<string>=new Set(['Synonyms and antonyms','Spelling','Active and passive voice','Ng at nang, din at rin, at iba pang madalas mapagpalit','Aspekto ng pandiwa','Pokus ng pandiwa','Panghalip','Pang-ugnay: pangatnig at pang-ukol','Wastong baybay at bantas','Kahulugan ayon sa konteksto','Kasingkahulugan at kasalungat','Sawikain at idyoma','Salawikain at tayutay','Speeches']);
+export const UPCAT_NO_VIDEO:ReadonlySet<string>=new Set(["Direct and reported speech","Synonyms and antonyms","Spelling","Active and passive voice","Speeches","Word relationships and analogies","Finding and correcting sentence errors","Novel excerpts","Practical texts and visual messages","Depositional landforms and bodies of water","Ng at nang, din at rin, at iba pang madalas mapagpalit","Aspekto ng pandiwa","Pokus ng pandiwa","Panghalip","Pang-ugnay: pangatnig at pang-ukol","Wastong baybay at bantas","Mga bahagi ng pananalita","Panlapi at pagbuo ng salita","Simuno at panaguri","Pagkilala at pagwawasto ng mali","Pag-aayos ng talata at pangungusap","Pagkumpleto ng pangungusap","Kahulugan ayon sa konteksto","Kasingkahulugan at kasalungat","Sawikain at idyoma","Salawikain at tayutay","Pangunahing ideya at buod","Detalye at ebidensiya sa teksto","Paghihinuha at kongklusyon","Layunin, tono at pananaw ng may-akda","Kahulugan ng salita sa binasa","Sanhi, bunga at pagkakasunod-sunod","Paghahambing at pagsusuring pampanitikan","Accuracy, precision and experimental uncertainty"]);
+
+/** Equivalent topics reuse reviewed UPCAT/question videos. See extras for compound topics. */
+export const DCAT_TOPIC_VIDEOS:Record<string,KhanVideo>={
+ 'Operations with integers':T.integerAddition,
+ 'Fractions and decimals':UPCAT_TOPIC_VIDEOS['Fractions and decimals'],
+ 'Percent and percent change':T.solvingPercentProblems,
+ 'Ratio and proportion':Q.ratioPart,
+ 'Square roots and radicals':T.simplifyingSquareRootExpressionsNo,
+ 'Algebraic expressions and laws of exponents':Q.exponentProducts,
+ 'Special products and factoring':T.perfectSquareFactorizationIntro,
+ 'Linear equations and inequalities':Q.twoStep,
+ 'Systems of linear equations':T.systemsOfEquationsWithSubstitution,
+ 'Quadratic equations':T.theQuadraticFormulaAlgebra,
+ 'Functions, lines and slope':Q.slope,
+ 'Number patterns and sequences':Q.arithmeticSequence,
+ 'Rate, distance and time':Q.averageSpeed,
+ 'Work problems':T.combinedWorkRates,
+ 'Age and mixture problems':T.ageProblem,
+ 'Interest, discounts and other business math':Q.interest,
+ 'Angles and polygons':Q.polygonAngles,
+ 'Triangles and the Pythagorean theorem':Q.pythagoras,
+ 'Perimeter and area':Q.triangleArea,
+ 'Circles':Q.circleArea,
+ 'Surface area and volume':T.cylinderVolumeSurfaceArea,
+ 'Trigonometric ratios':Q.trigRatios,
+ 'Special angles':T.unitCircle,
+ 'Mean, median and mode':T.statisticsIntroMeanMedianMode,
+ 'Counting outcomes':T.countOutcomesUsingTreeDiagram,
+ 'Probability of events':T.compoundProbabilityOfIndependentEvents,
+ 'Reading tables and graphs':T.readingBarGraphsMovies,
+ 'Cell parts and transport':T.passiveTransportAndSelectivePermeability,
+ 'Photosynthesis and respiration':Q.photosynthesis,
+ 'Genetics and inheritance':Q.punnett,
+ 'Human body systems':T.circulatorySystemAndTheHeart,
+ 'Matter and its changes':T.physicalAndChemicalChanges,
+ 'Atomic structure':T.protonsNeutronsAndElectronsIn,
+ 'Chemical symbols and naming compounds':T.namingIonsAndIonicCompounds,
+ 'Formulas, molar mass and the mole':Q.moles,
+ 'Gas laws':T.theIdealGasLawPv,
+ 'Acids, bases and solutions':Q.ph,
+ 'SI units, measurement and density':Q.density,
+ 'Motion and Newton’s laws':Q.newtonSecond,
+ 'Work, energy and power':Q.work,
+ 'Heat and temperature':Q.specificHeat,
+ 'Electricity and circuits':Q.ohm,
+ 'Waves, sound and light':Q.waves,
+ 'Radioactivity':Q.halfLife,
+ 'Earth’s structure and plate tectonics':Q.earthLayers,
+ 'Rocks and minerals':Q.rockCycle,
+ 'Weather and climate':T.theSunSEnergyAnd,
+ 'The solar system':Q.solarSystem,
+ 'Word meaning from context clues':T.usingContextCluesToFigure,
+ 'Word roots, prefixes and suffixes':T.latinAndGreekRootsAnd,
+ 'Commonly confused words':Q.affectEffect,
+ 'Idioms':T.figurativeLanguage,
+ 'Subject-verb agreement':Q.agreement,
+ 'Verb tenses and forms':T.introductionToVerbTense,
+ 'Pronoun case':Q.subjectObjectPronouns,
+ 'Punctuation':T.meetTheComma,
+ 'Fragments, run-ons and comma splices':T.runOnsAndCommaSplices,
+ 'Misplaced and dangling modifiers':T.danglingModifiers,
+ 'Parallel structure':T.parallelStructure,
+ 'Main idea':Q.centralIdeas,
+ 'Stated details':Q.centralIdeas,
+ 'Inferences and conclusions':Q.inferences,
+ 'Word meaning in a passage':Q.wordsInContext,
+ 'Author’s purpose and tone':T.analyzingAnAuthorSPurpose,
+ 'Graphs and data in a passage':T.quantitativeInformationInTexts,
+};
+export const DCAT_NO_VIDEO:ReadonlySet<string>=new Set(['Synonyms and antonyms','Finding the error in a sentence']);
 
 /** College subject topics by subject id, then by the topic's exact text in SUBJECTS. */
 export const SUBJECT_TOPIC_VIDEOS:Record<string,Record<string,KhanVideo>>={
  calculus1:{'Limits and continuity':T.exploringContinuityAtAPoint,'The derivative as a rate of change':T.exploringDerivativesAsAConcept,'Power, product, quotient and chain rules':T.exploringThePowerRule,'Implicit differentiation and related rates':T.implicitDifferentiationExampleWalkthrough,'Optimisation and curve sketching':T.applyingOptimizationBoxVolumePart,'Antiderivatives and the definite integral':T.exploringAntiderivativesAndIndefiniteIntegrals},
  calculus2:{'Substitution and integration by parts':T.integrationByPartsIntro,'Partial fractions and improper integrals':T.integrationWithPartialFractions,'Areas, volumes and arc length':T.calculatingTheAreaBetweenCurves,'Separable differential equations':T.separableEquationsIntroductionDifferentialEquations,'Parametric and polar curves':T.parametricEquationsIntro,'Sequences, series and Taylor polynomials':T.taylorMaclaurinSeriesFormulaIntro},
  multivariable:{'Functions of several variables':T.introductionTo3dGraphs,'Partial derivatives and the gradient':T.partialDerivativesIntroduction,'Tangent planes and linear approximation':T.whatIsATangentPlane,'Optimisation and Lagrange multipliers':T.constrainedOptimizationIntroduction,'Double and triple integrals':T.doubleIntegral1,'Line integrals and the theorems of Green and Stokes':T.introductionToTheLineIntegral},
- diffeq:{'Modelling with differential equations':T.writingADifferentialEquation,'Slope fields and Euler’s method':T.slopeFieldsIntroductionDifferentialEquations,'Separable and first-order linear equations':T.integratingFactors1,'Second-order linear equations':T.v2ndOrderLinearHomogeneousDifferential,'Oscillation and damping':T.complexRootsOfTheCharacteristic,'The Laplace transform':T.laplaceTransformIntroDifferentialEquations},
+ diffeq:{'Modelling with differential equations':T.writingADifferentialEquation,'Slope fields and Euler’s method':T.slopeFieldsIntroductionDifferentialEquations,'Separable and first-order linear equations':T.integratingFactors1,'Second-order linear equations':T.v2ndOrderLinearHomogeneousDifferential,'Oscillation and damping':T.resonanceAndDamping,'The Laplace transform':T.laplaceTransformIntroDifferentialEquations},
  linear_algebra:{'Vectors, span and linear independence':T.linearCombinationsAndSpan,'Matrices and matrix operations':T.matrixProductExamples,'Solving systems by row reduction':T.solvingLinearSystemsWithMatrices,'Determinants and inverses':T.formulaFor2x2Inverse,'Linear transformations':T.linearTransformations,'Bases, eigenvalues and eigenvectors':T.introductionToEigenvaluesAndEigenvectors},
  precalculus:{'Composite and inverse functions':T.introToInverseFunctions,'Exponential and logarithmic functions':T.introToLogarithms,'Trigonometric functions and identities':T.trigAngleAdditionIdentities,'Complex numbers':T.polarRectangularFormsOfComplex,'Conic sections':T.introToConicSections,'Sequences and series':T.geometricSeriesIntroduction},
  discrete:{'Logic, sets and proof':T.conditionalStatementsAndLogicalEquivalence,'Counting, permutations and combinations':T.introToCombinations,'Probability for computing':T.randomizedAlgorithmsIntro,'Modular arithmetic and primes':T.theFundamentalTheoremOfArithmetic},
@@ -512,12 +621,48 @@ export const SUBJECT_NO_VIDEO:Record<string,readonly string[]>={
 };
 
 const own=<V,>(map:Record<string,V>,key:string|undefined)=>key!==undefined&&Object.hasOwn(map,key)?map[key]:undefined;
-const BY_EXAM:Partial<Record<ExamId,Record<string,KhanVideo>>>={upcat:UPCAT_TOPIC_VIDEOS};
+const BY_EXAM:Partial<Record<ExamId,Record<string,KhanVideo>>>={upcat:UPCAT_TOPIC_VIDEOS,dcat:DCAT_TOPIC_VIDEOS};
 
-/** The Khan video for one reviewer outline topic, or undefined. Only the UPCAT outline is mapped. */
+/** The Khan video for one reviewer outline topic, or undefined. UPCAT and DCAT are mapped. */
 export const outlineVideo=(exam:ExamId,title:string)=>own(BY_EXAM[exam]??{},title);
 /** The Khan video for one college subject topic, or undefined. */
 export const subjectTopicVideo=(subject:string,topic:string)=>own(own(SUBJECT_TOPIC_VIDEOS,subject)??{},topic);
+/** Companion videos cover separate components, rather than claiming one video covers a broad title. */
+export function outlineVideos(exam:ExamId,title:string):KhanVideo[]{
+ const first=outlineVideo(exam,title);if(!first)return [];
+ const extra:Record<string,KhanVideo[]>={
+  'Quadrilaterals and polygons':[T.quadrilateralProperties,Q.polygonAngles],
+  'Elements, compounds and mixtures':[T.typesOfMixtures],
+  'Oxidation, reduction and electrochemistry':[Q.galvanicCells],
+  'Enzymes and cellular metabolism':[T.metabolismOverviewAnabolismAndCatabolism],
+  'Thermodynamics and heat transfer':[T.thermalEnergyTemperatureAndHeat],
+  "Imaginary and complex numbers":[T.polarRectangularFormsOfComplex],
+  "Laws of sines and cosines":[Q.cosineLaw],
+  "Variance, standard deviation and percentiles":[Q.percentiles],
+  "Fundamental counting principle and factorials":[T.permutationFormula],
+  "Electron configuration and quantum numbers":[Q.quantumNumbers],
+  "Nuclear reactions":[Q.nuclearFusion],
+  'Operations with integers':[T.integerProducts],
+  'Simple derivatives and integrals':[T.exploringThePowerRule],
+  'Age and mixture problems':[T.combiningMixtures],
+  'Interest, discounts and other business math':[Q.percentTax],
+  'Functions, lines and slope':[Q.evaluateFunction],
+  'Motion and Newton’s laws':[Q.speed,Q.acceleration],
+  'Work, energy and power':[Q.kinetic,Q.power],
+  'Acids, bases and solutions':[Q.molarity],
+  'Waves, sound and light':[T.convexLenses],
+  'Earth’s structure and plate tectonics':[Q.convergentBoundaries],
+  'Author’s purpose and tone':[T.analyzingToneThroughWordChoice],
+  'Photosynthesis and respiration':[T.cellularRespirationIntroduction],
+ };
+ return [first,...(own(extra,title)??[])].filter((v,i,all)=>all.findIndex(x=>x.id===v.id)===i);
+}
+export function subjectTopicVideos(subject:string,title:string):KhanVideo[]{
+ const first=subjectTopicVideo(subject,title);if(!first)return [];
+ const extras=subject==='data_analysis'&&title==='Bias and privacy in data'?[T.personalInformation]
+  :subject==='diffeq'&&title==='Oscillation and damping'?[T.complexRootsOfTheCharacteristic]:[];
+ return [first,...extras];
+}
 /** The UPCAT topics a reviewer summary teaches, each with its video, one row per distinct video. */
 export function conceptVideos(concept:string):{topic:string;video:KhanVideo}[]{
  const seen=new Set<string>(),out:{topic:string;video:KhanVideo}[]=[];
@@ -527,3 +672,8 @@ export function conceptVideos(concept:string):{topic:string;video:KhanVideo}[]{
  }
  return out;
 }
+
+/** Stable saved-topic keys; practice-question lookup stays separate. */
+export const TOPIC_VIDEOS:Record<string,KhanVideo>=Object.fromEntries(Object.entries(UPCAT_TOPIC_VIDEOS).map(([title,video])=>[topicKey('upcat',title),video]));
+export const TOPIC_NO_VIDEO:ReadonlySet<string>=new Set([...UPCAT_NO_VIDEO].map(title=>topicKey('upcat',title)));
+export const topicVideo=(exam:ExamId,title:string)=>own(TOPIC_VIDEOS,topicKey(exam,title));

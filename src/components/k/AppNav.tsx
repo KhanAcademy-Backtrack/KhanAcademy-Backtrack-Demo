@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {createContext,useContext,useEffect,useId,useRef,useState,type ReactNode} from 'react';
@@ -121,7 +122,7 @@ function SectionBar({rail}:{rail:boolean}){
  return <nav aria-label={t(lang,'nav.sectionPages').replace('{section}',label(tab))} className={cx('print:hidden mx-auto max-w-6xl px-4 pt-3 sm:px-8',!rail&&'xl:hidden')}>
   <ul ref={bar} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]">{pages.map(y=><li key={y.key} className="shrink-0">
    <Link href={y.href} aria-current={sub===y?'page':undefined} className={cx('relative flex min-h-11 items-center gap-2 whitespace-nowrap rounded-t-lg px-3 text-[14px] font-semibold focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',sub===y?'text-navy':'text-ink-soft hover:text-navy')}>
-    <NavIcon small k={y.icon}/>{t(lang,y.label)}{sub===y&&<span aria-hidden="true" className="absolute inset-x-2 bottom-0 h-[3px] rounded-t-sm bg-green"/>}
+    <NavIcon small k={y.icon}/><Headline>{t(lang,y.label)}</Headline>{sub===y&&<span aria-hidden="true" className="absolute inset-x-2 bottom-0 h-[3px] rounded-t-sm bg-green"/>}
    </Link></li>)}</ul>
  </nav>;
 }
@@ -135,27 +136,30 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
  const center=rail==='always'?'justify-center px-0':rail==='below-xl'?'justify-center px-0 xl:justify-start xl:px-3':'px-3';
  const heading=cx('px-3 pb-1.5 pt-1 text-sm font-semibold text-ink-soft',rail==='always'?'hidden':rail==='below-xl'?'hidden xl:block':'');
  const item=(current:boolean,animated=false)=>cx('relative flex min-h-11 items-center gap-3 rounded-lg text-[15px] font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',center,current&&!animated&&'bg-white shadow-sheet');
+ /* Narrowing the sidebar keeps the four section names readable: each stacks a short label under its icon. */
+ const stacked='min-h-14 flex-col justify-center gap-0.5 px-0 text-[11.5px] leading-tight';
+ const section=(current:boolean,animated:boolean)=>cx('relative flex items-center rounded-lg font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',rail==='never'?'min-h-11 gap-3 px-3 text-[15px]':rail==='always'?stacked:cx(stacked,'xl:min-h-11 xl:flex-row xl:justify-start xl:gap-3 xl:px-3 xl:text-[15px] xl:leading-normal'),current&&!animated&&'bg-white shadow-sheet');
  const tip=rail==='never'?undefined:true;
  const setup=state.setup,targets=examTargets(state),program=PROGRAM_BY_ID[state.bridgeProgram??''],concept=CONCEPT_BY_ID[setup?.concept??''];
  const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/reviewer',title:t(lang,'nav.generalCet')}]:[]),...targets.slice(0,5).map(x=>({href:'/admissions',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
  return <>
   <nav aria-label={t(lang,main?'nav.main':'nav.all')} className="grid gap-1">
    {list.map(x=>{const on=active===x.key,sub=on?x.subs.flatMap(y=>y.children??[y]).find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
-    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={item(on,main)}>
+    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={section(on,main)}>
      {main&&on&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
-     <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><span className={hide}>{label(x)}</span></span>
+     <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><Headline>{label(x)}</Headline></span>
     </Link>
     {on&&rail!=='always'&&x.subs.length>0&&<ul aria-label={label(x)} className={cx('mb-1 ml-6 gap-0.5 border-l border-line pl-2',rail==='below-xl'?'hidden xl:grid':'grid')}>
      {x.subs.map(y=>{
-      if(!y.children)return <li key={y.key}><Link href={y.href} onClick={onPick} aria-current={sub===y?'page':undefined} className={subLink(sub===y)}><NavIcon small k={y.icon}/>{t(lang,y.label)}</Link></li>;
+      if(!y.children)return <li key={y.key}><Link href={y.href} onClick={onPick} aria-current={sub===y?'page':undefined} className={subLink(sub===y)}><NavIcon small k={y.icon}/><Headline>{t(lang,y.label)}</Headline></Link></li>;
       const holds=y.children.some(c=>c===sub),open=toggled[y.key]??holds,id=`${uid}-${y.key}`;
       return <li key={y.key}>
        <button type="button" aria-expanded={open} aria-controls={id} onClick={()=>setToggled(o=>({...o,[y.key]:!open}))} className={cx('flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-[14px] font-semibold hover:bg-white hover:text-navy focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',holds?'text-navy':'text-ink-soft')}>
-        <NavIcon small k={y.icon}/><span className="flex-1">{t(lang,y.label)}</span>
+        <NavIcon small k={y.icon}/><span className="flex-1"><Headline>{t(lang,y.label)}</Headline></span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" className={cx('shrink-0 motion-safe:transition-transform',open&&'rotate-90')}><path d="m6 4 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
        </button>
        <ul id={id} aria-label={t(lang,y.label)} className={cx('ml-5 mt-0.5 gap-0.5 border-l border-line pl-2',open?'grid':'hidden')}>
-        {y.children.map(c=><li key={c.key}><Link href={c.href} onClick={onPick} aria-current={sub===c?'page':undefined} className={cx(subLink(sub===c),'min-h-9 text-[13.5px]')}><NavIcon small k={c.icon}/><span>{t(lang,c.label)}{c.hint&&<span className="sr-only">{t(lang,c.hint)}</span>}</span></Link></li>)}
+        {y.children.map(c=><li key={c.key}><Link href={c.href} onClick={onPick} aria-current={sub===c?'page':undefined} className={cx(subLink(sub===c),'min-h-9 text-[13.5px]')}><NavIcon small k={c.icon}/><span><Headline>{t(lang,c.label)}</Headline>{c.hint&&<span className="sr-only">{t(lang,c.hint)}</span>}</span></Link></li>)}
        </ul>
       </li>;})}
     </ul>}
@@ -164,9 +168,9 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
   <hr className="my-3 border-line"/>
   <p className={heading}>{t(lang,goal==='exam'?'nav.yourExams':goal==='college'?'nav.yourProgram':goal==='topic'?'nav.yourTopic':'nav.yourGoal')}</p>
   <ul aria-label={t(lang,'nav.yourGoal')} className="grid gap-1">
-   {mine.map(x=><li key={x.title}><Link href={x.href} onClick={onPick} title={tip&&x.title} className={item(false)}><NavIcon k={goal==='exam'?'folder':'goal'}/><span className={cx('min-w-0 truncate',hide)}>{x.title}</span></Link></li>)}
+   {mine.map(x=><li key={x.title}><Link href={x.href} onClick={onPick} title={tip&&x.title} className={item(false)}><NavIcon k={goal==='exam'?'folder':'goal'}/><span className={cx('min-w-0 truncate',hide)}><Headline>{x.title}</Headline></span></Link></li>)}
    {goal==='exam'&&targets.length>5&&<li className={cx('px-3 text-sm text-ink-soft',hide)}>{t(lang,'nav.moreInPlan').replace('{n}',String(targets.length-5))}</li>}
-   <li>{(()=>{const k=goal==='exam'?'nav.editExams':goal?'nav.changeGoal':'nav.setGoal';return <button type="button" onClick={()=>{onPick?.();guide.configure();}} title={tip&&t(lang,k)} className={cx(item(false),'w-full')}><NavIcon k="plus"/><span className={hide}>{t(lang,k)}</span></button>;})()}</li>
+   <li>{(()=>{const k=goal==='exam'?'nav.editExams':goal?'nav.changeGoal':'nav.setGoal';return <button type="button" onClick={()=>{onPick?.();guide.configure();}} title={tip&&t(lang,k)} className={cx(item(false),'w-full')}><NavIcon k="plus"/><span className={hide}><Headline>{t(lang,k)}</Headline></span></button>;})()}</li>
   </ul>
 
  </>;
@@ -202,8 +206,8 @@ export function AppNav(){
        <span className="grid h-7 w-7 place-items-center rounded-md bg-green text-navy" aria-hidden="true"><svg viewBox="0 0 24 24" className="h-4 w-4"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6" fill="currentColor"/></svg></span><span className="hidden min-[400px]:inline">{t(lang,'nav.me')}</span>
       </button>
       {menu&&<div ref={panel} id="me-menu" className="absolute right-0 top-14 w-72 rounded-xl border border-line bg-white p-2 text-navy shadow-lift">
-       <button onClick={()=>{setMenu(false);guide.configure(button.current);}} className="flex min-h-11 w-full items-center rounded-lg px-3 text-left font-semibold hover:bg-sky">{t(lang,'nav.changeGoalRoutine')}</button>
-       {[['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-lg px-3 font-semibold hover:bg-sky">{t(lang,key)}</Link>)}
+       <button onClick={()=>{setMenu(false);guide.configure(button.current);}} className="flex min-h-11 w-full items-center rounded-lg px-3 text-left font-semibold hover:bg-sky"><Headline>{t(lang,'nav.changeGoalRoutine')}</Headline></button>
+       {[['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-lg px-3 font-semibold hover:bg-sky"><Headline>{t(lang,key)}</Headline></Link>)}
        <div className="mt-1 flex items-center justify-between border-t border-line px-3 pt-2"><span className="text-sm font-semibold">{t(lang,'me.language')}</span>
         <div className="flex gap-1">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(p=>({...p,lang:l}))} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div>
        </div>
