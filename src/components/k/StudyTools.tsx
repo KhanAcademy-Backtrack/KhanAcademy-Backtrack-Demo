@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useProgram} from './ProgramProvider';
@@ -22,7 +23,7 @@ export function StudyTools(){
  return <ul aria-label={t(lang,'nav.studyTools')} className="grid gap-3 sm:grid-cols-2">{STUDY_TOOLS.filter(x=>CARDS.has(x.key)).map(x=><li key={x.key} className="min-w-0">
   <Link href={x.href} className="flex h-full min-h-28 gap-3 rounded-xl bg-white p-4 shadow-sheet hover:outline-2 hover:outline-line-strong focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy">
    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-mint text-navy"><NavIcon k={x.icon}/></span>
-   <span className="min-w-0"><span className="block font-extrabold leading-tight">{t(lang,x.label)}</span><span className="mt-1 block text-sm leading-snug text-ink-soft">{x.blurb}</span>
+   <span className="min-w-0"><span className="block font-extrabold leading-tight"><Headline>{t(lang,x.label)}</Headline></span><span className="mt-1 block text-sm leading-snug text-ink-soft">{x.blurb}</span>
     {note(x.key)&&<span className="mt-2 inline-block rounded-md bg-mint px-2 py-0.5 text-xs font-bold text-navy">{note(x.key)}</span>}</span>
   </Link>
  </li>)}</ul>;
@@ -34,7 +35,7 @@ export function HomeShortcuts({className}:{className?:string}){
  return <nav aria-label={t(lang,'nav.shortcuts')} className={cx('min-w-0',className)}>
   <ul className="flex flex-wrap gap-2">{list.map(x=><li key={x.key}>
    <Link href={x.href} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3.5 text-[14px] font-semibold text-navy shadow-sheet hover:bg-sky focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy">
-    <NavIcon small k={x.icon}/>{t(lang,x.label)}{note(x.key)&&<><span aria-hidden="true" className="rounded-md bg-green px-1.5 text-xs font-bold text-navy">{note(x.key)?.split(' ')[0]}</span><span className="sr-only">, {note(x.key)}</span></>}
+    <NavIcon small k={x.icon}/><Headline>{t(lang,x.label)}</Headline>{note(x.key)&&<><span aria-hidden="true" className="rounded-md bg-green px-1.5 text-xs font-bold text-navy">{note(x.key)?.split(' ')[0]}</span><span className="sr-only">, {note(x.key)}</span></>}
    </Link>
   </li>)}</ul>
  </nav>;

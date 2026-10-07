@@ -1,12 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
-import {UPCAT_TOPIC_VIDEOS,UPCAT_NO_VIDEO,outlineVideos,SUBJECT_TOPIC_VIDEOS,SUBJECT_NO_VIDEO,outlineVideo,subjectTopicVideo,conceptVideos} from '../src/lib/program/topic-videos.ts';
+import {UPCAT_TOPIC_VIDEOS,UPCAT_NO_VIDEO,DCAT_TOPIC_VIDEOS,DCAT_NO_VIDEO,SUBJECT_TOPIC_VIDEOS,SUBJECT_NO_VIDEO,outlineVideo,outlineVideos,subjectTopicVideo,subjectTopicVideos,conceptVideos} from '../src/lib/program/topic-videos.ts';
 import {VIDEOS,FAMILY_VIDEOS,ITEM_VIDEOS,CONCEPT_VIDEOS,TOPIC_VIDEOS,TOPIC_NO_VIDEO,topicVideo} from '../src/lib/program/khan-videos.ts';
 import {EXAM_OUTLINES,topicKey} from '../src/lib/program/exam-outline.ts';
 import {SUBJECTS} from '../src/lib/program/college-courses.ts';
 import {videoSource} from '../src/lib/video-clips.ts';
 
 const upcat=Object.values(EXAM_OUTLINES.upcat.sections).flat();
-const topicVideos=[...Object.keys(UPCAT_TOPIC_VIDEOS).flatMap(t=>outlineVideos('upcat',t)),...Object.values(SUBJECT_TOPIC_VIDEOS).flatMap(Object.values)];
+const topicVideos=[...Object.keys(UPCAT_TOPIC_VIDEOS).flatMap(t=>outlineVideos('upcat',t)),...Object.keys(DCAT_TOPIC_VIDEOS).flatMap(t=>outlineVideos('dcat',t)),...Object.entries(SUBJECT_TOPIC_VIDEOS).flatMap(([s,ts])=>Object.keys(ts).flatMap(t=>subjectTopicVideos(s,t)))];
 
 test('every UPCAT reviewer topic has a Khan video or is listed as having none, never both',()=>{
  const titles=new Set(upcat.flatMap(g=>g.topics.map(t=>t.title)));
@@ -20,7 +20,7 @@ test('every UPCAT reviewer topic has a Khan video or is listed as having none, n
 test('a Filipino topic never gets an English video',()=>{
  const fil=upcat.filter(g=>['Gramatikang Filipino','Talasalitaang Filipino','Pagbasa sa Filipino'].includes(g.name)).flatMap(g=>g.topics.map(t=>t.title));
  assert.ok(fil.length>=10);
- for(const t of fil){assert.equal(topicVideo('upcat',t),undefined);assert.ok(TOPIC_NO_VIDEO.has(topicKey('upcat',t)));assert.equal(outlineVideo('upcat',t),undefined,t);assert.ok(UPCAT_NO_VIDEO.has(t));}
+ for(const t of fil){assert.equal(topicVideo('upcat',t),undefined,t);assert.ok(TOPIC_NO_VIDEO.has(topicKey('upcat',t)));assert.equal(outlineVideo('upcat',t),undefined,t);assert.ok(UPCAT_NO_VIDEO.has(t));}
 });
 
 test('every college subject topic has a Khan video or is listed as having none, never both',()=>{
@@ -38,7 +38,7 @@ test('every college subject topic has a Khan video or is listed as having none, 
 test('topic videos are full Khan videos, and one id always means one page',()=>{
  for(const v of topicVideos){
   assert.match(v.id,/^[A-Za-z0-9_-]{11}$/,v.title);
-  assert.match(v.url,/^https:\/\/www\.khanacademy\.org\/(math|science|ela|test-prep|computing|humanities)\/[^?#\s]+\/v\/[a-z0-9_-]+$/,v.url);
+  assert.match(v.url,/^https:\/\/www\.khanacademy\.org\/(math|science|ela|test-prep|computing|humanities|college-careers-more)\/[^?#\s]+\/v\/[a-z0-9_-]+$/,v.url);
   assert.match(v.checked,/^2026-\d\d-\d\d$/);
   assert.ok(v.title.trim().length>0&&!/\(video\)|Khan Academy$/.test(v.title),v.title);
   assert.doesNotThrow(()=>videoSource(v.id,'https://khanpanion.vercel.app'));
@@ -49,11 +49,12 @@ test('topic videos are full Khan videos, and one id always means one page',()=>{
 });
 
 test('lookups are safe and limited to what is mapped',()=>{
- assert.equal(outlineVideo('dcat','Circles'),undefined,'only the UPCAT outline is mapped');
+ assert.equal(outlineVideo('dcat','Circles').id,outlineVideo('upcat','Circles').id,'equivalent DCAT and UPCAT topics reuse the same checked video');
+ assert.equal(outlineVideo('acet','Circles'),undefined,'unmapped exams receive no fallback');
  assert.ok(outlineVideo('upcat','Circles'));
  assert.equal(outlineVideo('upcat','toString'),undefined);
  assert.equal(topicVideo('upcat','toString'),undefined);
- assert.equal(topicVideo('dcat','Circles'),undefined);
+ assert.equal(topicVideo('dcat','Circles'),undefined,'saved-topic API is UPCAT-specific');
  assert.equal(topicVideo('upcat','Circles'),TOPIC_VIDEOS[topicKey('upcat','Circles')]);
  assert.equal(subjectTopicVideo('toString','x'),undefined);
  assert.equal(subjectTopicVideo('calculus1','constructor'),undefined);

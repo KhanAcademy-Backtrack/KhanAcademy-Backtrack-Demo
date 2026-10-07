@@ -82,3 +82,9 @@
 .math-inline .punct{margin-right:.2em}
 .math .op.unary,.math-inline .op.unary{margin:0 .03em 0 0}
 }
+
+/* Headline styling preserves authored text and accessible names. Short connecting
+   words are explicitly marked by Headline; prose, choices and notation keep their case. */
+.headline{text-transform:capitalize}
+.headline .headline-connector{text-transform:lowercase}
+.math,.math-inline,.math *,.math-inline *{text-transform:none}

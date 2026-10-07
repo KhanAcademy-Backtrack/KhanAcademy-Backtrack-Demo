@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import {Component,createContext,lazy,Suspense,useCallback,useContext,useEffect,useRef,useState,type ReactNode} from 'react';
 import {usePathname,useRouter} from 'next/navigation';
 import {useProgram} from './ProgramProvider';
@@ -9,7 +10,7 @@ const Setup=lazy(()=>import('./GoalSetup').then(m=>({default:m.GoalSetup})));
 type Mode='closed'|'setup'|'tour'|'calendar';
 type Api={start:(focus?:HTMLElement|null)=>void;configure:(focus?:HTMLElement|null)=>void;finishSetup:()=>void;calendarGuide:boolean;browsing:boolean;browseNow:()=>void;continueGuide:()=>void;close:()=>void};
 const Context=createContext<Api|null>(null);
-function TourMessage({onClose,failed=false}:{onClose:()=>void;failed?:boolean}){return <div className="fixed inset-0 z-[70] grid place-items-center bg-navy-night/55 p-4 print:hidden"><div role="dialog" aria-modal="true" aria-label={failed?'Guide unavailable':'Opening guide'} onKeyDown={e=>{if(e.key==='Tab')e.preventDefault();}} className="max-w-sm rounded-[22px] bg-white p-6 text-navy"><p role="status">{failed?'The guide couldn’t open. You can close it and keep studying.':'Opening your guide…'}</p><button autoFocus className={btn.ghost} onClick={onClose}>Close guide</button></div></div>;}
+function TourMessage({onClose,failed=false}:{onClose:()=>void;failed?:boolean}){return <div className="fixed inset-0 z-[70] grid place-items-center bg-navy-night/55 p-4 print:hidden"><div role="dialog" aria-modal="true" aria-label={failed?'Guide unavailable':'Opening guide'} onKeyDown={e=>{if(e.key==='Tab')e.preventDefault();}} className="max-w-sm rounded-[22px] bg-white p-6 text-navy"><p role="status">{failed?'The guide couldn’t open. You can close it and keep studying.':'Opening your guide…'}</p><button autoFocus className={btn.ghost} onClick={onClose}><Headline>Close guide</Headline></button></div></div>;}
 class TourBoundary extends Component<{onClose:()=>void;children:ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return {failed:true};}render(){return this.state.failed?<TourMessage failed onClose={this.props.onClose}/>:this.props.children;}}
 
 export function ProgramTourProvider({children}:{children:ReactNode}){
@@ -28,8 +29,10 @@ export function ProgramTourProvider({children}:{children:ReactNode}){
  useEffect(()=>{if(pendingHome.current&&path==='/'){pendingHome.current=false;setMode('tour');return;}if(mode==='calendar'&&path==='/calendar')return;setMode('closed');},[path]);
  useEffect(()=>{
   let intent:string|null=null;try{intent=sessionStorage.getItem('backtrack.entry.choice');}catch{}
+  // A saved routine already answers the entry question. New tabs resume it without setup.
+  if(!intent&&state.setup){intent='study';rememberChoice(intent);}
   choice.current=!!intent;setBrowsing(intent==='browse');
-  const url=new URL(location.href),requested=url.searchParams.get('guide')==='1',focused=path.startsWith('/mock/take')||path.startsWith('/mock/print')||(path==='/demo'&&url.searchParams.get('tour')==='1')||(path==='/group'&&(url.searchParams.has('join')||state.group)&&!requested);
+  const url=new URL(location.href),requested=url.searchParams.get('guide')==='1',focused=path.startsWith('/learn/')||path.startsWith('/reviewer/')||path.startsWith('/mock/take')||path.startsWith('/mock/print')||(path==='/demo'&&url.searchParams.get('tour')==='1')||(path==='/group'&&(url.searchParams.has('join')||state.group)&&!requested);
   if(!focused&&(!intent||requested)){setStep(0);setEntry(!intent);setMode(!intent||(!state.setup&&intent!=='browse')?'setup':'tour');}
   if(requested){url.searchParams.delete('guide');history.replaceState(history.state,'',url.href);}
  },[]);
@@ -48,6 +51,6 @@ export function ProgramTourProvider({children}:{children:ReactNode}){
 }
 export function useProgramGuide(){const api=useContext(Context);if(!api)throw Error('ProgramTourProvider is required');return api;}
 export function useProgramTour(){return useProgramGuide().start;}
-export function ProgramTourButton({className,label='Show me around'}:{className?:string;label?:string}){const open=useProgramTour();return <button type="button" className={className??btn.ghost} onClick={()=>open()}>{label}</button>;}
-export function ChangeGoalButton({className,label='Change my goal or routine'}:{className?:string;label?:string}){const api=useProgramGuide();return <button type="button" className={className??btn.ghost} onClick={()=>api.configure()}>{label}</button>;}
-export function CalendarGuide(){const api=useProgramGuide();if(!api.calendarGuide)return null;return <section aria-label="Calendar guide" className="mb-5 rounded-[22px] border-2 border-green bg-mint p-5 text-navy"><h2 className="text-xl font-extrabold">Try your calendar</h2><p className="mt-2 max-w-2xl leading-relaxed">Pick a day to see its sessions. Add an event, or use Edit and Move on a session. Your changes are saved in this browser.</p><div className="mt-3 flex flex-wrap gap-2"><button className={btn.primary} onClick={api.continueGuide}>Continue guide</button><button className={btn.text} onClick={api.close}>Finish here</button></div></section>;}
+export function ProgramTourButton({className,label='Show me around'}:{className?:string;label?:string}){const open=useProgramTour();return <button type="button" className={className??btn.ghost} onClick={()=>open()}><Headline>{label}</Headline></button>;}
+export function ChangeGoalButton({className,label='Change my goal or routine'}:{className?:string;label?:string}){const api=useProgramGuide();return <button type="button" className={className??btn.ghost} onClick={()=>api.configure()}><Headline>{label}</Headline></button>;}
+export function CalendarGuide(){const api=useProgramGuide();if(!api.calendarGuide)return null;return <section aria-label="Calendar guide" className="mb-5 rounded-[22px] border-2 border-green bg-mint p-5 text-navy"><h2 className="text-xl font-extrabold"><Headline>Try your calendar</Headline></h2><p className="mt-2 max-w-2xl leading-relaxed">Pick a day to see its sessions. Add an event, or use Edit and Move on a session. Your changes are saved in this browser.</p><div className="mt-3 flex flex-wrap gap-2"><button className={btn.primary} onClick={api.continueGuide}><Headline>Continue guide</Headline></button><button className={btn.text} onClick={api.close}><Headline>Finish here</Headline></button></div></section>;}

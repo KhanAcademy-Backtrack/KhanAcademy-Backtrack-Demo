@@ -1,9 +1,10 @@
+import {Headline} from './Headline';
 import type {ReactNode} from 'react';
 import {Sheet,cx} from './ui';
 
 /** A home section: a small label above one card, so the page reads as a short list. */
 export function Section({label,children,className}:{label:string;children:ReactNode;className?:string}){
- return <div className={cx('min-w-0',className)}><p className="mb-2.5 px-1 text-[15px] font-bold text-navy">{label}</p>{children}</div>;
+ return <div className={cx('min-w-0',className)}><p className="mb-2.5 px-1 text-[15px] font-bold text-navy"><Headline>{label}</Headline></p>{children}</div>;
 }
 
 /** One thing to do: an icon, a title, a line of context and one full-width action,
@@ -12,7 +13,7 @@ export function FeatureCard({icon,title,body,action,art,children,...rest}:{icon?
  return <Sheet {...rest} className={cx('grid min-w-0 gap-5 p-4 sm:p-5',!!art&&'sm:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)]')}>
   <div className="flex min-w-0 flex-col sm:p-1">
    {icon&&<span className="grid h-10 w-10 place-items-center rounded-lg bg-mint text-navy">{icon}</span>}
-   <h2 className={cx('text-xl font-extrabold leading-tight tracking-[-.015em]',!!icon&&'mt-3')}>{title}</h2>
+   <h2 className={cx('text-xl font-extrabold leading-tight tracking-[-.015em]',!!icon&&'mt-3')}><Headline>{title}</Headline></h2>
    {body&&<p className="mt-1.5 leading-relaxed text-ink-soft">{body}</p>}
    {action&&<div className="mt-auto flex flex-wrap gap-2 pt-5 [&>*]:flex-1">{action}</div>}
    {children}

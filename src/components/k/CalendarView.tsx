@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import {validDay,type CalEvent} from '@/lib/program/store';
@@ -38,14 +39,14 @@ export function CalendarView(){
  const agenda=items.filter(i=>(i.end??i.date)>=today).slice(0,60);
  const byDay=new Map<string,CalItem[]>();for(const i of agenda){const k=i.date<today?today:i.date;byDay.set(k,[...(byDay.get(k)??[]),i]);}
  return <>
-  <PageBand title="Calendar" lead="Keep your study sessions and exam dates together. Move a session when your week changes." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}>Download calendar</button><ChangeGoalButton className={btn.quiet} label="Change my study routine"/></div>}/>
+  <PageBand title="Calendar" lead="Keep your study sessions and exam dates together. Move a session when your week changes." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}><Headline>Download calendar</Headline></button><ChangeGoalButton className={btn.quiet} label="Change my study routine"/></div>}/>
   <div className={pageBody}>
    <CalendarGuide/>
-   {undo&&<div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-mint p-4 text-navy"><p>Removed from your calendar.</p><button className={btn.text} onClick={()=>{update(p=>({...p,events:[...p.events.filter(e=>e.id!==undo.item.id),...(undo.previous?[undo.previous]:[])]}));setUndo(undefined);}}>Undo</button></div>}
+   {undo&&<div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-mint p-4 text-navy"><p>Removed from your calendar.</p><button className={btn.text} onClick={()=>{update(p=>({...p,events:[...p.events.filter(e=>e.id!==undo.item.id),...(undo.previous?[undo.previous]:[])]}));setUndo(undefined);}}><Headline>Undo</Headline></button></div>}
    <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
     <Sheet className="p-3 sm:p-6">
      <div className="flex flex-wrap items-center gap-2 px-2 pt-2 sm:px-0 sm:pt-0">
-      <h2 className="mr-auto text-2xl font-extrabold tracking-[-.02em]" aria-live="polite">{view==='month'?monthName:'Coming up'}</h2>
+      <h2 className="mr-auto text-2xl font-extrabold tracking-[-.02em]" aria-live="polite"><Headline>{view==='month'?monthName:'Coming up'}</Headline></h2>
       <div role="group" aria-label="View" className="flex rounded-lg bg-sky p-1">{(['month','agenda'] as const).map(v=><button key={v} aria-pressed={view===v} onClick={()=>setView(v)} className="min-h-11 rounded-lg px-4 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{v==='month'?'Month':'Agenda'}</button>)}</div>
       {view==='month'&&<div className="flex gap-1"><button aria-label="Previous month" onClick={()=>shift(-1)} className="grid h-11 w-11 place-items-center rounded-lg border-2 border-navy/15 hover:bg-mint text-navy">‹</button><button onClick={()=>rememberDay(today)} className="min-h-11 rounded-lg border-2 border-navy/15 px-4 text-sm font-bold hover:bg-mint text-navy">Today</button><button aria-label="Next month" onClick={()=>shift(1)} className="grid h-11 w-11 place-items-center rounded-lg border-2 border-navy/15 hover:bg-mint text-navy">›</button></div>}
      </div>
@@ -56,24 +57,24 @@ export function CalendarView(){
         className={cx('relative flex min-h-14 flex-col items-stretch rounded-xl p-1 text-left  sm:min-h-24 sm:p-2 text-navy',inMonth?'bg-white':'bg-transparent text-ink-soft/60',win&&inMonth&&'bg-mint',isSel?'ring-2 ring-navy':'hover:bg-sky')}>
         <span className={cx('grid h-7 w-7 place-items-center self-start rounded-lg text-sm font-bold',isToday&&'bg-green text-navy',exam&&!isToday&&'ring-2 ring-navy')}>{Number(d.slice(8))}</span>
         <span className="mt-1 flex flex-wrap gap-1 sm:hidden">{list.filter(i=>i.kind!=='examWindow').slice(0,3).map(i=><span key={i.id} className={cx('h-2 w-2 rounded-lg',KIND[i.kind].dot,i.done&&'opacity-40')}/>)}</span>
-        <span className="mt-1 hidden flex-col gap-0.5 sm:flex">{list.filter(i=>i.kind!=='examWindow'||i.date===d).slice(0,3).map(i=><span key={i.id} className={cx('truncate rounded-md px-1.5 py-0.5 text-[11px] font-semibold',i.kind==='study'?'bg-green/20':i.kind==='mock'?'bg-navy text-white':i.kind==='exam'?'bg-white ring-1 ring-navy':i.kind==='examWindow'?'bg-mint-line':'bg-sky',i.done&&'line-through opacity-60')}>{i.title}</span>)}{list.length>3&&<span className="text-[11px] text-ink-soft">+{list.length-3} more</span>}</span>
+        <span className="mt-1 hidden flex-col gap-0.5 sm:flex">{list.filter(i=>i.kind!=='examWindow'||i.date===d).slice(0,3).map(i=><span key={i.id} className={cx('truncate rounded-md px-1.5 py-0.5 text-[11px] font-semibold',i.kind==='study'?'bg-green/20':i.kind==='mock'?'bg-navy text-white':i.kind==='exam'?'bg-white ring-1 ring-navy':i.kind==='examWindow'?'bg-mint-line':'bg-sky',i.done&&'line-through opacity-60')}><Headline>{i.title}</Headline></span>)}{list.length>3&&<span className="text-[11px] text-ink-soft">+{list.length-3} more</span>}</span>
        </button>;})}</div>
       <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 px-2 text-sm text-ink-soft sm:px-0">{Object.entries(KIND).filter(([key])=>official||(key!=='exam'&&key!=='examWindow')).map(([,k])=><span key={k.label} className="flex items-center gap-2"><span className={cx('h-2.5 w-2.5 rounded-lg',k.dot)}/>{k.label}</span>)}</div>
      <label className="mt-3 flex min-h-11 items-center gap-2 px-2 text-sm text-ink-soft"><input type="checkbox" checked={official} onChange={e=>setOfficial(e.target.checked)} className="h-5 w-5 accent-[#14bf96]"/>Show official exam dates</label>
-     <Link href="/admissions" className={cx(btn.text,'px-2 text-sm')}>Every exam date, with its official page</Link>
+     <Link href="/admissions" className={cx(btn.text,'px-2 text-sm')}><Headline>Every exam date, with its official page</Headline></Link>
      </motion.div>
      :<ol className="mt-4 grid gap-4">{[...byDay].map(([d,list])=><li key={d}><p className="font-bold">{d===today?'Today':parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</p><ul className="mt-2 grid gap-2">{list.map(i=>row(i,i.id+d))}</ul></li>)}{!byDay.size&&<p className="text-ink-soft">Nothing planned yet. Make a study plan to fill your calendar.</p>}</ol>}
     </Sheet>
     <Sheet className="lg:sticky lg:top-24 lg:self-start">
-     <h2 className="text-xl font-extrabold">{selected===today?'Today':parseDay(selected).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</h2>
+     <h2 className="text-xl font-extrabold"><Headline>{selected===today?'Today':parseDay(selected).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'})}</Headline></h2>
      {view==='month'&&day.length?<ul className="mt-3 grid gap-2">{day.map(i=>row(i,i.id))}</ul>:view==='month'?<p className="mt-2 text-ink-soft">Nothing on this day.</p>:null}
      {adding?<form className="mt-5 grid gap-3 rounded-2xl bg-sky p-4" onSubmit={e=>{e.preventDefault();const values={...draft,title:e.currentTarget.querySelector<HTMLInputElement>('input:not([type])')?.value??draft.title,date:e.currentTarget.querySelector<HTMLInputElement>('input[type=date]')?.value??draft.date,time:e.currentTarget.querySelector<HTMLInputElement>('input[type=time]')?.value??draft.time,minutes:Number(e.currentTarget.querySelector<HTMLInputElement>('input[type=number]')?.value??draft.minutes)};if(!values.title.trim())return setError('Give the event a name.');if(!validDay(values.date))return setError('Choose a valid date.');saveEvent({id:editing??`own-${crypto.randomUUID()}`,date:values.date,time:values.time,minutes:values.minutes,title:values.title.trim().slice(0,120),kind:values.kind,...(editing?{concept:items.find(i=>i.id===editing)?.concept,done:items.find(i=>i.id===editing)?.done}:{})});rememberDay(values.date);setAdding(false);setEditing(null);setError('');setDraft({title:'',date:values.date,time:state.setup?.time??'16:00',minutes:state.setup?.minutes??30,kind:'custom'});}}>
       <label className="grid gap-1 text-sm font-semibold">What<input className={field} value={draft.title} maxLength={120} onChange={e=>setDraft({...draft,title:e.target.value})} placeholder="Group review at the library" autoFocus/></label>
       <label className="grid gap-1 text-sm font-semibold">Event date<input type="date" className={field} value={draft.date} onChange={e=>setDraft({...draft,date:e.target.value})}/></label><label className="grid gap-1 text-sm font-semibold">Event type<select className={field} value={draft.kind} onChange={e=>setDraft({...draft,kind:e.target.value as CalEvent['kind']})}><option value="custom">My event</option><option value="study">Study session</option><option value="mock">Mock practice</option></select></label>
       <div className="grid grid-cols-2 gap-2"><label className="grid gap-1 text-sm font-semibold">Time<input type="time" className={field} value={draft.time} onChange={e=>setDraft({...draft,time:e.target.value})}/></label><label className="grid gap-1 text-sm font-semibold">Minutes<input type="number" min={5} max={600} className={field} value={draft.minutes} onChange={e=>setDraft({...draft,minutes:Math.max(5,Math.min(600,Number(e.target.value)||30))})}/></label></div>
-      <div className="flex gap-2"><button className={btn.primary}>{editing?'Save changes':`Add to ${selected===today?'today':'this day'}`}</button><button type="button" className={btn.ghost} onClick={()=>{setAdding(false);setEditing(null);setError('');}}>Cancel</button></div>
+      <div className="flex gap-2"><button className={btn.primary}><Headline>{editing?'Save changes':`Add to ${selected===today?'today':'this day'}`}</Headline></button><button type="button" className={btn.ghost} onClick={()=>{setAdding(false);setEditing(null);setError('');}}><Headline>Cancel</Headline></button></div>
       {error&&<p role="alert" className="font-semibold">{error}</p>}
-     </form>:<button className={cx(btn.ghost,'mt-5')} onClick={()=>{setDraft({title:'',date:selected,time:state.setup?.time??'16:00',minutes:state.setup?.minutes??30,kind:'custom'});setEditing(null);setError('');setAdding(true);}}>Add an event</button>}
+     </form>:<button className={cx(btn.ghost,'mt-5')} onClick={()=>{setDraft({title:'',date:selected,time:state.setup?.time??'16:00',minutes:state.setup?.minutes??30,kind:'custom'});setEditing(null);setError('');setAdding(true);}}><Headline>Add an event</Headline></button>}
     </Sheet>
    </div>
   </div>
@@ -93,7 +94,7 @@ export function CalendarView(){
      <button className="min-h-11 text-sm font-semibold underline underline-offset-4 text-navy" onClick={()=>{setUndo({item:i,previous:own});saveEvent({...i,removed:true});}}>Remove</button>
     </>}
    </div>
-   {moving===i.id&&<form className="mt-2 flex flex-wrap items-end gap-2 pl-6" onSubmit={e=>{e.preventDefault();if(!validDay(moveTo))return setError('Choose a valid date.');saveEvent({...i,date:moveTo});setMoving(null);rememberDay(moveTo);setError('');}}><label className="grid gap-1 text-sm font-semibold">New date<input type="date" className={field} value={moveTo} onChange={e=>setMoveTo(e.target.value)}/></label><button className={btn.dark}>Move</button><button type="button" className={btn.ghost} onClick={()=>setMoving(null)}>Cancel</button>{error&&<p role="alert" className="w-full font-semibold">{error}</p>}</form>}
+   {moving===i.id&&<form className="mt-2 flex flex-wrap items-end gap-2 pl-6" onSubmit={e=>{e.preventDefault();if(!validDay(moveTo))return setError('Choose a valid date.');saveEvent({...i,date:moveTo});setMoving(null);rememberDay(moveTo);setError('');}}><label className="grid gap-1 text-sm font-semibold">New date<input type="date" className={field} value={moveTo} onChange={e=>setMoveTo(e.target.value)}/></label><button className={btn.dark}><Headline>Move</Headline></button><button type="button" className={btn.ghost} onClick={()=>setMoving(null)}><Headline>Cancel</Headline></button>{error&&<p role="alert" className="w-full font-semibold">{error}</p>}</form>}
   </li>;
  }
 }

@@ -18,10 +18,10 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 176 tests
+npm test          # node --test, currently 180 tests
 npm run typecheck # tsc --noEmit
-npm run build     # static export, currently 188 generated pages (including 404)
-npm run test:browser  # 50 Playwright journeys; Chrome default, BROWSER_CHANNEL=msedge supported
+npm run build     # static export, currently 691 generated pages (including 404)
+npm run test:browser  # Playwright acceptance; Chrome by default, BROWSER_CHANNEL=msedge supported
 npm start         # serve the static build on http://127.0.0.1:3047
 ```
 
@@ -87,20 +87,19 @@ UPCAT sweep (7 October 2026): 43 appended topics, 173 total. `TOPIC_VIDEOS` and
 keys: 139 video matches and 34 gaps (23 Filipino topics skipped without an English fallback).
 `topicVideo(exam,title)` uses own-property lookup; it does not change `videoFor` or the practice
 maps. Shared catalog data lives in `khan-video-catalog.ts` to avoid a circular import.
-Reviewer rows use `Watch video: <title>` disclosures; `/learn/<concept>` has “Videos for this
-topic”, deduplicated by id. Topic players are lazy, paused full videos, with no clip ranges,
-cover, close control or learner-record writes. Research and source limits:
+Reviewer rows link to dedicated topic lessons; `/learn/<concept>` opens the selected topic's
+material immediately. Do not restore `Watch video` disclosures or preview buttons. Topic players
+are paused full videos, with no clip ranges, cover, close control or learner-record writes. Research and source limits:
 `docs/research/2026-10-07/UPCAT_TOPIC_SWEEP.md`; every resource and gap is logged in
 `docs/THIRD_PARTY_MATERIALS.md` under “UPCAT topic videos, checked 2026-10-07”.
 
-Validation for `codex/upcat-topic-video-sweep`: 176 unit tests, typecheck, 188-page static
-export and all 50 browser journeys passed. Browser checks used Edge (`BROWSER_CHANNEL=msedge`)
-and `BACKTRACK_TEST_PORT=3063`; live-group checks require an allowed local origin. Player
-fixtures test our paused/full-video UI and record boundaries, not external playback or caption
-quality. The isolated build reused real, previously built project font bytes through a private
-verification cache after Google font CSS retrieval failed; no fonts, dependency versions or
-production font configuration changed. These counts exclude the separate, uncommitted
-topic-lesson expansion in the main checkout.
+Historical validation for the separately committed `codex/upcat-topic-video-sweep`: 176 unit
+tests, clean typecheck, 188 static pages and all 50 browser journeys passed using Edge and
+local port 3063. The isolated build reused existing real font bytes through a private cache;
+no dependency versions or production font configuration changed. These counts exclude the
+later topic-lesson expansion, whose final results are recorded in TOPIC_LESSONS_2026_10_07.md.
+External-player fixtures checked UI contracts; full playback, captions and learner outcomes
+were not verified.
 
 Every URL is opened by hand in a browser and its page title checked before it ships. Khan is a
 client-rendered app, so an automated fetch returns an empty shell and is not verification. Never
@@ -274,18 +273,34 @@ inline with the house typesetter (STIX Two Text; no KaTeX, no new font or depend
 
 ## Topic videos, 7 October 2026
 
-Owner request: every UPCAT reviewer topic and every college subject topic gets its own Khan Academy video.
+Owner request: every UPCAT/DCAT reviewer topic and every college subject topic gets dedicated learning material.
 `src/lib/program/topic-videos.ts` holds `UPCAT_TOPIC_VIDEOS` (by the exact outline title in `EXAM_OUTLINES.upcat`)
-and `SUBJECT_TOPIC_VIDEOS` (by subject id, then the exact topic text in `SUBJECTS`), each with a `NO_VIDEO` list
+`DCAT_TOPIC_VIDEOS` (by the exact DCAT title), and `SUBJECT_TOPIC_VIDEOS` (by subject id, then the exact topic text in `SUBJECTS`), each with a `NO_VIDEO` list
 for topics searched with no fitting video. Renaming a topic drops its video, and `tests/topic-videos.test.mjs`
 fails until it is re-mapped. Question videos (`VIDEOS` in `khan-videos.ts`) are reused where the same video fits.
-The Filipino grammar and vocabulary topics have none on purpose (never an English fallback). Only the UPCAT outline
-is mapped; `outlineVideo` returns nothing for other exams.
+The Filipino grammar and vocabulary topics have none on purpose (never an English fallback). UPCAT and DCAT
+are mapped; `outlineVideo` returns nothing for other exams. `outlineVideos` and `subjectTopicVideos` add explicitly
+matched companion videos where one clip cannot cover a compound topic. Do not infer resources from arbitrary URLs.
 
-- Reviewer rows (`Reviewer.tsx`) and the subject page's "What you’ll learn" rows (`Bridge.tsx`) carry a `VideoToggle`
-  (`TopicVideo.tsx`): a "Video" button named `Watch the Khan Academy video for <topic>` (never starting with "Save",
-  which the reviewer test matches) that opens the paused `KhanPlayer` under the row, one topic at a time, so a long
-  list loads at most one player. `/learn/<concept>` lists the videos of the UPCAT topics that summary teaches
-  (`conceptVideos`). Opening any of them writes nothing.
+- `topic-lessons.ts` gives all 503 outline/college topics a stable `/learn/topic/<lesson>` page. Reviewer rows link
+  to these pages; `LessonSequence` in concept, reviewer-chapter and college-subject pages selects one topic at a
+  time. Players appear immediately, paused, with no video-preview button. On phones a compact topic selector keeps
+  the material near the top. Only the selected lesson's players mount (at most three).
+- Every unmatched topic has a focused original guide in `src/content/topic-guides.ts`: idea, worked example,
+  self-explanation with a revealed answer, and a common trap. These are draft teaching notes pending specialist
+  review. Reading, viewing, saving and revealing explanations never award learning evidence. Question videos
+  retain their answer-check/exam-result gates; never expose a question's video before those gates.
+- Broader practice remains explicitly labelled as broader topic checks. Existing bookmark keys and saved evidence
+  are preserved. Original broad reference notes remain below the dedicated material as optional Key Reminders.
 - Every page was rendered in the in-app browser through Khan's own client router: title read as "(video)" and the
   youtube-nocookie id read from the player. Log: `docs/THIRD_PARTY_MATERIALS.md`, "Topic videos".
+
+## Headline Styling, 7 October 2026
+
+Use `Headline` for interface headings, action labels, navigation and topic/course card titles. It capitalizes
+main words while keeping short English and Filipino connectors lowercase inside the title. First/last words
+still capitalize. Native topic-selector options use `headlineText`. Preserve catalog titles, saved keys,
+accessible names, lesson paragraphs, answer choices and mathematical case. Do not restore blanket
+`text-transform: capitalize` on all headings/buttons or reintroduce Video preview/disclosure buttons.
+The `/start` chooser adapts its columns to content width and keeps equation previews inside each card;
+phone previews use the smaller notation size, with larger previews from the `sm` breakpoint.

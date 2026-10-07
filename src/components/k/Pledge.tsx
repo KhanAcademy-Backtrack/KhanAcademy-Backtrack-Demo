@@ -1,4 +1,5 @@
 'use client';
+import {Headline} from './Headline';
 import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useProgram} from './ProgramProvider';
@@ -23,7 +24,7 @@ export function Pledge({onSaved}:{onSaved?:()=>void}){
   onSaved?.();router.push('/');
  }
  return <Sheet id="pledge" aria-labelledby="pledge-title">
-  <h2 id="pledge-title" className="text-2xl font-extrabold tracking-[-.02em]">{t(lang,'onb.title')}</h2>
+  <h2 id="pledge-title" className="text-2xl font-extrabold tracking-[-.02em]"><Headline>{t(lang,'onb.title')}</Headline></h2>
   <p className="mt-1 text-ink-soft">Start with a routine you can keep. You can change these choices later.</p>
   <div className="mt-6 grid gap-6">
    <fieldset><legend className="mb-2 font-bold">{t(lang,'onb.exam')}</legend>
@@ -50,7 +51,7 @@ export function Pledge({onSaved}:{onSaved?:()=>void}){
     </p>
    </div>
    {error&&<p role="alert" className="font-semibold text-navy">{error}</p>}
-   <div><button className={btn.primary} onClick={save}>{t(lang,'onb.save')}</button></div>
+   <div><button className={btn.primary} onClick={save}><Headline>{t(lang,'onb.save')}</Headline></button></div>
   </div>
  </Sheet>;
 }

@@ -4,6 +4,7 @@ import type {ReactNode,ComponentProps} from 'react';
 import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
 import {DUR,SPRING} from '@/lib/motion-tokens';
+import {Headline} from './Headline';
 
 export const cx=(...xs:(string|false|null|undefined)[])=>xs.filter(Boolean).join(' ');
 
@@ -52,7 +53,7 @@ export function Sheet({children,className,as='section',...rest}:{children:ReactN
 export function PageBand({title,lead,children,aside}:{title:ReactNode;lead?:ReactNode;children?:ReactNode;aside?:ReactNode}){
  return <div>
   <div className="mx-auto grid max-w-6xl gap-4 px-5 pb-6 pt-8 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:pt-10">
-   <div className="min-w-0 max-w-3xl"><h1 className="break-words text-[1.65rem] font-extrabold leading-tight tracking-[-.025em] text-navy sm:text-[1.9rem]">{title}</h1>{lead&&<p className="mt-2 max-w-2xl text-[16px] leading-relaxed text-ink-soft">{lead}</p>}{children}</div>
+   <div className="min-w-0 max-w-3xl"><h1 className="break-words text-[1.65rem] font-extrabold leading-tight tracking-[-.025em] text-navy sm:text-[1.9rem]"><Headline>{title}</Headline></h1>{lead&&<p className="mt-2 max-w-2xl text-[16px] leading-relaxed text-ink-soft">{lead}</p>}{children}</div>
    {aside}
   </div>
  </div>;

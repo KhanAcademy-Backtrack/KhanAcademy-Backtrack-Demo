@@ -44,6 +44,7 @@ Khan matching reuses already reviewed exact-topic videos first. Newly added page
 | Novel excerpts | novel excerpts reading; reading novels; analyzing novel excerpts | No novel-excerpt reading lesson accepted |
 | Practical texts and visual messages | practical texts; reading advertisements; functional reading | No directly matching lesson accepted |
 | Organizing paragraphs and transitions | paragraph organization transitions; paragraph organization; transitions; SAT transitions | SAT transitions worked example verified |
+
 | Accuracy, precision and experimental uncertainty | precision accuracy; accuracy precision measurements; accuracy and precision | Reporting measurements was title/player verified but rejected: it teaches measurement precision, not the distinction from accuracy or experimental uncertainty |
 | Depositional landforms and bodies of water | deposition landforms; river deposition; sediment deposition landforms | Weathering/erosion resources are neighbouring processes; no direct landform/water-body match accepted |
 

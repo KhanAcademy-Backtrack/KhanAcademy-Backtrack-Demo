@@ -8,6 +8,7 @@ import {programJourneys} from './test-program-browser.mjs';
 import {programTourJourneys} from './test-program-tour.mjs';
 import {liveGroupJourneys} from './test-live-groups.mjs';
 import {dailyJourneys} from './test-daily-practice.mjs';
+import {topicLessonJourneys} from './test-topic-lessons-browser.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 import {speakText} from '../src/lib/notation.ts';
 
@@ -16,14 +17,15 @@ const port=process.env.BACKTRACK_TEST_PORT||'3050';
 const origin='http://127.0.0.1:'+port;
 const server=spawn(process.execPath,['scripts/serve-static.mjs'],{cwd:root,env:{...process.env,BACKTRACK_PORT:port},windowsHide:true,stdio:'pipe'});
 await new Promise((resolve,reject)=>{server.stdout.once('data',resolve);server.once('error',reject);server.once('exit',code=>reject(Error(`Preview exited: ${code}`)));});
-const browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'chrome',headless:true});
+let browser;try{browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'chrome',headless:true});}catch(error){server.kill();throw error;}
 const report=[];await fs.mkdir(path.join(root,'.refs/browser-review'),{recursive:true});
 async function scenario(name,run,viewport={width:1280,height:850}){
   if(process.env.TEST_FILTER&&!new RegExp(process.env.TEST_FILTER).test(name))return;
-  const context=await browser.newContext({viewport,...(name.startsWith('program ')?{reducedMotion:'reduce'}:{})});if(!/program personalized|program first-entry|program returning|program direct guide/.test(name))await context.addInitScript(()=>sessionStorage.setItem('backtrack.entry.choice','study'));
-  // Assert paused player parameters without third-party network noise; source pages are checked in the in-app browser.
+  const context=await browser.newContext({viewport,...(name.startsWith('program ')?{reducedMotion:'reduce'}:{})});
+  // Assert our UI and player parameters without third-party network/player console noise.
+  // Actual Khan source pages and their players are verified separately in the in-app browser.
   await context.route('https://www.youtube-nocookie.com/**',r=>r.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Paused External Player Fixture</title>'}));
-  const page=await context.newPage();const errors=[];
+  if(!/program personalized|program first-entry|program returning|program direct guide/.test(name))await context.addInitScript(()=>sessionStorage.setItem('backtrack.entry.choice','study'));const page=await context.newPage();const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   if(name.startsWith('program '))page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   try{await run(page,context);assert.deepEqual(errors,[],`Browser errors: ${errors.join('; ')}`);report.push({name,passed:true});console.log(`PASS ${name}`);}
@@ -180,6 +182,7 @@ try{
  await programTourJourneys({scenario,origin,root});
  await liveGroupJourneys({scenario,origin,root});
  await dailyJourneys({scenario,origin,root});
+ await topicLessonJourneys({scenario,origin,root});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }

@@ -10,12 +10,12 @@
 - [x] Check mapping, Filipino exclusion, canonical URLs, attribution and saved-topic preservation.
 - [x] Finish production/browser validation and commit this sweep separately from ongoing topic-lesson work on `codex/upcat-topic-video-sweep`.
 
-Validation: 176 unit tests, clean typecheck, 188 generated pages and all 50 browser journeys
-passed. Edge and allowed local port 3063 were used; external players were fixtures for UI
-contracts, with real source pages checked separately in the in-app browser. The build reused
-existing real font bytes through a private cache. Full external playback/captions and real
-learner outcomes were not verified. No push, deployment or presentation changes are included.
-
+Historical sweep validation: 176 unit tests, clean typecheck, 188 generated pages and all
+50 browser journeys passed. Edge and allowed local port 3063 were used; external players
+were fixtures for UI contracts, with real source pages checked separately in the in-app browser.
+The isolated build reused existing real font bytes through a private cache. Full external
+playback/captions and real learner outcomes were not verified. This precedes the topic-lesson
+pass and its separate final validation below.
 
 ## Latest release checkpoint — 10 September 2026
 
@@ -189,3 +189,19 @@ User clarification after planning: no backend or accounts are required for this 
 ## Resume point
 
 The plan was delivered and the user explicitly asked to continue implementation. Begin with the shared-state/migration contract and test harness, then follow the complete sequence; do not finish one feature and lose the remaining product areas.
+
+## Topic Lesson Pass — 7 October 2026
+
+Current owner steering: site/resources only, on Codex-Reworks. Details: TOPIC_LESSONS_2026_10_07.md.
+
+- [x] Review the six loose-fit matches through rendered Khan pages; replace, supplement or explicitly remove them.
+- [x] Map every DCAT outline topic with a verified resource or explicit unmatched entry.
+- [x] Provide 503 dedicated outline/college topic pages, including 43 additional UPCAT topics, with focused written material for every unmatched topic.
+- [x] Replace the opening broad summary and Video preview buttons with selected, immediately visible paused material.
+- [x] Preserve practice, reviewer chapters, college foundations, existing saved keys and evidence boundaries.
+- [x] Add exam/program return context, topic search, a compact phone selector and saved-routine resume.
+- [x] Remove the tour highlight edge and apply visual title casing without rewriting prose or maths.
+- [x] Complete final npm test (180 passed), npm run typecheck (clean), npm run build (691 static pages) and npm run test:browser (53 passed, Edge). External players use deterministic fixtures; real source verification and manual preview checks are separate.
+- [ ] Independently review the new original instructional notes with subject/language reviewers.
+- [ ] Verify complete external video playback/caption quality and actual learner outcomes; do not imply these were tested.
+- [x] Owner authorized pushing the verified changes to main under Harry Gomez's GitHub identity. This record accompanies that push; live deployment is not verified here.
