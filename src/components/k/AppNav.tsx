@@ -135,15 +135,18 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
  const center=rail==='always'?'justify-center px-0':rail==='below-xl'?'justify-center px-0 xl:justify-start xl:px-3':'px-3';
  const heading=cx('px-3 pb-1.5 pt-1 text-sm font-semibold text-ink-soft',rail==='always'?'hidden':rail==='below-xl'?'hidden xl:block':'');
  const item=(current:boolean,animated=false)=>cx('relative flex min-h-11 items-center gap-3 rounded-lg text-[15px] font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',center,current&&!animated&&'bg-white shadow-sheet');
+ /* Narrowing the sidebar keeps the four section names readable: each stacks a short label under its icon. */
+ const stacked='min-h-14 flex-col justify-center gap-0.5 px-0 text-[11.5px] leading-tight';
+ const section=(current:boolean,animated:boolean)=>cx('relative flex items-center rounded-lg font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',rail==='never'?'min-h-11 gap-3 px-3 text-[15px]':rail==='always'?stacked:cx(stacked,'xl:min-h-11 xl:flex-row xl:justify-start xl:gap-3 xl:px-3 xl:text-[15px] xl:leading-normal'),current&&!animated&&'bg-white shadow-sheet');
  const tip=rail==='never'?undefined:true;
  const setup=state.setup,targets=examTargets(state),program=PROGRAM_BY_ID[state.bridgeProgram??''],concept=CONCEPT_BY_ID[setup?.concept??''];
  const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/plan',title:t(lang,'nav.generalCet')}]:[]),...targets.slice(0,5).map(x=>({href:'/plan',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
  return <>
   <nav aria-label={t(lang,main?'nav.main':'nav.all')} className="grid gap-1">
    {list.map(x=>{const on=active===x.key,sub=on?x.subs.flatMap(y=>y.children??[y]).find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
-    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} title={tip&&label(x)} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={item(on,main)}>
+    <Link href={x.href} onClick={onPick} {...(main?{'data-program-tour':x.key}:{})} aria-current={on?(sub||x.href!==path?'true':'page'):undefined} className={section(on,main)}>
      {main&&on&&<motion.span layoutId="tab-oval" transition={reduced?{duration:0}:SPRING} className="absolute inset-0 rounded-lg bg-white shadow-sheet"/>}
-     <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><span className={hide}><Headline>{label(x)}</Headline></span></span>
+     <span className="relative"><NavIcon k={x.key}/></span><span className="relative"><Headline>{label(x)}</Headline></span>
     </Link>
     {on&&rail!=='always'&&x.subs.length>0&&<ul aria-label={label(x)} className={cx('mb-1 ml-6 gap-0.5 border-l border-line pl-2',rail==='below-xl'?'hidden xl:grid':'grid')}>
      {x.subs.map(y=>{
