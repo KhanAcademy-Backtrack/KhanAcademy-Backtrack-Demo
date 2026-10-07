@@ -47,14 +47,14 @@ const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'cours
  {...FIX,key:'fix-college',href:'/start/college',hint:'nav.forCollege',match:p=>p==='/start/college'}]};
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
-/** Four sections. Plan holds the goal page, the routine and the calendar with its exam dates;
+/** Four sections. Plan holds the goal page and the calendar with its exam dates;
  *  Study holds the CET reviewers, the college courses, practice exams and every study tool.
  *  A goal page claims only the learner's own topic or program page; the rest of the reviewer
  *  and the courses stay in Study. */
 function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{
  const college=program?'/bridge/'+program:'/bridge';
  const goalPage:Sub[]=bridge?[{key:'college',href:college,label:'page.college',icon:'goal',match:p=>p===college}]:topic?[{key:'topic',href:'/learn/'+topic,label:'page.topic',icon:'goal',match:p=>p==='/learn/'+topic}]:[];
- const plan:Sub[]=[...goalPage,{key:'plan',href:'/plan',label:'page.plan',icon:'plan',match:p=>p.startsWith('/plan')},{key:'calendar',href:'/calendar',label:'page.calendar',icon:'calendar',match:p=>p.startsWith('/calendar')},EXAM_DATES_LINK];
+ const plan:Sub[]=[...goalPage,{key:'calendar',href:'/calendar',label:'page.calendar',icon:'calendar',match:p=>p.startsWith('/calendar')},EXAM_DATES_LINK];
  return [
  {href:'/',key:'today',match:p=>p==='/',subs:[]},
  {href:plan[0].href,key:'plan',match:p=>plan.some(x=>x.match(p)),subs:plan},
@@ -137,7 +137,7 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
  const item=(current:boolean,animated=false)=>cx('relative flex min-h-11 items-center gap-3 rounded-lg text-[15px] font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-navy',center,current&&!animated&&'bg-white shadow-sheet');
  const tip=rail==='never'?undefined:true;
  const setup=state.setup,targets=examTargets(state),program=PROGRAM_BY_ID[state.bridgeProgram??''],concept=CONCEPT_BY_ID[setup?.concept??''];
- const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/plan',title:t(lang,'nav.generalCet')}]:[]),...targets.slice(0,5).map(x=>({href:'/plan',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
+ const mine:{href:string;title:string}[]=goal==='exam'?[...(setup?.cet?.general?[{href:'/reviewer',title:t(lang,'nav.generalCet')}]:[]),...targets.slice(0,5).map(x=>({href:'/admissions',title:x.name}))]:goal==='college'&&program?[{href:'/bridge/'+program.id,title:program.title}]:goal==='topic'&&concept?[{href:'/learn/'+concept.id,title:concept.title}]:[];
  return <>
   <nav aria-label={t(lang,main?'nav.main':'nav.all')} className="grid gap-1">
    {list.map(x=>{const on=active===x.key,sub=on?x.subs.flatMap(y=>y.children??[y]).find(y=>y.match(path)):undefined;return <div key={x.key} className="grid gap-1">
@@ -166,8 +166,7 @@ function SidebarContent({rail,list,active,path,goal,lang,label,onPick,main=false
   <ul aria-label={t(lang,'nav.yourGoal')} className="grid gap-1">
    {mine.map(x=><li key={x.title}><Link href={x.href} onClick={onPick} title={tip&&x.title} className={item(false)}><NavIcon k={goal==='exam'?'folder':'goal'}/><span className={cx('min-w-0 truncate',hide)}><Headline>{x.title}</Headline></span></Link></li>)}
    {goal==='exam'&&targets.length>5&&<li className={cx('px-3 text-sm text-ink-soft',hide)}>{t(lang,'nav.moreInPlan').replace('{n}',String(targets.length-5))}</li>}
-   <li>{goal==='exam'?<Link href="/plan" onClick={onPick} title={tip&&t(lang,'nav.editExams')} className={item(false)}><NavIcon k="plus"/><span className={hide}>{t(lang,'nav.editExams')}</span></Link>
-    :<button type="button" onClick={()=>{onPick?.();guide.configure();}} title={tip&&t(lang,goal?'nav.changeGoal':'nav.setGoal')} className={cx(item(false),'w-full')}><NavIcon k="plus"/><span className={hide}><Headline>{t(lang,goal?'nav.changeGoal':'nav.setGoal')}</Headline></span></button>}</li>
+   <li>{(()=>{const k=goal==='exam'?'nav.editExams':goal?'nav.changeGoal':'nav.setGoal';return <button type="button" onClick={()=>{onPick?.();guide.configure();}} title={tip&&t(lang,k)} className={cx(item(false),'w-full')}><NavIcon k="plus"/><span className={hide}><Headline>{t(lang,k)}</Headline></span></button>;})()}</li>
   </ul>
 
  </>;
@@ -204,7 +203,7 @@ export function AppNav(){
       </button>
       {menu&&<div ref={panel} id="me-menu" className="absolute right-0 top-14 w-72 rounded-xl border border-line bg-white p-2 text-navy shadow-lift">
        <button onClick={()=>{setMenu(false);guide.configure(button.current);}} className="flex min-h-11 w-full items-center rounded-lg px-3 text-left font-semibold hover:bg-sky"><Headline>{t(lang,'nav.changeGoalRoutine')}</Headline></button>
-       {[['/plan','me.pledge'],['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-lg px-3 font-semibold hover:bg-sky"><Headline>{t(lang,key)}</Headline></Link>)}
+       {[['/calendar','me.calendar'],['/admissions','me.admissions'],['/bridge','me.bridge'],['/me','me.settings'],['/about','me.about']].map(([href,key])=><Link key={href} href={href} onClick={()=>setMenu(false)} className="flex min-h-11 items-center rounded-lg px-3 font-semibold hover:bg-sky"><Headline>{t(lang,key)}</Headline></Link>)}
        <div className="mt-1 flex items-center justify-between border-t border-line px-3 pt-2"><span className="text-sm font-semibold">{t(lang,'me.language')}</span>
         <div className="flex gap-1">{(['en','fil'] as const).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>update(p=>({...p,lang:l}))} className="min-h-11 rounded-lg px-3 text-sm font-bold aria-pressed:bg-navy aria-pressed:text-white text-navy">{l==='en'?'English':'Filipino'}</button>)}</div>
        </div>

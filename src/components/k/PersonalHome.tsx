@@ -32,7 +32,7 @@ export function PersonalHome(){
  const personalize=<Section label="Personalize">
   <Sheet className="home-personalize p-4 sm:p-5"><div className="flex items-start gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-mint text-navy">{glyph.tune}</span><div className="min-w-0"><h2 className="text-lg font-extrabold leading-tight"><Headline>Make this space fit your week</Headline></h2>
    {goal==='exam'&&targets.length>0&&<p className="mt-1 break-words text-sm text-ink-soft">Your exams: {targets.map(t=>t.name).join(', ')}</p>}</div></div>
-   <div className="mt-4 flex flex-wrap gap-2"><ChangeGoalButton className={btn.chip} label="Change goal or routine"/>{goal==='exam'&&<Link href="/plan" className={btn.chip}><Headline>Edit or add CETs</Headline></Link>}{goal==='topic'&&<ChangeGoalButton className={btn.chip} label="Choose another topic"/>}</div>
+   <div className="mt-4 flex flex-wrap gap-2"><ChangeGoalButton className={btn.chip} label="Change goal or routine"/>{goal==='exam'&&<ChangeGoalButton className={btn.chip} label="Edit or add CETs"/>}{goal==='topic'&&<ChangeGoalButton className={btn.chip} label="Choose another topic"/>}</div>
   </Sheet>
  </Section>;
  return <div className="home-dashboard">

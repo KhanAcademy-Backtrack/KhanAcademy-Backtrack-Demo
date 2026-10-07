@@ -1,6 +1,7 @@
 'use client';
 import {Headline} from './Headline';
 import Link from 'next/link';
+import {ChangeGoalButton} from './ProgramTourProvider';
 
 import {useProgram} from './ProgramProvider';
 import {ProgressMoment} from './ProgressMoment';
@@ -36,7 +37,7 @@ export function Today(){
      <div className="px-5 pb-5 pt-4">{left!==undefined&&left>0?<><p className="text-[2.75rem] sm:text-[3.25rem] font-extrabold leading-none tracking-[-.06em]">{left}</p><p className="mt-1 text-lg text-ink-soft">{left===1?t(lang,'today.day'):t(lang,'today.days')} {EXAMS[s.pledge.exam].name}</p></>:<p className="text-2xl font-bold">{t(lang,'today.examToday')}</p>}
       {s.pledge.why&&<p className="mt-4 border-l-2 border-green pl-3 font-serif text-[17px] italic leading-snug text-navy">“{s.pledge.why}”</p>}</div>
     </div>:program?<div className="rounded-2xl bg-white shadow-sheet p-5"><p className="text-sm text-ink-soft">Getting ready for</p><p className="text-2xl font-extrabold"><Headline>{program.title}</Headline></p><Link href={`/bridge/${program.id}`} className={cx(btn.quiet,'mt-4')}><Headline>Open my bridge map</Headline></Link></div>
-    :<div className="rounded-2xl bg-white shadow-sheet p-5"><p className="text-lg font-bold">Make a plan to your exam date.</p><Link href="/plan" className={cx(btn.primary,'mt-4')}><Headline>{t(lang,'onb.title')}</Headline></Link></div>}
+    :<div className="rounded-2xl bg-white shadow-sheet p-5"><p className="text-lg font-bold">Make a plan to your exam date.</p><ChangeGoalButton className={cx(btn.primary,'mt-4')} label={t(lang,'onb.title')}/></div>}
     <div className="order-2 rounded-2xl bg-white shadow-sheet p-5 lg:order-none">
      <div className="flex items-baseline justify-between"><h2 className="font-bold"><Headline>{t(lang,'today.week')}</Headline></h2><span className="text-sm text-ink-soft">{w.thisWeek.days} of {w.target} days</span></div>
      <div className="mt-3"><OvalRow tone="navy" done={Math.min(w.thisWeek.days,w.target)} total={w.target} label={`${w.thisWeek.days} of ${w.target} study days this week`}/></div>
@@ -69,7 +70,7 @@ export function Today(){
       <p className="mt-1 text-sm text-ink-soft">Ranked from your answers so far. Unseen topics start in the middle.</p>
       <ul className="mt-4 grid gap-2">{focus.map(f=><li key={f.concept.id}><Link href={`/learn/${f.concept.id}`} className="flex min-h-14 items-center gap-3 rounded-2xl px-3 py-2 hover:bg-mint">
        <Oval filled={statusOf(f)==='solid'} size={26}/><span className="flex-1"><span className="block font-semibold"><Headline>{f.concept.title}</Headline></span><span className="text-sm text-ink-soft">{statusOf(f)}{f.accuracy!==undefined?` · ${f.accuracy}% right lately`:''}</span></span><span aria-hidden="true" className="text-ink-soft">›</span></Link></li>)}</ul>
-      <Link href="/plan" className={cx(btn.text,'mt-2')}><Headline>See the whole plan</Headline></Link>
+      <Link href="/reviewer" className={cx(btn.text,'mt-2')}><Headline>See every topic</Headline></Link>
      </Sheet>
     </div>
    </div>
