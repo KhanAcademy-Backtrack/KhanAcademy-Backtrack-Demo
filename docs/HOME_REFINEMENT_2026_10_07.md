@@ -1,6 +1,6 @@
 # Home refinement — 7 October 2026
 
-Owner request: add a study heatmap and refine Home using the supplied spacious profile/activity reference, within Khanpanion's identity. Work belongs on `codex/home-study-heatmap`, with no merge to main in this pass.
+Owner request: add a study heatmap and refine Home using the supplied spacious profile/activity reference, within Khanpanion's identity. Work started on `codex/home-study-heatmap`. The owner subsequently approved combining main's updates with the Home refinements, including removal of the My plan page. A final push requires a separate approval.
 
 ## What changed
 
@@ -12,7 +12,13 @@ Owner request: add a study heatmap and refine Home using the supplied spacious p
 - The same activity card is available on browsing Home and the legacy Today surface. Existing goal changes, routine controls, topic selection, practice, calendar and BACKTRACK actions remain connected.
 - Results preserve the lowercase connecting word in scores such as “4 of 6.” Numeric scores use their authored case rather than headline title casing.
 - The header reads “Khanpanion Profile:” with the current date. The compact study-week illustration and heatmap use the owner's requested Sunday-first order: S M T W T F S. The detailed calendar and weekly participation calculation keep their existing Monday-first week boundaries.
-- Plan's three starting-point choice titles and its browsing action use the same headline style, including lowercase connecting words. Descriptions keep their sentence case and accessible button names keep their authored labels.
+- The goal picker's three starting-point choice titles and its browsing action use the same headline style, including lowercase connecting words. Descriptions keep their sentence case and accessible button names keep their authored labels.
+
+## Integration with main
+
+Navigation follows main: Home, Study, Plan, Group, with section labels visible when the sidebar is narrow. The My plan page and its unused components are removed. Calendar and Exam dates remain under Plan; exam editing opens the existing goal picker from Home and the menu. Search and guided-tour destinations no longer point to the removed page.
+
+Main's header/sidebar overscroll fix and course illustration corrections are retained. Home keeps the complete layout, heatmap, momentum, Sunday-first labels and responsive card refinements described here. The integration is prepared on the feature branch; publication awaits the owner's final approval.
 
 ## Activity contract
 
@@ -27,10 +33,11 @@ The heatmap has a single keyboard entry point. Arrow keys move between recorded 
 ## Validation
 
 - 188 domain tests pass, including eight activity/date/deduplication cases, full calendar-year coverage and a leap year needing 54 week columns.
-- Type checking and the production build pass; 691 static pages export.
+- Type checking and the production build pass. The integrated build exports 690 static pages after removal of My plan; the original Home branch exported 691.
 - The full Edge browser regression passed all 59 cases. After the owner's order/score feedback, 23 relevant guide, Home and result cases passed. After the latest visual comments, eight focused cases passed, including the 1100-pixel viewport, fixed-square geometry and real four-pixel gaps, complete week labels, removed range controls, the profile label and lowercase score wording.
 - The final eight focused cases also pass after the owner's spacing, calendar-year, tooltip and Plan feedback. They verify both empty and completed Home states at 390/1100/1440 pixels, equal column widths and aligned bottom edges, the full-width picker and its focus/close controls, Sunday-first week labels, hover counts for elapsed/future dates and Plan headline styling.
 - The Sunday-first heatmap follow-up passes all eight activity domain tests and eight Home browser cases. Every rendered date matches its weekday row, including leap years and blank padding outside the calendar year.
+- The integrated main/Home version passes all 61 Edge browser cases and 188 domain tests. The browser checks confirm My plan returns 404, goal editing remains available from Home, saved work survives setup changes, and the Home heatmap, tooltips, keyboard controls and card geometry still work across phone and desktop widths.
 - Desktop and phone screenshots were inspected. Test screenshots use disposable QA activity; no sample history is installed in the application.
 
 Local captures are under `.refs/home-review/`. Private working files and reference images are not part of this release.

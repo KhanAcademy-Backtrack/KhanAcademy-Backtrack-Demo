@@ -222,4 +222,6 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Use headline title styling on the Plan starting-point choices and browsing action.
 - [x] Match Home's desktop column widths and next-step bottom edges; show S M T W T F S in the weekly illustration.
 - [x] Use Sunday-first heatmap rows labeled S M T W T F S, with date positions matched to every label.
-- [ ] Any later merge/publication; main remains outside this pass.
+- [x] Prepare the approved integration with main: preserve Home, follow main's navigation and remove My plan with its obsolete links.
+- [x] Verify the integrated version: 61 browser checks, 188 domain tests, type checking and the 690-page production export pass.
+- [ ] Publish to main after the owner's separate push approval.
