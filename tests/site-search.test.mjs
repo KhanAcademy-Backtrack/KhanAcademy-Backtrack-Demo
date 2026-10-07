@@ -9,7 +9,7 @@ import {TOPICS} from '../src/lib/recovery.ts';
 import {PROGRAMS} from '../src/lib/program/bridge.ts';
 import {TOPIC_LESSONS,lessonHref} from '../src/lib/program/topic-lessons.ts';
 
-const statics=new Set(['/mock','/start','/review','/notebook','/plan','/calendar','/admissions','/group','/packs','/explore','/reviewer','/bridge']);
+const statics=new Set(['/mock','/start','/review','/notebook','/calendar','/admissions','/group','/packs','/explore','/reviewer','/bridge']);
 
 test('every search result points at a statically exported route', () => {
   const reviewer=new Set([...CHAPTERS,...EXTRAS].map(c=>`/reviewer/${c.id}`)),learn=new Set(CONCEPTS.map(c=>`/learn/${c.id}`));

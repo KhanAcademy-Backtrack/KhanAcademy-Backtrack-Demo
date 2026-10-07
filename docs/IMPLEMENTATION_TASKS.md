@@ -205,3 +205,23 @@ Current owner steering: site/resources only, on Codex-Reworks. Details: TOPIC_LE
 - [ ] Independently review the new original instructional notes with subject/language reviewers.
 - [ ] Verify complete external video playback/caption quality and actual learner outcomes; do not imply these were tested.
 - [x] Owner authorized pushing the verified changes to main under Harry Gomez's GitHub identity. This record accompanies that push; live deployment is not verified here.
+
+## Home Refinement — 7 October 2026
+
+Owner steering: add a study heatmap and polish Home, on a branch before main. Details: HOME_REFINEMENT_2026_10_07.md. Branch: `codex/home-study-heatmap`.
+
+- [x] Preserve existing work and create a separate branch for the Home refinement.
+- [x] Refine the companion/goal header, saved counters, shortcuts and responsive next-step cards.
+- [x] Add a heatmap, weekly rhythm, optional streak and participation milestones from retained activity.
+- [x] Keep saved data, learning evidence, existing topic/program actions and calendar links intact.
+- [x] Validate Manila dates, empty state, duplicate Daily 3 records, keyboard interaction and real completion/reload.
+- [x] Finish the full browser regression suite and verify the owner's follow-up adjustments on the feature branch.
+- [x] Incorporate the owner's preview feedback: activity/momentum above next actions, lowercase “of”, fixed square cells, one yearly heatmap, “Khanpanion Profile:” and a complete seven-day illustration.
+- [x] Balance the closed Home cards and use a full-width topic picker to prevent tall empty columns when opened.
+- [x] Show January–December of the current year, with hover/focus date and exact activity count, muted future dates and current-day positioning on phones.
+- [x] Use headline title styling on the Plan starting-point choices and browsing action.
+- [x] Match Home's desktop column widths and next-step bottom edges; show S M T W T F S in the weekly illustration.
+- [x] Use Sunday-first heatmap rows labeled S M T W T F S, with date positions matched to every label.
+- [x] Prepare the approved integration with main: preserve Home, follow main's navigation and remove My plan with its obsolete links.
+- [x] Verify the integrated version: 61 browser checks, 188 domain tests, type checking and the 690-page production export pass.
+- [ ] Publish to main after the owner's separate push approval.

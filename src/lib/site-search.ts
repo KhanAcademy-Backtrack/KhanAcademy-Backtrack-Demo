@@ -18,7 +18,6 @@ const PAGES:[string,string,string,string][]=[
  ['Fix a gap with BACKTRACK','Find the earlier step that needs a repair','/start','backtrack route recovery stuck repair gap'],
  ['Daily recall','Quick review of what is due today','/review','recall review spaced memory'],
  ['Mistake notebook','Every missed question, grouped by idea','/notebook','mistakes notebook wrong missed'],
- ['Study plan','Your routine, study days and exam targets','/plan','plan routine pledge schedule target'],
  ['Calendar','Study sessions and exam dates','/calendar','calendar schedule dates week'],
  ['Exam dates','Verified college entrance exam dates','/admissions','admissions dates upcat dcat pupcet ustet acet'],
  ['Study groups','Study with friends using a group code','/group','group friends together study'],
