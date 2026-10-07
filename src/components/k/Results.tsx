@@ -50,7 +50,7 @@ export function Results(){
    <div className="mx-auto grid max-w-6xl gap-8 px-5 pb-8 pt-9 sm:px-8 lg:grid-cols-[1fr_1fr] lg:pt-12">
     <div>
      <p className="text-sm font-semibold text-ink-soft">{form.title} · {t(lang,'result.title').toLowerCase()}</p>
-     <h1 className="mt-2 text-4xl font-extrabold tracking-[-.03em] sm:text-5xl"><Headline>{result.total.correct} of {result.total.total}</Headline></h1>
+     <h1 className="mt-2 text-4xl font-extrabold tracking-[-.03em] sm:text-5xl">{result.total.correct} of {result.total.total}</h1>
      <p className="mt-3 text-lg text-ink-soft">{praise}{growth!==undefined&&growth>0&&` Up ${growth} points from your last one.`}</p>
      {result.sureButWrong>0&&<p className="mt-3 max-w-lg text-ink-soft">{result.sureButWrong} answer{result.sureButWrong===1?' was':'s were'} marked “sure” but wrong. Those are the most useful misses to study: they are ideas that feel right and are not.</p>}
      <div className="mt-6 flex flex-wrap gap-3"><a href="#key" className={btn.primary}><Headline>{t(lang,'result.key')}</Headline></a><button className={btn.ghost} onClick={share}><Headline>Share my result</Headline></button></div>

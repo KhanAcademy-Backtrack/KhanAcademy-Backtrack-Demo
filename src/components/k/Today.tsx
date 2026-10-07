@@ -13,6 +13,7 @@ import {EXAMS} from '@/lib/program/admissions';
 import {khanUrl,khanLabel} from '@/lib/program/khan-units';
 import {PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {t} from '@/lib/i18n';
+import {StudyActivity} from './HomeDashboard';
 
 const longDate=(d:string)=>parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'});
 
@@ -73,5 +74,6 @@ export function Today(){
     </div>
    </div>
   </div>
+  <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-8"><StudyActivity/></div>
  </div>;
 }

@@ -205,3 +205,16 @@ Current owner steering: site/resources only, on Codex-Reworks. Details: TOPIC_LE
 - [ ] Independently review the new original instructional notes with subject/language reviewers.
 - [ ] Verify complete external video playback/caption quality and actual learner outcomes; do not imply these were tested.
 - [x] Owner authorized pushing the verified changes to main under Harry Gomez's GitHub identity. This record accompanies that push; live deployment is not verified here.
+
+## Home Refinement — 7 October 2026
+
+Owner steering: add a study heatmap and polish Home, on a branch before main. Details: HOME_REFINEMENT_2026_10_07.md. Branch: `codex/home-study-heatmap`.
+
+- [x] Preserve existing work and create a separate branch for the Home refinement.
+- [x] Refine the companion/goal header, saved counters, shortcuts and responsive next-step cards.
+- [x] Add a heatmap, weekly rhythm, optional streak and participation milestones from retained activity.
+- [x] Keep saved data, learning evidence, existing topic/program actions and calendar links intact.
+- [x] Validate Manila dates, empty state, duplicate Daily 3 records, keyboard interaction and real completion/reload.
+- [x] Finish the full browser regression suite and verify the owner's follow-up adjustments on the feature branch.
+- [x] Incorporate the owner's preview feedback: activity/momentum above next actions, lowercase “of”, fixed square cells, one yearly heatmap, “Khanpanion Profile:” and a complete seven-day illustration.
+- [ ] Any later merge/publication; main remains outside this pass.

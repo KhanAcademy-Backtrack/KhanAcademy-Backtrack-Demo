@@ -4,13 +4,13 @@ import {Sheet,cx} from './ui';
 
 /** A home section: a small label above one card, so the page reads as a short list. */
 export function Section({label,children,className}:{label:string;children:ReactNode;className?:string}){
- return <div className={cx('min-w-0',className)}><p className="mb-2.5 px-1 text-[15px] font-bold text-navy"><Headline>{label}</Headline></p>{children}</div>;
+ return <div className={cx('min-w-0',className)}><p className="home-section-label mb-2.5 px-1 text-[15px] font-bold text-navy"><Headline>{label}</Headline></p>{children}</div>;
 }
 
 /** One thing to do: an icon, a title, a line of context and one full-width action,
  *  with a quiet illustration beside it on wider screens. */
-export function FeatureCard({icon,title,body,action,art,children,...rest}:{icon?:ReactNode;title:ReactNode;body?:ReactNode;action?:ReactNode;art?:ReactNode;children?:ReactNode}&Record<`data-${string}`,string>){
- return <Sheet {...rest} className={cx('grid min-w-0 gap-5 p-4 sm:p-5',!!art&&'sm:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)]')}>
+export function FeatureCard({icon,title,body,action,art,children,className,...rest}:{icon?:ReactNode;title:ReactNode;body?:ReactNode;action?:ReactNode;art?:ReactNode;children?:ReactNode;className?:string}&Record<`data-${string}`,string>){
+ return <Sheet {...rest} className={cx('home-feature-card grid min-w-0 gap-5 p-4 sm:p-5',!!art&&'sm:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)]',className)}>
   <div className="flex min-w-0 flex-col sm:p-1">
    {icon&&<span className="grid h-10 w-10 place-items-center rounded-lg bg-mint text-navy">{icon}</span>}
    <h2 className={cx('text-xl font-extrabold leading-tight tracking-[-.015em]',!!icon&&'mt-3')}><Headline>{title}</Headline></h2>
@@ -18,7 +18,7 @@ export function FeatureCard({icon,title,body,action,art,children,...rest}:{icon?
    {action&&<div className="mt-auto flex flex-wrap gap-2 pt-5 [&>*]:flex-1">{action}</div>}
    {children}
   </div>
-  {art&&<div aria-hidden="true" className="hidden min-h-44 overflow-hidden rounded-xl bg-mint sm:block">{art}</div>}
+  {art&&<div aria-hidden="true" className="home-card-art hidden min-h-44 overflow-hidden rounded-xl bg-mint sm:block">{art}</div>}
  </Sheet>;
 }
 
@@ -55,7 +55,7 @@ export function RouteArt(){
 /** The learner's own study days, Monday first. */
 export function WeekArt({days}:{days:number[]}){
  const order=[1,2,3,4,5,6,0],names=['M','T','W','T','F','S','S'];
- return <svg viewBox="0 0 240 180" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
+ return <svg viewBox="0 0 240 180" className="h-full w-full" preserveAspectRatio="xMidYMid meet">
   <rect x="24" y="36" width="192" height="108" rx="12" fill="#fff"/>
   {order.map((d,i)=><g key={d}><text x={42+i*26.5} y="66" textAnchor="middle" fontSize="12" fontWeight="700" fill="#475e7c" fontFamily="var(--font-instrument-sans),Arial">{names[i]}</text>
    <rect x={31+i*26.5} y="80" width="22" height="44" rx="6" fill={days.includes(d)?'#14bf96':'#eef3fa'}/></g>)}

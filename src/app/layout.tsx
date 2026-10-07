@@ -7,6 +7,7 @@ import './maths-labs.css';
 import './living-scenes.css';
 import './explore.css';
 import './calm.css';
+import './home.css';
 import { RouteTransition } from '@/components/motion/RouteTransition';
 import { MotionProvider } from '@/components/motion/MotionPolicy';
 import { AppShell } from '@/components/k/AppNav';
