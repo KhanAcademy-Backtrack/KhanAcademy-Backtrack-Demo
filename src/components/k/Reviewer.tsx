@@ -20,6 +20,8 @@ import {EXAMS,EXAM_IDS,type ExamId} from '@/lib/program/admissions';
 import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection,listNames as list} from '@/lib/program/exam-coverage';
 import {EXAM_OUTLINES,OUTLINE_BY_KEY,topicKey,type OutlineGroup} from '@/lib/program/exam-outline';
 import {firstExam} from '@/lib/program/personalization';
+import {outlineVideo,type KhanVideo} from '@/lib/program/topic-videos';
+import {VideoToggle,VideoPanel} from './TopicVideo';
 import {Rich} from '@/components/math/Math';
 import {plainText} from '@/lib/notation';
 
@@ -34,7 +36,7 @@ const row='flex min-h-14 items-center gap-3 px-4 py-3';
  *  Offline caching is scheduled for Phase B. */
 export function ReviewerLibrary(){
  const {state,update}=useProgram();
- const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId>();
+ const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId>(),[playing,setPlaying]=useState<string>();
  const norm=q.trim().toLowerCase();
  /** Always one exam: the learner's first named exam, else the first in the list. */
  const scope=picked??firstExam(state)??EXAM_IDS[0],cover=EXAM_COVERAGE[scope];
@@ -45,23 +47,26 @@ export function ReviewerLibrary(){
  const missing=cover.sections.filter(x=>!x.reviewer.length).map(x=>x.name);
  const mark=(id:string)=>update(s=>({...s,bookmarks:s.bookmarks.includes(id)?s.bookmarks.filter(x=>x!==id):[...s.bookmarks,id]}));
  /** One reviewer line: the circle saves it under its own key (filled when saved), the title opens its page.
-  *  A line with nowhere to go keeps a faded circle that does nothing. */
- type Line={key:string;title:string;note:string;href?:string};
- const lines=(items:Line[])=><ul className="mt-3 grid gap-2 md:grid-cols-2">{items.map(x=>{const on=state.bookmarks.includes(x.key);return <li key={x.key} className="flex items-center gap-1 rounded-2xl py-1 pr-2">
+  *  A line with nowhere to go keeps a faded circle that does nothing.
+  *  A topic with a matched Khan video has a Video control that opens the player under it, one topic at a time. */
+ type Line={key:string;title:string;note:string;href?:string;video?:KhanVideo};
+ const lines=(items:Line[],where='list')=><ul className="mt-3 grid gap-2 md:grid-cols-2">{items.map(x=>{const on=state.bookmarks.includes(x.key),open=!!x.video&&playing===where+x.key,panel=`video-${where}-${x.key.replace(/\W+/g,'-')}`;return <li key={x.key} className={cx('flex flex-wrap items-center gap-1 rounded-2xl py-1 pr-2',open&&'bg-sky pb-3 pl-1 md:col-span-2')}>
   {x.href?<button type="button" aria-pressed={on} aria-label={`Save ${x.title}`} title={on?'Saved. Select to remove':'Save for later'} onClick={()=>mark(x.key)} className="grid h-11 w-11 shrink-0 place-items-center rounded-lg hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy"><Oval filled={on} size={22}/></button>
   :<span className="grid h-11 w-11 shrink-0 place-items-center"><Oval size={22} className="opacity-40"/></span>}
   {x.href?<Link href={x.href} className="min-h-11 flex-1 py-2 font-semibold hover:underline">{x.title}<span className="block text-sm font-normal text-ink-soft">{x.note}</span></Link>
-  :<span className="min-h-11 flex-1 py-2 font-semibold text-ink-soft">{x.title}<span className="block text-sm font-normal">{x.note}</span></span>}</li>;})}</ul>;
+  :<span className="min-h-11 flex-1 py-2 font-semibold text-ink-soft">{x.title}<span className="block text-sm font-normal">{x.note}</span></span>}
+  {x.video&&<VideoToggle open={open} onClick={()=>setPlaying(open?undefined:where+x.key)} topic={x.title} controls={panel}/>}
+  {open&&x.video&&<VideoPanel id={panel} video={x.video} className="mt-2 sm:pl-12"/>}</li>;})}</ul>;
  const summaryLines=(list:typeof CONCEPTS,inside:boolean)=>lines(list.map(c=>({key:c.id,title:c.title,href:`/learn/${c.id}`,note:inside?c.area:`${label(c.subtest,c.area===FILIPINO_CONCEPT_AREA)} · ${c.area}`})));
  /** An outlined exam lists every topic reviewers report, sub-subject by sub-subject. Each topic saves on its own,
   *  even when another topic shares its summary. A topic without a summary stays greyed out and says so. */
  const outline=EXAM_OUTLINES[scope];
  const outlineRows=(sub:OutlineGroup[])=>sub.map((o,j)=><section key={o.name}><h3 className="mt-5 text-lg font-extrabold">{String.fromCharCode(97+j)}. {o.name}</h3>{o.less&&<p className="mt-1 text-sm text-ink-soft">Only some reviewers report this part.</p>}
-  {lines(o.topics.map(x=>({key:topicKey(scope,x.title),title:x.title,...(x.concepts?.length?{href:`/learn/${x.concepts[0]}`,note:`Summary: ${x.concepts.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}`}:{note:'Not written yet'})})))}</section>);
+  {lines(o.topics.map(x=>({key:topicKey(scope,x.title),title:x.title,video:outlineVideo(scope,x.title),...(x.concepts?.length?{href:`/learn/${x.concepts[0]}`,note:`Summary: ${x.concepts.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}`}:{note:outlineVideo(scope,x.title)?'No summary yet · Khan video':'Not written yet'})})))}</section>);
  const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-xl hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
  /** Everything saved, from any exam: outline topics, summaries, and chapters saved before chapters left this list. */
- const saved:Line[]=state.bookmarks.flatMap(k=>{const o=OUTLINE_BY_KEY.get(k),c=CONCEPT_BY_ID[k],ch=CHAPTER_BY_ID[k];
-  return o?[{key:k,title:o.topic.title,href:o.topic.concepts?.length?`/learn/${o.topic.concepts[0]}`:undefined,note:`${EXAMS[o.exam].name} · ${o.section}`}]:c?[{key:k,title:c.title,href:`/learn/${c.id}`,note:`Summary · ${c.area}`}]:ch?[{key:k,title:ch.title,href:`/reviewer/${ch.id}`,note:'Full chapter'}]:[];});
+ const saved:Line[]=state.bookmarks.flatMap<Line>(k=>{const o=OUTLINE_BY_KEY.get(k),c=CONCEPT_BY_ID[k],ch=CHAPTER_BY_ID[k];
+  return o?[{key:k,title:o.topic.title,href:o.topic.concepts?.length?`/learn/${o.topic.concepts[0]}`:undefined,video:outlineVideo(o.exam,o.topic.title),note:`${EXAMS[o.exam].name} · ${o.section}`}]:c?[{key:k,title:c.title,href:`/learn/${c.id}`,note:`Summary · ${c.area}`}]:ch?[{key:k,title:ch.title,href:`/reviewer/${ch.id}`,note:'Full chapter'}]:[];});
  return <>
   <PageBand title="Study" lead="Practice exams, daily recall and the full CET reviewer in one place."/>
   <div className={pageBody}>
@@ -79,7 +84,7 @@ export function ReviewerLibrary(){
      <p><span className="font-bold">{EXAMS[scope].full}:</span> {list(cover.sections.map(x=>x.name))}.</p>
      {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
      <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
-     {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Greyed topics have no Khanpanion summary yet.</p>}
+     {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Greyed topics have no Khanpanion summary yet.{scope==='upcat'&&' Every topic with a matching Khan Academy video has a Video button; watching is your own study and is not recorded as a result.'}</p>}
     </div>
     {norm?<>
      <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {EXAMS[scope].name} section</p>
@@ -93,7 +98,7 @@ export function ReviewerLibrary(){
       </details>:<div className={cx(row,'rounded-xl border-2 border-dashed border-line')}><span className="flex-1 text-lg font-extrabold">{i+1}. {g.label}</span><span className="text-sm font-semibold text-ink-soft">No material yet</span></div>}</li>;})}
      {saved.length>0&&<li><details name="reviewer-section" className="group rounded-xl border-2 border-line open:border-line-strong">
       {summary(groups.length+1,'Saved',`${saved.length} saved`)}
-      <div className="border-t border-line px-3 pb-5 sm:px-5">{lines(saved)}</div>
+      <div className="border-t border-line px-3 pb-5 sm:px-5">{lines(saved,'saved')}</div>
      </details></li>}
     </ul>}
    </Sheet>

@@ -9,6 +9,8 @@ import {PageBand,Sheet,btn,cx,pageBody,KhanLink,Pill} from './ui';
 import {useFix} from './useFix';
 import {useQuietMotion} from './useQuietMotion';
 import {KhanPlayer} from '@/components/product/KhanPlayer';
+import {subjectTopicVideo} from '@/lib/program/topic-videos';
+import {VideoToggle,VideoPanel} from './TopicVideo';
 import {PROGRAMS,PROGRAM_BY_ID,RESCUES,RESCUE_BY_ID,RETIRED_PROGRAMS,summerPlan,type BridgeProgram} from '@/lib/program/bridge';
 import {COLLEGE_UNITS,KIND_LABEL,SUBJECT_BY_ID,collegeUnitUrl,type CollegeSubject,type SubjectKind} from '@/lib/program/college-courses';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
@@ -195,11 +197,11 @@ function SubjectList({p}:{p:BridgeProgram}){
 }
 
 export function BridgeSubjectPage({program,subject}:{program:string;subject:string}){
- const {state}=useProgram(),fix=useFix(),{done,toggle}=useKhanTicks();
+ const {state}=useProgram(),fix=useFix(),{done,toggle}=useKhanTicks(),[playing,setPlaying]=useState<string>();
  const p=PROGRAM_BY_ID[program],s=SUBJECT_BY_ID[subject];if(!p||!s)return null;
  const rank:Rank=new Map(focusRanking(state).map(r=>[r.concept.id,r]));
  const siblings=subjectsOf(p),at=siblings.findIndex(x=>x.id===s.id),prev=siblings[at-1],next=siblings[at+1];
- const ticked=s.units.filter(done).length,builds=s.buildsOn.filter(c=>CONCEPT_BY_ID[c]);
+ const ticked=s.units.filter(done).length,builds=s.buildsOn.filter(c=>CONCEPT_BY_ID[c]),withVideo=s.topics.filter(t=>subjectTopicVideo(s.id,t)).length;
  return <div className="mx-auto max-w-6xl px-4 pb-32 pt-5 sm:px-8 lg:pb-20 lg:pt-7">
   <Link href={`/bridge/${p.id}`} className={cx(btn.quiet,'-ml-3 no-underline')}><span aria-hidden="true">←</span> {p.title}</Link>
   <div className="mt-3 grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-7">
@@ -210,8 +212,12 @@ export function BridgeSubjectPage({program,subject}:{program:string;subject:stri
      <p className="mt-2 max-w-2xl text-[16px] leading-relaxed text-ink-soft">{s.summary}</p>
     </Sheet>
 
-    <Section title="What you’ll learn" meta={<p className="text-sm font-semibold text-ink-soft">{s.topics.length} topics</p>}>
-     <ol className="mt-4 grid gap-2 sm:grid-cols-2">{s.topics.map((t,i)=><li key={t} className="flex items-start gap-3 rounded-xl bg-sky p-3"><span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white text-sm font-bold">{i+1}</span><span className="pt-0.5 font-semibold leading-snug">{t}</span></li>)}</ol>
+    <Section title="What you’ll learn" meta={<p className="text-sm font-semibold text-ink-soft">{s.topics.length} topics · {withVideo} {withVideo===1?'video':'videos'}</p>}>
+     {withVideo>0&&<p className="mt-1 text-sm text-ink-soft">Each topic with a matching Khan Academy video has a Video button. It opens here, paused, one topic at a time.</p>}
+     <ol className="mt-4 grid gap-2 sm:grid-cols-2">{s.topics.map((t,i)=>{const v=subjectTopicVideo(s.id,t),open=!!v&&playing===t,panel=`topic-video-${i+1}`;
+      return <li key={t} className={cx('flex flex-wrap items-center gap-3 rounded-xl bg-sky p-3',open&&'sm:col-span-2')}><span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white text-sm font-bold">{i+1}</span><span className="min-w-0 flex-1 font-semibold leading-snug">{t}{!v&&<span className="block text-[13px] font-normal text-ink-soft">No matching Khan video</span>}</span>
+       {v&&<VideoToggle open={open} onClick={()=>setPlaying(open?undefined:t)} topic={t} controls={panel}/>}
+       {open&&v&&<VideoPanel id={panel} video={v} className="mt-1"/>}</li>;})}</ol>
      {s.gap&&<p className="mt-4 text-sm leading-relaxed text-ink-soft">{s.gap}</p>}
     </Section>
 

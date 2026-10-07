@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 170 tests
+npm test          # node --test, currently 176 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 188 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -251,3 +251,21 @@ inline with the house typesetter (STIX Two Text; no KaTeX, no new font or depend
 - Older CSS rules restyle every nested `span` in some containers (`.hint-note span`, `.sample-answers span`).
   The `.math-inline` rules in `calm.css` restate the typesetting in the later layer; keep them together.
 
+
+## Topic videos, 7 October 2026
+
+Owner request: every UPCAT reviewer topic and every college subject topic gets its own Khan Academy video.
+`src/lib/program/topic-videos.ts` holds `UPCAT_TOPIC_VIDEOS` (by the exact outline title in `EXAM_OUTLINES.upcat`)
+and `SUBJECT_TOPIC_VIDEOS` (by subject id, then the exact topic text in `SUBJECTS`), each with a `NO_VIDEO` list
+for topics searched with no fitting video. Renaming a topic drops its video, and `tests/topic-videos.test.mjs`
+fails until it is re-mapped. Question videos (`VIDEOS` in `khan-videos.ts`) are reused where the same video fits.
+The Filipino grammar and vocabulary topics have none on purpose (never an English fallback). Only the UPCAT outline
+is mapped; `outlineVideo` returns nothing for other exams.
+
+- Reviewer rows (`Reviewer.tsx`) and the subject page's "What you’ll learn" rows (`Bridge.tsx`) carry a `VideoToggle`
+  (`TopicVideo.tsx`): a "Video" button named `Watch the Khan Academy video for <topic>` (never starting with "Save",
+  which the reviewer test matches) that opens the paused `KhanPlayer` under the row, one topic at a time, so a long
+  list loads at most one player. `/learn/<concept>` lists the videos of the UPCAT topics that summary teaches
+  (`conceptVideos`). Opening any of them writes nothing.
+- Every page was rendered in the in-app browser through Khan's own client router: title read as "(video)" and the
+  youtube-nocookie id read from the player. Log: `docs/THIRD_PARTY_MATERIALS.md`, "Topic videos".

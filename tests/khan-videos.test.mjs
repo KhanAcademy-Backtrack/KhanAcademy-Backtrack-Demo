@@ -10,7 +10,7 @@ const all=[...Object.values(FAMILY_VIDEOS),...Object.values(ITEM_VIDEOS),...Obje
 test('every matched video has a YouTube id, a Khan video page and a check date',()=>{
  for(const v of all){
   assert.match(v.id,/^[A-Za-z0-9_-]{11}$/,v.title);
-  assert.match(v.url,/^https:\/\/www\.khanacademy\.org\/(math|science|ela|test-prep)\/[^?#\s]+\/v\/[a-z0-9_-]+$/,v.url);
+  assert.match(v.url,/^https:\/\/www\.khanacademy\.org\/(math|science|ela|test-prep|humanities)\/[^?#\s]+\/v\/[a-z0-9_-]+$/,v.url);
   assert.match(v.checked,/^2026-\d\d-\d\d$/);
   assert.ok(v.title.trim().length>0);
   assert.doesNotThrow(()=>videoSource(v.id,'https://khanpanion.vercel.app'));
@@ -45,7 +45,8 @@ test('a generated item gets its own family’s video or none, never another fami
 test('an authored item uses its own video, then its concept’s, else none',()=>{
  assert.equal(videoFor(itemById('sci_cell_03')).id,ITEM_VIDEOS.sci_cell_03.id);
  assert.equal(videoFor(itemById('lang_sva_01')).id,CONCEPT_VIDEOS.grammar_agreement.id);
- assert.equal(videoFor(itemById('lang_usage_01')),undefined,'affect/effect has no Khan match');
+ assert.equal(videoFor(itemById('lang_usage_01')).id,ITEM_VIDEOS.lang_usage_01.id,'affect/effect has its own grammar video');
+ assert.equal(videoFor(itemById('lang_usage_06')),undefined,'good/well has no Khan match');
  assert.equal(videoFor(itemById('lang_usage_05')).id,ITEM_VIDEOS.lang_usage_05.id);
  assert.equal(videoFor({id:'constructor',concept:'toString'}),undefined,'prototype keys are not videos');
 });

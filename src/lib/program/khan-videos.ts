@@ -15,7 +15,8 @@ export type KhanVideo={id:string;title:string;url:string;checked:string};
 const KHAN='https://www.khanacademy.org';
 const v=(id:string,title:string,path:string,checked='2026-10-05'):KhanVideo=>({id,title,url:KHAN+path,checked});
 
-const V={
+/** Every question video by a short name; the reviewer's topic videos reuse them where they match. */
+export const VIDEOS={
  // Mathematics
  percentTax:v('jb_RwR_Eso4','Percent word problems: tax and discount','/math/7th-grade-matatag/x065dcf1640354e81:1st-quarter/x065dcf1640354e81:percentages/v/tax-discount-and-tip-examples'),
  fractionsAdd:v('zkJ1gOrYhEg','Adding fractions with unlike denominators introduction','/math/6th-grade-math-foundations/x7f9e1f592eb7eeaf:cd2-numbers-and-algebra/x7f9e1f592eb7eeaf:addition-and-subtraction-of-dissimilar-fractions/v/adding-fractions-with-unlike-denominators-introduction'),
@@ -87,8 +88,11 @@ const V={
  wordsInContext:v('uKid6-WPRe8','Words in context | Worked example','/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-craft-and-structure/x07a01ed1f1ffc4bd:words-in-context/v/words-in-context-worked-example'),
  centralIdeas:v('5G2LYyXSAn8','Central ideas and details | Worked example','/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-information-and-ideas/x07a01ed1f1ffc4bd:central-ideas-and-details/v/central-ideas-and-details-worked-example'),
  inferences:v('mDJuTM4mqhs','Inferences | Worked example','/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-information-and-ideas/x07a01ed1f1ffc4bd:inferences/v/inferences-worked-example'),
- textStructure:v('lbZjD48fWd8','Text structure and purpose | Worked example','/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-craft-and-structure/x07a01ed1f1ffc4bd:text-structure-and-purpose/v/text-structure-and-purpose-video')
+ textStructure:v('lbZjD48fWd8','Text structure and purpose | Worked example','/test-prep/get-ready-for-sat-prep-reading-and-writing/x07a01ed1f1ffc4bd:get-ready-craft-and-structure/x07a01ed1f1ffc4bd:text-structure-and-purpose/v/text-structure-and-purpose-video'),
+ affectEffect:v('5pfZ3dyG1cg','Affect and effect','/humanities/grammar/usage-and-style/frequently-confused-words/v/affect-and-effect-final','2026-10-07'),
+ lessFewer:v('ZkFihBrRMCM','Less versus fewer','/humanities/grammar/usage-and-style/frequently-confused-words/v/less-v-fewer','2026-10-07')
 };
+const V=VIDEOS;
 
 /** By MockItem.familyId. A family missing here must be listed in NO_VIDEO. */
 export const FAMILY_VIDEOS:Record<string,KhanVideo>={
@@ -110,7 +114,7 @@ export const ITEM_VIDEOS:Record<string,KhanVideo>={
  sci_gen_01:V.geneticsVocabulary,sci_gen_02:V.genesProteins,
  sci_earth_01:V.convergentBoundaries,sci_earth_02:V.rockCycle,sci_earth_03:V.seasons,sci_earth_04:V.cyclones,
  sci_earth_05:V.earthLayers,sci_earth_06:V.solarSystem,sci_earth_07:V.weathering,sci_earth_08:V.tsunami,
- lang_usage_02:V.possessivePronouns,lang_usage_03:V.subjectObjectPronouns,lang_usage_05:V.possessivePronouns
+ lang_usage_01:V.affectEffect,lang_usage_02:V.possessivePronouns,lang_usage_03:V.subjectObjectPronouns,lang_usage_04:V.lessFewer,lang_usage_05:V.possessivePronouns
 };
 
 /** By concept id, for authored items without their own video. A concept missing here
@@ -127,7 +131,8 @@ export const CONCEPT_VIDEOS:Record<string,KhanVideo>={
 };
 
 /** Searched on Khan Academy with no matching video: a work-rate family, the word-usage
- *  concept (affect/effect, fewer/less, good/well) and the two Filipino language concepts. */
+ *  concept as a whole (good/well has none; affect/effect and fewer/less items have their own,
+ *  found in Khan's Grammar course on 7 October 2026) and the two Filipino language concepts. */
 export const NO_VIDEO:ReadonlySet<string>=new Set(['m_work_rate','usage','filipino_gramatika','filipino_talasalitaan']);
 
 const own=(map:Record<string,KhanVideo>,key:string|undefined)=>key!==undefined&&Object.hasOwn(map,key)?map[key]:undefined;
