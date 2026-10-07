@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 201 tests
+npm test          # node --test, currently 209 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 690 generated pages (including 404)
 npm run test:browser  # Playwright acceptance; Chrome by default, BROWSER_CHANNEL=msedge supported
