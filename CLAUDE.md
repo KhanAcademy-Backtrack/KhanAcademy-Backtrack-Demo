@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 168 tests
+npm test          # node --test, currently 170 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 188 generated pages (including 404)
 npm run test:browser  # Playwright acceptance, needs the Chrome channel
@@ -99,7 +99,8 @@ independent Khanpanion answers stay four separate records. Never imply synchroni
 Question videos (5 October 2026): `src/lib/program/khan-videos.ts` maps practice questions to verified
 full Khan videos: `FAMILY_VIDEOS` (by `familyId`), `ITEM_VIDEOS` (authored item id), `CONCEPT_VIDEOS`,
 and `NO_VIDEO` for what was searched and has no match. `videoFor`: a generated item gets its own
-family's video or none, never another family's; an authored item gets its own, then its concept's.
+family's video or none, never another family's; an authored item gets its own, then its concept's. A Filipino item (`lang:'fil'`) gets none, never
+an English fallback (owner, 7 October).
 `tests/khan-videos.test.mjs` requires every family and concept to be mapped or in `NO_VIDEO`, and every
 id and URL to be in the third-party log. In the Work on this panel `RelatedVideo` embeds `KhanPlayer`
 straight away but paused (`autoplay=0`; owner's choice, 6 October), and the exam hall renders that panel

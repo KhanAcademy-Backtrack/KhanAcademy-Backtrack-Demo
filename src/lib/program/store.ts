@@ -69,7 +69,8 @@ function validAttempt(a:unknown):a is Attempt{
   &&obj(sure)&&Object.values(sure).every(v=>v==='sure'||v==='unsure')
   &&obj(seconds)&&Object.values(seconds).every(v=>num(v,0,86400))
   &&obj(triage)&&Object.values(triage).every(v=>v==='didnt_know'||v==='careless'||v==='out_of_time')
-  &&Number.isInteger(a.section)&&Number.isInteger(a.index)&&num(a.pausedMs)&&obj(elapsed)&&Object.values(elapsed).every(v=>num(v));
+  &&Number.isInteger(a.section)&&Number.isInteger(a.index)&&num(a.pausedMs)&&obj(elapsed)&&Object.values(elapsed).every(v=>num(v))
+  &&(a.revealed===undefined||(Array.isArray(a.revealed)&&a.revealed.every(id)));
 }
 
 /** Accepts only well-formed saves. Older saves without newer optional fields pass. */

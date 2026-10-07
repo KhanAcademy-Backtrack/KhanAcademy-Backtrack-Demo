@@ -54,7 +54,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   const router=useRouter(),{state,update,today}=useProgram(),reduced=useQuietMotion(),lang=state.lang;
   const [a,setA]=useState<Attempt>(attempt),live=useRef(a);
   useEffect(()=>{window.scrollTo({top:0,behavior:'instant'});},[]);
-  const [paused,setPaused]=useState(false),[hideTimer,setHideTimer]=useState(false),[nav,setNav]=useState(false),[confirm,setConfirm]=useState(false),[breakFor,setBreakFor]=useState<number|null>(null),[revealed,setRevealed]=useState<string[]>([]);
+  const [paused,setPaused]=useState(false),[hideTimer,setHideTimer]=useState(false),[nav,setNav]=useState(false),[confirm,setConfirm]=useState(false),[breakFor,setBreakFor]=useState<number|null>(null);
   const section=form.sections[a.section],id=section.itemIds[a.index],item=itemById(id)!;
   const elapsed=useRef(a.elapsedMs[a.section]??0),tick=useRef(Date.now()),itemStart=useRef(Date.now()),running=useRef(true);
   const [now,setNow]=useState(elapsed.current);
@@ -81,7 +81,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   // one of the two is rendered, so the embedded player loads once.
   const [wide,setWide]=useState(false);
   useEffect(()=>{const q=matchMedia('(min-width:1024px)'),sync=()=>setWide(q.matches);sync();q.addEventListener('change',sync);return()=>q.removeEventListener('change',sync);},[]);
-  const shown=practice&&revealed.includes(id),missed=shown&&(a.answers[id]??null)!==item.answerIndex;
+  const revealed=a.revealed??[],shown=practice&&revealed.includes(id),missed=shown&&(a.answers[id]??null)!==item.answerIndex;
   const work=(heading:string,stacked:boolean)=><><h2 id={heading} className="text-sm font-semibold text-ink-soft">Work on this</h2>
    <RelatedVideo key={id} item={item} className="mt-2"/>
    {missed&&<FixLinks item={item} chosen={a.answers[id]??null} lang={lang} stacked={stacked} className="mt-1"/>}</>;
@@ -123,7 +123,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
      className={cx('min-w-0 self-start rounded-2xl bg-white p-5 text-navy shadow-sheet sm:p-8',item.passageId&&'lg:grid lg:grid-cols-2 lg:gap-8')}>
      {item.passageId&&<div className="mb-5 lg:mb-0"><PassageView id={item.passageId} compact/></div>}
      <motion.div key={id} initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={tween(reduced,DUR.fast)}>
-      <Question key={id} keys={!paused&&!confirm&&!nav} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>setRevealed(r=>[...r,id])} linksBeside
+      <Question key={id} keys={!paused&&!confirm&&!nav} item={item} number={a.index+1} mode={practice?'practice':'exam'} lang={lang} showPassage={false} chosen={a.answers[id]??null} idk={a.idk.includes(id)} onChoose={choose} onIdk={idk} revealed={revealed.includes(id)} onReveal={()=>{if(!revealed.includes(id))save({...a,revealed:[...revealed,id]});}} linksBeside
        panel={shown&&!wide&&<section aria-labelledby="work-on-this-inline" className="rounded-xl border border-line bg-white p-4 lg:hidden">{work('work-on-this-inline',false)}</section>}
        actions={<>{backButton}<button className={btn.primary} onClick={next}>{nextLabel}</button></>}
        checkActions={<>{backButton}<button className={btn.ghost} onClick={next}>{nextLabel}</button></>}/>

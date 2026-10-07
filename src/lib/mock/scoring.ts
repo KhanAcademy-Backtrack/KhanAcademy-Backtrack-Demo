@@ -5,8 +5,10 @@ import type {MockItem,Subtest} from './types.ts';
 
 export type Triage='didnt_know'|'careless'|'out_of_time';
 export type Sure='sure'|'unsure';
-/** One learner's work on one form. Answers are choice indexes; null is blank. */
-export type Attempt={id:string;formKey:string;startedAt:number;updatedAt:number;submittedAt?:number;timed:boolean;answers:Record<string,number|null>;flags:string[];idk:string[];sure:Record<string,Sure>;seconds:Record<string,number>;triage:Record<string,Triage>;section:number;index:number;pausedMs:number;elapsedMs:Record<number,number>;manual?:boolean};
+/** One learner's work on one form. Answers are choice indexes; null is blank. `revealed` lists
+ *  the practice-mode questions already checked, so a reload keeps their answers locked; attempts
+ *  saved before it existed have none. */
+export type Attempt={id:string;formKey:string;startedAt:number;updatedAt:number;submittedAt?:number;timed:boolean;answers:Record<string,number|null>;flags:string[];idk:string[];sure:Record<string,Sure>;seconds:Record<string,number>;triage:Record<string,Triage>;section:number;index:number;pausedMs:number;elapsedMs:Record<number,number>;manual?:boolean;revealed?:string[]};
 
 export type Miss={item:MockItem;chosen:number|null;idk:boolean;misconceptionId?:string;seconds:number;sure?:Sure};
 export type SubtestScore={subtest:Subtest;correct:number;total:number;blank:number;idk:number;percent:number;band:ReturnType<typeof bandFor>;seconds:number;minutes:number};

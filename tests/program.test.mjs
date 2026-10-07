@@ -25,6 +25,14 @@ test('a fresh and a pledged program both validate, and junk is rejected', ()=>{
  assert.ok(!validProgram({...pledged(),group:{code:'bad code',goal:3,joinedAt:1}}));
 });
 
+test('practice reveals are saved with the attempt, and older attempts without them still load', ()=>{
+ const attempt=newAttempt(formKey('sprint','abc'),false,5);
+ assert.ok(validProgram({...pledged(),attempts:[attempt]}),'an attempt saved before reveals were stored');
+ assert.ok(validProgram({...pledged(),attempts:[{...attempt,revealed:['m_linear:abc-1']}]}));
+ assert.ok(!validProgram({...pledged(),attempts:[{...attempt,revealed:'m_linear:abc-1'}]}));
+ assert.ok(!validProgram({...pledged(),attempts:[{...attempt,revealed:[3]}]}));
+});
+
 test('storage round trip, and an unreadable save is backed up, not lost', ()=>{
  const mem=new Mem();const s=pledged();s.attempts.push(newAttempt(formKey('sprint','abc'),false,5));
  mem.setItem(PROGRAM_KEY,JSON.stringify(s));
