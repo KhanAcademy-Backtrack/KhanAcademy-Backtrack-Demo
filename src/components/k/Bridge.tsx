@@ -78,7 +78,7 @@ export function BridgeHub(){
       <CourseArt id={p.id} className="block aspect-square w-28 shrink-0 self-stretch sm:aspect-[16/9] sm:w-full sm:self-auto"/>
       <span className="flex min-w-0 flex-1 flex-col gap-3 p-4 sm:p-5">
        <span className="text-lg font-bold leading-snug"><Headline>{p.title}</Headline></span>
-       <span className="mt-auto flex items-center justify-between gap-3 text-sm text-ink-soft"><span>{p.subjects.length} subjects{done?` · ${done} of ${n} foundations solid`:''}</span>{current&&<Pill tone="green">Your field</Pill>}</span>
+       <span className="mt-auto flex items-center justify-between gap-3 text-sm text-ink-soft"><span>{p.subjects.length} subjects{done?` · ${done} of ${n} foundations solid`:''}</span>{current&&<Pill tone="green">Field</Pill>}</span>
        {done>0&&<Bar value={done} total={n}/>}
       </span>
      </button></li>;})}</ul>
