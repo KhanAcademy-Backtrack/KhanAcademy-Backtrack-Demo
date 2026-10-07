@@ -132,8 +132,10 @@ export const NO_VIDEO:ReadonlySet<string>=new Set(['m_work_rate','usage','filipi
 
 const own=(map:Record<string,KhanVideo>,key:string|undefined)=>key!==undefined&&Object.hasOwn(map,key)?map[key]:undefined;
 
-/** The Khan video for one question, or undefined when none is matched. */
-export function videoFor(item:Pick<MockItem,'id'|'familyId'|'concept'>):KhanVideo|undefined{
+/** The Khan video for one question, or undefined when none is matched. A Filipino item
+ *  (lang 'fil') never borrows its concept's English video (owner's choice, 7 October 2026). */
+export function videoFor(item:Pick<MockItem,'id'|'familyId'|'concept'>&Partial<Pick<MockItem,'lang'>>):KhanVideo|undefined{
+ if(item.lang==='fil')return undefined;
  if(item.familyId)return own(FAMILY_VIDEOS,item.familyId);
  return own(ITEM_VIDEOS,item.id)??own(CONCEPT_VIDEOS,item.concept);
 }

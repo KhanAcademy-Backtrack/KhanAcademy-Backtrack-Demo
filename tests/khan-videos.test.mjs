@@ -50,6 +50,12 @@ test('an authored item uses its own video, then its concept’s, else none',()=>
  assert.equal(videoFor({id:'constructor',concept:'toString'}),undefined,'prototype keys are not videos');
 });
 
+test('a Filipino item shows no video rather than its concept’s English one',()=>{
+ assert.equal(videoFor(itemById('read_bayanihan_1')),undefined);
+ assert.equal(videoFor(itemById('read_wika_3')),undefined);
+ assert.equal(videoFor({...itemById('read_bayanihan_1'),lang:'en'}).id,CONCEPT_VIDEOS.main_idea.id,'the same concept in English keeps its video');
+});
+
 test('every video id and page is recorded in the third-party log',()=>{
  const log=readFileSync(new URL('../docs/THIRD_PARTY_MATERIALS.md',import.meta.url),'utf8');
  for(const v of all){assert.ok(log.includes(v.id),`${v.id} missing from docs/THIRD_PARTY_MATERIALS.md`);assert.ok(log.includes(v.url),`${v.url} missing from docs/THIRD_PARTY_MATERIALS.md`);}
