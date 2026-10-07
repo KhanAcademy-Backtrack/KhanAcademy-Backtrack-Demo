@@ -24,6 +24,10 @@ The owner then requested flat global navigation. The sidebar and menu drawer now
 
 Direct inspection of the production Home page confirms that the profile header, current-calendar-year heatmap and momentum cards are already deployed. The menu follow-up preserves those Home changes and main's subsequent route-map work.
 
+## Plan navigation follow-up
+
+The owner reported that selecting Plan opened Courses. The remaining goal-dependent destination sent college learners to their program map and class-topic learners to their lesson; those pages correctly belong to Study, so the active section immediately changed. The owner selected Exam dates as Plan's landing page and requested removal of College map from its row. Plan now consistently opens Exam dates, with only Calendar and Exam dates in its horizontal row. Personal course and topic shortcuts remain available and stay in Study. A regression check reproduces the earlier goal-dependent failure at phone and desktop widths, then verifies direct and drawer navigation for exam, college and class-topic goals, Calendar access and preservation of the saved goal and routine. This fix is prepared on `codex/fix-plan-navigation` for review before publication.
+
 ## Activity contract
 
 This is participation, not mastery or predicted exam performance. The calculations use retained program and study records without changing either save schema. Calendar dates and timestamp conversion use Manila days.
@@ -44,5 +48,6 @@ The heatmap has a single keyboard entry point. Arrow keys move between recorded 
 - The integrated main/Home version passes all 61 Edge browser cases and 188 domain tests. The browser checks confirm My plan returns 404, goal editing remains available from Home, saved work survives setup changes, and the Home heatmap, tooltips, keyboard controls and card geometry still work across phone and desktop widths.
 - Desktop and phone screenshots were inspected. Test screenshots use disposable QA activity; no sample history is installed in the application.
 - The flat-menu follow-up retains main's newer route-map work and passes 209 domain tests, 27 relevant Edge browser cases, type checking and the 690-page production export. Direct browser checks cover the desktop and phone drawer, focus wrapping, Escape return, scroll lock, drawer links and horizontal Courses navigation. Production Home was also inspected directly.
+- The Plan landing-page correction passes 16 targeted Edge cases, type checking and the 690-page production export. The checks cover all three study goals at phone/desktop widths, both direct and drawer Plan links, the two-link planning row, Calendar access, retained goals/routines, setup changes and Home behavior. The preview's Plan link and row were also inspected directly.
 
 Local captures are under `.refs/home-review/`. Private working files and reference images are not part of this release.

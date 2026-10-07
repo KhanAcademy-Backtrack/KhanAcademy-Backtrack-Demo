@@ -228,3 +228,6 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Prepare the owner's flat-menu follow-up in an isolated worktree: direct section buttons, no nested menu lists, and section links within the page on all screen widths.
 - [x] Verify the flat menu, desktop/phone drawer and horizontal section links: 27 browser checks, 209 domain tests and the 690-page production build pass; manually verify focus wrapping, Escape and destination navigation.
 - [x] Publish the flat-menu follow-up after the owner's approval, preserving the Home refinements and main's route-map work.
+- [x] Correct Plan's goal-dependent destination: open Exam dates for every goal, show only Calendar/Exam dates in its row and keep course/topic pages under Study.
+- [x] Verify the Plan regression on phone/desktop for all three goals: direct/drawer links, Calendar access, goal preservation, existing setup changes and Home behavior pass all 16 targeted browser checks; type checking and the 690-page production build pass.
+- [ ] Publish the Plan navigation fix after the owner's approval.

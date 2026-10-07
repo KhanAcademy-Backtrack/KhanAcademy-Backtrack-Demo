@@ -97,6 +97,29 @@ export async function homeJourneys({scenario,origin,root}){
   await page.reload();await page.getByRole('heading',{name:'Today’s set is complete',exact:true}).waitFor();
   assert.deepEqual(await page.locator('.home-stats dd').allTextContents(),['1','1','0']);await overflow(page);
  },{width:390,height:844});
+ for(const width of [390,1440])for(const goal of ['exam','college','topic'])await scenario(`program Plan opens exam dates for ${goal} ${width}`,async page=>{
+  await seed(page,{goal});
+  const before=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);
+  const plan=page.getByRole('link',{name:'Plan',exact:true});
+  assert.equal(await plan.getAttribute('href'),'/admissions','Plan opens Exam dates for every study goal');
+  await plan.click();await page.waitForURL('**/admissions');await page.getByRole('heading',{name:/^College entrance exam dates$/i}).waitFor();
+  assert.equal(await page.getByRole('navigation',{name:'Main',exact:true}).getByRole('link',{name:'Plan',exact:true}).getAttribute('aria-current'),'page');
+  assert.deepEqual(await page.getByRole('navigation',{name:'Plan pages',exact:true}).locator('a').evaluateAll(links=>links.map(link=>link.getAttribute('href'))),['/calendar','/admissions']);
+  await page.getByRole('navigation',{name:'Plan pages',exact:true}).getByRole('link',{name:/^Calendar$/i}).click();
+  await page.waitForURL('**/calendar');await page.getByRole('heading',{name:'Calendar',exact:true}).waitFor();
+  assert.equal(await page.getByRole('navigation',{name:'Main',exact:true}).getByRole('link',{name:'Plan',exact:true}).getAttribute('aria-current'),'true','Calendar remains inside Plan');
+  const after=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);
+  assert.deepEqual(after.setup,before.setup,'Navigation preserves the chosen goal and routine');
+  assert.equal(after.bridgeProgram,before.bridgeProgram);
+  await page.goto(origin+(goal==='college'?'/bridge/cs_it':goal==='topic'?'/learn/percent_fractions':'/reviewer'));
+  await page.locator('h1').first().waitFor();
+  assert.ok(await page.getByRole('navigation',{name:'Main',exact:true}).getByRole('link',{name:'Study',exact:true}).getAttribute('aria-current'),'Course and topic pages stay in Study');
+  await page.getByRole('button',{name:'Open menu',exact:true}).click();
+  await page.getByRole('dialog',{name:'Menu',exact:true}).getByRole('link',{name:'Plan',exact:true}).click();
+  await page.waitForURL('**/admissions');await page.getByRole('heading',{name:/^College entrance exam dates$/i}).waitFor();
+  assert.equal(await page.getByRole('dialog',{name:'Menu',exact:true}).count(),0);
+  await overflow(page);await page.screenshot({path:path.join(dir,`plan-${goal}-${width}.png`),fullPage:true});
+ },{width,height:900});
  for(const goal of ['college','topic'])await scenario(`program home ${goal} preserves useful actions`,async page=>{
   await seed(page,{goal});await overflow(page);
   assert.equal(await page.locator('a[href="/learn/percent_fractions"]').count()>0,goal==='topic');

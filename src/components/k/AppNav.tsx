@@ -40,19 +40,15 @@ const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'
 const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:IN_COURSES};
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
-/** Four sections, in this order: Home, Study, Plan, Group. Plan holds the goal page and the
- *  calendar with its exam dates (the My plan page was removed at the owner's request on 7 October);
- *  Study holds the CET reviewers, the college courses, practice exams and every study tool.
- *  A goal page claims only the learner's own topic or program page; the rest of the reviewer
- *  and the courses stay in Study. */
-function tabs(bridge:boolean,topic?:string,program?:string):Tab[]{
- const college=program?'/bridge/'+program:'/bridge';
- const goalPage:Sub[]=bridge?[{key:'college',href:college,label:'page.college',icon:'goal',match:p=>p===college}]:topic?[{key:'topic',href:'/learn/'+topic,label:'page.topic',icon:'goal',match:p=>p==='/learn/'+topic}]:[];
- const plan:Sub[]=[...goalPage,{key:'calendar',href:'/calendar',label:'page.calendar',icon:'calendar',match:p=>p.startsWith('/calendar')},EXAM_DATES_LINK];
+/** Four sections, in this order: Home, Study, Plan, Group. Plan opens exam dates
+ *  and holds the calendar. Study holds the reviewers, courses, chosen topics and study tools.
+ *  The learner's goal changes their personal shortcuts, not the Plan destination. */
+function tabs():Tab[]{
+ const plan:Sub[]=[{key:'calendar',href:'/calendar',label:'page.calendar',icon:'calendar',match:p=>p.startsWith('/calendar')},EXAM_DATES_LINK];
  return [
  {href:'/',key:'today',match:p=>p==='/',subs:[]},
  {href:'/reviewer',key:'study',match:p=>OFF_MENU_STUDY(p)||[REVIEWER,COURSES,...STUDY_TOOLS,FIX].some(x=>x.match(p)),subs:[REVIEWER,COURSES,...STUDY_TOOLS],bar:[FIX]},
- {href:plan[0].href,key:'plan',match:p=>plan.some(x=>x.match(p)),subs:plan},
+ {href:'/admissions',key:'plan',match:p=>plan.some(x=>x.match(p)),subs:plan},
  {href:'/group',key:'group',match:p=>p.startsWith('/group')||p.startsWith('/together')||p.startsWith('/challenge'),subs:[]}
 ];}
 
@@ -98,8 +94,8 @@ export function AppShell({children}:{children:ReactNode}){
 /** The learner's sections, worked out from their goal and the current address. */
 function useSections(){
  const guide=useProgramGuide(),{state}=useProgram(),path=usePathname()||'/';
- const goal=guide.browsing?undefined:learnerGoal(state),bridge=goal==='college',topic=goal==='topic'?state.setup?.concept:undefined;
- const list=tabs(bridge,topic,PROGRAM_BY_ID[state.bridgeProgram??'']?state.bridgeProgram:undefined);
+ const goal=guide.browsing?undefined:learnerGoal(state);
+ const list=tabs();
  return {list,active:list.find(x=>x.match(path))?.key,path,goal,lang:state.lang,label:(x:Tab)=>t(state.lang,`nav.${x.key}`)};
 }
 
