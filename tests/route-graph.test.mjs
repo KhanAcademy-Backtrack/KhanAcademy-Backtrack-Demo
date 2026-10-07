@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {initialRecovery,recoveryReducer,problemFor,skillDependencies,TOPICS,ORDER} from '../src/lib/recovery.ts';
-import {routeGraph,layoutRoute,estimateLines,ROUTE_METRICS} from '../src/lib/route-graph.ts';
+import {routeGraph,layoutRoute,estimateLines,edgePath,ROUTE_METRICS} from '../src/lib/route-graph.ts';
 
 let clock=1;
 const act=(s,a)=>recoveryReducer(s,{now:clock++,...a});
@@ -224,4 +224,37 @@ test('the estimate errs toward more lines, never fewer',()=>{
  assert.equal(estimateLines('Like terms',ROUTE_METRICS.labelGlyph,200),1);
  assert.ok(estimateLines('Set each factor to zero',ROUTE_METRICS.labelGlyph,97)>=2);
  assert.equal(estimateLines('',ROUTE_METRICS.labelGlyph,100),1);
+});
+
+test('a routing check from an earlier round does not label a new detour',()=>{
+ const s={...start('quadratics'),cycleStart:50,active:'multiply',phase:'learn',evidence:[attempt('quadratics','zero',10,{family:'diagnostic',assisted:true})]};
+ const g=routeGraph(s);
+ assert.equal(edge(g,'multiply','zero'),undefined);
+ assert.ok(edge(g,'multiply','factor')?.inferred);
+});
+
+test('a checked detour with nothing to say where it came from never crowds the goal’s row',()=>{
+ const s={...start('quadratics'),planned:['factor','zero','goal'],passed:['multiply'],evidence:[attempt('quadratics','multiply',1),attempt('quadratics','multiply',2)]};
+ const g=routeGraph(s),l=layoutRoute(g,292);
+ assert.equal(edge(g,'multiply','goal'),undefined);
+ assert.equal(l.nodes.filter(n=>n.rank===1).length,2);
+});
+
+test('lines can be redrawn from live positions with the same shape as the layout',()=>{
+ let s=start('quadratics');s=next(miss(s));s=next(miss(s));
+ const l=layoutRoute(routeGraph(s),292),at=Object.fromEntries(l.nodes.map(n=>[n.id,n]));
+ for(const e of l.edges){const a=at[e.from],b=at[e.to];assert.equal(edgePath(a.x,a.y,a.r,b.x,b.y,b.r,e.footBelow),e.d);}
+ assert.match(edgePath(20,200,11,20,100,13,40),/^M20,189 L20,113$/);
+ assert.match(edgePath(20,200,11,90,100,13,40),/^M20,189 C/);
+ // A step tugged up close to its parent joins the circle directly instead of tucking behind the text.
+ assert.doesNotMatch(edgePath(60,120,11,100,100,13,40),/ L/);
+});
+
+test('a word wider than its column is flagged so the page can hyphenate it',()=>{
+ const s={...start('brackets'),active:'expand'};
+ const narrow=Object.fromEntries(layoutRoute(routeGraph(s),236).nodes.map(n=>[n.id,n]));
+ assert.equal(narrow.linear.tight,true,'“multiplication” at a 320 px phone');
+ const wide=Object.fromEntries(layoutRoute(routeGraph(s),420).nodes.map(n=>[n.id,n]));
+ assert.equal(wide.linear.tight,false);
+ assert.ok(estimateLines('multiplication',ROUTE_METRICS.labelGlyph,60)>=2);
 });

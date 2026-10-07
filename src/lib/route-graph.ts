@@ -82,7 +82,8 @@ export function routeGraph(s: Recovery): RouteGraph {
   const detours = s.passed.filter((x) => !listed.includes(x) && s.evidence.some((e) => e.skill === x && serialOf(e) >= cycle));
   listed.push(...detours);
   if (live && !listed.includes(s.active)) listed.unshift(s.active);
-  const ids = [...new Set(listed.filter((x) => x !== destination)), destination];
+  const ids = [...new Set(listed.filter((x) => x !== destination))].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
+  ids.push(destination);
   const inRoute = new Set(ids);
 
   const edges = new Map<string, { from: Skill; to: Skill; inferred: boolean }>();
@@ -117,12 +118,18 @@ export function routeGraph(s: Recovery): RouteGraph {
      without one, it is drawn as support for the next step in the route. */
   const raisedBy = (id: Skill): Skill | undefined => {
     const clue = s.routeClue?.skill === id ? s.evidence.filter((e) => serialOf(e) === s.routeClue!.serial).at(-1) : undefined;
-    const probe = [...s.evidence].reverse().find((e) => e.family === 'diagnostic' && e.skill !== id);
+    const probe = [...s.evidence].reverse().find((e) => e.family === 'diagnostic' && e.skill !== id && serialOf(e) >= cycle);
     return [clue?.skill, probe?.skill].find((x): x is Skill => !!x && x !== id && inRoute.has(x) && !reaches(x, id));
   };
+  /* The fallback prefers the next skill in the curriculum, then the one before
+     it, and only then the destination, so a detour never crowds the goal's row. */
   ids.forEach((id, i) => {
     if (id === destination || [...edges.values()].some((e) => e.from === id)) return;
-    const to = raisedBy(id) ?? ids.slice(i + 1).find((t) => !reaches(t, id));
+    const skills = ids.filter((t) => t !== destination && t !== id && !reaches(t, id));
+    const to = raisedBy(id)
+      ?? skills.find((t) => ids.indexOf(t) > i)
+      ?? [...skills].reverse().find((t) => ids.indexOf(t) < i)
+      ?? (reaches(destination, id) ? undefined : destination);
     if (to) link(id, to, true);
   });
 
@@ -184,9 +191,15 @@ export type PlacedNode = RouteGraphNode & {
   /** Top and bottom of the node's text block. */
   top: number;
   bottom: number;
+  /** A word is wider than the label, so the page may hyphenate it rather than overflow. */
+  tight: boolean;
 };
 
-export type PlacedEdge = RouteGraphEdge & { d: string };
+export type PlacedEdge = RouteGraphEdge & {
+  d: string;
+  /** How far below the upper skill's centre its text ends, where the line joins it. */
+  footBelow: number;
+};
 
 export type RouteLayout = { width: number; height: number; nodes: PlacedNode[]; edges: PlacedEdge[] };
 
@@ -218,6 +231,8 @@ export function estimateLines(text: string, glyph: number, width: number): numbe
     const w = word.length * glyph;
     if (line > 0 && line + M.space + w > width) { lines++; line = w; }
     else line += (line > 0 ? M.space : 0) + w;
+    /* A word wider than the line is broken across lines of its own. */
+    while (line > width) { lines++; line -= width; }
   }
   return lines;
 }
@@ -228,6 +243,20 @@ const round = (v: number) => Math.round(v * 100) / 100;
 function permutations<T>(xs: T[]): T[][] {
   if (xs.length <= 1) return [xs];
   return xs.flatMap((x, i) => permutations([...xs.slice(0, i), ...xs.slice(i + 1)]).map((p) => [x, ...p]));
+}
+
+/** A line from the top of the lower skill (a) to the foot of the upper skill's text (b), then
+ *  straight up into its circle. Exported so the page can redraw it every frame while nodes move. */
+export function edgePath(ax: number, ay: number, ar: number, bx: number, by: number, br: number, footBelow: number): string {
+  const y0 = ay - ar;
+  const y1 = by + br;
+  if (Math.abs(ax - bx) < 0.5) return `M${round(ax)},${round(y0)} L${round(bx)},${round(y1)}`;
+  /* With no room below the upper skill's text (a step being tugged up close), the line runs
+     straight into its circle instead of tucking behind the text. */
+  const foot = by + footBelow < y0 - 8 ? by + footBelow : y1;
+  const mid = (y0 + foot) / 2;
+  const tail = foot === y1 ? '' : ` L${round(bx)},${round(y1)}`;
+  return `M${round(ax)},${round(y0)} C${round(ax)},${round(mid)} ${round(bx)},${round(mid)} ${round(bx)},${round(foot)}${tail}`;
 }
 
 /** `measured` holds the rendered height of each node's text block at this width, when the page has it.
@@ -357,9 +386,10 @@ export function layoutRoute(graph: RouteGraph, containerWidth: number, measured?
       const top = y - M.lift;
       const bottom = top + height;
       stem = Math.max(stem, bottom, y + radius);
+      const tight = n.label.split(/\s+/).some((word) => word.length * M.labelGlyph > labelWidth);
       placed.set(id, {
         ...n, x: round(cx), y: round(y), r: radius, rank: rank.get(id)!, row: r,
-        labelWidth, top: round(top), bottom: round(bottom),
+        labelWidth, top: round(top), bottom: round(bottom), tight,
       });
     }
     stems[r] = stem + 4;
@@ -373,16 +403,8 @@ export function layoutRoute(graph: RouteGraph, containerWidth: number, measured?
   const edges: PlacedEdge[] = graph.edges.map((e) => {
     const a = placed.get(e.from)!;
     const b = placed.get(e.to)!;
-    const y0 = a.y - a.r;
-    const foot = Math.min(stems[b.row], y0 - 8);
-    const y1 = b.y + b.r;
-    let d: string;
-    if (Math.abs(a.x - b.x) < 0.5) d = `M${round(a.x)},${round(y0)} L${round(b.x)},${round(y1)}`;
-    else {
-      const mid = (y0 + foot) / 2;
-      d = `M${round(a.x)},${round(y0)} C${round(a.x)},${round(mid)} ${round(b.x)},${round(mid)} ${round(b.x)},${round(foot)} L${round(b.x)},${round(y1)}`;
-    }
-    return { ...e, d };
+    const footBelow = round(stems[b.row] - b.y);
+    return { ...e, footBelow, d: edgePath(a.x, a.y, a.r, b.x, b.y, b.r, footBelow) };
   });
 
   /* Reading order: top to bottom, then left to right, so focus moves the way the eye does. */

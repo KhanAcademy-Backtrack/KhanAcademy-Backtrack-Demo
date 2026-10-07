@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 180 tests
+npm test          # node --test, currently 201 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 691 generated pages (including 404)
 npm run test:browser  # Playwright acceptance; Chrome by default, BROWSER_CHANNEL=msedge supported
@@ -143,6 +143,7 @@ is submitted (results), never before answering, and opening it writes nothing: i
 - `src/lib/program/exam-outline.ts` — per-exam sub-subjects and topics (UPCAT and DCAT so far), following what established review books and sites agree the exam covers, in our own words; providers' names stay off the site. Each topic lists the summaries that teach it; one without stays greyed as "Not written yet". Section names must match `EXAM_COVERAGE`, and every summary in the exam's coverage must appear (`tests/exam-outline.test.mjs`). Sources in `docs/research/2026-10-05/UPCAT_TOPIC_OUTLINE.md` and `DCAT_TOPIC_OUTLINE.md`. Do not rebuild it from the DepEd curriculum guides; the owner found them too broad.
 - `src/lib/recovery.ts` — routing policy, item generation, answer checking. The whole product keys on `Topic`.
 - `src/lib/science.ts` — reviewed chemistry and physics constants, item families, rounding policy.
+- `src/lib/route-graph.ts` — the BACKTRACK route as a prerequisite map: `routeGraph` (nodes, edges, statuses) and `layoutRoute` (positions), pure and tested in `tests/route-graph.test.mjs`. `RouteCanvas.tsx` draws it. See "Route map" below.
 - `src/lib/notation.ts` — LaTeX tokeniser, spoken form and plain form (JSX-free so tests can assert it). See "Equations are LaTeX" below.
 - `src/lib/study.ts` — packs, sessions, reviewer, exposure ledger, `validStudy`.
 - `src/components/study/ScienceLab.tsx`, `ConceptLab.tsx` — original interactive explanations.
@@ -304,3 +305,29 @@ accessible names, lesson paragraphs, answer choices and mathematical case. Do no
 `text-transform: capitalize` on all headings/buttons or reintroduce Video preview/disclosure buttons.
 The `/start` chooser adapts its columns to content width and keeps equation previews inside each card;
 phone previews use the smaller notation size, with larger previews from the `sm` breakpoint.
+
+## Route map, 7 October 2026
+
+Owner request: the BACKTRACK route must not be linear; draw it like a graph (Obsidian was the reference) in the
+site's own look, and make it dynamic. Research and review notes: `docs/research/2026-10-07/ROUTE_GRAPH.md`.
+
+- `routeGraph(state)` builds the map from `planned`, the active skill and checked detours (passed with evidence
+  at serial >= `cycleStart`), joined by `skillDependencies` (a pruned middle step is bridged). A skill no
+  dependency explains gets a dashed `inferred` link to the skill whose answer raised it (`routeClue.serial`, or
+  this round's latest `family:'diagnostic'` attempt), else the next skill in `ORDER`, never crowding the goal.
+- `layoutRoute(graph,width,measured)` is pure: longest-path ranks with the goal at the top, rows anchored to the top
+  so the goal never moves, crossing-free ordering with `ORDER` ties (siblings never swap sides), two columns from
+  200 px. `tests/route-graph.test.mjs` checks every reachable route for overlaps and line crossings, and trips if a
+  rank ever needs three skills side by side; extend the layout before appending a skill that would.
+- No step numbers. Statuses come from `routeStatus`: Checked, You're here / First check, Up next (feedback or moment
+  toward `nextSkill`), Where you're headed, Needs practice, Check if you need this. The heading reports progress only.
+- Every state uses shape and text, lines meet 3:1 (ink-soft, green-deep, navy), orange is only "Needs practice".
+  Buttons carry `aria-label` "label, status" (the browser suite matches it) and `aria-describedby` relations;
+  the reason panel is a polite live region; list order is reading order. Opening, hovering or tugging a step writes
+  nothing and is never evidence.
+- Dynamic: each step is a spring (`SPRING`); lines are rewritten from the springs' change events, so they stretch
+  as steps move. First paint unfolds from the goal; a new prerequisite springs out of the step that needed it; a
+  mouse can tug a step and its neighbours (not the goal), which spring home. Quiet, reduced motion, typing and
+  hidden tabs place everything at once. A line decides its entrance once at mount; toggling it later replays it.
+  `scripts/test-route-map.mjs` covers growth, Up next, the tug and phone layout.
+- `route-geometry.ts` is no longer used by the route; it stays for `HomeExperience.tsx` and its tests.

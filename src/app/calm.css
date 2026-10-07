@@ -42,15 +42,21 @@
 .route-heading>span+span{width:100%}
 .route-graph{position:relative;margin:18px 0 4px;min-width:0}
 .route-graph-lines{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
-.route-edge{fill:none;stroke:#475e7c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:opacity .15s ease}
+.route-edge{fill:none;stroke:#475e7c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;transition:opacity .15s ease;animation:route-line-draw .4s cubic-bezier(.2,.8,.2,1) backwards}
 .route-edge.is-checked{stroke:#0f9f7c;stroke-width:2}
 .route-edge.is-route,.route-edge.is-lit{stroke:#0a2a66;stroke-width:2.5}
-.route-edge.is-inferred{stroke-dasharray:3 5}
+.route-edge.is-inferred{stroke-dasharray:3 5;animation-name:route-line-in}
+@keyframes route-line-draw{from{stroke-dashoffset:1;opacity:0}to{stroke-dashoffset:0;opacity:1}}
+@keyframes route-line-in{from{opacity:0}}
+.route-edge.is-still{animation:none}
 .route-edge.is-dim{opacity:.25}
 .route-graph-stops{list-style:none;margin:0;padding:0}
 .route-node{position:absolute;left:0;top:0}
 .route-node>button{position:relative;display:block;width:100%;height:100%;padding:0;border:0;border-radius:10px;background:none;color:#0a2a66;text-align:left;cursor:pointer}
 .route-node>button:focus-visible{outline:2px solid #0a2a66;outline-offset:2px}
+.route-node>button{user-select:none;-webkit-user-select:none}
+.route-node[data-held]{z-index:2}
+.route-node[data-held]>button{cursor:grabbing}
 .route-dot{position:absolute;display:grid;place-items:center;border:2px dashed #0a2a66;border-radius:50%;background:#fff;color:#0a2a66;transition:opacity .15s ease}
 .route-dot svg{width:64%;height:64%}
 .route-pin{display:block;width:8px;height:8px;border-radius:50%;background:#0a2a66}
@@ -66,11 +72,12 @@
 .route-node>button:hover .route-text::before,.route-node>button[aria-expanded='true'] .route-text::before{background:#eef3fa}
 .route-node[data-kind='active']>button .route-text::before{background:#e7f9f3}
 .route-label{display:block;font-size:14px;font-weight:600;line-height:19px;overflow-wrap:break-word}
+.route-node[data-tight] .route-label{hyphens:auto}
 .route-text small{display:block;font-size:12.5px;font-weight:500;line-height:16px;color:#505a6b}
 .route-node[data-kind='active'] .route-text small,.route-node[data-next] .route-text small{color:#0a2a66;font-weight:700}
 .route-node[data-kind='needs']:not([data-next]) .route-text small{color:#b94f18}
 .route-reason-links{font-weight:600;color:#0a2a66;margin-bottom:4px}
-@media(prefers-reduced-motion:reduce){.route-edge,.route-dot,.route-text::before{transition:none}}
+@media(prefers-reduced-motion:reduce){.route-edge,.route-dot,.route-text::before{transition:none;animation:none}}
 @media(min-width:781px){
  .product-shell{padding:28px 32px 8px}
  .goal-bar{position:sticky;top:64px}

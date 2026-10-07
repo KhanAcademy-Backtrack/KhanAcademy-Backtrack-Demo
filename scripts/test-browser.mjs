@@ -9,6 +9,7 @@ import {programTourJourneys} from './test-program-tour.mjs';
 import {liveGroupJourneys} from './test-live-groups.mjs';
 import {dailyJourneys} from './test-daily-practice.mjs';
 import {topicLessonJourneys} from './test-topic-lessons-browser.mjs';
+import {routeMapJourneys} from './test-route-map.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 import {speakText} from '../src/lib/notation.ts';
 
@@ -183,6 +184,7 @@ try{
  await liveGroupJourneys({scenario,origin,root});
  await dailyJourneys({scenario,origin,root});
  await topicLessonJourneys({scenario,origin,root});
+ await routeMapJourneys({scenario,origin});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }
