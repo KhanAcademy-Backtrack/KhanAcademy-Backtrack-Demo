@@ -28,6 +28,8 @@ export async function homeJourneys({scenario,origin,root}){
    assert.equal(await page.locator('.home-activity-bottom a').getAttribute('href'),`/calendar?day=${addDays(today,-7)}`);
    assert.equal(await page.getByRole('button',{name:'12 weeks',exact:true}).count(),0);
    assert.equal(await page.locator('.home-heatmap-week').count(),53);await overflow(page);
+   assert.deepEqual((await page.locator('.home-heatmap-labels span').allTextContents()).filter(Boolean),['S','M','T','W','T','F','S']);
+   assert.ok(await page.locator('.home-heatmap-week').evaluateAll(weeks=>weeks.every(week=>[...week.querySelectorAll('.home-heatmap-cell')].every((cell,row)=>!cell.dataset.day||new Date(cell.dataset.day+'T12:00:00Z').getUTCDay()===row))),'Heatmap dates align with Sunday-first row labels');
    const year=today.slice(0,4);
    assert.deepEqual((await page.locator('.home-month').allTextContents()).filter(Boolean),['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']);
    assert.equal(await page.locator(`.home-heatmap [data-day="${year}-01-01"]`).count(),1);

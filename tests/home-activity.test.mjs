@@ -44,9 +44,9 @@ test('streaks tolerate today before studying, preserve personal best and dedupli
  assert.equal(studyActivity(p,initialStudy(),'2026-10-09').streak,0);
 });
 test('heatmap covers exactly the current calendar year, including leap years needing 54 columns',()=>{
- for(const [day,count,dates] of [['2026-01-01',53,365],['2024-02-29',53,366],['2012-12-31',54,366],[today,53,365]]){
+ for(const [day,count,dates] of [['2026-01-01',53,365],['2024-02-29',53,366],['2012-12-31',53,366],['2000-02-29',54,366],[today,53,365]]){
   const weeks=activityWeeks(day),year=day.slice(0,4);assert.equal(weeks.length,count);assert.equal(new Set(weeks.flat()).size,count*7);
-  for(const w of weeks){assert.equal(w.length,7);assert.equal(new Date(w[0]+'T12:00:00Z').getUTCDay(),1);}
+  for(const w of weeks){assert.equal(w.length,7);for(const [i,date] of w.entries())assert.equal(new Date(date+'T12:00:00Z').getUTCDay(),i,'Each row matches its Sunday-first weekday label');}
   const inYear=weeks.flat().filter(d=>d.startsWith(year));
   assert.equal(inYear.length,dates);assert.equal(inYear[0],`${year}-01-01`);assert.equal(inYear.at(-1),`${year}-12-31`);assert.ok(inYear.includes(day));
  }

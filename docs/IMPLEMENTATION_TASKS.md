@@ -221,4 +221,5 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Show January–December of the current year, with hover/focus date and exact activity count, muted future dates and current-day positioning on phones.
 - [x] Use headline title styling on the Plan starting-point choices and browsing action.
 - [x] Match Home's desktop column widths and next-step bottom edges; show S M T W T F S in the weekly illustration.
+- [x] Use Sunday-first heatmap rows labeled S M T W T F S, with date positions matched to every label.
 - [ ] Any later merge/publication; main remains outside this pass.

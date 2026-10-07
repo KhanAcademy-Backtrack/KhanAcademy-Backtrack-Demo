@@ -58,12 +58,12 @@ export function studyActivity(program:ProgramState,study:StudyState,today:string
  return {byDay,days,activeDays:days.length,sets:days.reduce((n,e)=>n+e.sets,0),checks:days.reduce((n,e)=>n+e.checks,0),streak,best,weekDays:days.filter(e=>e.day>=weekStart).length};
 }
 
-/** Whole Monday-first columns covering January through December. Dates outside
+/** Whole Sunday-first columns covering January through December. Dates outside
  * the calendar year are padding; future dates never gain recorded activity. */
 export function activityWeeks(today:string){
  const year=today.slice(0,4),first=`${year}-01-01`,last=`${year}-12-31`;
- const start=addDays(first,-((weekday(first)+6)%7));
- const end=addDays(last,6-((weekday(last)+6)%7));
+ const start=addDays(first,-weekday(first));
+ const end=addDays(last,6-weekday(last));
  const count=Math.floor((Date.parse(end)-Date.parse(start))/86400000/7)+1;
  return Array.from({length:count},(_,w)=>Array.from({length:7},(_,d)=>addDays(start,w*7+d)));
 }
