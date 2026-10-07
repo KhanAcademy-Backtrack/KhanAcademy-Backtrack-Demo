@@ -8,6 +8,7 @@ import {Headline} from './Headline';
 import {Sheet,btn} from './ui';
 import {activityWeeks,studyActivity,type ActivityDay} from '@/lib/program/activity';
 import {parseDay} from '@/lib/program/planner';
+import {ProfileNameEditor} from './ProfileName';
 
 function useActivity(){
  const {state:program,today}=useProgram(),{state:study}=useStudy();
@@ -15,14 +16,15 @@ function useActivity(){
 }
 
 export function HomeWelcome({title,children,action}:{title:string;children:ReactNode;action?:ReactNode}){
- const activity=useActivity(),{today}=useProgram();
- return <header className="home-welcome">
+ const activity=useActivity(),{profileName}=useProgram(),[editing,setEditing]=useState(false);
+ return <><header className="home-welcome">
   <div className="home-welcome-main"><div className="home-buddy"><Companion size={76} pose={activity.weekDays?'encourage':'wave'}/></div>
-   <div className="min-w-0"><p className="home-kicker">Khanpanion Profile: <time dateTime={today}>{parseDay(today).toLocaleDateString('en-PH',{month:'short',day:'numeric'})}</time></p>
-    <h1><Headline>{title}</Headline></h1><div className="home-welcome-copy">{children}</div>{action}</div>
+   <div className="home-profile-copy"><p className="home-kicker">Khanpanion Profile</p>
+    <h1 className="home-profile-name">{profileName}</h1><div className="home-welcome-copy"><h2 className="home-profile-goal"><Headline>{title}</Headline></h2>{children}</div>{action}</div>
   </div>
-  <dl className="home-stats"><div><dt>Study days</dt><dd>{activity.activeDays}</dd></div><div><dt>Practice sets</dt><dd>{activity.sets}</dd></div><div><dt>BACKTRACK answers</dt><dd>{activity.checks}</dd></div></dl>
- </header>;
+  <dl className="home-stats"><div><dt>Study Days</dt><dd>{activity.activeDays}</dd></div><div><dt>Practice Sets</dt><dd>{activity.sets}</dd></div><div><dt>BACKTRACK Answers</dt><dd>{activity.checks}</dd></div></dl>
+  <button type="button" aria-label="Edit profile name" title="Edit profile name" className="home-profile-edit" onClick={()=>setEditing(true)}><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15l-1 5Z"/></svg></button>
+ </header>{editing&&<ProfileNameEditor onClose={()=>setEditing(false)}/>}</>;
 }
 
 const milestones=[1,5,10,25,50];

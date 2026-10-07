@@ -230,4 +230,9 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Publish the flat-menu follow-up after the owner's approval, preserving the Home refinements and main's route-map work.
 - [x] Correct Plan's goal-dependent destination: open Exam dates for every goal, show only Calendar/Exam dates in its row and keep course/topic pages under Study.
 - [x] Verify the Plan regression on phone/desktop for all three goals: direct/drawer links, Calendar access, goal preservation, existing setup changes and Home behavior pass all 16 targeted browser checks; type checking and the 690-page production build pass.
-- [ ] Publish the Plan navigation fix after the owner's approval.
+- [x] Publish the Plan navigation fix after the owner's approval; confirm the deployed Plan button opens Exam dates with only Calendar/Exam dates in its row.
+- [x] Prepare the selected-field badge wording change from “Your field” to “Field” on a branch; verify the one-line badge and production build.
+- [x] Remove the date from the Home profile label and title-case the activity counters.
+- [x] Add an optional name step after first-time goal/routine questions, a Khanpanion default and a pencil name editor on Home, with separate device-local storage.
+- [x] Complete browser verification for optional/blank names, edits/cancellation/Escape, reloads, cross-tab updates, narrow layouts and unchanged learning records; 35 browser cases, 213 domain tests and the 690-page production build pass.
+- [ ] Publish the profile-name and badge follow-ups after the owner's approval.

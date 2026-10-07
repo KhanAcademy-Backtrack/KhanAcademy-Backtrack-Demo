@@ -1,6 +1,14 @@
 @layer components {
 .home-dashboard{max-width:1160px;min-width:0;margin:0 auto;display:grid;gap:28px;padding:36px 32px 96px;color:#0a2a66}
-.home-welcome{display:flex;align-items:center;justify-content:space-between;gap:32px;padding:4px 0 8px}
+.home-welcome{position:relative;display:flex;align-items:center;justify-content:space-between;gap:32px;padding:4px 56px 8px 0}
+.home-profile-copy{min-width:0}
+.home-profile-name{overflow-wrap:anywhere;text-transform:none}
+.home-profile-goal{font-weight:600;font-size:.875rem;line-height:1.7}
+.home-profile-edit{position:absolute;top:0;right:0;display:grid;place-items:center;width:44px;height:44px;border:1px solid #dce7ec;border-radius:12px;background:#fff;color:#0a2a66}
+.home-profile-edit:hover{background:#e5f9f3;border-color:#14bf96}
+.home-profile-edit:focus-visible{outline:2px solid #0a2a66;outline-offset:3px}
+.profile-name-dialog{margin:auto;width:min(440px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow-y:auto;border:1px solid #dce7ec;border-radius:22px;padding:24px;background:#fff;color:#0a2a66;box-shadow:0 20px 80px #0a2a6630}
+.profile-name-dialog::backdrop{background:#0a2a6666}
 .home-welcome-main{display:flex;align-items:center;gap:20px;min-width:0}
 .home-buddy{display:grid;place-items:center;width:96px;height:104px;flex-shrink:0;border:1px solid #dce7e5;border-radius:22px;background:#fff;box-shadow:0 4px 16px #0a2a6604}
 .home-kicker{font-size:.75rem;font-weight:600;color:#475e7c;line-height:1.6}

@@ -11,7 +11,7 @@ Owner request: add a study heatmap and refine Home using the supplied spacious p
 - Weekly participation, a current optional streak, a personal best and milestones at 1, 5, 10, 25 and 50 recorded study days. Missing a day leaves those milestones intact.
 - The same activity card is available on browsing Home and the legacy Today surface. Existing goal changes, routine controls, topic selection, practice, calendar and BACKTRACK actions remain connected.
 - Results preserve the lowercase connecting word in scores such as “4 of 6.” Numeric scores use their authored case rather than headline title casing.
-- The header reads “Khanpanion Profile:” with the current date. The compact study-week illustration and heatmap use the owner's requested Sunday-first order: S M T W T F S. The detailed calendar and weekly participation calculation keep their existing Monday-first week boundaries.
+- The header reads “Khanpanion Profile” without a date, with an optional learner name and a pencil button for editing it. The compact study-week illustration and heatmap use the owner's requested Sunday-first order: S M T W T F S. The detailed calendar and weekly participation calculation keep their existing Monday-first week boundaries.
 - The goal picker's three starting-point choice titles and its browsing action use the same headline style, including lowercase connecting words. Descriptions keep their sentence case and accessible button names keep their authored labels.
 
 ## Integration with main
@@ -26,7 +26,15 @@ Direct inspection of the production Home page confirms that the profile header, 
 
 ## Plan navigation follow-up
 
-The owner reported that selecting Plan opened Courses. The remaining goal-dependent destination sent college learners to their program map and class-topic learners to their lesson; those pages correctly belong to Study, so the active section immediately changed. The owner selected Exam dates as Plan's landing page and requested removal of College map from its row. Plan now consistently opens Exam dates, with only Calendar and Exam dates in its horizontal row. Personal course and topic shortcuts remain available and stay in Study. A regression check reproduces the earlier goal-dependent failure at phone and desktop widths, then verifies direct and drawer navigation for exam, college and class-topic goals, Calendar access and preservation of the saved goal and routine. This fix is prepared on `codex/fix-plan-navigation` for review before publication.
+The owner reported that selecting Plan opened Courses. The remaining goal-dependent destination sent college learners to their program map and class-topic learners to their lesson; those pages correctly belong to Study, so the active section immediately changed. The owner selected Exam dates as Plan's landing page and requested removal of College map from its row. Plan now consistently opens Exam dates, with only Calendar and Exam dates in its horizontal row. Personal course and topic shortcuts remain available and stay in Study. A regression check reproduces the earlier goal-dependent failure at phone and desktop widths, then verifies direct and drawer navigation for exam, college and class-topic goals, Calendar access and preservation of the saved goal and routine. This fix was approved and published to main at 683d1e4, with the production Plan destination and two-link row verified directly.
+
+## Profile name follow-up
+
+The owner requested that Home's main heading show the learner's name instead of their study goal. A new learner sees an optional name step after choosing their goal, focus and study routine. Skip or a blank name uses “Khanpanion.” Existing learners also get that default, with no forced setup or changes to their saved goal. The study goal stays visible as smaller context beneath the name.
+
+The pencil button at the top right of the Home header opens a keyboard-accessible name editor. Save updates the heading immediately; Cancel and Escape leave the saved name intact. Names retain their authored spelling and case. The short profile label has no colon or date, and the counters read Study Days, Practice Sets and BACKTRACK Answers. The earlier selected-field badge refinement (“Field”) remains in the review branch.
+
+The name is optional device-local data in `backtrack.profile.v1`, separate from learning records, shared study scopes and the existing program save. Missing, blank or unreadable name data falls back to Khanpanion. Name writes are immediate, sync between tabs and do not change the learning save. No account or backend is added. This follow-up is verified on `codex/home-profile-name`, pending owner approval to publish.
 
 ## Activity contract
 
@@ -51,3 +59,5 @@ The heatmap has a single keyboard entry point. Arrow keys move between recorded 
 - The Plan landing-page correction passes 16 targeted Edge cases, type checking and the 690-page production export. The checks cover all three study goals at phone/desktop widths, both direct and drawer Plan links, the two-link planning row, Calendar access, retained goals/routines, setup changes and Home behavior. The preview's Plan link and row were also inspected directly.
 
 Local captures are under `.refs/home-review/`. Private working files and reference images are not part of this release.
+
+The profile follow-up passes 35 targeted Edge cases across Home, onboarding, optional names for all three study goals, routine preservation, the short-phone first-entry step, name editing at 320/390/1100/1440 pixels, cancellation/Escape/focus containment, reloads, cross-tab updates, long names and the blank-name default. All 213 domain tests, type checking and the 690-page production build pass. Direct visual review confirms the optional final name step, date-free profile label, learner-name heading, top-right pencil and counter casing. Profile review captures are private under `.refs/profile-review/`.

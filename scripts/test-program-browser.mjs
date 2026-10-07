@@ -9,7 +9,7 @@ import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {CHAPTERS} from '../src/content/reviewer/index.ts';
 import {EXTRAS} from '../src/content/reviewer/extras.ts';
 import {PROGRAMS} from '../src/lib/program/bridge.ts';
-import {chooseGoal,closeGuide,startDaily} from './program-qa-helpers.mjs';
+import {finishGoal,chooseGoal,closeGuide,startDaily} from './program-qa-helpers.mjs';
 
 export async function programJourneys({scenario,origin,root}){
  const dir=path.join(root,'.refs/program-review');await fs.mkdir(dir,{recursive:true});
@@ -27,7 +27,7 @@ export async function programJourneys({scenario,origin,root}){
    for(let i=0;i<3;i++){await page.getByRole('radio').first().click();await page.getByRole('button',{name:'Check',exact:true}).click();await overflow(page);await page.getByRole('button',{name:i===2?'Finish':'Next question',exact:true}).click();}
    assert.equal((await data(page)).daily[Object.keys((await data(page)).daily)[0]].total,3);await shot(page,'sprint-result',width);
    await page.goto(origin);await page.getByRole('button',{name:'Edit or add CETs'}).click();await page.getByRole('dialog').getByRole('button',{name:'Prepare for an entrance exam',exact:true}).click();await shot(page,'pledge',width);
-   await page.getByLabel('Planning date, if you have one').fill('2027-08-07');await page.getByRole('button',{name:'Continue',exact:true}).click();await page.getByRole('button',{name:'Show my study space',exact:true}).click();await closeGuide(page);
+   await page.getByLabel('Planning date, if you have one').fill('2027-08-07');await page.getByRole('button',{name:'Continue',exact:true}).click();await finishGoal(page);await closeGuide(page);
    await page.getByRole('heading',{name:'UPCAT preparation',exact:true}).waitFor();assert.equal((await data(page)).setup.cet.targets[0].date,'2027-08-07');await page.getByText(/days to your planning target/).waitFor();await shot(page,'today',width);
    
   },viewport);

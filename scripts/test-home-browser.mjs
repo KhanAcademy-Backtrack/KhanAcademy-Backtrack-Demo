@@ -44,7 +44,9 @@ export async function homeJourneys({scenario,origin,root}){
    }
    await page.mouse.move(0,0);
    await cell.scrollIntoViewIfNeeded();await cell.focus();await cell.press('Escape');
-   assert.match(await page.locator('.home-welcome .home-kicker').innerText(),/^Khanpanion Profile:/);
+   assert.equal(await page.locator('.home-welcome .home-kicker').innerText(),'Khanpanion Profile');
+   assert.equal(await page.locator('.home-profile-name').innerText(),'Khanpanion');
+   assert.deepEqual(await page.locator('.home-stats dt').allTextContents(),['Study Days','Practice Sets','BACKTRACK Answers']);
    const geometry=await page.locator('.home-heatmap').evaluate(chart=>{
     const columns=[...chart.querySelectorAll('.home-heatmap-week')].map(w=>[...w.querySelectorAll('.home-heatmap-cell')].map(c=>c.getBoundingClientRect()));
     return {squares:columns.flat().every(r=>Math.abs(r.width-r.height)<.01),rows:columns.every(c=>c.slice(1).every((r,i)=>r.top-c[i].bottom>=3.99)),columns:columns.slice(1).every((c,i)=>c[0].left-columns[i][0].right>=3.99)};
