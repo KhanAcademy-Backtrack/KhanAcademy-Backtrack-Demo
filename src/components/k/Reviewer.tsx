@@ -21,6 +21,7 @@ import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCovera
 import {EXAM_OUTLINES,OUTLINE_BY_KEY,topicKey,type OutlineGroup} from '@/lib/program/exam-outline';
 import {firstExam} from '@/lib/program/personalization';
 import {outlineVideo,type KhanVideo} from '@/lib/program/topic-videos';
+import {topicVideo} from '@/lib/program/khan-videos';
 import {VideoToggle,VideoPanel} from './TopicVideo';
 import {Rich} from '@/components/math/Math';
 import {plainText} from '@/lib/notation';
@@ -62,7 +63,7 @@ export function ReviewerLibrary(){
   *  even when another topic shares its summary. A topic without a summary stays greyed out and says so. */
  const outline=EXAM_OUTLINES[scope];
  const outlineRows=(sub:OutlineGroup[])=>sub.map((o,j)=><section key={o.name}><h3 className="mt-5 text-lg font-extrabold">{String.fromCharCode(97+j)}. {o.name}</h3>{o.less&&<p className="mt-1 text-sm text-ink-soft">Only some reviewers report this part.</p>}
-  {lines(o.topics.map(x=>({key:topicKey(scope,x.title),title:x.title,video:outlineVideo(scope,x.title),...(x.concepts?.length?{href:`/learn/${x.concepts[0]}`,note:`Summary: ${x.concepts.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}`}:{note:outlineVideo(scope,x.title)?'No summary yet · Khan video':'Not written yet'})})))}</section>);
+  {lines(o.topics.map(x=>({key:topicKey(scope,x.title),title:x.title,video:scope==='upcat'?topicVideo(scope,x.title):outlineVideo(scope,x.title),...(x.concepts?.length?{href:`/learn/${x.concepts[0]}`,note:`Summary: ${x.concepts.map(id=>CONCEPT_BY_ID[id].title).join(' · ')}`}:{note:'Not written yet'})})))}</section>);
  const summary=(n:number,title:string,note:string)=><summary className={cx(row,'cursor-pointer list-none rounded-xl hover:bg-mint focus-visible:outline-3 focus-visible:outline-navy [&::-webkit-details-marker]:hidden')}><span className="flex-1 text-lg font-extrabold">{n}. {title}</span><span className="text-sm font-semibold text-ink-soft">{note}</span><span aria-hidden="true" className="text-xl leading-none transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span></summary>;
  /** Everything saved, from any exam: outline topics, summaries, and chapters saved before chapters left this list. */
  const saved:Line[]=state.bookmarks.flatMap<Line>(k=>{const o=OUTLINE_BY_KEY.get(k),c=CONCEPT_BY_ID[k],ch=CHAPTER_BY_ID[k];

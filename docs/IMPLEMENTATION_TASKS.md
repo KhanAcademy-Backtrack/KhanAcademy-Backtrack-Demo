@@ -1,5 +1,22 @@
 # Complete study-companion implementation checklist
 
+## UPCAT topic sweep — 7 October 2026
+
+- [x] Check public reviewer/topic sources and record access and coverage limits.
+- [x] Append 43 broad missing topics without changing existing titles, ordering or concept links.
+- [x] Give all 173 topics a video/no-video decision: 139 matched, 34 gaps including 23 Filipino skips.
+- [x] Record rendered title/embed checks for 20 accepted new videos, reused source dates and every no-match query.
+- [x] Add stable topic-key lookups and paused full-video disclosures with no learner-record writes.
+- [x] Check mapping, Filipino exclusion, canonical URLs, attribution and saved-topic preservation.
+- [x] Finish production/browser validation and commit this sweep separately from ongoing topic-lesson work on `codex/upcat-topic-video-sweep`.
+
+Validation: 176 unit tests, clean typecheck, 188 generated pages and all 50 browser journeys
+passed. Edge and allowed local port 3063 were used; external players were fixtures for UI
+contracts, with real source pages checked separately in the in-app browser. The build reused
+existing real font bytes through a private cache. Full external playback/captions and real
+learner outcomes were not verified. No push, deployment or presentation changes are included.
+
+
 ## Latest release checkpoint — 10 September 2026
 
 The expanded website is live at https://khanpanion.vercel.app/ (legacy alias https://dunlo.vercel.app/). Final follow-up fixes cover pack editor identity, accessible saved backups, Khan practice self-report transfer into route records, clearing an earlier round’s goal-completion flag, and completing supported rounds after unknown answers without awarding learning credit. The current code passed 48 domain tests and a production build with 26 routes. Eight browser acceptance journeys plus visible confidence/unknown routing, desktop card alignment and backup restore/download were checked. Historical unchecked tasks below are planning records, not an assertion that all listed work is absent.

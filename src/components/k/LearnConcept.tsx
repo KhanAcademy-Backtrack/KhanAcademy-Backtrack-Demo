@@ -35,7 +35,7 @@ export function LearnConcept({id}:{id:string}){
     </Sheet>
     <Sheet>
      <h2 className="text-xl font-extrabold">Learn it properly</h2>
-     {videos.length>0&&<div className="mb-4 mt-1 border-b border-mint-line pb-4"><p className="text-ink-soft">Khan Academy {videos.length===1?'video':'videos'} for the UPCAT topics this summary teaches. Each opens here, paused.</p>
+     {videos.length>0&&<div className="mb-4 mt-1 border-b border-mint-line pb-4"><h3 className="text-lg font-extrabold">Videos for this topic</h3><p className="mt-1 text-ink-soft">Khan Academy {videos.length===1?'video':'videos'} for the UPCAT topics this summary teaches. Each opens here, paused.</p>
       <ul className="mt-3 grid gap-2">{videos.map(({topic,video},i)=>{const open=playing===topic,panel=`learn-video-${i+1}`;return <li key={topic} className={cx('flex flex-wrap items-center gap-2 rounded-xl p-1',open&&'bg-sky pb-3')}>
        <span className="min-w-0 flex-1 pl-2 font-semibold leading-snug">{topic}<span className="block text-sm font-normal text-ink-soft">{video.title}</span></span>
        <VideoToggle open={open} onClick={()=>setPlaying(open?undefined:topic)} topic={topic} controls={panel}/>

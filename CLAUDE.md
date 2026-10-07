@@ -21,7 +21,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 npm test          # node --test, currently 176 tests
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 188 generated pages (including 404)
-npm run test:browser  # Playwright acceptance, needs the Chrome channel
+npm run test:browser  # 50 Playwright journeys; Chrome default, BROWSER_CHANNEL=msedge supported
 npm start         # serve the static build on http://127.0.0.1:3047
 ```
 
@@ -81,6 +81,26 @@ These are defects if broken, even with a green build.
 - `HomeExperience.tsx`, `SchoolLink.tsx` and `route-geometry.ts` look dead but are still tested. Leave them.
 
 ## Khan Academy resources
+
+UPCAT sweep (7 October 2026): 43 appended topics, 173 total. `TOPIC_VIDEOS` and
+`TOPIC_NO_VIDEO`, exported by `khan-videos.ts`, partition stable `topicKey('upcat', title)`
+keys: 139 video matches and 34 gaps (23 Filipino topics skipped without an English fallback).
+`topicVideo(exam,title)` uses own-property lookup; it does not change `videoFor` or the practice
+maps. Shared catalog data lives in `khan-video-catalog.ts` to avoid a circular import.
+Reviewer rows use `Watch video: <title>` disclosures; `/learn/<concept>` has “Videos for this
+topic”, deduplicated by id. Topic players are lazy, paused full videos, with no clip ranges,
+cover, close control or learner-record writes. Research and source limits:
+`docs/research/2026-10-07/UPCAT_TOPIC_SWEEP.md`; every resource and gap is logged in
+`docs/THIRD_PARTY_MATERIALS.md` under “UPCAT topic videos, checked 2026-10-07”.
+
+Validation for `codex/upcat-topic-video-sweep`: 176 unit tests, typecheck, 188-page static
+export and all 50 browser journeys passed. Browser checks used Edge (`BROWSER_CHANNEL=msedge`)
+and `BACKTRACK_TEST_PORT=3063`; live-group checks require an allowed local origin. Player
+fixtures test our paused/full-video UI and record boundaries, not external playback or caption
+quality. The isolated build reused real, previously built project font bytes through a private
+verification cache after Google font CSS retrieval failed; no fonts, dependency versions or
+production font configuration changed. These counts exclude the separate, uncommitted
+topic-lesson expansion in the main checkout.
 
 Every URL is opened by hand in a browser and its page title checked before it ships. Khan is a
 client-rendered app, so an automated fetch returns an empty shell and is not verification. Never

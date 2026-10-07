@@ -1,6 +1,6 @@
 import type {ExamId} from './admissions.ts';
-import {VIDEOS as Q,type KhanVideo} from './khan-videos.ts';
-import {EXAM_OUTLINES} from './exam-outline.ts';
+import {VIDEOS as Q,type KhanVideo} from './khan-video-catalog.ts';
+import {EXAM_OUTLINES,topicKey} from './exam-outline.ts';
 export type {KhanVideo};
 
 /** Khan Academy videos for every UPCAT reviewer topic and every college subject topic. Each page
@@ -14,7 +14,12 @@ export type {KhanVideo};
  *  for a Filipino topic (owner, 7 October 2026). Watching is activity, never learning evidence. */
 export const TOPIC_VIDEOS_CHECKED='2026-10-07';
 const KHAN='https://www.khanacademy.org';
-const v=(id:string,title:string,path:string):KhanVideo=>({id,title,url:KHAN+path,checked:TOPIC_VIDEOS_CHECKED});
+// Canonicalize reviewed aliases: practice maps keep their original pages.
+const canonical=new Map(Object.values(Q).map(video=>[video.id,video]));
+const v=(id:string,title:string,path:string):KhanVideo=>{
+ const reused=canonical.get(id);if(reused)return reused;
+ const video={id,title,url:KHAN+path,checked:TOPIC_VIDEOS_CHECKED};canonical.set(id,video);return video;
+};
 
 const T={
  usingContextCluesToFigure:v('CiNggzdWkIo','Using context clues to figure out new words','/ela/pisa-2025-english-supplement/x0fbe4cb2373ed873:7th-grade-reading-vocabulary/x0fbe4cb2373ed873:living-tongues/v/using-context-clues-to-figure-out-new-words-reading'),
@@ -345,7 +350,6 @@ export const UPCAT_TOPIC_VIDEOS:Record<string,KhanVideo>={
  'Misplaced and dangling modifiers':T.danglingModifiers,
  'Parallel structure':T.parallelStructure,
  'Combining and ordering sentences':T.simpleAndCompoundSentences,
- 'Direct and reported speech':T.commasInDialogue,
  'Main idea and best title':Q.centralIdeas,
  'Stated details':Q.centralIdeas,
  'Sequence of events':T.theStructuresOfInformationalTexts,
@@ -446,9 +450,33 @@ export const UPCAT_TOPIC_VIDEOS:Record<string,KhanVideo>={
  'Phases of the Moon and eclipses':T.introToMoonPhases,
  'Stars and constellations':T.constellations,
  'The origin of the universe':T.bigBangIntroduction,
+ "Organizing paragraphs and transitions":Q.transitions,
+ "Comparing ideas in a passage":T.theStructuresOfInformationalTexts,
+ "Literary analysis and interpreting evidence":Q.literaryEvidence,
+ "Comic strips":Q.comicMedium,
+ "Sets and Venn diagrams":Q.sets,
+ "Imaginary and complex numbers":Q.imaginary,
+ "Geometric reasoning and proofs":Q.proof,
+ "Quadrilaterals and polygons":Q.quadrilateral,
+ "Trigonometric identities":T.trigAngleAdditionIdentities,
+ "Laws of sines and cosines":Q.sineLaw,
+ "Variance, standard deviation and percentiles":T.measuresOfSpreadRangeVariance,
+ "Fundamental counting principle and factorials":Q.counting,
+ "Enzymes and cellular metabolism":Q.enzymes,
+ "Nutrient cycles in ecosystems":T.theNitrogenCycle,
+ "Elements, compounds and mixtures":Q.matterClassification,
+ "Electron configuration and quantum numbers":Q.electronConfiguration,
+ "Oxidation, reduction and electrochemistry":Q.galvanicCells,
+ "Nuclear reactions":Q.nuclearFission,
+ "Relative motion and velocities":Q.relativeVelocity,
+ "Thermodynamics and heat transfer":T.firstAndSecondLawsOf,
+ "Special relativity":Q.relativity,
+ "Rock layers and relative dating":Q.rockLayers,
+ "The formation of Earth":T.earthFormation,
+ "Galaxies and other objects in space":T.scaleOfTheGalaxy,
 };
 /** UPCAT topics searched on Khan Academy with no fitting video. */
-export const UPCAT_NO_VIDEO:ReadonlySet<string>=new Set(['Synonyms and antonyms','Spelling','Active and passive voice','Ng at nang, din at rin, at iba pang madalas mapagpalit','Aspekto ng pandiwa','Pokus ng pandiwa','Panghalip','Pang-ugnay: pangatnig at pang-ukol','Wastong baybay at bantas','Kahulugan ayon sa konteksto','Kasingkahulugan at kasalungat','Sawikain at idyoma','Salawikain at tayutay','Speeches']);
+export const UPCAT_NO_VIDEO:ReadonlySet<string>=new Set(["Direct and reported speech","Synonyms and antonyms","Spelling","Active and passive voice","Speeches","Word relationships and analogies","Finding and correcting sentence errors","Novel excerpts","Practical texts and visual messages","Depositional landforms and bodies of water","Ng at nang, din at rin, at iba pang madalas mapagpalit","Aspekto ng pandiwa","Pokus ng pandiwa","Panghalip","Pang-ugnay: pangatnig at pang-ukol","Wastong baybay at bantas","Mga bahagi ng pananalita","Panlapi at pagbuo ng salita","Simuno at panaguri","Pagkilala at pagwawasto ng mali","Pag-aayos ng talata at pangungusap","Pagkumpleto ng pangungusap","Kahulugan ayon sa konteksto","Kasingkahulugan at kasalungat","Sawikain at idyoma","Salawikain at tayutay","Pangunahing ideya at buod","Detalye at ebidensiya sa teksto","Paghihinuha at kongklusyon","Layunin, tono at pananaw ng may-akda","Kahulugan ng salita sa binasa","Sanhi, bunga at pagkakasunod-sunod","Paghahambing at pagsusuring pampanitikan","Accuracy, precision and experimental uncertainty"]);
 
 /** College subject topics by subject id, then by the topic's exact text in SUBJECTS. */
 export const SUBJECT_TOPIC_VIDEOS:Record<string,Record<string,KhanVideo>>={
@@ -518,6 +546,19 @@ const BY_EXAM:Partial<Record<ExamId,Record<string,KhanVideo>>>={upcat:UPCAT_TOPI
 export const outlineVideo=(exam:ExamId,title:string)=>own(BY_EXAM[exam]??{},title);
 /** The Khan video for one college subject topic, or undefined. */
 export const subjectTopicVideo=(subject:string,topic:string)=>own(own(SUBJECT_TOPIC_VIDEOS,subject)??{},topic);
+/** Separate full videos cover the components of a broad added topic. */
+export function outlineVideos(exam:ExamId,title:string):KhanVideo[]{
+ const first=outlineVideo(exam,title);if(!first)return [];
+ const extras:Record<string,KhanVideo[]>={
+  "Imaginary and complex numbers":[T.polarRectangularFormsOfComplex],
+  "Laws of sines and cosines":[Q.cosineLaw],
+  "Variance, standard deviation and percentiles":[Q.percentiles],
+  "Fundamental counting principle and factorials":[T.permutationFormula],
+  "Electron configuration and quantum numbers":[Q.quantumNumbers],
+  "Nuclear reactions":[Q.nuclearFusion],
+ };
+ return [first,...(own(extras,title)??[])].filter((v,i,all)=>all.findIndex(x=>x.id===v.id)===i);
+}
 /** The UPCAT topics a reviewer summary teaches, each with its video, one row per distinct video. */
 export function conceptVideos(concept:string):{topic:string;video:KhanVideo}[]{
  const seen=new Set<string>(),out:{topic:string;video:KhanVideo}[]=[];
@@ -527,3 +568,8 @@ export function conceptVideos(concept:string):{topic:string;video:KhanVideo}[]{
  }
  return out;
 }
+
+/** Stable saved-topic keys; practice-question lookup stays separate. */
+export const TOPIC_VIDEOS:Record<string,KhanVideo>=Object.fromEntries(Object.entries(UPCAT_TOPIC_VIDEOS).map(([title,video])=>[topicKey('upcat',title),video]));
+export const TOPIC_NO_VIDEO:ReadonlySet<string>=new Set([...UPCAT_NO_VIDEO].map(title=>topicKey('upcat',title)));
+export const topicVideo=(exam:ExamId,title:string)=>own(TOPIC_VIDEOS,topicKey(exam,title));
