@@ -36,35 +36,39 @@
 .product-bottom{background:transparent;border:0;padding:14px 4px}
 .feedback-buddy{opacity:.95}
 /* Route map: the goal at the top, the skills it rests on beneath it (src/lib/route-graph.ts places
-   them). Shape and text carry every state, never colour alone; dimming touches lines and dots only. */
+   them). Shape and text carry every state, never colour alone, and every line meets 3:1 on white.
+   Orange is kept for "Needs practice"; dimming touches lines and dots only, never labels. */
+.route-heading{flex-wrap:wrap;gap:2px 12px}
+.route-heading>span+span{width:100%}
 .route-graph{position:relative;margin:18px 0 4px;min-width:0}
 .route-graph-lines{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
-.route-edge{fill:none;stroke:#c3cddc;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:opacity .15s ease}
-.route-edge.is-checked{stroke:#14bf96;stroke-width:2}
+.route-edge{fill:none;stroke:#475e7c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:opacity .15s ease}
+.route-edge.is-checked{stroke:#0f9f7c;stroke-width:2}
 .route-edge.is-route,.route-edge.is-lit{stroke:#0a2a66;stroke-width:2.5}
-.route-edge.is-route.is-detour{stroke:#d36b35}
 .route-edge.is-inferred{stroke-dasharray:3 5}
 .route-edge.is-dim{opacity:.25}
 .route-graph-stops{list-style:none;margin:0;padding:0}
 .route-node{position:absolute;left:0;top:0}
 .route-node>button{position:relative;display:block;width:100%;height:100%;padding:0;border:0;border-radius:10px;background:none;color:#0a2a66;text-align:left;cursor:pointer}
 .route-node>button:focus-visible{outline:2px solid #0a2a66;outline-offset:2px}
-.route-dot{position:absolute;display:grid;place-items:center;border:2px dashed #0a2a66;border-radius:50%;background:#fff;color:#0a2a66;font-size:12px;font-weight:800;line-height:1;transition:opacity .15s ease}
+.route-dot{position:absolute;display:grid;place-items:center;border:2px dashed #0a2a66;border-radius:50%;background:#fff;color:#0a2a66;transition:opacity .15s ease}
 .route-dot svg{width:64%;height:64%}
+.route-pin{display:block;width:8px;height:8px;border-radius:50%;background:#0a2a66}
+.route-node[data-next] .route-dot{border-style:solid}
 .route-node[data-kind='needs'] .route-dot{border-style:solid;border-color:#d36b35}
-.route-node[data-kind='checked'] .route-dot{border-style:solid;border-color:#14bf96;background:#e8f5f0}
+.route-node[data-kind='checked'] .route-dot{border-style:solid;border-color:#0f9f7c;background:#e7f9f3}
 .route-node[data-destination] .route-dot{border-style:solid;box-shadow:0 0 0 3px #fff,0 0 0 4.5px #0a2a66}
 .route-node[data-destination][data-kind='checked'] .route-dot{border-color:#0a2a66;background:#14bf96}
-.route-node[data-kind='active'] .route-dot{border-style:solid;border-color:#0a2a66;background:#14bf96;box-shadow:0 0 0 5px #e8f5f0}
+.route-node[data-kind='active'] .route-dot{border-style:solid;border-color:#0a2a66;background:#14bf96;box-shadow:0 0 0 5px #e7f9f3}
 .route-node[data-dim] .route-dot{opacity:.4}
 .route-text{position:absolute;display:block;width:max-content;padding:6px 0;isolation:isolate}
 .route-text::before{content:'';position:absolute;inset:0 -8px;z-index:-1;border-radius:9px;transition:background-color .15s ease}
-.route-node>button:hover .route-text::before,.route-node>button[aria-expanded='true'] .route-text::before{background:#f1f4f9}
-.route-node[data-kind='active']>button .route-text::before{background:#e8f5f0}
-.route-label{display:block;font-size:14px;font-weight:600;line-height:19px;overflow-wrap:anywhere}
+.route-node>button:hover .route-text::before,.route-node>button[aria-expanded='true'] .route-text::before{background:#eef3fa}
+.route-node[data-kind='active']>button .route-text::before{background:#e7f9f3}
+.route-label{display:block;font-size:14px;font-weight:600;line-height:19px;overflow-wrap:break-word}
 .route-text small{display:block;font-size:12.5px;font-weight:500;line-height:16px;color:#505a6b}
-.route-node[data-kind='active'] .route-text small{color:#0a2a66;font-weight:700}
-.route-node[data-kind='needs'] .route-text small{color:#b94f18}
+.route-node[data-kind='active'] .route-text small,.route-node[data-next] .route-text small{color:#0a2a66;font-weight:700}
+.route-node[data-kind='needs']:not([data-next]) .route-text small{color:#b94f18}
 .route-reason-links{font-weight:600;color:#0a2a66;margin-bottom:4px}
 @media(prefers-reduced-motion:reduce){.route-edge,.route-dot,.route-text::before{transition:none}}
 @media(min-width:781px){

@@ -9,10 +9,11 @@
    Pure functions: a saved route in, nodes, edges and positions out. No DOM, no
    clock and no randomness, so the same route always draws the same picture and
    the tests can pin it. Text is measured with an average glyph width that errs
-   wide, which leaves slack rather than letting a label run into a line.
+   wide, which leaves slack rather than letting a label run into a line; the
+   page passes real heights once the text is on screen.
    ========================================================================== */
 
-import { LABELS, skillDependencies, type Recovery, type Skill } from './recovery.ts';
+import { LABELS, ORDER, skillDependencies, type Attempt, type Recovery, type Skill } from './recovery.ts';
 
 export type RouteNodeKind = 'checked' | 'active' | 'needs' | 'open';
 
@@ -22,8 +23,8 @@ export type RouteGraphNode = {
   status: string;
   kind: RouteNodeKind;
   destination: boolean;
-  /** Suggested order among the steps still to check. The destination and checked steps have none. */
-  step?: number;
+  /** The skill the route moves to after this feedback. */
+  next: boolean;
   /** Skills in this route that this one builds on, and the skills it is needed for. */
   needs: Skill[];
   neededFor: Skill[];
@@ -32,7 +33,7 @@ export type RouteGraphNode = {
 export type RouteGraphEdge = {
   from: Skill;
   to: Skill;
-  /** No listed dependency joins these two; the route suggests the link (a wrong-turn clue or a detour). */
+  /** No listed dependency joins these two; an answer pattern or a detour suggested the link. */
   inferred: boolean;
   /** Part of the way from where the learner is now up to the destination. */
   onRoute: boolean;
@@ -50,10 +51,19 @@ export type RouteGraph = {
   checked: number;
 };
 
+const serialOf = (e: Attempt) => Number(e.id.split(':').at(-1));
+
+/** After a goal is reached the map rests, except while an extra "next step" question is open. */
+const isLive = (s: Recovery) => !s.goalPassed || (s.extension && s.phase !== 'complete');
+
+const isUpNext = (s: Recovery, id: Skill) =>
+  (s.phase === 'feedback' || s.phase === 'moment') && s.next === 'check' && s.nextSkill !== s.active && id === s.nextSkill;
+
 export function routeStatus(s: Recovery, id: Skill): string {
   const destination = s.destinationSkill ?? 'goal';
   return s.passed.includes(id) ? 'Checked'
-    : id === s.active ? (s.phase === 'setup' ? 'First check' : 'You’re here')
+    : id === s.active && isLive(s) ? (s.phase === 'setup' ? 'First check' : 'You’re here')
+    : isUpNext(s, id) ? 'Up next'
     : id === destination ? 'Where you’re headed'
     : s.suspected.includes(id) ? 'Needs practice'
     : 'Check if you need this';
@@ -62,11 +72,16 @@ export function routeStatus(s: Recovery, id: Skill): string {
 export function routeGraph(s: Recovery): RouteGraph {
   const destination = s.destinationSkill ?? 'goal';
   const deps = (id: Skill) => skillDependencies(id, s.topic);
+  const live = isLive(s);
+  const cycle = s.cycleStart ?? 0;
 
-  /* Checked steps stay on the map, so progress is visible instead of vanishing.
-     Once the destination holds, only what was actually checked remains. */
+  /* Checked steps stay on the map, so progress is visible instead of vanishing,
+     and that includes a detour the route never listed. Once the destination
+     holds, only what was actually checked remains. */
   const listed: Skill[] = s.goalPassed ? s.planned.filter((x) => s.passed.includes(x)) : [...s.planned];
-  if (!s.goalPassed && !listed.includes(s.active)) listed.unshift(s.active);
+  const detours = s.passed.filter((x) => !listed.includes(x) && s.evidence.some((e) => e.skill === x && serialOf(e) >= cycle));
+  listed.push(...detours);
+  if (live && !listed.includes(s.active)) listed.unshift(s.active);
   const ids = [...new Set(listed.filter((x) => x !== destination)), destination];
   const inRoute = new Set(ids);
 
@@ -97,12 +112,17 @@ export function routeGraph(s: Recovery): RouteGraph {
   };
   for (const id of ids) for (const d of deps(id)) for (const from of resolve(d, new Set())) link(from, id, false);
 
-  /* A step no listed dependency explains came from a wrong-turn clue or a
-     support detour. It is drawn as a suggestion for the next step in the route,
-     which is where both of those are inserted. */
+  /* A step no listed dependency explains came from a wrong-turn clue or from a
+     short routing check. The answer that raised it says which skill it serves;
+     without one, it is drawn as support for the next step in the route. */
+  const raisedBy = (id: Skill): Skill | undefined => {
+    const clue = s.routeClue?.skill === id ? s.evidence.filter((e) => serialOf(e) === s.routeClue!.serial).at(-1) : undefined;
+    const probe = [...s.evidence].reverse().find((e) => e.family === 'diagnostic' && e.skill !== id);
+    return [clue?.skill, probe?.skill].find((x): x is Skill => !!x && x !== id && inRoute.has(x) && !reaches(x, id));
+  };
   ids.forEach((id, i) => {
     if (id === destination || [...edges.values()].some((e) => e.from === id)) return;
-    const to = ids.slice(i + 1).find((t) => !reaches(t, id));
+    const to = raisedBy(id) ?? ids.slice(i + 1).find((t) => !reaches(t, id));
     if (to) link(id, to, true);
   });
 
@@ -112,7 +132,7 @@ export function routeGraph(s: Recovery): RouteGraph {
   const joined = [...edges.values()].filter((e) => keep.has(e.from) && keep.has(e.to));
 
   const ahead = new Set<Skill>();
-  if (!s.goalPassed && keep.has(s.active) && s.active !== destination) {
+  if (live && keep.has(s.active) && s.active !== destination) {
     const walk = (x: Skill) => {
       if (ahead.has(x)) return;
       ahead.add(x);
@@ -123,26 +143,20 @@ export function routeGraph(s: Recovery): RouteGraph {
 
   const kind = (id: Skill): RouteNodeKind =>
     s.passed.includes(id) || (id === destination && s.goalPassed) ? 'checked'
-    : id === s.active && !s.goalPassed ? 'active'
+    : id === s.active && live ? 'active'
     : id !== destination && s.suspected.includes(id) ? 'needs'
     : 'open';
 
-  /* The current step is finished first, then the rest in the route's own order. */
-  const numbered = kept.filter((id) => id !== destination && kind(id) !== 'checked');
-  const steps = [...numbered.filter((id) => kind(id) === 'active'), ...numbered.filter((id) => kind(id) !== 'active')];
-  const nodes: RouteGraphNode[] = kept.map((id) => {
-    const isDestination = id === destination;
-    return {
-      id,
-      label: isDestination ? 'Today’s goal' : LABELS[id],
-      status: routeStatus(s, id),
-      kind: kind(id),
-      destination: isDestination,
-      step: steps.includes(id) ? steps.indexOf(id) + 1 : undefined,
-      needs: joined.filter((e) => e.to === id).map((e) => e.from),
-      neededFor: joined.filter((e) => e.from === id).map((e) => e.to),
-    };
-  });
+  const nodes: RouteGraphNode[] = kept.map((id) => ({
+    id,
+    label: id === destination ? 'Today’s goal' : LABELS[id],
+    status: routeStatus(s, id),
+    kind: kind(id),
+    destination: id === destination,
+    next: kind(id) !== 'checked' && isUpNext(s, id),
+    needs: joined.filter((e) => e.to === id).map((e) => e.from),
+    neededFor: joined.filter((e) => e.from === id).map((e) => e.to),
+  }));
   const checkedSet = new Set(nodes.filter((n) => n.kind === 'checked').map((n) => n.id));
 
   return {
@@ -222,9 +236,9 @@ export function layoutRoute(graph: RouteGraph, containerWidth: number, measured?
   const width = Math.max(200, Math.round(containerWidth));
   const usable = Math.min(width, M.maxWidth);
   const left = Math.round((width - usable) / 2);
-  const columns = usable >= 470 ? 3 : usable >= 228 ? 2 : 1;
-  /* Numbered steps first, in number order; checked steps and the goal after them. */
-  const travel = new Map(graph.nodes.map((n, i) => [n.id, n.step ?? 100 + i]));
+  const columns = usable >= 470 ? 3 : 2;
+  /* Siblings keep the curriculum's own order, so nothing swaps sides when the current step moves. */
+  const travel = new Map(graph.nodes.map((n) => [n.id, ORDER.indexOf(n.id)]));
   const byId = new Map(graph.nodes.map((n) => [n.id, n]));
   const up = (id: Skill) => graph.edges.filter((e) => e.from === id).map((e) => e.to);
   const down = (id: Skill) => graph.edges.filter((e) => e.to === id).map((e) => e.from);
@@ -248,7 +262,7 @@ export function layoutRoute(graph: RouteGraph, containerWidth: number, measured?
 
   /* Order each rank to cross as few lines as possible with the ranks above,
      trying every order (a rank holds at most a handful of skills). Ties keep
-     the suggested order, so step numbers read left to right. */
+     the curriculum's order. */
   const deepest = Math.max(0, ...rank.values());
   const ranks: Skill[][] = Array.from({ length: deepest + 1 }, (_, r) =>
     graph.nodes.filter((n) => rank.get(n.id) === r).map((n) => n.id));
@@ -328,12 +342,13 @@ export function layoutRoute(graph: RouteGraph, containerWidth: number, measured?
     /* Every row keeps room for the halo, so a row does not shift when the current step moves. */
     const y = cursor + M.halo;
     let stem = y;
-    for (const id of row) {
+    for (const [i, id] of row.entries()) {
       const n = byId.get(id)!;
       const radius = radiusOf(n);
       const cx = x.get(id)!;
+      /* Text runs to just short of the next column's halo, or to the edge. */
       const labelWidth = row.length > 1
-        ? Math.floor(usable / row.length - M.halo - radius - M.gap - 8)
+        ? Math.floor((i < row.length - 1 ? x.get(row[i + 1])! - M.halo - 4 : left + usable) - (cx + radius + M.gap))
         : Math.floor(Math.min(loneLabel, left + usable - cx - radius - M.gap));
       const text = Math.max(labelWidth - 4, 40);
       const height = measured?.[id] ?? M.pad * 2
@@ -370,5 +385,7 @@ export function layoutRoute(graph: RouteGraph, containerWidth: number, measured?
     return { ...e, d };
   });
 
-  return { width, height, nodes: graph.nodes.map((n) => placed.get(n.id)!), edges };
+  /* Reading order: top to bottom, then left to right, so focus moves the way the eye does. */
+  const reading = [...placed.values()].sort((a, b) => a.row - b.row || a.x - b.x);
+  return { width, height, nodes: reading, edges };
 }
