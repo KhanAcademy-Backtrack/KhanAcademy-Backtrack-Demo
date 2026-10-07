@@ -6,6 +6,8 @@ const dir='.refs/living-scenes',origin='http://127.0.0.1:3053';await fs.mkdir(di
 const server=spawn(process.execPath,['scripts/serve-static.mjs'],{env:{...process.env,BACKTRACK_PORT:'3053'},windowsHide:true,stdio:'pipe'});
 await new Promise((r,j)=>{server.stdout.once('data',r);server.once('error',j);});
 const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
+// Every context starts as a visit whose learner already chose I’m just browsing, so the full-screen goal picker stays closed.
+const openContext=browser.newContext.bind(browser);browser.newContext=async(options)=>{const context=await openContext(options);await context.addInitScript(()=>{if(window===window.top)sessionStorage.setItem('backtrack.entry.choice','browse');});return context;};
 async function run(name,work,options={}){
  const context=await browser.newContext({viewport:{width:1280,height:850},recordVideo:{dir:`${dir}/video`,size:{width:1280,height:850}},...options}),page=await context.newPage(),errors=[];
  page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});

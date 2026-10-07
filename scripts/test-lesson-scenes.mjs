@@ -6,6 +6,8 @@ import {initialRecovery} from '../src/lib/recovery.ts';
 const dir='.refs/lesson-scenes',origin='http://127.0.0.1:3054';await fs.mkdir(dir,{recursive:true});
 const server=spawn(process.execPath,['scripts/serve-static.mjs'],{env:{...process.env,BACKTRACK_PORT:'3054'},windowsHide:true,stdio:'pipe'});await new Promise((r,j)=>{server.stdout.once('data',r);server.once('error',j);});
 const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
+// Every context starts as a visit whose learner already chose I’m just browsing, so the full-screen goal picker stays closed.
+const openContext=browser.newContext.bind(browser);browser.newContext=async(options)=>{const context=await openContext(options);await context.addInitScript(()=>{if(window===window.top)sessionStorage.setItem('backtrack.entry.choice','browse');});return context;};
 const cases=[
  ['brackets','expand','.distribution-scene','Collect next group'],
  ['quadratics','factor','.assembled-factor','3 Join the middle terms'],

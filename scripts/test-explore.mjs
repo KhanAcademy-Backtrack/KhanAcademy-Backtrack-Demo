@@ -7,6 +7,8 @@ const origin='http://127.0.0.1:3059',dir='.refs/explore-release';await fs.mkdir(
 const server=spawn(process.execPath,['scripts/serve-static.mjs'],{env:{...process.env,BACKTRACK_PORT:'3059'},windowsHide:true,stdio:'pipe'});
 await new Promise((resolve,reject)=>{server.stdout.once('data',resolve);server.once('error',reject);server.once('exit',code=>reject(Error('Server exited '+code)));});
 const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
+// Every context starts as a visit whose learner already chose I’m just browsing, so the full-screen goal picker stays closed.
+const openContext=browser.newContext.bind(browser);browser.newContext=async(options)=>{const context=await openContext(options);await context.addInitScript(()=>{if(window===window.top)sessionStorage.setItem('backtrack.entry.choice','browse');});return context;};
 async function scenario(name,run,options={}){const context=await browser.newContext({viewport:{width:1440,height:1000},...options}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));try{await run(page,context);assert.deepEqual(errors,[]);results.push({name,passed:true});console.log('PASS '+name);}catch(e){results.push({name,passed:false,error:e.message});console.log('FAIL '+name+': '+e.message);await page.screenshot({path:`${dir}/${name.replace(/\W/g,'-')}-failure.png`,fullPage:true});}finally{await context.close();}}
 const state=page=>page.evaluate(()=>JSON.parse(localStorage.getItem('backtrack.study.v1')||'null'));
 const overflow=async page=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Horizontal overflow');
