@@ -55,7 +55,7 @@ test('quiz contract rejects missing roles, keys, rationales, distractors, source
  assert.deepEqual(lessonQuizIssues(fixture()),[]);
  const mutations=[q=>q.items.pop(),q=>q.items[0].choices.pop(),q=>q.items[0].answerIndex=4,
   q=>q.items[0].choices[1]=q.items[0].choices[0],q=>q.items[0].misconceptions[1]=null,
-  q=>q.items[0].rationales.pop(),q=>q.items[0].status='reviewed',q=>q.items[0].source='family',
+  q=>q.items[0].difficulty='1',q=>q.items[0].rationales.pop(),q=>q.items[0].status='reviewed',q=>q.items[0].source='family',
   q=>q.items[0].role='apply',q=>q.items[1].answerIndex=0,q=>q.items[1].id=q.items[0].id,
   q=>q.lessonId='outline-upcat-aspekto-ng-pandiwa',q=>q.videoId='not_a_video',
   q=>q.watchFor[1].at=0,q=>q.watchFor=[q.watchFor[0]],q=>q.captionsReviewedOn='2026-02-30',

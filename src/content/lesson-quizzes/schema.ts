@@ -54,7 +54,7 @@ export function lessonQuizIssues(value:unknown):string[]{
   if(item.source!=='authored'||item.status!=='draft'||item.lang!=='en')issues.push(prefix+'original English draft required');
   if(item.subtest!==(l?.section==='Mathematics'?'math':'science'))issues.push(prefix+'subtest must match lesson');
   for(const f of ['stem','skill','concept','reviewerChapter'])if(!nonempty(item[f]))issues.push(prefix+f+' required');
-  if(![1,2,3].includes(Number(item.difficulty)))issues.push(prefix+'invalid difficulty');
+  if(typeof item.difficulty!=='number'||![1,2,3].includes(item.difficulty))issues.push(prefix+'invalid difficulty');
   if(!Number.isInteger(item.answerIndex)||Number(item.answerIndex)<0||Number(item.answerIndex)>3)issues.push(prefix+'one key in positions zero through three required');
   if(!Array.isArray(item.choices)||item.choices.length!==4||!item.choices.every(nonempty)||new Set(item.choices).size!==4)issues.push(prefix+'four distinct choices required');
   if(!Array.isArray(item.rationales)||item.rationales.length!==4||!item.rationales.every(nonempty))issues.push(prefix+'rationale for every choice required');
