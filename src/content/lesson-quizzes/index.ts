@@ -8,6 +8,8 @@ import {MATH_LOGIC_CALCULUS} from './math-logic-calculus.ts';
 import {SCIENCE_BIOLOGY} from './science-biology.ts';
 import {SCIENCE_CHEMISTRY} from './science-chemistry.ts';
 import {SCIENCE_PHYSICS} from './science-physics.ts';
+import {SCIENCE_EARTH} from './science-earth.ts';
+import {SCIENCE_ASTRONOMY} from './science-astronomy.ts';
 export {PILOT_LESSONS,QUIZ_ROLES,lessonQuizIssues,verifiedLessonSegment} from './schema.ts';
 export type {LessonQuestion,LessonQuiz} from './schema.ts';
 
@@ -24,5 +26,7 @@ export const LESSON_QUIZZES:Record<string,LessonQuiz>=Object.fromEntries([
  ...SCIENCE_BIOLOGY,
  ...SCIENCE_CHEMISTRY,
  ...SCIENCE_PHYSICS,
+ ...SCIENCE_EARTH,
+ ...SCIENCE_ASTRONOMY,
 ].map(q=>[q.lessonId,q]));
 export const lessonQuizFor=(lessonId:string):LessonQuiz|undefined=>Object.hasOwn(LESSON_QUIZZES,lessonId)?LESSON_QUIZZES[lessonId]:undefined;
