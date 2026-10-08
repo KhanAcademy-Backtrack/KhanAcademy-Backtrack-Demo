@@ -38,6 +38,7 @@ test('all published quiz prose passes the house LaTeX lint',()=>{
 test('published videos, practice pages, caption dates and exact segments are logged',()=>{
  for(const q of Object.values(LESSON_QUIZZES)){
   const v=LESSON_BY_ID[q.lessonId].videos.find(v=>v.id===q.videoId);
+  for(const url of JSON.stringify(q).match(/https?:\/\/[^\s"<>]+/g)??[])assert.ok(log.includes(url),'every authored URL needs a source receipt: '+url);
   for(const value of [v.id,v.url,q.practice.url,q.practice.checked,q.captionsReviewedOn])assert.ok(log.includes(value),value);
   assert.ok(log.includes(`lesson-quiz:${q.lessonId}`),'each caption review needs its own logged receipt');
   if(q.segment){
