@@ -12,6 +12,7 @@ import {topicLessonJourneys} from './test-topic-lessons-browser.mjs';
 import {homeJourneys} from './test-home-browser.mjs';
 import {profileJourneys} from './test-profile-browser.mjs';
 import {routeMapJourneys} from './test-route-map.mjs';
+import {lessonQuizJourneys} from './test-lesson-quizzes.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 import {speakText} from '../src/lib/notation.ts';
 
@@ -189,6 +190,7 @@ try{
  await homeJourneys({scenario,origin,root});
  await profileJourneys({scenario,origin,root});
  await routeMapJourneys({scenario,origin});
+ await lessonQuizJourneys({scenario,origin});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }
