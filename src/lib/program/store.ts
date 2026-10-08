@@ -71,7 +71,7 @@ function validLessonCheck(v:unknown){
  if(v.practice!==undefined){
   const p=v.practice;
   if(!obj(p)||!only(p,['openedAt','reportedAt','report'])||v.completedAt===undefined||!num(p.openedAt)||Number(p.openedAt)<Number(v.completedAt)||Number(p.openedAt)>Number(v.updatedAt))return false;
-  if(p.report!==undefined&&!['completed','still_difficult','access_problem'].includes(String(p.report)))return false;
+  if(p.report!==undefined&&(typeof p.report!=='string'||!['completed','still_difficult','access_problem'].includes(p.report)))return false;
   if((p.report===undefined)!==(p.reportedAt===undefined))return false;
   if(p.reportedAt!==undefined&&(!num(p.reportedAt)||Number(p.reportedAt)<Number(p.openedAt)||Number(p.reportedAt)>Number(v.updatedAt)))return false;
  }

@@ -42,6 +42,7 @@ test('invalid calls, premature reports and changed authored versions do not corr
  assert.equal(chooseLessonAnswer(s,q,0,1,NaN),s);assert.equal(recordLessonPrediction(s,q,1,true,11),s);
  assert.equal(openLessonPractice(s,q,11),s);assert.equal(reportLessonPractice(s,q,'completed',11),s);
  assert.equal(beginLessonCheck(empty,{...q,lessonId:'constructor'},10),empty);
+ const practice=openLessonPractice(finish(s),q,40);assert.equal(reportLessonPractice(practice,q,['completed'],41),practice);
  assert.equal(activeLessonCheck(s,{...q,version:2}),undefined);
  assert.equal(activeLessonCheck(s,{...q,items:[{id:'changed'},...q.items.slice(1)]}),undefined);
  const renewed=beginLessonCheck(s,{...q,version:2},5);assert.equal(renewed.lessonChecks[q.lessonId].startedAt,10);

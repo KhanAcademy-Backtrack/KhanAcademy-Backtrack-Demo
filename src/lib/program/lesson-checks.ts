@@ -43,6 +43,6 @@ export function openLessonPractice(s:ProgramState,q:QuizIdentity,now:number):Pro
  const at=time(now,c);return put(s,q.lessonId,{...c,practice:{openedAt:at},updatedAt:at});
 }
 export function reportLessonPractice(s:ProgramState,q:QuizIdentity,report:NonNullable<LessonCheck['practice']>['report'],now:number):ProgramState{
- const c=activeLessonCheck(s,q);if(!c?.practice||!clock(now)||!['completed','still_difficult','access_problem'].includes(String(report)))return s;
+ const c=activeLessonCheck(s,q);if(!c?.practice||!clock(now)||typeof report!=='string'||!['completed','still_difficult','access_problem'].includes(report))return s;
  const at=time(now,c);return put(s,q.lessonId,{...c,practice:{...c.practice,reportedAt:at,report},updatedAt:at});
 }

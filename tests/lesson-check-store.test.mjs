@@ -45,6 +45,6 @@ test('completed lesson checks reject impossible self-report chronology and field
  const done={...check(),answers:[0,1,2,3],checked:[true,true,true,true],completedAt:19};
  for(const practice of [{openedAt:18},{openedAt:21},{openedAt:19,report:'completed'},
   {openedAt:19,reportedAt:20},{openedAt:19,reportedAt:18,report:'completed'},
-  {openedAt:19,reportedAt:20,report:'passed'},{openedAt:19,verified:true}])assert.equal(validProgram(saved({...done,practice})),false);
+  {openedAt:19,reportedAt:20,report:'passed'},{openedAt:19,reportedAt:20,report:['completed']},{openedAt:19,verified:true}])assert.equal(validProgram(saved({...done,practice})),false);
  assert.equal(validProgram(saved({...done,completedAt:21})),false);
 });
