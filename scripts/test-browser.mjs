@@ -29,6 +29,8 @@ async function scenario(name,run,viewport={width:1280,height:850}){
   // Assert our UI and player parameters without third-party network/player console noise.
   // Actual Khan source pages and their players are verified separately in the in-app browser.
   await context.route('https://www.youtube-nocookie.com/**',r=>r.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Paused External Player Fixture</title>'}));
+  // External practice navigation is activity. It does not require loading Khan in a UI regression.
+  await context.route('https://www.khanacademy.org/**',r=>r.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Khan Practice Navigation Fixture</title>'}));
   if(!/program personalized|program first-entry|program returning|program direct guide/.test(name))await context.addInitScript(()=>sessionStorage.setItem('backtrack.entry.choice','study'));const page=await context.newPage();const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   if(name.startsWith('program '))page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
