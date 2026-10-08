@@ -11,7 +11,7 @@ export const MATH_LOGIC_CALCULUS=[
   items:[
    {stem:'What is the contrapositive of “if $p$, then $q$”?',choices:['If $q$, then $p$','If not $p$, then not $q$','If not $q$, then not $p$','If $p$, then not $q$'],key:2,
     miss:['converse_as_contrapositive','inverse_as_contrapositive',null,'negation_confusion'],
-    why:['Swapping the parts without negating them gives the converse.','Negating both parts without swapping them gives the inverse.','Correct. Swap the parts and negate both.','This contradicts the original statement rather than restating it.'],
+    why:['Swapping the parts without negating them gives the converse.','Negating both parts without swapping them gives the inverse.','Correct. Swap the parts and negate both.','This keeps $p$ but negates the result, so it disagrees with the original whenever $p$ is true.'],
     steps:['Converse: swap. Inverse: negate both. Contrapositive: swap and negate both.','Contrapositive of “if $p$, then $q$”: “if not $q$, then not $p$”.']},
    {stem:'Assume “if it is raining, then the road is wet” is true. Why need “if the road is wet, then it is raining” not be true?',choices:['Something else, such as a burst pipe, could wet the road; the original only says rain is enough to wet it','It must be true, because a statement and its converse always agree','Because the converse puts “not” in front of both parts','Because a conditional is true only when both of its parts are true'],key:0,
     miss:[null,'converse_equivalent','converse_inverse_confusion','conditional_truth_confusion'],
@@ -59,7 +59,7 @@ export const MATH_LOGIC_CALCULUS=[
     steps:['The derivative of $x^2$ is $2x$.','Adding any constant does not change the derivative, so the answer is $x^2 + C$.']},
    {stem:'Why does the antiderivative need “$+ C$”?',choices:['Because $C$ stands for the coefficient $2$','The derivative of any constant is $0$, so $x^2$, $x^2 + 1$ and $x^2 + \\pi$ all have derivative $2x$','To show that the answer is only approximate','Because every derivative adds a constant'],key:1,
     miss:['c_as_coefficient',null,'c_as_error','derivative_adds_constant'],
-    why:['$C$ is an unknown constant term, not a coefficient.','Correct. The constant is lost when differentiating, so reversing cannot tell which one it was.','The family $x^2 + C$ is exact; $C$ just can be any constant.','Differentiating removes constants rather than adding them.'],
+    why:['$C$ is an unknown constant term, not a coefficient.','Correct. The constant is lost when differentiating, so reversing cannot tell which one it was.','The family $x^2 + C$ is exact; $C$ can be any constant.','Differentiating removes constants rather than adding them.'],
     steps:['A constant does not change, so its derivative is $0$.','So many functions share the derivative $2x$; $C$ covers all of them.']},
    {stem:'Which function has derivative $2x$ and passes through the point $(0, 5)$?',choices:['$x^2$','$2x + 5$','$x^2 + 5$','$x^2 + 5x$'],key:2,
     miss:['forgot_constant','derivative_confusion',null,'linear_term'],

@@ -33,7 +33,7 @@ export const MATH_TRIGONOMETRY=[
   items:[
    {stem:'On the unit circle, the terminal side of angle $\\theta$ meets the circle at $(a, b)$. Which statement is true?',choices:['$\\sin\\theta = a$ and $\\cos\\theta = b$','$\\cos\\theta = a$ and $\\sin\\theta = b$','$\\cos\\theta = \\frac{a}{b}$','$\\cos\\theta = 2a$ and $\\sin\\theta = 2b$, because the diameter is $2$'],key:1,
     miss:['swap_sin_cos',null,'ratio_confusion','diameter_confusion'],
-    why:['Sine and cosine are swapped: cosine goes with the horizontal coordinate.','Correct. Cosine is the $x$-coordinate and sine is the $y$-coordinate.','$\\frac{b}{a}$ would be the tangent; cosine is just $a$.','The hypotenuse is a radius, length $1$, not the diameter.'],
+    why:['Sine and cosine are swapped: cosine goes with the horizontal coordinate.','Correct. Cosine is the $x$-coordinate and sine is the $y$-coordinate.','$\\frac{a}{b}$ divides one coordinate by the other (it is the reciprocal of the tangent). Cosine is just the $x$-coordinate, $a$.','The hypotenuse is a radius, length $1$, not the diameter.'],
     steps:['Hypotenuse: the radius, $1$.','$\\cos\\theta = \\frac{a}{1} = a$ and $\\sin\\theta = \\frac{b}{1} = b$.']},
    {stem:'Why does the cosine of $\\theta$ equal the $x$-coordinate $a$ on the unit circle?',choices:['Because cosine is always the larger coordinate','Because the angle is measured clockwise','Because $a$ is the height of the triangle','The hypotenuse is a radius of length $1$, so adjacent over hypotenuse is $\\frac{a}{1} = a$'],key:3,
     miss:['larger_coordinate','direction_confusion','height_as_adjacent',null],
