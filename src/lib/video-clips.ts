@@ -4,7 +4,8 @@ export const VERIFIED_CLIPS:Record<string,VideoClip>={
  D3a8NnpQ2vU:{start:142,end:236,label:'Match the sum and product'},
  oOTFGdjhqqM:{start:61,end:171,label:'Find all four products'},
  CLWpkv6ccpA:{start:69,end:136,label:'Combine the x terms'},
- Jp25LHI9wII:{start:51,end:139,label:'Multiply every term inside'}
+ Jp25LHI9wII:{start:51,end:139,label:'Multiply every term inside'},
+ ClYdw4d4OmA:{start:458,end:542,label:'Same-level operations go left to right'}
 };
 export function videoSource(id:string,origin:string,mode:ClipMode='focus',clip?:VideoClip,autoplay=true):string{
  if(!/^[A-Za-z0-9_-]{11}$/.test(id))throw Error('Invalid video ID');
