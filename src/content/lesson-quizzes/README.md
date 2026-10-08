@@ -1,8 +1,15 @@
 # Lesson quiz authoring
 
 Pilot: the 107 UPCAT Mathematics and Science lessons in `PILOT_LESSONS`.
-The registry is currently empty: captions have not been watched for this pass.
-It is infrastructure, not completed pilot content. Existing lesson material stays available.
+99 quizzes are registered, one file per group (`math-*.ts`, `science-*.ts`), all draft pending subject review.
+Eight lessons have none: six videos render no Transcript tab, and two lessons have no matched video.
+The 107-lesson completion test stays skipped until they do. `author.ts` builds a quiz from a compact spec.
+
+Practical notes from the first pass:
+- Khan hides the Transcript tab when the browser viewport has no size; give it a real size first.
+- Write each quiz with its key at position 0, then rotate keys so a quiz uses all four positions. Never mention a choice by position (“the first choice”); a test rejects it.
+- Lesson misconception ids may repeat ids in the shared registry. The lesson quiz shows its own rationales (`rationaleFirst`), so that is harmless, but keep each rationale complete on its own.
+- Do not build a question on a caption claim that a specialist would dispute; log it as a subject-review flag instead.
 
 Before adding a lesson-keyed entry to `index.ts`:
 

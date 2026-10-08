@@ -334,7 +334,9 @@ site's own look, and make it dynamic. Research and review notes: `docs/research/
 
 ## Lesson quiz infrastructure, 8 October 2026
 
-The 107-lesson UPCAT Mathematics/Science content pilot is blocked: `src/content/lesson-quizzes/index.ts` is empty because Khan caption access is still denied by a saved browser permission. Read `docs/LESSON_QUIZ_PILOT_2026_10_08.md` and the authoring README before adding content. Accuracy/precision/uncertainty and depositional landforms/bodies of water have no matched videos; never infer a source. Every new item must remain draft pending subject review.
+99 of the 107 UPCAT Mathematics/Science lessons have caption-reviewed draft quizzes (`src/content/lesson-quizzes/math-*.ts`, `science-*.ts`, built with `author.ts`). Khan's Transcript tab was read in the desktop app's in-app browser, which needs a sized viewport. Frames and playback were not reviewed. Six lessons wait on videos with no Transcript tab, and accuracy/precision/uncertainty and depositional landforms have no matched video. Remapping any of them is an owner decision; never infer a source. Read `docs/LESSON_QUIZ_PILOT_2026_10_08.md` and the authoring README before adding content. Every item stays draft pending subject review. Explanations name choices, never positions (tested). Lesson quizzes pass `rationaleFirst`, because their misconception ids can repeat shared registry ids.
+
+`src/lib/program/lesson-readings.ts` holds optional Read Next Khan articles (title-checked, receipts under "Lesson readings"). On quiz lessons they show only after the lesson check is finished. They write nothing. `tests/lesson-readings.test.mjs` checks the partition, the subject of every link and the receipts.
 
 Conditional lesson cues, predictions, checks, verified rewatch, worked examples, repair entry, reflection and optional practice self-reports are implemented. Optional bounded `lessonChecks` stays device-local and separate from attempts, BACKTRACK evidence, gaps and the study exposure ledger; old saves still load. Retakes do not become fresh evidence.
 
