@@ -1,5 +1,22 @@
 # Third-party materials
 
+## Lesson-quiz research, checked 2026-10-08
+
+These pages were manually opened in the in-app browser by the owner-requested research sub-agent on 2026-10-08. They support research documentation only; no competitor exercises, scripts, players or materials are embedded in Khanpanion. Details: `docs/research/2026-10-08/VIDEO_LESSON_INTEGRATION.md`.
+
+- TED-Ed temple lesson, rendered Watch / Think / Dig Deeper / Discuss flow: https://ed.ted.com/lessons/can-you-solve-the-temple-riddle-dennis-e-shasha/think?lesson_collection=math-in-real-life . Checked 2026-10-08.
+- TED-Ed teaching guidance, riddle pause/solve/reveal recommendations: https://blog.ed.ted.com/2020/09/24/4-free-ted-ed-resources-to-help-support-online-and-in-person-learning/ . Checked 2026-10-08.
+- H5P Interactive Video, public demo playback and timeline/question controls: https://h5p.org/interactive-video . Checked 2026-10-08.
+- H5P interaction/answer/completion event documentation: https://h5p.org/node/617/xapi-coverage . Checked 2026-10-08.
+- Edpuzzle per-choice feedback documentation: https://support.edpuzzle.com/hc/en-us/articles/360007545352-Can-I-include-immediate-feedback-in-the-questions . Checked 2026-10-08; no authenticated assignment tested.
+- Edpuzzle retry documentation: https://support.edpuzzle.com/hc/en-us/articles/12883625699981-Can-I-allow-multiple-attempts . Checked 2026-10-08; no authenticated assignment tested.
+- CK-12 official lesson-feature documentation: https://help.ck12.org/hc/en-us/articles/360008241774-FlexBook-2-0-Lesson-Features . Checked 2026-10-08; documented capabilities, not measured outcomes.
+- OpenStax Physics, Newton's second law: https://openstax.org/books/physics/pages/4-3-newtons-second-law-of-motion . Checked 2026-10-08. The footer and expanded citation prose say CC BY-NC-SA 4.0 and include TEA attribution requirements; nested legacy wording/linking says CC BY 4.0. This inconsistency is retained in the research. No content is redistributed or learner-facing link shipped.
+
+Pilot caption review is **not complete**. Khan Academy browser access was denied, then a saved permission still blocked it after the owner's chat approval. No new Khan video id, practice URL, timestamp cue or clip range was accepted or guessed. The 107-lesson registry remains empty; existing page checks below are not caption-review receipts. “Depositional landforms and bodies of water” also still has no matched video.
+
+## Existing source records
+
 Khan Academy logo: copied from the rendered public header SVG at https://www.khanacademy.org/ on 10 September 2026. Geometry and aspect ratio are unchanged; its inherited neutral fill is resolved to the observed #151521 for standalone SVG rendering. Used as attribution to the source of learning materials, not as BACKTRACK branding or a partnership lockup.
 
 Official Khan videos remain streamed from their original YouTube privacy-enhanced players. Since 7 October 2026 (owner's choice) each player is shown on the page straight away, paused, with no click-to-load cover, so YouTube is contacted when the player scrolls into view; nothing plays until the learner presses play. No video bytes or full transcripts are redistributed. Each player links to the original Khan lesson. The learning stop includes BACKTRACK-authored concept summaries, worked examples, and guided practice connected to the matched Khan topic. Optional exercise and article links open the originals on Khan Academy. A full Khan page is not used as the learning interface: the repair, practice, and return remain inside BACKTRACK. BACKTRACK-authored practice and examples are labeled as its own fresh checks, not official Khan assessment results.
