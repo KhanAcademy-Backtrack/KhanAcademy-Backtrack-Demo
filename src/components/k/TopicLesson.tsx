@@ -66,9 +66,9 @@ export function LessonSequence({lessons}:{lessons:TopicLesson[]}){
  const selected=useLessonSelection();
  const lesson=lessons.find(l=>l.id===selected)??lessons[0];if(!lesson)return null;
  const next=lessons[lessons.findIndex(l=>l.id===lesson.id)+1];
- return <Sheet><LessonActions lesson={lesson}/>
-  <div className="grid gap-5 lg:grid-cols-[minmax(0,240px)_minmax(0,1fr)]">
-   <nav aria-label="Choose a Topic Lesson"><label className="grid gap-2 text-sm font-semibold lg:hidden">Choose a Topic<select className="min-h-12 w-full rounded-lg border border-line bg-white px-3 text-base text-navy" value={lesson.id} onChange={e=>selectLesson(e.target.value)}>{lessons.map((l,i)=><option key={l.id} value={l.id}>{i+1}. {headlineText(l.title)}</option>)}</select></label><ol className="hidden gap-1 lg:grid">{lessons.map((l,i)=><li key={l.id}><button type="button" aria-pressed={l.id===lesson.id} onClick={()=>selectLesson(l.id)}
+ return <Sheet className="@container"><LessonActions lesson={lesson}/>
+  <div className="grid gap-5 @3xl:grid-cols-[minmax(0,240px)_minmax(0,1fr)]">
+   <nav aria-label="Choose a Topic Lesson"><label className="grid gap-2 text-sm font-semibold @3xl:hidden">Choose a Topic<select className="min-h-12 w-full rounded-lg border border-line bg-white px-3 text-base text-navy" value={lesson.id} onChange={e=>selectLesson(e.target.value)}>{lessons.map((l,i)=><option key={l.id} value={l.id}>{i+1}. {headlineText(l.title)}</option>)}</select></label><ol className="hidden gap-1 @3xl:grid">{lessons.map((l,i)=><li key={l.id}><button type="button" aria-pressed={l.id===lesson.id} onClick={()=>selectLesson(l.id)}
     className={cx('flex min-h-12 w-full gap-2 rounded-lg px-3 py-2 text-left font-semibold focus-visible:outline-3 focus-visible:outline-navy',l.id===lesson.id?'bg-mint':'hover:bg-sky')}><span className="text-ink-soft">{i+1}.</span><span><Headline>{l.title}</Headline></span></button></li>)}</ol></nav>
    <div className="min-w-0"><h2 className="mb-3 text-xl font-extrabold"><Headline>{lesson.title}</Headline></h2><LessonMaterial key={lesson.id} lesson={lesson} onNext={next?()=>selectLesson(next.id):undefined}/></div>
   </div>
