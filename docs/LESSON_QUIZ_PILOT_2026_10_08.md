@@ -32,8 +32,8 @@ For every pilot lesson, watch the actual chosen Khan video with captions, write 
 
 **Not verified:** any pilot Khan captions, new practice pages, new clip ranges, meaningful video-derived quiz content, subject accuracy, complete external playback or learner/retention outcomes. The two real quiz browser journeys remain explicitly skipped until suitable reviewed content exists. This is not a completed 107-lesson pilot.
 
-## Publication pending
+## Publication confirmed — 8 October 2026
 
-Seventeen separate commits are retained locally as the repository's configured author, polandreei, without AI attribution trailers. Main has not been pushed: Git's MSYS credential-helper process failed in the Windows sandbox, and direct native credential lookup returned Access is denied. The connected GitHub account differs from the requested author, and the available commit tool cannot preserve that configured identity. No remote ref was changed.
+The seventeen implementation, research and validation commits are on main through 5451f73d069b7fcaa629ca3275c390e4a2ff0d46, authored as the repository's configured author, polandreei, without AI attribution trailers. After the shell permission change, git push reported Everything up-to-date; a fresh fetch confirmed identical local and remote main heads. This documentation correction is committed separately.
 
-Run the existing commits' normal main push from an authenticated terminal outside the agent sandbox. This publication blocker is separate from the saved Khan browser permission and the unfinished caption/content review. Live deployment is not verified.
+The earlier Windows credential sandbox failure no longer blocks publication. Caption/content review remains unfinished at 0/107; publishing the infrastructure does not complete the pilot. Live deployment is not verified.
