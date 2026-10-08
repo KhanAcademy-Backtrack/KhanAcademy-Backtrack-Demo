@@ -27,7 +27,7 @@ function ReadNext({lesson,quiz}:{lesson:TopicLesson;quiz?:Quiz}){
  return <section aria-label="Read Next" className="grid gap-2 rounded-lg border border-line p-4">
   <h3 className="font-bold"><Headline>Read Next</Headline></h3>
   <p className="text-sm text-ink-soft">Optional Khan Academy articles. Opening one is not tracked and does not count as practice.</p>
-  <ul className="grid gap-2">{readings.map(r=><li key={r.url}><KhanLink href={r.url}>{readingLabel(r)}</KhanLink><p className="text-sm text-ink-soft"><Rich>{r.why}</Rich></p></li>)}</ul>
+  <ul className="grid gap-1">{readings.map(r=><li key={r.url}><KhanLink href={r.url}>{readingLabel(r)}</KhanLink></li>)}</ul>
  </section>;
 }
 

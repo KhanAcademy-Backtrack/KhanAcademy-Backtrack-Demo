@@ -27,12 +27,12 @@ test('readings are hand-read Khan articles with logged receipts',()=>{
    if(!CROSS_SUBJECT.has(id))assert.match(u.pathname,science?/^\/(?:science|partner-content)\//:/^\/math\//,`${id} must not link another subject: ${r.url}`);
    assert.match(r.title,/\(article\)( \|[^|]+)? \| Khan Academy$/,r.title);assert.match(r.checked,/^\d{4}-\d{2}-\d{2}$/);
    const label=readingLabel(r);assert.ok(label.length>2&&!/\(article\)|\|/.test(label),label);
-   assert.ok(r.why.length>0&&r.why.length<=140,r.why);assert.equal(unbalancedMath(r.why),false,r.why);
-   for(const s of splitMath(r.why))if(s.math)assert.deepEqual(unknownCommands(s.v),[],r.why);
+   assert.ok(r.note.length>0&&r.note.length<=140,r.note);assert.equal(unbalancedMath(r.note),false,r.note);
+   for(const s of splitMath(r.note))if(s.math)assert.deepEqual(unknownCommands(s.v),[],r.note);
    const receipt=log.split('\n').find(l=>l.startsWith('- `lesson-reading:'+id+'`'));
    assert.ok(receipt?.includes(r.url)&&receipt.includes(r.title)&&receipt.includes(r.checked),'receipt for '+r.url);
   }
  }
- assert.equal(readingLabel({title:'Learn: What is the ideal gas law? (article) | Khan Academy',url:'',checked:'',why:''}),'What is the ideal gas law?');
- assert.equal(readingLabel({title:'Difference of squares | Factoring quadratics (article) | Khan Academy',url:'',checked:'',why:''}),'Difference of squares');
+ assert.equal(readingLabel({title:'Learn: What is the ideal gas law? (article) | Khan Academy',url:'',checked:'',note:''}),'What is the ideal gas law?');
+ assert.equal(readingLabel({title:'Difference of squares | Factoring quadratics (article) | Khan Academy',url:'',checked:'',note:''}),'Difference of squares');
 });
