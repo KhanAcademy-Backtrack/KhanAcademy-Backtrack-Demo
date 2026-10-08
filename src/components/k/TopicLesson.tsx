@@ -4,7 +4,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import {useEffect,useState} from 'react';
 import {Rich} from '@/components/math/Math';
-import {PageBand,Sheet,btn,pageBody,cx} from './ui';
+import {PageBand,Sheet,btn,pageBody,cx,KhanLink} from './ui';
 import {VideoPanel} from './TopicVideo';
 import {useProgram} from './ProgramProvider';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
@@ -12,10 +12,24 @@ import {SUBJECT_BY_ID} from '@/lib/program/college-courses';
 import {PROGRAMS,PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {EXAMS} from '@/lib/program/admissions';
 import {lessonHref,lessonSiblings,type TopicLesson} from '@/lib/program/topic-lessons';
-import {lessonQuizFor,verifiedLessonSegment} from '@/content/lesson-quizzes';
+import {lessonQuizFor,verifiedLessonSegment,type LessonQuiz as Quiz} from '@/content/lesson-quizzes';
+import {activeLessonCheck} from '@/lib/program/lesson-checks';
+import {readingsFor,readingLabel} from '@/lib/program/lesson-readings';
 import {clipTime} from '@/lib/video-clips';
 const LessonQuiz=dynamic(()=>import('./LessonQuiz').then(m=>m.LessonQuiz));
 const LessonPrediction=dynamic(()=>import('./LessonQuiz').then(m=>m.LessonPrediction));
+
+/** Optional Khan articles. On a quiz lesson they appear once the lesson check is finished, so a
+ * worked article cannot prime the quiz. Opening one writes nothing. */
+function ReadNext({lesson,quiz}:{lesson:TopicLesson;quiz?:Quiz}){
+ const {state}=useProgram(),readings=readingsFor(lesson.id);
+ if(!readings.length||(quiz&&activeLessonCheck(state,quiz)?.completedAt===undefined))return null;
+ return <section aria-label="Read Next" className="grid gap-2 rounded-lg border border-line p-4">
+  <h3 className="font-bold"><Headline>Read Next</Headline></h3>
+  <p className="text-sm text-ink-soft">Optional Khan Academy articles. Opening one is not tracked and does not count as practice.</p>
+  <ul className="grid gap-2">{readings.map(r=><li key={r.url}><KhanLink href={r.url}>{readingLabel(r)}</KhanLink><p className="text-sm text-ink-soft"><Rich>{r.why}</Rich></p></li>)}</ul>
+ </section>;
+}
 
 /** Reading or revealing material writes no evidence. Authored quizzes, when available,
  * write their separate device-local practice record only after learner interaction. */
@@ -43,6 +57,7 @@ export function LessonMaterial({lesson,nextHref,onNext}:{lesson:TopicLesson;next
   </section>:!quiz&&lesson.videos.length?<section aria-label="Study This Lesson" className="rounded-xl bg-mint p-4">
    <h3 className="font-bold"><Headline>Make the Idea Your Own</Headline></h3><ol className="mt-2 list-decimal space-y-2 pl-5 text-[15px]"><li>Pause at a worked example and predict the next step.</li><li>Explain why that step works in your own words.</li><li>Close your notes and try a similar example. Revisit the part you cannot yet explain.</li></ol>
   </section>:!quiz&&lesson.videos.length===0?<p className="rounded-lg bg-mint p-4 font-semibold">Not written yet. You can save this topic for later.</p>:null}
+  <ReadNext lesson={lesson} quiz={quiz}/>
  </div>;
 }
 

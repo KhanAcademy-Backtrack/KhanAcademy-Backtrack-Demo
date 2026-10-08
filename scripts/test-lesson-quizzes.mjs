@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {LESSON_QUIZZES,verifiedLessonSegment,PILOT_LESSONS} from '../src/content/lesson-quizzes/index.ts';
 import {LESSON_BY_ID,lessonHref} from '../src/lib/program/topic-lessons.ts';
+import {readingsFor} from '../src/lib/program/lesson-readings.ts';
 import {PROGRAM_KEY,initialProgram} from '../src/lib/program/store.ts';
 
 const snapshot=page=>page.evaluate(({key,empty})=>{
@@ -33,6 +34,7 @@ export async function lessonQuizJourneys({scenario,origin,fixture}){
    const lesson=fixture?.lesson??LESSON_BY_ID[quiz.lessonId],clip=verifiedLessonSegment(quiz);
    await page.goto(origin+(fixture?.route??lessonHref(quiz.lessonId)));await page.locator('[data-lesson-quiz]').waitFor();
    const before=await snapshot(page),panel=page.locator('[data-lesson-quiz]');
+   const readNext=page.getByRole('region',{name:'Read Next'});assert.equal(await readNext.count(),0,'readings wait until the lesson check is finished');
    if(quiz.prediction){const p=page.getByRole('region',{name:'Predict First'});assert.equal(await p.locator('[aria-label="Correct answer"]').count(),0);await p.getByRole('radio').first().click();}
    await panel.getByRole('button',{name:'Start Lesson Check',exact:true}).click();
    await panel.getByRole('radio').nth((quiz.items[0].answerIndex+1)%4).click();await panel.getByRole('button',{name:'Check',exact:true}).click();
@@ -53,6 +55,9 @@ export async function lessonQuizJourneys({scenario,origin,fixture}){
     else await panel.getByRole('button',{name:'Next Question',exact:true}).click();
    }
    await panel.getByText(/Lesson check finished: 2 of 4 correct/).waitFor();
+   if(readingsFor(quiz.lessonId).length){await readNext.waitFor();const links=readNext.getByRole('link');assert.equal(await links.count(),readingsFor(quiz.lessonId).length);
+    for(const l of await links.all()){assert.equal(await l.getAttribute('target'),'_blank');assert.match(await l.getAttribute('rel'),/noopener/);}
+    await links.first().evaluate(el=>el.addEventListener('click',e=>e.preventDefault()));await links.first().click();}
    if(quiz.prediction)await panel.getByRole('heading',{name:'Revisit Your Prediction',exact:true}).waitFor();
    const practice=panel.getByRole('link',{name:/↗$/});assert.equal(await practice.getAttribute('href'),quiz.practice.url);
    // Prevent navigation; the real external page was hand-verified during authoring.
