@@ -2,6 +2,7 @@
 import {Headline,headlineText} from './Headline';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/navigation';
 import {useEffect,useState} from 'react';
 import {Rich} from '@/components/math/Math';
 import {PageBand,Sheet,btn,pageBody,cx,KhanLink} from './ui';
@@ -11,7 +12,8 @@ import {CONCEPT_BY_ID} from '@/lib/program/concepts';
 import {SUBJECT_BY_ID} from '@/lib/program/college-courses';
 import {PROGRAMS,PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {EXAMS} from '@/lib/program/admissions';
-import {lessonHref,lessonSiblings,type TopicLesson} from '@/lib/program/topic-lessons';
+import {lessonHref,standaloneLessonHref,lessonSiblings,type TopicLesson} from '@/lib/program/topic-lessons';
+import {selectLesson,useLessonSelection} from './useLessonSelection';
 import {lessonQuizFor,verifiedLessonSegment,type LessonQuiz as Quiz} from '@/content/lesson-quizzes';
 import {activeLessonCheck} from '@/lib/program/lesson-checks';
 import {readingsFor,readingLabel} from '@/lib/program/lesson-readings';
@@ -64,26 +66,48 @@ export function LessonMaterial({lesson,nextHref,onNext}:{lesson:TopicLesson;next
 /** A lesson selector chooses material, rather than asking for another click to open a video.
  * Only the selected topic's players mount, limiting memory/network use on phones. */
 export function LessonSequence({lessons,program}:{lessons:TopicLesson[];program?:string}){
- const [selected,setSelected]=useState(lessons[0]?.id);
+ const selected=useLessonSelection();
  const lesson=lessons.find(l=>l.id===selected)??lessons[0];if(!lesson)return null;
  const next=lessons[lessons.findIndex(l=>l.id===lesson.id)+1];
- return <Sheet><h2 className="text-xl font-extrabold"><Headline>Topic Lessons</Headline></h2><p className="mt-1 text-ink-soft">Choose one topic. Its learning material is ready below.</p>
+ return <Sheet><LessonActions lesson={lesson}/><h2 className="text-xl font-extrabold"><Headline>Topic Lessons</Headline></h2><p className="mt-1 text-ink-soft">Choose one topic. Its learning material is ready below.</p>
   <div className="mt-4 grid gap-5 lg:grid-cols-[minmax(0,240px)_minmax(0,1fr)]">
-   <nav aria-label="Choose a Topic Lesson"><label className="grid gap-2 text-sm font-semibold lg:hidden">Choose a Topic<select className="min-h-12 w-full rounded-lg border border-line bg-white px-3 text-base text-navy" value={lesson.id} onChange={e=>setSelected(e.target.value)}>{lessons.map((l,i)=><option key={l.id} value={l.id}>{i+1}. {headlineText(l.title)}</option>)}</select></label><ol className="hidden gap-1 lg:grid">{lessons.map((l,i)=><li key={l.id}><button type="button" aria-pressed={l.id===lesson.id} onClick={()=>setSelected(l.id)}
+   <nav aria-label="Choose a Topic Lesson"><label className="grid gap-2 text-sm font-semibold lg:hidden">Choose a Topic<select className="min-h-12 w-full rounded-lg border border-line bg-white px-3 text-base text-navy" value={lesson.id} onChange={e=>selectLesson(e.target.value)}>{lessons.map((l,i)=><option key={l.id} value={l.id}>{i+1}. {headlineText(l.title)}</option>)}</select></label><ol className="hidden gap-1 lg:grid">{lessons.map((l,i)=><li key={l.id}><button type="button" aria-pressed={l.id===lesson.id} onClick={()=>selectLesson(l.id)}
     className={cx('flex min-h-12 w-full gap-2 rounded-lg px-3 py-2 text-left font-semibold focus-visible:outline-3 focus-visible:outline-navy',l.id===lesson.id?'bg-mint':'hover:bg-sky')}><span className="text-ink-soft">{i+1}.</span><span><Headline>{l.title}</Headline></span></button></li>)}</ol></nav>
-   <div className="min-w-0"><h2 className="mb-3 text-xl font-extrabold"><Headline>{lesson.title}</Headline></h2><LessonMaterial key={lesson.id} lesson={lesson} onNext={next?()=>setSelected(next.id):undefined}/><Link className={cx(btn.text,'mt-4')} href={lessonHref(lesson.id)+(program?'?program='+program:'')}><Headline>Open This Lesson <span aria-hidden="true">→</span></Headline></Link></div>
+   <div className="min-w-0"><h2 className="mb-3 text-xl font-extrabold"><Headline>{lesson.title}</Headline></h2><LessonMaterial key={lesson.id} lesson={lesson} onNext={next?()=>selectLesson(next.id):undefined}/><Link className={cx(btn.text,'mt-4')} href={lessonHref(lesson.id,program)}><Headline>Open This Lesson <span aria-hidden="true">→</span></Headline></Link></div>
   </div>
  </Sheet>;
 }
 
 export function TopicLessonPage({lesson}:{lesson:TopicLesson}){
+ const router=useRouter(),target=lessonHref(lesson.id);
+ useEffect(()=>{
+  if(target===standaloneLessonHref(lesson.id))return;
+  const params=new URLSearchParams(window.location.search);
+  const destination=lessonHref(lesson.id,params.get('program')??undefined);
+  router.replace(destination+window.location.hash);
+ },[lesson.id,router,target]);
+ if(target!==standaloneLessonHref(lesson.id))return <div className={pageBody}><p role="status">Opening your lesson…</p><Link className={btn.text} href={target}>Continue to the lesson</Link></div>;
+ return <StandaloneLessonPage lesson={lesson}/>;
+}
+
+function LessonActions({lesson}:{lesson:TopicLesson}){
+ const {state,update}=useProgram(),key=lesson.saveKey;
+ if(!lesson.exam&&!key)return null;
+ const saved=!!key&&state.bookmarks.includes(key);
+ return <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+  {lesson.exam&&<Link href={'/reviewer?exam='+lesson.exam} className={btn.quiet}><Headline>← Back to the Reviewer</Headline></Link>}
+  {key&&<button type="button" className={btn.chip} aria-pressed={saved} onClick={()=>update(s=>({...s,bookmarks:s.bookmarks.includes(key)?s.bookmarks.filter(k=>k!==key):[...s.bookmarks,key]}))}><Headline>{saved?'Saved':'Save Lesson'}</Headline></button>}
+ </div>;
+}
+
+function StandaloneLessonPage({lesson}:{lesson:TopicLesson}){
  const {state,update}=useProgram();
  const [program,setProgram]=useState<string>();
  useEffect(()=>{const p=new URLSearchParams(location.search).get('program');setProgram(p&&PROGRAM_BY_ID[p]?.subjects.includes(lesson.subject??'')?p:undefined);},[lesson.id,lesson.subject]);
  const siblings=lessonSiblings(lesson),index=siblings.findIndex(l=>l.id===lesson.id),previous=siblings[index-1],next=siblings[index+1];
  const subjectProgram=program??PROGRAMS.find(p=>p.subjects.includes(lesson.subject??''))?.id;
  const parent=lesson.exam?'/reviewer?exam='+lesson.exam:subjectProgram?'/bridge/'+subjectProgram+'/'+lesson.subject:'/bridge';
- const href=(id:string)=>lessonHref(id)+(program?'?program='+program:'');
+ const href=(id:string)=>lessonHref(id,program);
  const context=lesson.exam?EXAMS[lesson.exam].name+' · '+lesson.group:lesson.section;
  const saved=!!lesson.saveKey&&state.bookmarks.includes(lesson.saveKey);
  const subject=lesson.subject?SUBJECT_BY_ID[lesson.subject]:undefined;

@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {TOPIC_LESSONS,LESSON_BY_ID,outlineLessonId,subjectLessonId,conceptLessons,subjectLessons} from '../src/lib/program/topic-lessons.ts';
+import {TOPIC_LESSONS,LESSON_BY_ID,outlineLessonId,subjectLessonId,conceptLessons,subjectLessons,lessonHref,standaloneLessonHref} from '../src/lib/program/topic-lessons.ts';
+import {CONCEPT_BY_ID} from '../src/lib/program/concepts.ts';
+import {PROGRAMS} from '../src/lib/program/bridge.ts';
 import {EXAM_OUTLINES,topicKey} from '../src/lib/program/exam-outline.ts';
 import {SUBJECTS} from '../src/lib/program/college-courses.ts';
 import {unknownCommands,unbalancedMath,splitMath} from '../src/lib/notation.ts';
@@ -40,4 +42,35 @@ test('original topic-guide mathematics uses balanced, supported LaTeX',()=>{
   assert.equal(unbalancedMath(s),false,l.id+' '+s);
   for(const seg of splitMath(s))if(seg.math)assert.deepEqual(unknownCommands(seg.v),[],l.id+' '+seg.v);
  }
+});
+
+test('every lesson opens its existing study page with the exact material selected',()=>{
+ for(const lesson of TOPIC_LESSONS){
+  const url=new URL(lessonHref(lesson.id),'https://khanpanion.vercel.app');
+  if(lesson.concepts.length){
+   assert.ok(CONCEPT_BY_ID[lesson.concepts[0]],lesson.id);
+   assert.equal(url.pathname,'/learn/'+lesson.concepts[0]);
+   assert.equal(url.searchParams.get('lesson'),lesson.id);
+   assert.ok(conceptLessons(lesson.concepts[0],lesson.exam).includes(lesson));
+  }else if(lesson.subject){
+   const parent=PROGRAMS.find(p=>p.subjects.includes(lesson.subject));assert.ok(parent,lesson.id);
+   assert.equal(url.pathname,`/bridge/${parent.id}/${lesson.subject}`);
+   assert.equal(url.searchParams.get('lesson'),lesson.id);
+   assert.ok(subjectLessons(lesson.subject).includes(lesson));
+  }else{
+   assert.equal(url.pathname,standaloneLessonHref(lesson.id),'Unmapped material must not be sent to an unrelated topic');
+   assert.equal(url.search,'');
+  }
+ }
+ assert.equal(new URL(lessonHref(outlineLessonId('upcat','Word meaning from context clues')),'https://test.local').pathname,'/learn/vocabulary_context');
+});
+
+test('college lesson navigation retains a valid field and safely rejects unrelated fields',()=>{
+ for(const lesson of TOPIC_LESSONS.filter(l=>l.subject)){
+  for(const program of PROGRAMS.filter(p=>p.subjects.includes(lesson.subject))){
+   assert.equal(new URL(lessonHref(lesson.id,program.id),'https://test.local').pathname,`/bridge/${program.id}/${lesson.subject}`);
+  }
+  assert.equal(lessonHref(lesson.id,'not-a-field'),lessonHref(lesson.id));
+ }
+ assert.equal(lessonHref('toString'),standaloneLessonHref('toString'));
 });

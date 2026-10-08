@@ -13,13 +13,15 @@ import {SUBTEST_LABEL} from '@/lib/mock/types';
 import {TOPICS,NEXT_SKILL} from '@/lib/recovery';
 import {TOPIC_CHECK} from '@/lib/mock/blueprint';
 import {Rich} from '@/components/math/Math';
-import {conceptLessons} from '@/lib/program/topic-lessons';
+import {conceptLessons,LESSON_BY_ID} from '@/lib/program/topic-lessons';
 import {LessonSequence} from './TopicLesson';
+import {useLessonSelection} from './useLessonSelection';
 
 export function LearnConcept({id}:{id:string}){
  const {state,today}=useProgram(),fix=useFix();
+ const selected=useLessonSelection(),requested=Object.hasOwn(LESSON_BY_ID,selected)?LESSON_BY_ID[selected]:undefined;
  const c=CONCEPT_BY_ID[id];if(!c)return null;
- const lessons=conceptLessons(c.id);
+ const lessons=conceptLessons(c.id,requested?.concepts.includes(c.id)?requested.exam:undefined);
  const checks=state.concepts[id]?.checks??[],last=checks[checks.length-1];
  const chapter=CHAPTER_IDS.has(c.chapter)?CHAPTER_BY_ID[c.chapter]:undefined;
  const seed=`${today.replace(/-/g,'')}${checks.length}`;
