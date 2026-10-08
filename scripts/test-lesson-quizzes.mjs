@@ -54,7 +54,7 @@ export async function lessonQuizJourneys({scenario,origin,fixture}){
    const practice=panel.getByRole('link',{name:/↗$/});assert.equal(await practice.getAttribute('href'),quiz.practice.url);
    // Prevent navigation; the real external page was hand-verified during authoring.
    await practice.evaluate(el=>el.addEventListener('click',e=>e.preventDefault()));await practice.click();
-   await panel.getByRole('button',{name:'Still Difficult',exact:true}).click();
+   await panel.getByRole('button',{name:'Still difficult',exact:true}).click();
    const c=(await program(page)).lessonChecks[quiz.lessonId];assert.ok(c.completedAt);assert.equal(c.practice.report,'still_difficult');assert.equal(c.runs,1);
    assert.deepEqual(await snapshot(page),before,'completion and self-report cannot clear gaps or write evidence');
    await page.reload();await page.getByText(/Lesson check finished: 2 of 4 correct/).waitFor();
