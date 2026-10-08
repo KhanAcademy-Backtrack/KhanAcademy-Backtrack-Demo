@@ -247,8 +247,8 @@ Owner scope: 107 UPCAT Mathematics/Science lessons. Infrastructure is implemente
 - [x] Keep bounded lessonChecks device-local, backward compatible and separate from the attempts list, gaps, BACKTRACK evidence and study exposures.
 - [x] Add content/save/evidence tests and phone/desktop browser journeys; verify the integrated interaction with isolated synthetic fixtures that are never published.
 - [x] Complete the owner-requested research on connected video/lesson flows and log manually checked sources without adding competitor material to the product.
-- [x] Run all four repository checks: 224 unit passes/one explicit content skip, clean typecheck, 690-page private sandbox-workaround export, 82 Chrome browser passes; two real quiz journeys remain explicitly skipped.
-- [ ] Enable the saved Khan browser permission, watch actual pilot videos with captions, hand-check practice pages/optional ranges, log dated observations and author the 107 lesson quizzes.
+- [x] Rerun all four checks directly in the repository after the filesystem permission change: 224 unit passes/one explicit content skip, clean typecheck, 690-page unmodified native export, 82 Chrome browser passes against that export; two real quiz journeys remain explicitly skipped.
+- [ ] Resolve the Khan browser permission denial despite the owner's Always allow setting, watch actual pilot videos with captions, hand-check practice pages/optional ranges, log dated observations and author the 107 lesson quizzes.
 - [ ] Find hand-checked video matches for Accuracy, precision and experimental uncertainty, and Depositional landforms and bodies of water.
 - [ ] Complete the real lesson-quiz miss/rewatch browser journeys using published caption-reviewed content.
 - [ ] Obtain subject review of every new original question; authored items stay draft until that review.
