@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test: 224 passed, 1 content-pilot test explicitly skipped
+npm test          # node --test: 227 passed, 1 content-pilot test explicitly skipped
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 690 generated pages (including 404)
 npm run test:browser  # Playwright acceptance; Chrome by default, BROWSER_CHANNEL=msedge supported
@@ -340,4 +340,4 @@ site's own look, and make it dynamic. Research and review notes: `docs/research/
 
 Conditional lesson cues, predictions, checks, verified rewatch, worked examples, repair entry, reflection and optional practice self-reports are implemented. Optional bounded `lessonChecks` stays device-local and separate from attempts, BACKTRACK evidence, gaps and the study exposure ledger; old saves still load. Retakes do not become fresh evidence.
 
-Validation rerun after the filesystem permission change: 224 unit tests passed and one content-completion test explicitly skipped; typecheck passed; the unmodified repository exported 690 pages without the earlier private Windows sandbox workarounds; all 82 Chrome browser checks passed against that export on the default port 3050. Two real quiz journeys remain explicitly skipped. Two additional phone/desktop synthetic integration journeys previously passed, then their temporary registry/route was removed. These checks do not establish caption/content accuracy, complete playback or learner outcomes. Khan browsing still returns a saved-permission denial despite the owner's Always allow screenshot and a fresh browser session. No private compiler patch or test teaching fixture is shipped.
+Validation on 8 October after the 99-quiz content pass: 227 unit tests passed and the 107-lesson completion test is explicitly skipped; typecheck passed; the export has 690 pages; all 82 Chrome browser checks passed, including both real lesson-quiz journeys (miss, verified rewatch, Every choice rationales, completion, Read Next, reload and retake) at 375 and 1280 px. Two additional phone/desktop synthetic integration journeys previously passed, then their temporary registry/route was removed. These checks do not establish caption/content accuracy, complete playback or learner outcomes. Khan browsing still returns a saved-permission denial despite the owner's Always allow screenshot and a fresh browser session. No private compiler patch or test teaching fixture is shipped.
