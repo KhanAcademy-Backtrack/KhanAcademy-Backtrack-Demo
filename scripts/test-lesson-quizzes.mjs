@@ -1,19 +1,19 @@
 import assert from 'node:assert/strict';
 import {LESSON_QUIZZES,verifiedLessonSegment,PILOT_LESSONS} from '../src/content/lesson-quizzes/index.ts';
 import {LESSON_BY_ID,lessonHref} from '../src/lib/program/topic-lessons.ts';
-import {PROGRAM_KEY} from '../src/lib/program/store.ts';
+import {PROGRAM_KEY,initialProgram} from '../src/lib/program/store.ts';
 
-const snapshot=page=>page.evaluate(k=>{
- const p=JSON.parse(localStorage.getItem(k)||'null');
+const snapshot=page=>page.evaluate(({key,empty})=>{
+ const p=JSON.parse(localStorage.getItem(key)||'null')??empty;
  return {study:localStorage.getItem('backtrack.study.v1'),routes:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith('backtrack.route.v1.')).sort().map(k=>[k,localStorage.getItem(k)])),program:p?Object.fromEntries(['attempts','concepts','recall','notebook','daily','studyDays','missions','placement'].map(k=>[k,p[k]])):null};
-},PROGRAM_KEY);
+},{key:PROGRAM_KEY,empty:initialProgram()});
 const program=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)||'null'),PROGRAM_KEY);
 const overflow=async page=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'lesson quiz overflows viewport');
 
 /** Real content only. The absence of caption-reviewed content is visibly skipped,
  * never counted as a completed quiz or replaced with a fabricated teaching item. */
-export async function lessonQuizJourneys({scenario,origin}){
- const quiz=Object.values(LESSON_QUIZZES).find(q=>verifiedLessonSegment(q));
+export async function lessonQuizJourneys({scenario,origin,fixture}){
+ const quiz=fixture?.quiz??Object.values(LESSON_QUIZZES).find(q=>verifiedLessonSegment(q));
  for(const width of [375,1280]){
   const viewport={width,height:850};
   if(!quiz){
@@ -30,8 +30,8 @@ export async function lessonQuizJourneys({scenario,origin}){
    continue;
   }
   await scenario(`program lesson quiz miss rewatch completion and retake ${width}`,async page=>{
-   const lesson=LESSON_BY_ID[quiz.lessonId],clip=verifiedLessonSegment(quiz);
-   await page.goto(origin+lessonHref(quiz.lessonId));await page.locator('[data-lesson-quiz]').waitFor();
+   const lesson=fixture?.lesson??LESSON_BY_ID[quiz.lessonId],clip=verifiedLessonSegment(quiz);
+   await page.goto(origin+(fixture?.route??lessonHref(quiz.lessonId)));await page.locator('[data-lesson-quiz]').waitFor();
    const before=await snapshot(page),panel=page.locator('[data-lesson-quiz]');
    if(quiz.prediction){const p=page.getByRole('region',{name:'Predict First'});assert.equal(await p.locator('[aria-label="Correct answer"]').count(),0);await p.getByRole('radio').first().click();}
    await panel.getByRole('button',{name:'Start Lesson Check',exact:true}).click();

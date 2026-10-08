@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {initialProgram,validProgram} from '../src/lib/program/store.ts';
 import {initialStudy} from '../src/lib/study.ts';
 import {findGaps} from '../src/lib/gaps.ts';
+import {initialRecovery} from '../src/lib/recovery.ts';
 import {activeLessonCheck,beginLessonCheck,chooseLessonAnswer,checkLessonAnswer,recordLessonPrediction,openLessonPractice,reportLessonPractice} from '../src/lib/program/lesson-checks.ts';
 
 // Identity-only fixture: no authored teaching content or false caption receipt.
@@ -10,7 +11,8 @@ const q={lessonId:'outline-upcat-fractions-and-decimals',version:1,items:[0,1,2,
 const finish=(s)=>{for(let i=0;i<4;i++){s=chooseLessonAnswer(s,q,i,i,30+i);s=checkLessonAnswer(s,q,i,30+i);}return s;};
 
 test('lesson quiz writes only its separate record and never creates or clears gaps',()=>{
- const initial=initialProgram(),study=initialStudy(),studyCopy=structuredClone(study),gaps=findGaps(study,initial.attempts,100);
+ const initial=initialProgram(),study={...initialStudy(),routes:{brackets:{...initialRecovery('brackets'),suspected:['terms'],updatedAt:1}}},studyCopy=structuredClone(study),gaps=findGaps(study,initial.attempts,100);
+ assert.equal(gaps.ready[0].skill,'terms','the existing gap stays open throughout lesson practice');
  let s=beginLessonCheck(initial,q,10);assert.equal(beginLessonCheck(s,q,11),s);
  s=recordLessonPrediction(s,q,1,false,12);
  s=chooseLessonAnswer(s,q,0,'idk',15);s=checkLessonAnswer(s,q,0,16);
