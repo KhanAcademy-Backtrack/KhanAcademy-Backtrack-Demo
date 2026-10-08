@@ -2,6 +2,7 @@ import type {LessonQuiz} from './schema.ts';
 import {MATH_NUMBER} from './math-number.ts';
 import {MATH_ALGEBRA} from './math-algebra.ts';
 import {MATH_GEOMETRY} from './math-geometry.ts';
+import {MATH_TRIGONOMETRY} from './math-trigonometry.ts';
 export {PILOT_LESSONS,QUIZ_ROLES,lessonQuizIssues,verifiedLessonSegment} from './schema.ts';
 export type {LessonQuestion,LessonQuiz} from './schema.ts';
 
@@ -12,5 +13,6 @@ export const LESSON_QUIZZES:Record<string,LessonQuiz>=Object.fromEntries([
  ...MATH_NUMBER,
  ...MATH_ALGEBRA,
  ...MATH_GEOMETRY,
+ ...MATH_TRIGONOMETRY,
 ].map(q=>[q.lessonId,q]));
 export const lessonQuizFor=(lessonId:string):LessonQuiz|undefined=>Object.hasOwn(LESSON_QUIZZES,lessonId)?LESSON_QUIZZES[lessonId]:undefined;
