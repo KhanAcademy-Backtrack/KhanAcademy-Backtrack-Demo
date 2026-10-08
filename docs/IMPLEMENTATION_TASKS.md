@@ -1,5 +1,17 @@
 # Complete study-companion implementation checklist
 
+## Direct lesson navigation — 8 October 2026
+
+Owner scope: simplify every lesson's entry and overlapping content, on a new branch with
+separate commits by `polandreei`. Branch: `codex/direct-lesson-navigation`.
+Details: [LESSON_NAVIGATION_2026_10_08.md](LESSON_NAVIGATION_2026_10_08.md).
+
+- [x] Route mapped outline lessons directly to their concept and college lessons to their subject, with the exact clicked lesson selected.
+- [x] Preserve original links, outline bookmark keys, DCAT/college context, lesson quizzes and learning-evidence boundaries.
+- [x] Remove redundant lesson links and repeated college video sections, keeping unique introductions available.
+- [x] Finish catalog-wide checks, the 690-page production export and phone/desktop browser verification: 230 unit passes/one explicit skip, 85 browser passes and eight final focused reruns.
+- [x] Package the verified work in separate commits by `polandreei` on the requested new branch; the release record accompanies its push.
+
 ## UPCAT topic sweep — 7 October 2026
 
 - [x] Check public reviewer/topic sources and record access and coverage limits.
