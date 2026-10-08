@@ -37,6 +37,9 @@ export async function lessonQuizJourneys({scenario,origin,fixture}){
    await panel.getByRole('button',{name:'Start Lesson Check',exact:true}).click();
    await panel.getByRole('radio').nth((quiz.items[0].answerIndex+1)%4).click();await panel.getByRole('button',{name:'Check',exact:true}).click();
    await panel.getByText('Not this time. Here is why.',{exact:true}).waitFor();
+   // Lesson misconception ids can coincide with shared registry ids; every choice must keep the quiz's own rationale.
+   await panel.getByRole('button',{name:/^Show explanation$/i}).click();
+   for(const [i,r] of quiz.items[0].rationales.entries()){const prose=r.split('$')[0].trim().slice(0,24);if(prose.length>=8)assert.ok(await panel.getByRole('listitem').filter({hasText:prose}).count()>=1,`Every choice line ${i} must show the quiz rationale`);}
    const rewatch=panel.getByRole('link',{name:/^Rewatch verified segment:/});await rewatch.waitFor();await rewatch.click();
    const player=page.locator(`iframe[src*="youtube-nocookie.com/embed/${quiz.videoId}"]`);await player.waitFor();
    const src=new URL(await player.getAttribute('src'));assert.equal(src.searchParams.get('start'),String(clip.start));assert.equal(src.searchParams.get('end'),String(clip.end));assert.equal(src.searchParams.get('autoplay'),'0');

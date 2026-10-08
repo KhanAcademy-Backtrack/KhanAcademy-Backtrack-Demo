@@ -53,12 +53,14 @@ export function WhyPanel({item,chosen,lang='en',linksBeside=false,rationaleFirst
  </div>;
 }
 
-export function Explanation({item}:{item:MockItem}){
+/** `rationaleFirst` (lesson quizzes) shows the item's own rationale for every choice: their misconception
+ * ids may coincide with unrelated entries in the shared registry. */
+export function Explanation({item,rationaleFirst=false}:{item:MockItem;rationaleFirst?:boolean}){
  return <div className="rounded-xl bg-sky/70 p-4 text-[15px] leading-relaxed text-navy sm:p-5">
   <p className="font-bold">Worked solution</p>
   <ol className="mt-2 list-decimal space-y-1 pl-5 font-serif text-[17px]">{item.solutionSteps.map((s,i)=><li key={i}><Rich>{s}</Rich></li>)}</ol>
   <p className="mt-4 font-bold">Every choice</p>
-  <ul className="mt-2 space-y-2">{item.choices.map((c,i)=>{const m=item.misconceptions[i]?misconception(item.misconceptions[i]!):undefined;return <li key={i} className="flex gap-3"><span className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',i===item.answerIndex?'bg-green':'bg-white')}>{LETTERS[i]}</span><span><span className="font-serif"><Rich>{c}</Rich></span>{' '}<span className="text-ink-soft"><Rich>{i===item.answerIndex?'Correct.':m?`${m.label}. ${m.why}`:item.rationales?.[i]??''}</Rich></span></span></li>;})}</ul>
+  <ul className="mt-2 space-y-2">{item.choices.map((c,i)=>{const own=rationaleFirst?item.rationales?.[i]:undefined,m=own===undefined&&item.misconceptions[i]?misconception(item.misconceptions[i]!):undefined;return <li key={i} className="flex gap-3"><span className={cx('grid h-7 w-7 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',i===item.answerIndex?'bg-green':'bg-white')}>{LETTERS[i]}</span><span><span className="font-serif"><Rich>{c}</Rich></span>{' '}<span className="text-ink-soft"><Rich>{own??(i===item.answerIndex?'Correct.':m?`${m.label}. ${m.why}`:item.rationales?.[i]??'')}</Rich></span></span></li>;})}</ul>
  </div>;
 }
 
@@ -113,7 +115,7 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
     <button className={btn.ghost} aria-expanded={explain} onClick={()=>setExplain(!explain)}><Headline>{explain?t(lang,'mock.hideExplain'):t(lang,'mock.explain')}</Headline></button>
     {actions&&<div className="ml-auto flex flex-wrap items-center gap-3">{actions}</div>}
    </div>
-   {explain&&<Explanation item={item}/>}
+   {explain&&<Explanation item={item} rationaleFirst={rationaleFirst}/>}
   </motion.div>}</AnimatePresence>
  </div>;
 }
