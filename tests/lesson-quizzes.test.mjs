@@ -35,6 +35,13 @@ test('all published quiz prose passes the house LaTeX lint',()=>{
  latex('Solve $x = 4$.');
 });
 
+test('quiz text never points at a choice by its position',()=>{
+ // Explanations must name the choice: authoring moves keys between positions after writing.
+ const positional=/\b(?:only|the) (?:first|second|third|fourth|last) (?:choice|option)\b|\b(?:choice|option) [A-D]\b/i;
+ for(const q of Object.values(LESSON_QUIZZES))for(const i of [...q.items,...(q.prediction?[q.prediction]:[])])for(const s of fields(i))assert.doesNotMatch(s,positional,i.id);
+ assert.match('Only the first choice gives both.',positional);assert.doesNotMatch('Each first choice pairs with every second choice.',positional);
+});
+
 test('published videos, practice pages, caption dates and exact segments are logged',()=>{
  for(const q of Object.values(LESSON_QUIZZES)){
   const v=LESSON_BY_ID[q.lessonId].videos.find(v=>v.id===q.videoId);

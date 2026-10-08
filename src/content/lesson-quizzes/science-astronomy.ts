@@ -15,7 +15,7 @@ export const SCIENCE_ASTRONOMY=[
     steps:['Sun, Mercury, Venus, Earth, Mars, asteroid belt, then the outer planets.']},
    {stem:'Why are the inner planets called terrestrial?',choices:['They are the largest planets','They are made mostly of hydrogen and helium','They have the most moons and rings','They are rocky worlds with solid surfaces, like Earth; the word comes from the Latin for Earth'],key:3,
     miss:['terrestrial_largest','terrestrial_gas','terrestrial_rings',null],
-    why:['The outer planets are much bigger.','That describes gas giants such as Jupiter.','The terrestrial planets have no rings and few moons.','Correct. They also have thin atmospheres and few or no moons.'],
+    why:['The outer planets are much bigger.','That describes gas giants such as Jupiter.','The terrestrial planets have no rings and few moons.','Correct. They also have few or no moons and no rings.'],
     steps:['Terrestrial: rocky, solid surface, Earth-like.']},
    {stem:'A planet found around another star is huge and cold, made mostly of hydrogen and helium, and has many moons. Which planet in our solar system is it most like?',choices:['Jupiter','Mars','Mercury','Earth'],key:0,
     miss:[null,'mars_like','mercury_like','earth_like'],

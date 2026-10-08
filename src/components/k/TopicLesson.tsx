@@ -39,7 +39,7 @@ export function LessonMaterial({lesson,nextHref,onNext}:{lesson:TopicLesson;next
     <button type="button" className={cx(btn.text,'mt-2')} aria-expanded={revealed} aria-controls={lesson.id+'-answer'} onClick={()=>setRevealed(r=>!r)}><Headline>{revealed?'Hide Explanation':'Show Explanation'}</Headline></button>
     {revealed&&<p id={lesson.id+'-answer'} className="mt-2 leading-relaxed"><Rich>{g.answer}</Rich></p>}
    </div>
-   <div><h3 className="font-bold"><Headline>Watch For This</Headline></h3><p className="mt-1 text-ink-soft"><Rich>{g.trap}</Rich></p></div>
+   <div><h3 className="font-bold"><Headline>Common Trap</Headline></h3><p className="mt-1 text-ink-soft"><Rich>{g.trap}</Rich></p></div>
   </section>:!quiz&&lesson.videos.length?<section aria-label="Study This Lesson" className="rounded-xl bg-mint p-4">
    <h3 className="font-bold"><Headline>Make the Idea Your Own</Headline></h3><ol className="mt-2 list-decimal space-y-2 pl-5 text-[15px]"><li>Pause at a worked example and predict the next step.</li><li>Explain why that step works in your own words.</li><li>Close your notes and try a similar example. Revisit the part you cannot yet explain.</li></ol>
   </section>:!quiz&&lesson.videos.length===0?<p className="rounded-lg bg-mint p-4 font-semibold">Not written yet. You can save this topic for later.</p>:null}
