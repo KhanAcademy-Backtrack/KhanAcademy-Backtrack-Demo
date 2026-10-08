@@ -198,12 +198,24 @@ function SubjectList({p}:{p:BridgeProgram}){
  </Section>;
 }
 
+function SubjectIntroductions({videos}:{videos:CollegeSubject['videos']}){
+ const [open,setOpen]=useState(false);
+ if(!videos.length)return null;
+ return <details className="rounded-2xl bg-white p-5 shadow-sheet sm:p-7" onToggle={e=>setOpen(e.currentTarget.open)}>
+  <summary className="min-h-11 cursor-pointer font-bold"><Headline>Subject Introductions</Headline></summary>
+  <p className="mt-1 text-sm text-ink-soft">Optional Khan Academy introductions. Watching is your own study and is not recorded as a result.</p>
+  {open&&<div className="mt-4 grid gap-4">{videos.map(v=><div key={v.id} className="[&_.khan-player]:my-0"><KhanPlayer id={v.id} title={v.title} source={v.url}/></div>)}</div>}
+ </details>;
+}
+
 export function BridgeSubjectPage({program,subject}:{program:string;subject:string}){
  const {state}=useProgram(),fix=useFix(),{done,toggle}=useKhanTicks();
  const p=PROGRAM_BY_ID[program],s=SUBJECT_BY_ID[subject];if(!p||!s)return null;
  const rank:Rank=new Map(focusRanking(state).map(r=>[r.concept.id,r]));
  const siblings=subjectsOf(p),at=siblings.findIndex(x=>x.id===s.id),prev=siblings[at-1],next=siblings[at+1];
  const ticked=s.units.filter(done).length,builds=s.buildsOn.filter(c=>CONCEPT_BY_ID[c]);
+ const lessons=subjectLessons(s.id),lessonVideos=new Set(lessons.flatMap(l=>l.videos.map(v=>v.id)));
+ const introductions=s.videos.filter(v=>!lessonVideos.has(v.id));
  return <div className="mx-auto max-w-6xl px-4 pb-32 pt-5 sm:px-8 lg:pb-20 lg:pt-7">
   <Link href={`/bridge/${p.id}`} className={cx(btn.quiet,'-ml-3 no-underline')}><Headline><span aria-hidden="true">←</span> {p.title}</Headline></Link>
   <div className="mt-3 grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-7">
@@ -214,13 +226,10 @@ export function BridgeSubjectPage({program,subject}:{program:string;subject:stri
      <p className="mt-2 max-w-2xl text-[16px] leading-relaxed text-ink-soft">{s.summary}</p>
     </Sheet>
 
-    <LessonSequence lessons={subjectLessons(s.id)} program={p.id}/>
+    <LessonSequence lessons={lessons}/>
     {s.gap&&<p className="text-sm leading-relaxed text-ink-soft">{s.gap}</p>}
 
-    <Section title="Watch first">
-     <p className="mt-1 text-sm text-ink-soft">{s.videos.length===1?'A Khan Academy video that opens this subject.':'Khan Academy videos that open this subject.'} Watching is your own study and is not recorded as a result.</p>
-     <div className="mt-4 grid gap-4">{s.videos.map(v=><div key={v.id} className="[&_.khan-player]:my-0"><KhanPlayer id={v.id} title={v.title} source={v.url}/></div>)}</div>
-    </Section>
+    <SubjectIntroductions key={s.id} videos={introductions}/>
 
     <Section title="Khan Academy units" meta={<p role="status" className="text-sm font-semibold text-ink-soft">{ticked} of {s.units.length} ticked</p>}>
      <p className="mt-1 text-sm text-ink-soft">Work through these on Khan Academy and tick the ones you finish. Ticks are your own notes, not Khanpanion results.</p>
