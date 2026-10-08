@@ -237,3 +237,19 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Complete browser verification for optional/blank names, edits/cancellation/Escape, reloads, cross-tab updates, narrow layouts and unchanged learning records; 35 browser cases, 213 domain tests and the 690-page production build pass.
 - [ ] Publish the profile-name and badge follow-ups after the owner's approval.
 - [x] Audit the guide against the current navigation: its Your focus step highlights Study (CET reviewer, Courses or chosen topic) instead of Plan, the exam goal opens the CET reviewer, the last step opens Find my missing skill for the goal, and stale mentions of the mistake notebook, Fix a gap and printing are gone.
+
+## Lesson Quiz Pilot — 8 October 2026
+
+Owner scope: 107 UPCAT Mathematics/Science lessons. Infrastructure is implemented; video-derived content is blocked at 0/107. Details: LESSON_QUIZ_PILOT_2026_10_08.md.
+
+- [x] Add the original draft-item contract, balanced keys, distractor misconceptions, rationales, timestamp cues and dated source-receipt checks.
+- [x] Connect conditional prediction, video cues, lesson checks, targeted verified rewatch/worked example/repair, reflection, optional Khan self-report and Next lesson.
+- [x] Keep bounded lessonChecks device-local, backward compatible and separate from the attempts list, gaps, BACKTRACK evidence and study exposures.
+- [x] Add content/save/evidence tests and phone/desktop browser journeys; verify the integrated interaction with isolated synthetic fixtures that are never published.
+- [x] Complete the owner-requested research on connected video/lesson flows and log manually checked sources without adding competitor material to the product.
+- [x] Run all four repository checks: 224 unit passes/one explicit content skip, clean typecheck, 690-page private sandbox-workaround export, 82 Chrome browser passes; two real quiz journeys remain explicitly skipped.
+- [ ] Enable the saved Khan browser permission, watch actual pilot videos with captions, hand-check practice pages/optional ranges, log dated observations and author the 107 lesson quizzes.
+- [ ] Find hand-checked video matches for Accuracy, precision and experimental uncertainty, and Depositional landforms and bodies of water.
+- [ ] Complete the real lesson-quiz miss/rewatch browser journeys using published caption-reviewed content.
+- [ ] Obtain subject review of every new original question; authored items stay draft until that review.
+- [ ] Consider optional Go deeper links only after the pilot passes, with each source and its own licence hand-checked and logged.

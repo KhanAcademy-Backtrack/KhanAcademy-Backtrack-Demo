@@ -18,7 +18,7 @@ equivalent attribution line, even when a general instruction elsewhere asks for 
 ## Commands
 
 ```bash
-npm test          # node --test, currently 209 tests
+npm test          # node --test: 224 passed, 1 content-pilot test explicitly skipped
 npm run typecheck # tsc --noEmit
 npm run build     # static export, currently 690 generated pages (including 404)
 npm run test:browser  # Playwright acceptance; Chrome by default, BROWSER_CHANNEL=msedge supported
@@ -331,3 +331,11 @@ site's own look, and make it dynamic. Research and review notes: `docs/research/
   hidden tabs place everything at once. A line decides its entrance once at mount; toggling it later replays it.
   `scripts/test-route-map.mjs` covers growth, Up next, the tug and phone layout.
 - `route-geometry.ts` is no longer used by the route; it stays for `HomeExperience.tsx` and its tests.
+
+## Lesson quiz infrastructure, 8 October 2026
+
+The 107-lesson UPCAT Mathematics/Science content pilot is blocked: `src/content/lesson-quizzes/index.ts` is empty because Khan caption access is still denied by a saved browser permission. Read `docs/LESSON_QUIZ_PILOT_2026_10_08.md` and the authoring README before adding content. Accuracy/precision/uncertainty and depositional landforms/bodies of water have no matched videos; never infer a source. Every new item must remain draft pending subject review.
+
+Conditional lesson cues, predictions, checks, verified rewatch, worked examples, repair entry, reflection and optional practice self-reports are implemented. Optional bounded `lessonChecks` stays device-local and separate from attempts, BACKTRACK evidence, gaps and the study exposure ledger; old saves still load. Retakes do not become fresh evidence.
+
+Validation: 224 unit tests passed and one content-completion test explicitly skipped; typecheck passed; a matching private copy exported 690 pages using Windows sandbox build workarounds; 82 Chrome browser checks passed on the default port 3050. Two real quiz journeys remain explicitly skipped. Two additional phone/desktop synthetic integration journeys passed, then their temporary registry/route was removed. These checks do not establish caption/content accuracy, complete playback or learner outcomes. No private compiler patch or test teaching fixture is shipped.
