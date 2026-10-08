@@ -13,7 +13,7 @@ These pages were manually opened in the in-app browser by the owner-requested re
 - CK-12 official lesson-feature documentation: https://help.ck12.org/hc/en-us/articles/360008241774-FlexBook-2-0-Lesson-Features . Checked 2026-10-08; documented capabilities, not measured outcomes.
 - OpenStax Physics, Newton's second law: https://openstax.org/books/physics/pages/4-3-newtons-second-law-of-motion . Checked 2026-10-08. The footer and expanded citation prose say CC BY-NC-SA 4.0 and include TEA attribution requirements; nested legacy wording/linking says CC BY 4.0. This inconsistency is retained in the research. No content is redistributed or learner-facing link shipped.
 
-Pilot caption review is **not complete**. Khan Academy browser access was denied, then a saved permission still blocked it after the owner's chat approval. No new Khan video id, practice URL, timestamp cue or clip range was accepted or guessed. The 107-lesson registry remains empty; existing page checks below are not caption-review receipts. “Depositional landforms and bodies of water” also still has no matched video.
+Pilot caption review is **not complete**. Khan Academy browser access was denied, then a saved permission still blocked it after the owner's chat approval. No new Khan video id, practice URL, timestamp cue or clip range was accepted or guessed. The 107-lesson registry remains empty; existing page checks below are not caption-review receipts. Catalog inspection on 2026-10-08 found two pilot lessons without matched videos: “Accuracy, precision and experimental uncertainty” and “Depositional landforms and bodies of water”. The other 105 lessons reference 119 distinct videos, including compound lessons; none was caption-reviewed in this pass.
 
 ## Existing source records
 

@@ -15,6 +15,6 @@ Before adding a lesson-keyed entry to `index.ts`:
 7. Put every equation, variable and chemical formula inside `$…$`, using commands supported by the house typesetter. UI content renders through `Rich`.
 8. Run the content tests and all four repository checks. The browser journey needs a published quiz with a verified segment; until one exists, it explicitly reports the blocked journey.
 
-“Depositional landforms and bodies of water” has no matched video. Find and hand-check a suitable source before authoring its video-based quiz; no URL or fallback is inferred.
+“Accuracy, precision and experimental uncertainty” and “Depositional landforms and bodies of water” have no matched videos. The other 105 pilot lessons reference 119 distinct videos, including compound lessons. Find and hand-check suitable sources for the two gaps before authoring their video-based quizzes; no URL or fallback is inferred.
 
 Lesson checks and Khan self-reports are device-local authored practice. They never pass a BACKTRACK step, update the study exposure ledger, clear a gap, or enter the 80-attempt list. Retaking the same items never makes them fresh evidence. No IFrame API script or additional runtime dependency is needed.
