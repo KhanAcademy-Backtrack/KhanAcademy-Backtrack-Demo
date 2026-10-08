@@ -31,3 +31,9 @@ For every pilot lesson, watch the actual chosen Khan video with captions, write 
 - Additional isolated synthetic UI journeys passed at 375 px and 1280 px through the actual `LessonMaterial` integration, including cues, miss feedback, rewatch, reflection, reports and retakes. The synthetic labels and temporary registry/route were removed before the production export and were never committed or published. External player and practice-navigation fixtures test UI contracts, not playback or source accuracy.
 
 **Not verified:** any pilot Khan captions, new practice pages, new clip ranges, meaningful video-derived quiz content, subject accuracy, complete external playback or learner/retention outcomes. The two real quiz browser journeys remain explicitly skipped until suitable reviewed content exists. This is not a completed 107-lesson pilot.
+
+## Publication pending
+
+Seventeen separate commits are retained locally as the repository's configured author, polandreei, without AI attribution trailers. Main has not been pushed: Git's MSYS credential-helper process failed in the Windows sandbox, and direct native credential lookup returned Access is denied. The connected GitHub account differs from the requested author, and the available commit tool cannot preserve that configured identity. No remote ref was changed.
+
+Run the existing commits' normal main push from an authenticated terminal outside the agent sandbox. This publication blocker is separate from the saved Khan browser permission and the unfinished caption/content review. Live deployment is not verified.
