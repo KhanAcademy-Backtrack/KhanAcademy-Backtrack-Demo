@@ -22,6 +22,8 @@ export function LearnConcept({id}:{id:string}){
  const selected=useLessonSelection(),requested=Object.hasOwn(LESSON_BY_ID,selected)?LESSON_BY_ID[selected]:undefined;
  const c=CONCEPT_BY_ID[id];if(!c)return null;
  const lessons=conceptLessons(c.id,requested?.concepts.includes(c.id)?requested.exam:undefined);
+ const lesson=lessons.find(l=>l.id===selected)??lessons[0];
+ const related=lesson?.concepts.filter(concept=>concept!==id)??[];
  const checks=state.concepts[id]?.checks??[],last=checks[checks.length-1];
  const chapter=CHAPTER_IDS.has(c.chapter)?CHAPTER_BY_ID[c.chapter]:undefined;
  const seed=`${today.replace(/-/g,'')}${checks.length}`;
@@ -34,6 +36,7 @@ export function LearnConcept({id}:{id:string}){
      <h2 className="text-xl font-extrabold"><Headline>Check Yourself on This Topic</Headline></h2>
      <p className="mt-1 text-ink-soft">{TOPIC_CHECK.items} exam-level questions from this topic only, new every time. Timer optional. You can see each explanation right after you answer.</p>
      <div className="mt-4 flex flex-wrap gap-2"><Link className={btn.primary} href={`/mock/take?f=topic~${c.id}|${seed}&mode=practice`}><Headline>Start a topic check</Headline></Link><Link className={btn.ghost} href={`/mock/take?f=topic~${c.id}|${seed}&mode=exam`}><Headline>Exam style (answers at the end)</Headline></Link></div>
+     {related.length>0&&<div className="mt-4"><p className="text-sm font-semibold">This lesson also connects to:</p><div className="mt-2 flex flex-wrap gap-2">{related.map(concept=><Link key={concept} href={`/learn/${concept}?lesson=${lesson.id}#practice`} className={btn.quiet}><Headline>{CONCEPT_BY_ID[concept].title}</Headline></Link>)}</div></div>}
      {chapter&&<div className="mt-6 rounded-2xl bg-mint p-4"><p className="font-bold">Full reviewer chapter</p><p className="text-[15px] text-ink-soft">Summary, worked examples at three levels, traps, a practice set and recall cards.</p><Link className={cx(btn.text,'mt-1')} href={`/reviewer/${chapter.id}`}><Headline>Read “{chapter.title}”</Headline></Link></div>}
     </Sheet>
     <Sheet>
