@@ -7,19 +7,24 @@ import {EXTRAS} from '../src/content/reviewer/extras.ts';
 import {CONCEPTS} from '../src/lib/program/concepts.ts';
 import {TOPICS} from '../src/lib/recovery.ts';
 import {PROGRAMS} from '../src/lib/program/bridge.ts';
-import {TOPIC_LESSONS,lessonHref} from '../src/lib/program/topic-lessons.ts';
+import {TOPIC_LESSONS,standaloneLessonHref,lessonHref} from '../src/lib/program/topic-lessons.ts';
 
 const statics=new Set(['/mock','/start','/review','/notebook','/calendar','/admissions','/group','/packs','/explore','/reviewer','/bridge']);
 
 test('every search result points at a statically exported route', () => {
   const reviewer=new Set([...CHAPTERS,...EXTRAS].map(c=>`/reviewer/${c.id}`)),learn=new Set(CONCEPTS.map(c=>`/learn/${c.id}`));
   const college=new Set(PROGRAMS.flatMap(p=>[`/bridge/${p.id}`,...p.subjects.map(x=>`/bridge/${p.id}/${x}`)]));
-  for(const l of TOPIC_LESSONS)learn.add(lessonHref(l.id));
+  for(const l of TOPIC_LESSONS)learn.add(standaloneLessonHref(l.id));
   for(const e of SEARCH_INDEX){
-    const ok=statics.has(e.href)||reviewer.has(e.href)||learn.has(e.href)||college.has(e.href)||(e.href.startsWith('/start/')&&e.href.slice(7) in TOPICS&&fs.existsSync(`src/app${e.href}/page.tsx`));
+    const href=new URL(e.href,'https://khanpanion.vercel.app').pathname;
+    const ok=statics.has(href)||reviewer.has(href)||learn.has(href)||college.has(href)||(href.startsWith('/start/')&&href.slice(7) in TOPICS&&fs.existsSync(`src/app${href}/page.tsx`));
     assert.ok(ok,`${e.title} → ${e.href}`);
   }
   for(const p of statics)assert.ok(fs.existsSync(`src/app${p}/page.tsx`),p);
+});
+
+test('global search uses the same direct destination for every catalog lesson',()=>{
+  for(const lesson of TOPIC_LESSONS)assert.ok(SEARCH_INDEX.some(e=>e.title===lesson.title&&e.href===lessonHref(lesson.id)),lesson.id);
 });
 
 test('search needs every word and ranks title matches first', () => {
