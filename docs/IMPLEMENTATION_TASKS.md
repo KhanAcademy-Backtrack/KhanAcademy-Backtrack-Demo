@@ -236,3 +236,4 @@ Owner steering: add a study heatmap and polish Home, on a branch before main. De
 - [x] Add an optional name step after first-time goal/routine questions, a Khanpanion default and a pencil name editor on Home, with separate device-local storage.
 - [x] Complete browser verification for optional/blank names, edits/cancellation/Escape, reloads, cross-tab updates, narrow layouts and unchanged learning records; 35 browser cases, 213 domain tests and the 690-page production build pass.
 - [ ] Publish the profile-name and badge follow-ups after the owner's approval.
+- [x] Audit the guide against the current navigation: its Your focus step highlights Study (CET reviewer, Courses or chosen topic) instead of Plan, the exam goal opens the CET reviewer, the last step opens Find my missing skill for the goal, and stale mentions of the mistake notebook, Fix a gap and printing are gone.
