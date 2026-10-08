@@ -1,5 +1,6 @@
 import type {Attempt,Triage,Sure} from '../mock/scoring.ts';
 import {EXAM_IDS,type ExamId} from './admissions.ts';
+import {LESSON_BY_ID} from './topic-lessons.ts';
 const knownExam=(x:unknown)=>(EXAM_IDS as readonly string[]).includes(String(x));
 
 /** Device-local program data: the pledge, mock attempts, the calendar, the mistake
@@ -15,6 +16,14 @@ export type CalEvent={id:string;date:string;time?:string;minutes?:number;title:s
 export type NoteEntry={itemId:string;at:number;formKey:string;chosen:number|null;idk:boolean;triage?:Triage;misconception?:string;concept:string;resolved?:boolean};
 export type ConceptProgress={khanOpened?:number;khanDone?:number;read?:number;checks:{at:number;correct:number;total:number}[]};
 export type RecallCard={due:number;stage:number;last:number};
+export type LessonAnswer=number|'idk'|null;
+export type LessonCheck={
+ version:number;itemIds:[string,string,string,string];
+ startedAt:number;updatedAt:number;completedAt?:number;runs:number;
+ answers:[LessonAnswer,LessonAnswer,LessonAnswer,LessonAnswer];checked:[boolean,boolean,boolean,boolean];
+ predictionBefore?:LessonAnswer;predictionAfter?:LessonAnswer;
+ practice?:{openedAt:number;reportedAt?:number;report?:'completed'|'still_difficult'|'access_problem'};
+};
 export type ProgramState={
  version:1;updatedAt:number;lang:'en'|'fil';
  sides:Record<Side,boolean>;activeSide:Side;
@@ -31,15 +40,47 @@ export type ProgramState={
  daily:Record<string,{correct:number;total:number}>;
  group?:{code:string;goal:number;joinedAt:number};
  placement:Record<string,{at:number;correct:number;total:number;weak:string[]}>;
+ /** Authored lesson practice only. Never consumed by BACKTRACK, findGaps or recall. */
+ lessonChecks?:Record<string,LessonCheck>;
 };
 export const initialProgram=():ProgramState=>({version:1,updatedAt:0,lang:'en',sides:{admission:false,bridge:false},activeSide:'admission',attempts:[],concepts:{},missions:{},studyDays:[],events:[],notebook:[],bookmarks:[],recall:{},daily:{},placement:{}});
 
+export const LESSON_CHECK_LIMIT=503;
 const LIMITS={attempts:80,notebook:400,events:600,studyDays:800};
 const obj=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const text=(v:unknown,max=300)=>typeof v==='string'&&v.length<=max;
 const num=(v:unknown,lo=0,hi=8.64e15)=>typeof v==='number'&&Number.isFinite(v)&&v>=lo&&v<=hi;
 const date=(v:unknown)=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v);
 const id=(v:unknown)=>typeof v==='string'&&/^[\w:|~.-]{1,160}$/.test(v);
+const lessonAnswer=(v:unknown)=>v===null||v==='idk'||(Number.isInteger(v)&&num(v,0,3));
+const only=(v:Record<string,unknown>,keys:string[])=>Object.keys(v).every(k=>keys.includes(k));
+
+/** One latest run per lesson bounds storage; a repeat is always authored practice.
+ * Unknown fields are rejected here so imported records cannot claim engine evidence. */
+function validLessonCheck(v:unknown){
+ if(!obj(v)||!only(v,['version','itemIds','startedAt','updatedAt','completedAt','runs','answers','checked','predictionBefore','predictionAfter','practice']))return false;
+ if(!Number.isInteger(v.version)||!num(v.version,1,1000)||!Number.isInteger(v.runs)||!num(v.runs,1,1000))return false;
+ if(!Array.isArray(v.itemIds)||v.itemIds.length!==4||!v.itemIds.every(id)||new Set(v.itemIds).size!==4)return false;
+ if(!num(v.startedAt)||!num(v.updatedAt)||Number(v.updatedAt)<Number(v.startedAt))return false;
+ if(!Array.isArray(v.answers)||v.answers.length!==4||!v.answers.every(lessonAnswer))return false;
+ if(!Array.isArray(v.checked)||v.checked.length!==4||!v.checked.every(x=>typeof x==='boolean')||v.checked.some((x,i)=>x&&v.answers instanceof Array&&v.answers[i]===null))return false;
+ if(v.completedAt!==undefined&&(!num(v.completedAt)||Number(v.completedAt)<Number(v.startedAt)||Number(v.completedAt)>Number(v.updatedAt)||!v.checked.every(Boolean)))return false;
+ if(v.checked.every(Boolean)&&v.completedAt===undefined)return false;
+ if(v.predictionBefore!==undefined&&!lessonAnswer(v.predictionBefore))return false;
+ if(v.predictionAfter!==undefined&&(!lessonAnswer(v.predictionAfter)||v.completedAt===undefined))return false;
+ if(v.practice!==undefined){
+  const p=v.practice;
+  if(!obj(p)||!only(p,['openedAt','reportedAt','report'])||v.completedAt===undefined||!num(p.openedAt)||Number(p.openedAt)<Number(v.completedAt)||Number(p.openedAt)>Number(v.updatedAt))return false;
+  if(p.report!==undefined&&!['completed','still_difficult','access_problem'].includes(String(p.report)))return false;
+  if((p.report===undefined)!==(p.reportedAt===undefined))return false;
+  if(p.reportedAt!==undefined&&(!num(p.reportedAt)||Number(p.reportedAt)<Number(p.openedAt)||Number(p.reportedAt)>Number(v.updatedAt)))return false;
+ }
+ return true;
+}
+
+function validLessonChecks(v:unknown){
+ return obj(v)&&Object.keys(v).length<=LESSON_CHECK_LIMIT&&Object.entries(v).every(([k,c])=>Object.hasOwn(LESSON_BY_ID,k)&&validLessonCheck(c));
+}
 
 export function validDay(value:unknown):value is string{
  if(!date(value))return false;
@@ -76,6 +117,7 @@ function validAttempt(a:unknown):a is Attempt{
 /** Accepts only well-formed saves. Older saves without newer optional fields pass. */
 export function validProgram(x:unknown):x is ProgramState{
  if(obj(x)&&x.setup!==undefined&&!validSetup(x.setup))return false;
+ if(obj(x)&&x.lessonChecks!==undefined&&!validLessonChecks(x.lessonChecks))return false;
  if(!obj(x)||x.version!==1||!num(x.updatedAt))return false;
  if(x.lang!=='en'&&x.lang!=='fil')return false;
  if(!obj(x.sides)||typeof x.sides.admission!=='boolean'||typeof x.sides.bridge!=='boolean')return false;
@@ -109,7 +151,7 @@ export function loadProgram(storage:Pick<Storage,'getItem'|'setItem'>,now:number
 
 /** Trims every list to its limit so a long-used device never outgrows its save. */
 export function tidy(s:ProgramState):ProgramState{
- return {...s,attempts:s.attempts.slice(-LIMITS.attempts),notebook:s.notebook.slice(-LIMITS.notebook),events:s.events.slice(-LIMITS.events),studyDays:[...new Set(s.studyDays)].sort().slice(-LIMITS.studyDays)};
+ return {...s,...(s.lessonChecks?{lessonChecks:Object.fromEntries(Object.entries(s.lessonChecks).sort((a,b)=>a[1].updatedAt-b[1].updatedAt).slice(-LESSON_CHECK_LIMIT))}:{}),attempts:s.attempts.slice(-LIMITS.attempts),notebook:s.notebook.slice(-LIMITS.notebook),events:s.events.slice(-LIMITS.events),studyDays:[...new Set(s.studyDays)].sort().slice(-LIMITS.studyDays)};
 }
 
 export function newAttempt(formKey:string,timed:boolean,now:number):Attempt{
