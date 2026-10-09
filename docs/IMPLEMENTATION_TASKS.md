@@ -311,3 +311,9 @@ Owner scope: 107 UPCAT Mathematics/Science lessons. Infrastructure is implemente
 - [x] Add optional Read Next Khan articles (140 title-checked links for 92 lessons, 15 searched with none), shown after the lesson check on quiz lessons and never recorded as evidence.
 - [ ] Obtain subject review of every new original question; authored items stay draft until that review.
 - [ ] Consider optional Go deeper links only after the pilot passes, with each source and its own licence hand-checked and logged.
+
+## Reviewer exam information placement — 9 October 2026
+
+- [x] Move the exam description, coverage notes and official-source link below the topic/search results and saved items within The Reviewer for all nine exam choices.
+- [x] Verify all nine exams at 375 and 1440 px with sections closed/open and populated/empty search results; descriptions and official links stay exam-specific, with no horizontal overflow or browser exceptions.
+- [x] Pass type checking, the 690-page production build and both existing reviewer browser journeys (375 and 1280 px).

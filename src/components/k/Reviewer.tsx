@@ -78,12 +78,6 @@ export function ReviewerLibrary(){
      </select></label>
      <label className="block min-w-0 max-w-xl flex-1 basis-64"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-lg border-2 border-line-strong bg-white px-4 text-navy placeholder:text-ink-soft focus:border-green focus:outline-none"/></label>
     </div>
-    <div className="mt-4 max-w-3xl rounded-lg bg-sky px-4 py-3 text-sm leading-relaxed text-navy">
-     <p><span className="font-bold">{EXAMS[scope].full}:</span> {list(cover.sections.map(x=>x.name))}.</p>
-     {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
-     <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
-     {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Open any topic for its own learning material.</p>}
-    </div>
     {norm?<>
      <p className="mt-5 text-sm font-semibold text-ink-soft">Matches from every {EXAMS[scope].name} section</p>
      {concepts.length>0&&<><h3 className="mt-5 text-lg font-extrabold"><Headline>Topic Foundations</Headline></h3>{summaryLines(concepts,false)}</>}
@@ -102,6 +96,12 @@ export function ReviewerLibrary(){
       <div className="border-t border-line px-3 pb-5 sm:px-5">{lines(saved)}</div>
      </details></li>}
     </ul>}
+    <div className="mt-4 max-w-3xl rounded-lg bg-sky px-4 py-3 text-sm leading-relaxed text-navy">
+     <p><span className="font-bold">{EXAMS[scope].full}:</span> {list(cover.sections.map(x=>x.name))}.</p>
+     {missing.length>0&&<p className="mt-1">The reviewer does not have {list(missing)} material yet.</p>}
+     <p className="mt-1 text-ink-soft">{cover.source==='official'?'These are the sections the exam itself lists.':'The school does not publish a section list on its admissions pages, so check before you rely on it.'} <a className="font-semibold text-navy underline decoration-green decoration-2 underline-offset-4" href={EXAMS[scope].link} target="_blank" rel="noopener noreferrer">Official page ↗</a></p>
+     {outline&&<p className="mt-1 text-ink-soft">The topics under each section follow what established {EXAMS[scope].name} reviewers cover. Open any topic for its own learning material.</p>}
+    </div>
    </Sheet>
    <Sheet className="mt-5"><h2 className="text-xl font-extrabold"><Headline>Handbooks and sheets</Headline></h2><ul className="mt-3 grid gap-2 md:grid-cols-2">{extras.map(x=><li key={x.id}><Link href={`/reviewer/${x.id}`} className="flex min-h-14 items-center gap-3 rounded-2xl border-2 border-mint-line px-4 py-3 hover:bg-mint"><span className="flex-1"><span className="block font-bold"><Headline>{x.title}</Headline></span><span className="text-sm text-ink-soft"><Rich>{x.blurb}</Rich></span></span></Link></li>)}</ul></Sheet>
   </div>
