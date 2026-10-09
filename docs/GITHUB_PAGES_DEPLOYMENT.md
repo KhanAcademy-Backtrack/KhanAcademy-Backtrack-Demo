@@ -59,5 +59,19 @@ of continuous five-minute delivery. The existing published site remains availabl
   and static assets. These checks do not certify third-party video access or every
   school network.
 
-Initial automatic deployment and unchanged-revision verification are pending until
-those actual workflow runs finish.
+## Verified release
+
+The first workflow-change-triggered run successfully published application
+`afc0501e56345053e9519eb3dffbabc9edc5cfb8`:
+https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/37890836273
+
+It passed 228 tests with one existing content skip, type checking and the 690-page
+production build, then deployed and verified the public revision. Direct requests
+also passed for Home, Groups, Study, a nested UPCAT lesson and referenced CSS/JavaScript.
+
+A subsequent manual check of unchanged main correctly skipped all build, deployment
+and receipt-writing jobs:
+https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/37891030280
+
+The scheduled workflow is enabled. These checks prove the workflow's changed and
+unchanged paths; they do not turn GitHub's scheduled delivery into a timing guarantee.

@@ -5,7 +5,7 @@
 - [x] Replace the pinned source release with scheduled checks of application `main`, skipping unchanged commits.
 - [x] Gate publication on tests, type checking and static build; keep write tokens out of the application build job.
 - [x] Respect the repository's disabled-deploy-key policy; remove the unused push workflow and empty environment, using only GitHub's short-lived workflow tokens.
-- [ ] Verify new-revision publication and unchanged-revision skipping in actual workflow runs, including the public release receipt.
+- [x] Verify new-revision publication and unchanged-revision skipping in actual workflow runs, including the public release receipt, four public routes and referenced CSS/JavaScript.
 
 Implementation, GitHub scheduling limits and recovery: `GITHUB_PAGES_DEPLOYMENT.md`.
 
