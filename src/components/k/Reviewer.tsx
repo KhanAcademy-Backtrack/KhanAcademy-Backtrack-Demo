@@ -1,7 +1,7 @@
 'use client';
 import {Headline} from './Headline';
 import Link from 'next/link';
-import {useEffect,useMemo,useState} from 'react';
+import {useMemo,useState} from 'react';
 import {useProgram} from './ProgramProvider';
 import {PageBand,Sheet,btn,Oval,cx,pageBody,Pill,KhanLink} from './ui';
 import {Question} from './Question';
@@ -19,7 +19,7 @@ import {t} from '@/lib/i18n';
 import {EXAMS,EXAM_IDS,type ExamId} from '@/lib/program/admissions';
 import {EXAM_COVERAGE,FILIPINO_CONCEPT_AREA,FILIPINO_EXTRAS,hasFilipino,inCoverage,inSection,listNames as list} from '@/lib/program/exam-coverage';
 import {EXAM_OUTLINES,OUTLINE_BY_KEY,topicKey,type OutlineGroup} from '@/lib/program/exam-outline';
-import {firstExam} from '@/lib/program/personalization';
+import {useReviewerExam} from './useReviewerExam';
 import {outlineVideo} from '@/lib/program/topic-videos';
 import {outlineLessonId,lessonHref,conceptLessons} from '@/lib/program/topic-lessons';
 import {LessonSequence} from './TopicLesson';
@@ -37,11 +37,11 @@ const row='flex min-h-14 items-center gap-3 px-4 py-3';
  *  Offline caching is scheduled for Phase B. */
 export function ReviewerLibrary(){
  const {state,update}=useProgram();
- const [q,setQ]=useState(''),[picked,setPicked]=useState<ExamId>();
- useEffect(()=>{const exam=new URLSearchParams(location.search).get('exam');if(EXAM_IDS.includes(exam as ExamId))setPicked(exam as ExamId);},[]);
+ const [q,setQ]=useState('');
+ const {exam:scope,setExam}=useReviewerExam();
  const norm=q.trim().toLowerCase();
- /** Always one exam: the learner's first named exam, else the first in the list. */
- const scope=picked??firstExam(state)??EXAM_IDS[0],cover=EXAM_COVERAGE[scope];
+ /** The shared reviewer preference falls back to the learner's first named exam. */
+ const cover=EXAM_COVERAGE[scope];
  const groups:Group[]=cover.sections.map((x,i)=>({key:'s'+i,label:x.name,match:(t:Subtest,f:boolean)=>inSection(x,t,f),empty:!x.reviewer.length}));
  const label=(t:Subtest,f:boolean)=>groups.find(g=>g.match(t,f))?.label??SUBTEST_LABEL[t];
  const concepts=norm?CONCEPTS.filter(c=>inCoverage(scope,c.subtest,c.area===FILIPINO_CONCEPT_AREA)&&plainText([c.title,c.blurb,c.area,...c.tldr.must].join(' ')).toLowerCase().includes(norm)):[];
@@ -73,7 +73,7 @@ export function ReviewerLibrary(){
     <h2 className="text-2xl font-extrabold"><Headline>The reviewer</Headline></h2>
     <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-soft">{CONCEPTS.length} topic foundations and focused lessons, plus formula sheets, grammar guides and a test-day handbook. Open a subject to see its topics.</p>
     <div className="mt-4 flex flex-wrap items-end gap-3">
-     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={scope} onChange={e=>setPicked(e.target.value as ExamId)} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
+     <label className="grid gap-1 text-sm font-semibold">{t(state.lang,'reviewer.for')}<select value={scope} onChange={e=>setExam(e.target.value as ExamId)} className="min-h-12 rounded-lg border-2 border-line-strong bg-white px-3 text-base font-bold text-navy focus:border-green focus:outline-none">
       {EXAM_IDS.map(x=><option key={x} value={x}>{EXAMS[x].name}</option>)}
      </select></label>
      <label className="block min-w-0 max-w-xl flex-1 basis-64"><span className="sr-only">Search the reviewer</span><input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search: slope, ng at nang, half-life…" className="min-h-12 w-full rounded-lg border-2 border-line-strong bg-white px-4 text-navy placeholder:text-ink-soft focus:border-green focus:outline-none"/></label>

@@ -29,6 +29,8 @@ export type ProgramState={
  sides:Record<Side,boolean>;activeSide:Side;
  pledge?:Pledge;bridgeProgram?:string;
  setup?:LearnerSetup;
+ /** Shared reviewer/practice preference; older saves fall back to the first exam target. */
+ reviewerExam?:ExamId;
  attempts:Attempt[];activeAttempt?:string;
  concepts:Record<string,ConceptProgress>;
  missions:Record<string,{recall?:number;khan?:number;exit?:number}>;
@@ -117,6 +119,7 @@ function validAttempt(a:unknown):a is Attempt{
 
 /** Accepts only well-formed saves. Older saves without newer optional fields pass. */
 export function validProgram(x:unknown):x is ProgramState{
+ if(obj(x)&&x.reviewerExam!==undefined&&!EXAM_IDS.includes(x.reviewerExam as ExamId))return false;
  if(obj(x)&&x.setup!==undefined&&!validSetup(x.setup))return false;
  if(obj(x)&&x.lessonChecks!==undefined&&!validLessonChecks(x.lessonChecks))return false;
  if(!obj(x)||x.version!==1||!num(x.updatedAt))return false;

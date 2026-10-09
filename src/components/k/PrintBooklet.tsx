@@ -17,7 +17,7 @@ const LETTERS=['A','B','C','D'];
 export function PrintBooklet(){
  const params=useSearchParams(),router=useRouter(),{update}=useProgram();
  const key=params.get('f')??'';
- const form=useMemo(()=>/^[a-z]+~[\w|-]+$/.test(key)?formFromKey(key):undefined,[key]);
+ const form=useMemo(()=>formFromKey(key),[key]);
  const [entry,setEntry]=useState(false),[answers,setAnswers]=useState<Record<string,number|null>>({});
  if(!form)return <p className="p-8">This booklet link is not complete.</p>;
  const ids=formItems(form);let n=0;

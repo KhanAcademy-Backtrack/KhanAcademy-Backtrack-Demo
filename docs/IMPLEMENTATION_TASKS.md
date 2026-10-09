@@ -1,5 +1,16 @@
 # Complete study-companion implementation checklist
 
+## Reviewer-based practice — 9 October 2026
+
+- [x] Share the selected reviewer between the CET reviewer and Practice exams, with persistence, named-exam defaults and explicit exam links.
+- [x] Derive Section choices and Topic Checks from all nine existing exam coverage definitions, including English/Filipino filtering and unavailable-section notices.
+- [x] Keep the chosen exam in new practice links and printable section booklets; retain the meaning of earlier saved forms and attempts.
+- [x] Label the existing full simulation as UPCAT and show actual available question counts for selected sections.
+- [x] Incorporate concurrent main changes through `435ad71`, preserving the retired-tool changes and the reviewer's bottom information panel.
+- [x] Verify 232 passing domain tests (one existing content skip), clean type checking, the 690-page production export and 12 affected browser journeys, including phone/desktop resume, all nine choices, cross-tab changes and printable English sections.
+
+The owner authorized automatic publication to main. This change uses an isolated worktree and keeps existing form keys, saved answers and exam targets intact.
+
 ## Home BACKTRACK graphic — 9 October 2026
 
 - [x] Replace the old curved-route illustration with a prerequisite map: the goal above earlier skills, a focused learning step and a highlighted return path.

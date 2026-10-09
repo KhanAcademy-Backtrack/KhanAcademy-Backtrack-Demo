@@ -6,6 +6,8 @@ import {SCIENCE_ITEMS} from '../../content/mock/science.ts';
 import {PROGRAM_BY_ID,RETIRED_PROGRAMS} from '../program/bridge.ts';
 import {UPCAT_BLUEPRINT,SECTION_ORDER,SPRINT,TOPIC_CHECK,BREAK_MINUTES} from './blueprint.ts';
 import type {MockItem,Subtest} from './types.ts';
+import {EXAMS,EXAM_IDS,type ExamId} from '../program/admissions.ts';
+import {reviewerSections} from './reviewer-scope.ts';
 
 export type FormKind='sprint'|'section'|'full'|'topic'|'exit'|'daily'|'fixed'|'placement';
 export type FormSection={subtest:Subtest;minutes:number;itemIds:string[]};
@@ -52,9 +54,9 @@ function generated(subtest:'math'|'science',count:number,seed:string,filter?:(fa
  return ids;
 }
 
-function authored(subtest:'language'|'reading'|'science',count:number,seed:string,opts:{officialOnly?:boolean;concept?:string}={}):string[]{
+function authored(subtest:'language'|'reading'|'science',count:number,seed:string,opts:{officialOnly?:boolean;concept?:string;lang?:'en'|'fil'}={}):string[]{
  const r=rng(`form:${subtest}:${seed}`);
- const ok=(i:MockItem)=>(!opts.officialOnly||i.status==='reviewed')&&(!opts.concept||i.concept===opts.concept);
+ const ok=(i:MockItem)=>(!opts.officialOnly||i.status==='reviewed')&&(!opts.concept||i.concept===opts.concept)&&(!opts.lang||i.lang===opts.lang);
  if(subtest==='language')return r.shuffle(LANGUAGE_ITEMS.filter(ok)).slice(0,count).map(i=>i.id);
  if(subtest==='science')return r.shuffle(SCIENCE_ITEMS.filter(ok)).slice(0,count).map(i=>i.id);
  // Reading keeps each passage's questions together.
@@ -166,10 +168,44 @@ export function placementForm(programId:string,seed:string):Form|undefined{
 export const formItems=(form:Form)=>form.sections.flatMap(s=>s.itemIds);
 export const formMinutes=(form:Form)=>form.sections.reduce((t,s)=>t+s.minutes,0)+(form.sections.length>1?form.breakMinutes*(form.sections.length-1):0);
 
+/** New keys pin the selected reviewer to the attempt. Legacy forms above stay unchanged.
+ * Combined verbal sections retain their language/reading blocks for honest scoring. */
+export function reviewerSectionForm(exam:ExamId,sectionId:string,seed:string):Form|undefined{
+ const section=reviewerSections(exam).find(s=>s.id===sectionId);
+ if(!section?.reviewer.length)return undefined;
+ const sections=section.reviewer.flatMap(subtest=>{
+  const b=UPCAT_BLUEPRINT[subtest];
+  const itemIds=(subtest==='language'||subtest==='reading')
+   ?authored(subtest,b.items,seed,{lang:section.lang})
+   :sectionItems(subtest,b.items,seed);
+  return itemIds.length?[{subtest,minutes:Math.ceil(b.minutes*itemIds.length/b.items),itemIds}]:[];
+ });
+ if(!sections.length)return undefined;
+ return {id:`section2-${exam}-${sectionId}-${seed}`,kind:'section',title:`${EXAMS[exam].name}: ${section.name} section`,seed,official:false,breakMinutes:0,sections};
+}
+
+export function reviewerTopicForm(exam:ExamId,concept:string,seed:string):Form|undefined{
+ const section=reviewerSections(exam).find(s=>s.concepts.some(c=>c.id===concept));
+ const topic=section?.concepts.find(c=>c.id===concept);
+ if(!section||!topic)return undefined;
+ const form=topicForm(concept,seed);
+ const sections=form.sections.flatMap(s=>{
+  const itemIds=section.lang?s.itemIds.filter(id=>itemById(id)?.lang===section.lang):s.itemIds;
+  return itemIds.length?[{...s,itemIds}]:[];
+ });
+ if(!sections.length)return undefined;
+ return {...form,id:`topic2-${exam}-${concept}-${seed}`,title:`${EXAMS[exam].name}: ${topic.title}`,sections};
+}
+
 /** Rebuilds a saved form from its kind and seed. Forms are never stored whole. */
 export function formFromKey(key:string):Form|undefined{
  if(!/^[a-z][a-z0-9]*~[\w-]+(?:\|[\w-]+)?$/.test(key))return undefined;
  const [kind,...rest]=key.split('~');const arg=rest.join('~');
+ if(kind==='section2'||kind==='topic2'){
+  const [scope,seed]=arg.split('|'),cut=scope.indexOf('-'),exam=scope.slice(0,cut) as ExamId,target=scope.slice(cut+1);
+  if(!seed||!EXAM_IDS.includes(exam))return undefined;
+  return kind==='section2'?reviewerSectionForm(exam,target,seed):reviewerTopicForm(exam,target,seed);
+ }
  if(kind==='sprint')return sprintForm(arg);
  if(kind==='daily')return dailyForm(arg);
  if(kind==='daily2')return dailyRotationForm(arg);

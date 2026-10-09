@@ -15,6 +15,7 @@ import {routeMapJourneys} from './test-route-map.mjs';
 import {lessonQuizJourneys} from './test-lesson-quizzes.mjs';
 import {retiredStudyToolJourneys} from './test-retired-study-tools.mjs';
 import {khanStartJourneys} from './test-khan-start-browser.mjs';
+import {reviewerPracticeJourneys} from './test-reviewer-practice.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 import {speakText} from '../src/lib/notation.ts';
 
@@ -197,6 +198,7 @@ try{
  await lessonQuizJourneys({scenario,origin});
  await khanStartJourneys({scenario,origin,root});
  await retiredStudyToolJourneys({scenario,origin,root});
+ await reviewerPracticeJourneys({scenario,origin,root});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }
