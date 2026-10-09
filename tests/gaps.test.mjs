@@ -107,3 +107,74 @@ test('college prep keeps the skills its field assumes, including prerequisites o
  assert.equal(findGaps(s,[],now,collegeScope()).ready.length,3,'before a field is chosen every field counts');
  for(const p of PROGRAMS)assert.ok(programTopics(p).length>0,p.id);
 });
+
+function assessment(key,at,answer){
+ const a={...newAttempt(key,false,at-600000),submittedAt:at};
+ for(const id of formItems(formFromKey(key))){
+  const item=itemById(id),chosen=answer(item);
+  if(chosen==='idk'){a.answers[id]=null;a.idk.push(id);}
+  else if(chosen!==undefined)a.answers[id]=chosen;
+ }
+ return a;
+}
+const correct=item=>item.answerIndex;
+const wrong=item=>(item.answerIndex+1)%item.choices.length;
+
+test('real course placements show mapped repairs and unsupported topics only for the selected field',()=>{
+ const cs=assessment('placement~cs_it|cs-review',now-DAY,item=>item.concept==='statistics_probability'?wrong(item):item.misconceptions.findIndex(m=>m&&misconception(m)?.recovery)>=0?item.misconceptions.findIndex(m=>m&&misconception(m)?.recovery):correct(item));
+ const health=assessment('placement~health|health-review',now,wrong);
+ const state=initialStudy(),before=structuredClone([state,cs,health]);
+ const g=findGaps(state,[cs,health],now,collegeScope(PROGRAM_BY_ID.cs_it));
+ assert.ok(g.ready.length+g.later.length>0,'actual CS answers create a repair');
+ assert.ok(g.topics.some(t=>t.concept==='statistics_probability'));
+ assert.equal(g.assessment.id,cs.id);assert.equal(g.assessment.total,8);
+ assert.equal(findGaps(state,[cs,health],now,CET_SCOPE).assessment,undefined);
+ assert.deepEqual([state,cs,health],before,'reading results changes no learning records');
+});
+
+test('latest answered result per topic updates review suggestions without claiming engine mastery',()=>{
+ const old=assessment('placement~cs_it|old-review',now-2*DAY,wrong);
+ const fresh=assessment('placement~cs_it|new-review',now-DAY,correct);
+ const g=findGaps(initialStudy(),[fresh,old],now,collegeScope(PROGRAM_BY_ID.cs_it));
+ assert.equal(g.assessment.id,fresh.id,'submission date wins over array order');
+ assert.deepEqual(g.topics,[],'the newer answers replace old topic-review suggestions');
+ assert.ok(g.ready.length+g.later.length>0,'assessment answers cannot clear a BACKTRACK repair');
+ const again=assessment('placement~cs_it|again-review',now,item=>item.concept==='statistics_probability'?wrong(item):correct(item));
+ assert.ok(findGaps(initialStudy(),[again,fresh,old],now,collegeScope(PROGRAM_BY_ID.cs_it)).topics.some(t=>t.concept==='statistics_probability'));
+});
+
+test('unsupported uncertainty is a topic review; untouched blanks are not evidence and cannot erase it',()=>{
+ const key='placement~social_sciences|uncertain';
+ const uncertain=assessment(key,now-DAY,item=>item.concept==='statistics_probability'?'idk':undefined);
+ const blank=assessment('placement~social_sciences|blank',now,()=>undefined);
+ const scope=collegeScope(PROGRAM_BY_ID.social_sciences);
+ const g=findGaps(initialStudy(),[blank,uncertain],now,scope);
+ assert.ok(g.topics.some(t=>t.concept==='statistics_probability'&&t.unknown>0&&t.wrong===0));
+ assert.equal(g.assessment.id,blank.id);assert.equal(g.assessment.blank,g.assessment.total);
+ const empty=findGaps(initialStudy(),[blank],now,scope);
+ assert.equal(empty.hasEvidence,false);assert.deepEqual([empty.ready,empty.later,empty.topics],[[],[],[]]);
+ const draft={...uncertain,submittedAt:undefined};
+ assert.equal(findGaps(initialStudy(),[draft],now,scope).assessment,undefined);
+});
+
+test('CET language misses remain visible as review topics without inventing a repair',()=>{
+ const a=assessment('section~language|language-review',now,wrong);
+ const g=findGaps(initialStudy(),[a],now,CET_SCOPE);
+ assert.ok(g.topics.length>0);assert.equal(g.ready.length+g.later.length,0);
+ assert.equal(g.assessment.correct,0);assert.equal(g.hasEvidence,true);
+ assert.equal(findGaps(initialStudy(),[a],now,collegeScope(PROGRAM_BY_ID.cs_it)).topics.length,0);
+});
+
+test('every live course placement miss stays visible even when its repair falls outside the field',()=>{
+ for(const program of PROGRAMS){
+  const key=`placement~${program.id}|coverage`,scope=collegeScope(program);
+  for(const id of formItems(formFromKey(key))){
+   const item=itemById(id);
+   for(const choice of [...item.choices.keys(),'idk']){
+    if(choice===item.answerIndex)continue;
+    const a=assessment(key,now,x=>x.id===id?choice:undefined),g=findGaps(initialStudy(),[a],now,scope);
+    assert.ok(g.ready.length+g.later.length+g.topics.length>0,`${program.id}: ${id}, choice ${choice}`);
+   }
+  }
+ }
+});

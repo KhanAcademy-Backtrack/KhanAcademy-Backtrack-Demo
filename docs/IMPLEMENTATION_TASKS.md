@@ -343,3 +343,15 @@ Owner scope: 107 UPCAT Mathematics/Science lessons. Infrastructure is implemente
 - [x] Move the exam description, coverage notes and official-source link below the topic/search results and saved items within The Reviewer for all nine exam choices.
 - [x] Verify all nine exams at 375 and 1440 px with sections closed/open and populated/empty search results; descriptions and official links stay exam-specific, with no horizontal overflow or browser exceptions.
 - [x] Pass type checking, the 690-page production build and both existing reviewer browser journeys (375 and 1280 px).
+
+## Dynamic practice entry and missing skills — 9 October 2026
+
+Owner scope: rename the assessment action to “Take a Practice Exam”, route it to the appropriate section, and keep missing skills responsive to practice/placement results. The owner requested independent agent review and a push to a separate branch: `codex/dynamic-practice-entry`.
+
+- [x] Route CET review to Practice Exams and college prep to the selected course's subject/placement page, with course selection when no field is saved. Everything keeps all results and follows the learner's goal for its assessment action.
+- [x] Keep the assessment action available after results appear; display the latest submitted result within the selected scope.
+- [x] Show unsupported wrong answers and explicit uncertainty as Topics to Revisit with lesson links, without inventing a prerequisite diagnosis. Update each topic from its latest answered assessment.
+- [x] Preserve the existing two-independent-check rule for BACKTRACK repairs. Blank/unsubmitted answers do not diagnose skills; viewing results does not write learning evidence.
+- [x] Independently review the change and fix the discovered Health Sciences placement filtering issue; cover every live course's wrong choices and uncertainty responses.
+- [x] Pass 241 unit tests (one existing content skip), type checking and the 690-page production build.
+- [x] Complete phone/desktop browser verification: 18 targeted journeys pass across the initial run and selector-corrected rerun, including real placement submission, every course destination, reloads and cross-tab result updates. Prepare the verified separate branch for the requested push.

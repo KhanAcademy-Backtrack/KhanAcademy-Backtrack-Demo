@@ -1,9 +1,9 @@
 import {LABELS,NEXT_SKILL,ORDER,TOPICS,skillDependencies,type Skill,type Topic} from './recovery.ts';
 import {skillKey,type StudyState} from './study.ts';
-import {formFromKey,type FormKind} from './mock/forms.ts';
+import {formFromKey,formItems,itemById,type FormKind} from './mock/forms.ts';
 import {misconception} from './mock/misconceptions.ts';
 import {scoreAttempt,type Attempt} from './mock/scoring.ts';
-import {CONCEPTS} from './program/concepts.ts';
+import {CONCEPTS,CONCEPT_BY_ID} from './program/concepts.ts';
 import {PROGRAMS,RESCUE_BY_ID,type BridgeProgram} from './program/bridge.ts';
 
 /** Which skills does this learner need to repair? Read-only over what this device
@@ -15,7 +15,10 @@ export type GapKind='exam'|'unknown'|'route'|'difficulty'|'hint'|'khan';
 export type GapReason={kind:GapKind;text:string;at:number;count?:number};
 export type Gap={key:string;topic:Topic;skill:Skill;label:string;context:string;reasons:GapReason[];weight:number;lastAt:number;blockedBy:Skill[]};
 export type FixedGap={key:string;topic:Topic;skill:Skill;label:string;at:number};
-export type GapMap={ready:Gap[];later:Gap[];fixed:FixedGap[];hasEvidence:boolean};
+/** A topic review is an assessment follow-up, not a diagnosed prerequisite or mastery record. */
+export type TopicReview={concept:string;title:string;at:number;attemptId:string;assessment:string;wrong:number;unknown:number};
+export type GapAssessment={id:string;title:string;at:number;correct:number;total:number;blank:number;unknown:number};
+export type GapMap={ready:Gap[];later:Gap[];fixed:FixedGap[];hasEvidence:boolean;topics:TopicReview[];assessment?:GapAssessment};
 /** Which practice counts and which topics belong. BACKTRACK routes and the reviewer count in
  *  every scope; only the exam forms differ. A skill belongs when its topic does, or when it
  *  sits on the way to one (a prerequisite of a belonging topic's steps). */
@@ -43,18 +46,34 @@ export function findGaps(study:StudyState,attempts:Attempt[],now:number,scope:Ga
  const belongs=(topic:Topic,skill:Skill)=>!scope.topics||(skill==='goal'?scope.topics.has(topic):scope.topics.has(topic)||skills!.has(skill));
  const counted=attempts.filter(a=>{if(!a.submittedAt)return false;const f=formFromKey(a.formKey);return !!f&&(!scope.forms||scope.forms(f.kind,a.formKey));});
  const found=new Map<string,{topic:Topic;skill:Skill;reasons:GapReason[]}>();
+ const topicResults=new Map<string,{at:number;review?:TopicReview}>();
+ let assessment:GapAssessment|undefined,answered=false;
  const add=(topic:Topic,skill:Skill,reason:GapReason)=>{if(!belongs(topic,skill))return;const key=skillKey(topic,skill),g=found.get(key)??{topic,skill,reasons:[]};g.reasons.push(reason);found.set(key,g);};
 
  // Practice exams: a wrong choice that names a misconception routes to that skill;
  // "I don't know yet" on a topic with a BACKTRACK route points at its first step.
  for(const a of counted){
   const form=formFromKey(a.formKey)!;
+  const result=scoreAttempt(form,a),at=a.submittedAt!;
+  const blank=result.subtests.reduce((n,s)=>n+s.blank,0),unknown=result.subtests.reduce((n,s)=>n+s.idk,0);
+  answered ||= result.total.total>blank;
+  if(!assessment||at>=assessment.at)assessment={id:a.id,title:form.title,at,correct:result.total.correct,total:result.total.total,blank,unknown};
+  // Only answers and explicit uncertainty update a topic's review suggestion.
+  // Untouched blanks cannot erase a previous miss or diagnose a new one.
+  const touched=new Set(formItems(form).filter(id=>a.answers[id]!=null||a.idk.includes(id)).flatMap(id=>{const item=itemById(id);return item?[item.concept]:[];}));
+  const reviews=new Map<string,TopicReview>();
   const misses=new Map<string,{topic:Topic;skill:Skill;kind:GapKind;labels:Set<string>;count:number}>();
-  for(const m of scoreAttempt(form,a).misses){
+  for(const m of result.misses){
    const mc=m.misconceptionId?misconception(m.misconceptionId):undefined;
-   if(mc?.recovery){const {topic,skill}=mc.recovery,k=`exam|${skillKey(topic,skill)}`,g=misses.get(k)??{topic,skill,kind:'exam' as const,labels:new Set<string>(),count:0};g.labels.add(mc.label);g.count++;misses.set(k,g);continue;}
-   if(m.idk){const c=CONCEPTS.find(x=>x.id===m.item.concept);if(!c?.engine)continue;const topic=c.engine,skill=NEXT_SKILL[topic],k=`unknown|${skillKey(topic,skill)}`,g=misses.get(k)??{topic,skill,kind:'unknown' as const,labels:new Set<string>(),count:0};g.labels.add(c.title);g.count++;misses.set(k,g);}
+   if(mc?.recovery&&belongs(mc.recovery.topic,mc.recovery.skill)){const {topic,skill}=mc.recovery,k=`exam|${skillKey(topic,skill)}`,g=misses.get(k)??{topic,skill,kind:'exam' as const,labels:new Set<string>(),count:0};g.labels.add(mc.label);g.count++;misses.set(k,g);continue;}
+   const c=CONCEPT_BY_ID[m.item.concept];
+   if(m.idk&&c?.engine&&belongs(c.engine,NEXT_SKILL[c.engine])){const topic=c.engine,skill=NEXT_SKILL[topic],k=`unknown|${skillKey(topic,skill)}`,g=misses.get(k)??{topic,skill,kind:'unknown' as const,labels:new Set<string>(),count:0};g.labels.add(c.title);g.count++;misses.set(k,g);continue;}
+   if(c&&(m.chosen!==null||m.idk)){
+    const r=reviews.get(c.id)??{concept:c.id,title:c.title,at,attemptId:a.id,assessment:form.title,wrong:0,unknown:0};
+    if(m.idk)r.unknown++;else r.wrong++;reviews.set(c.id,r);
+   }
   }
+  for(const concept of touched)if(at>=(topicResults.get(concept)?.at??0))topicResults.set(concept,{at,review:reviews.get(concept)});
   for(const g of misses.values())add(g.topic,g.skill,g.kind==='exam'
    ?{kind:'exam',count:g.count,at:a.submittedAt!,text:`Missed ${plural(g.count,'question')} in ${form.title}: ${quoted([...g.labels])}`}
    :{kind:'unknown',count:g.count,at:a.submittedAt!,text:`“I don’t know yet” on ${plural(g.count,'question')} in ${[...g.labels].join(', ')}`});
@@ -95,6 +114,7 @@ export function findGaps(study:StudyState,attempts:Attempt[],now:number,scope:Ga
  }
  const ready=gaps.filter(g=>!g.blockedBy.length).sort((a,b)=>b.weight-a.weight||b.lastAt-a.lastAt||ORDER.indexOf(a.skill)-ORDER.indexOf(b.skill));
  const later=gaps.filter(g=>g.blockedBy.length).sort((a,b)=>ORDER.indexOf(a.skill)-ORDER.indexOf(b.skill)||b.weight-a.weight);
- const hasEvidence=counted.length>0||Object.values(study.review).some(i=>belongs(i.topic,i.skill))||Object.values(study.routes).some(r=>!!r?.evidence.length&&(!scope.topics||scope.topics.has(r.topic)));
- return {ready,later,fixed:fixed.sort((a,b)=>b.at-a.at),hasEvidence};
+ const hasEvidence=answered||Object.values(study.review).some(i=>belongs(i.topic,i.skill))||Object.values(study.routes).some(r=>!!r?.evidence.length&&(!scope.topics||scope.topics.has(r.topic)));
+ const reviewTopics=[...topicResults.values()].flatMap(r=>r.review?[r.review]:[]).sort((a,b)=>b.at-a.at||a.title.localeCompare(b.title));
+ return {ready,later,fixed:fixed.sort((a,b)=>b.at-a.at),hasEvidence,topics:reviewTopics,assessment};
 }
