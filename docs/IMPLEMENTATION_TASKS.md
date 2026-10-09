@@ -20,7 +20,7 @@ Owner scope: current main, preference-based Khan video recommendations on Home, 
 - [x] Diagnose the missed update: scheduled polling did not subscribe to pushes in the application repository; manually publish the friend's `6bb2cb7` update.
 - [x] Add a direct application-main push trigger using the owner's publishing-repository-only `PAGES_DISPATCH_TOKEN`, with no application checkout or default token permissions in the trigger job.
 - [x] Wait through the Actions API compatible with fine-grained tokens, then check the public source revision; document token renewal and visible failures.
-- [ ] Verify an actual source-main push triggers the downstream tested build and updates the public release, without a manual dispatch.
+- [x] Verify an actual source-main push triggers the downstream tested build and updates the public release, without a manual dispatch: source run `37893904796` requested publisher run `37893912221`, and both succeeded with public commit `0f263666aed40de3d85ac85c9efd4fe7126eb0d6`.
 - [x] Replace the pinned source release with scheduled checks of application `main`, skipping unchanged commits.
 - [x] Gate publication on tests, type checking and static build; keep write tokens out of the application build job.
 - [x] Respect the repository's disabled-deploy-key policy; remove the unused deploy-key workflow and empty environment. The publisher uses GitHub's short-lived workflow tokens; the new direct trigger uses the narrowly scoped Actions token described above.

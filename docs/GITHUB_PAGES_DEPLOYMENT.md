@@ -44,6 +44,13 @@ The direct trigger uses the owner's `PAGES_DISPATCH_TOKEN` Actions secret in the
 application repository. Create it as a fine-grained token with resource owner
 `KhanAcademy-Backtrack`, selected repository `khanacademy-backtrack.github.io`, and
 **Actions: read and write** only (plus automatically included metadata access).
+The [prefilled token form](https://github.com/settings/personal-access-tokens/new?name=Khanpanion%20Pages&target_name=KhanAcademy-Backtrack&actions=write)
+sets the organization and Actions permission. Choose **Only select repositories**
+and the publishing repository before generating it; **Public repositories** alone
+is read-only and cannot dispatch a release. A token owned by the personal account
+will not list the organization's repository. Save the generated value as
+`PAGES_DISPATCH_TOKEN` in the **application** repository's Actions secrets, replacing
+the previous value when creating a replacement token.
 No source-code write permission is required. The source workflow never checks out
 or executes application code and gives the token only to its dispatch and status
 steps. It polls the Actions run API rather than `gh run watch`, which does not
@@ -100,7 +107,23 @@ Those initial runs verified the publisher, not a source-push trigger. When the
 owner reported the stale site, manual run
 https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/37892287055
 published `6bb2cb7bec6b9a5e5c106c704d2a705e21216b42`, including the new Khan start
-section on Home. Direct push-trigger verification is tracked in IMPLEMENTATION_TASKS.md.
+section on Home.
+
+The complete direct-push flow passed after the owner replaced the personal-account
+read-only token with an organization-scoped Actions token:
+
+- [Source push run 37893904796](https://github.com/KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo/actions/runs/37893904796)
+  started from the push of `0f263666aed40de3d85ac85c9efd4fe7126eb0d6`, dispatched
+  the publisher, waited successfully with the fine-grained token, and verified
+  the same revision on the public site.
+- [Publisher run 37893912221](https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/37893912221)
+  passed 228 tests (one existing skip), type checking, all 690 static pages,
+  deployment and the public receipt check. Its `workflow_dispatch` event came
+  from the source push workflow; no manual dispatch was used for this test.
+
+The public `/release.json` independently matched that application commit. The
+original HTTP 403 attempt remains in Actions history; it is resolved by the
+replacement credential, not by granting broader code-writing permissions.
 
 API permission and compatibility references:
 [workflow dispatch](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event),
