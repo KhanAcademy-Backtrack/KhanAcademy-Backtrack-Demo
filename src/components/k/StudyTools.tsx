@@ -3,7 +3,7 @@ import {Headline} from './Headline';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useProgram} from './ProgramProvider';
-import {NavIcon,STUDY_TOOLS,EXAM_DATES_LINK,type Sub} from './AppNav';
+import {NavIcon,STUDY_TOOLS,HOME_SHORTCUTS} from './AppNav';
 import {cx} from './ui';
 import {t} from '@/lib/i18n';
 import {recallPrompt} from '@/lib/program/recall';
@@ -29,11 +29,11 @@ export function StudyTools(){
  </li>)}</ul>;
 }
 
-/** Practice exams, daily recall, study packs and exam dates as one row of buttons on the home page. */
+/** Courses, CET reviewers, practice exams and daily recall as one row of buttons on the home page. */
 export function HomeShortcuts({className}:{className?:string}){
- const note=useToolNotes(),{state:{lang}}=useProgram(),list:Sub[]=[...STUDY_TOOLS,EXAM_DATES_LINK];
+ const note=useToolNotes(),{state:{lang}}=useProgram();
  return <nav aria-label={t(lang,'nav.shortcuts')} className={cx('min-w-0',className)}>
-  <ul className="flex flex-wrap gap-2">{list.map(x=><li key={x.key}>
+  <ul className="flex flex-wrap gap-2">{HOME_SHORTCUTS.map(x=><li key={x.key}>
    <Link href={x.href} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-transparent px-3.5 text-[14px] font-semibold text-navy hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy">
     <NavIcon small k={x.icon}/><Headline>{t(lang,x.label)}</Headline>{note(x.key)&&<><span aria-hidden="true" className="rounded-md bg-green px-1.5 text-xs font-bold text-navy">{note(x.key)?.split(' ')[0]}</span><span className="sr-only">, {note(x.key)}</span></>}
    </Link>
