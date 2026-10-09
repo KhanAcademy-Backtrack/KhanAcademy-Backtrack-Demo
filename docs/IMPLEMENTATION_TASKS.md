@@ -1,5 +1,10 @@
 # Complete study-companion implementation checklist
 
+## CET reviewer card cleanup — 9 October 2026
+
+- [x] Remove the Study Packs card from the CET reviewer and update its introduction and guide copy; let the remaining Practice Exams card fill the row.
+- [x] Verify type checking, the 690-page production export, both existing phone/desktop reviewer journeys and targeted card-layout/navigation checks. Incorporate concurrent main changes through `4070777`; publish under the owner's automatic-push authorization.
+
 ## Missing-skill answer feedback — 9 October 2026
 
 - [x] Show checked incorrect answers in red in the question navigator and selected answer, with an × and accessible status; keep correct answers green.
@@ -355,3 +360,4 @@ Owner scope: rename the assessment action to “Take a Practice Exam”, route i
 - [x] Independently review the change and fix the discovered Health Sciences placement filtering issue; cover every live course's wrong choices and uncertainty responses.
 - [x] Pass 241 unit tests (one existing content skip), type checking and the 690-page production build.
 - [x] Complete phone/desktop browser verification: 18 targeted journeys pass across the initial run and selector-corrected rerun, including real placement submission, every course destination, reloads and cross-tab result updates. Prepare the verified separate branch for the requested push.
+- [x] Integrate main's concurrent CET reviewer card cleanup for the owner's subsequent main-push approval; rerun type checking, all 241 passing unit tests (one existing skip), and two live-dev browser checks covering the merged reviewer and both assessment destinations at 375/1280 px.
