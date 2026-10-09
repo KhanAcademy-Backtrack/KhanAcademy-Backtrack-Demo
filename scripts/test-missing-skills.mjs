@@ -18,10 +18,15 @@ export async function missingSkillsJourneys({scenario,origin,root}){
   await scenario(`program missing skills CET entry and explicit tabs ${width}`,async page=>{
    const s={...initialProgram(),sides:{admission:true,bridge:false},bridgeProgram:'cs_it',reviewerExam:'dcat'};await seed(page,s);
    await page.goto(origin+'/start/cet');await page.getByRole('heading',{name:'Nothing to go on yet',exact:true}).waitFor();
+   const tabs=page.getByRole('navigation',{name:'Which skills'});
+   assert.deepEqual(await tabs.getByRole('link').allTextContents(),['CET review','College courses']);
+   assert.equal(await tabs.locator('[aria-current=page]').getAttribute('href'),'/start/cet');
    assert.equal(await cta(page).getAttribute('href'),'/mock');await cta(page).click();
    await page.waitForURL('**/mock');assert.equal(await page.getByRole('combobox',{name:'Reviewing for'}).inputValue(),'dcat');
    await page.goto(origin+'/start/college');assert.equal(await cta(page).getAttribute('href'),'/bridge/cs_it');
+   assert.equal(await tabs.locator('[aria-current=page]').getAttribute('href'),'/start/college');
    await page.goto(origin+'/start');assert.equal(await cta(page).getAttribute('href'),'/mock');
+   assert.equal(await tabs.locator('[aria-current=page]').getAttribute('href'),'/start/cet');
    assert.deepEqual((await data(page)).attempts,[]);await overflow(page);
    await page.screenshot({path:path.join(dir,`empty-${width}.png`),fullPage:true});
   },viewport);
@@ -33,6 +38,7 @@ export async function missingSkillsJourneys({scenario,origin,root}){
     await page.goto(origin+'/start/college');assert.equal(await cta(page).getAttribute('href'),`/bridge/${p.id}`);
     await cta(page).click();await page.waitForURL(`**/bridge/${p.id}`);await page.getByRole('heading',{name:'Subjects',exact:true}).waitFor();
     await page.goto(origin+'/start');assert.equal(await cta(page).getAttribute('href'),`/bridge/${p.id}`);
+    assert.equal(await page.getByRole('navigation',{name:'Which skills'}).locator('[aria-current=page]').getAttribute('href'),'/start/college');
     await page.goto(origin+'/bridge');
    }
    assert.deepEqual((await data(page)).attempts,[]);await overflow(page);

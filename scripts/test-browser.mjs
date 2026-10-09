@@ -162,7 +162,7 @@ try{
    await overflow(page);
  });
  await scenario('science destinations, packs and class options are grouped by subject',async page=>{
-   await page.goto(origin+'/start');
+   await page.goto(origin+'/start/college');
    for(const heading of ['Mathematics','Chemistry','Physics'])await page.getByRole('heading',{name:heading,exact:true}).waitFor();
    assert.equal(await page.locator('[data-destination]').count(),9);
    await page.getByRole('link',{name:/Balancing equations/}).click();

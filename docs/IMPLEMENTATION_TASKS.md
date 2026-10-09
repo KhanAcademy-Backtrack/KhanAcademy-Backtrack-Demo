@@ -1,5 +1,11 @@
 # Complete study-companion implementation checklist
 
+## Missing-skill tabs — 9 October 2026
+
+- [x] Remove Everything and rename College Prep to College Courses, including the page title and matching navigation labels.
+- [x] Make `/start` select College Courses for a saved college goal and CET Review otherwise; retain both explicit entry URLs and their scoped results.
+- [x] Verify type checking, all 16 gap-domain tests, the 690-page production export and nine affected browser journeys, including 375/1280 px tabs, default goal selection, every course, real placement results, reloads and cross-tab updates. Publish under the owner’s main-push authorization.
+
 ## Remove optional pack test dates — 9 October 2026
 
 - [x] Remove test-date inputs from every pack card and the pack editor, along with the Today date display and tour copy.
@@ -361,7 +367,7 @@ Owner scope: 107 UPCAT Mathematics/Science lessons. Infrastructure is implemente
 
 Owner scope: rename the assessment action to “Take a Practice Exam”, route it to the appropriate section, and keep missing skills responsive to practice/placement results. The owner requested independent agent review and a push to a separate branch: `codex/dynamic-practice-entry`.
 
-- [x] Route CET review to Practice Exams and college prep to the selected course's subject/placement page, with course selection when no field is saved. Everything keeps all results and follows the learner's goal for its assessment action.
+- [x] Route CET review to Practice Exams and College Courses to the selected course's subject/placement page, with course selection when no field is saved. The later tab cleanup removes Everything and makes the general entry select the learner's goal scope.
 - [x] Keep the assessment action available after results appear; display the latest submitted result within the selected scope.
 - [x] Show unsupported wrong answers and explicit uncertainty as Topics to Revisit with lesson links, without inventing a prerequisite diagnosis. Update each topic from its latest answered assessment.
 - [x] Preserve the existing two-independent-check rule for BACKTRACK repairs. Blank/unsubmitted answers do not diagnose skills; viewing results does not write learning evidence.

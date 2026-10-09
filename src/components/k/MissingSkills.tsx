@@ -18,8 +18,8 @@ const SUBJECTS:[Subject,string][]=[['maths','Mathematics'],['chemistry','Chemist
 const topics=Object.entries(TOPICS) as [Topic,(typeof TOPICS)[Topic]][];
 const day=(at:number)=>new Date(at).toLocaleDateString(undefined,{month:'short',day:'numeric'});
 
-export type GapView='all'|'cet'|'college';
-const VIEWS:[GapView,string,string][]=[['cet','CET review','/start/cet'],['college','College prep','/start/college'],['all','Everything','/start']];
+export type GapView='cet'|'college';
+const VIEWS:[GapView,string,string][]=[['cet','CET review','/start/cet'],['college','College courses','/start/college']];
 const subtestName=(s:keyof typeof SUBTEST_LABEL)=>s==='math'?'Math':s==='science'?'Science':SUBTEST_LABEL[s];
 /** Where a gap shows up for this view: the CET topics it serves, or the first-year courses that assume it. */
 function where(view:GapView,g:Gap,field?:BridgeProgram):string{
@@ -33,19 +33,20 @@ function where(view:GapView,g:Gap,field?:BridgeProgram):string{
 }
 
 /** Find my missing skill: only the skills this learner's own answers point to, the
- *  deepest missing prerequisite first. CET review and college prep count different
+ *  deepest missing prerequisite first. CET review and college courses count different
  *  practice and keep different topics; BACKTRACK and reviewer evidence counts in both.
  *  Reading it records nothing. */
-export function MissingSkills({view='all'}:{view?:GapView}){
+export function MissingSkills({view:requestedView}:{view?:GapView}){
  const {state:study,ready:studyReady}=useStudy(),{state:program,ready:programReady}=useProgram(),fix=useFix();
+ const view=requestedView??(learnerGoal(program)==='college'?'college':'cet');
  const [now,setNow]=useState<number>();useEffect(()=>setNow(Date.now()),[]);
  const field=PROGRAM_BY_ID[program.bridgeProgram??''];
- const scope:GapScope=useMemo(()=>view==='cet'?CET_SCOPE:view==='college'?collegeScope(field):{},[view,field]);
+ const scope:GapScope=useMemo(()=>view==='cet'?CET_SCOPE:collegeScope(field),[view,field]);
  const map=useMemo(()=>now!==undefined&&studyReady&&programReady?findGaps(study,program.attempts,now,scope):undefined,[now,studyReady,programReady,study,program.attempts,scope]);
- const college=view==='college'||(view==='all'&&learnerGoal(program)==='college');
+ const college=view==='college';
  const assessmentHref=college?field?`/bridge/${field.id}`:'/bridge':'/mock';
  const any=!!map&&map.ready.length+map.later.length+map.topics.length>0;
- const lead=view==='cet'?'Skills behind the CET questions you missed and the steps BACKTRACK found, starting with the one underneath.':view==='college'?`Skills ${field?`a first year in ${field.title}`:'first-year college courses'} ${field?'assumes':'assume'}, where your answers show a gap, starting with the one underneath.`:'Only the skills your own answers point to, starting with the one underneath.';
+ const lead=view==='cet'?'Skills behind the CET questions you missed and the steps BACKTRACK found, starting with the one underneath.':`Skills ${field?`a first year in ${field.title}`:'first-year college courses'} ${field?'assumes':'assume'}, where your answers show a gap, starting with the one underneath.`;
  const listed=topics.filter(([id])=>!scope.topics||scope.topics.has(id));
  return <>
   <PageBand title="Find my missing skill" lead={`${lead} A BACKTRACK repair leaves this list after two fresh answers on your own.`}>
