@@ -8,11 +8,14 @@ import {useProgram} from './ProgramProvider';
 import {useFix} from './useFix';
 import {PageBand,Sheet,btn,cx,pageBody} from './ui';
 import {findGaps,CET_SCOPE,collegeScope,type Gap,type GapScope} from '@/lib/gaps';
-import {LABELS,TOPICS,type Subject,type Topic} from '@/lib/recovery';
+import {LABELS,TOPICS,ORDER,skillDependencies,type Subject,type Topic,type Skill} from '@/lib/recovery';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
-import {CONCEPTS} from '@/lib/program/concepts';
+import {CONCEPTS,CONCEPT_BY_ID} from '@/lib/program/concepts';
 import {PROGRAM_BY_ID,RESCUE_BY_ID,PROGRAMS,type BridgeProgram} from '@/lib/program/bridge';
 import {learnerGoal} from '@/lib/program/personalization';
+import {RouteCanvas} from '@/components/product/RouteCanvas';
+import {initialRecovery,TOPICS as RECOVERY_TOPICS,type Recovery} from '@/lib/recovery';
+import {plainText} from '@/lib/notation';
 
 const SUBJECTS:[Subject,string][]=[['maths','Mathematics'],['chemistry','Chemistry'],['physics','Physics']];
 const topics=Object.entries(TOPICS) as [Topic,(typeof TOPICS)[Topic]][];
@@ -48,6 +51,22 @@ export function MissingSkills({view:requestedView}:{view?:GapView}){
  const any=!!map&&map.ready.length+map.later.length+map.topics.length>0;
  const lead=view==='cet'?'Skills behind the CET questions you missed and the steps BACKTRACK found, starting with the one underneath.':`Skills ${field?`a first year in ${field.title}`:'first-year college courses'} ${field?'assumes':'assume'}, where your answers show a gap, starting with the one underneath.`;
  const listed=topics.filter(([id])=>!scope.topics||scope.topics.has(id));
+ const route=useMemo(()=>{
+  if(!map)return undefined;
+  const topic=map.ready[0]?.topic??map.later[0]?.topic??map.topics.map(r=>CONCEPT_BY_ID[r.concept]?.engine).find((t):t is Topic=>!!t)??(college?undefined:scope.topics?.values().next().value);
+  if(!topic)return undefined;
+  const base=initialRecovery(topic),gaps=[...map.ready,...map.later].filter(g=>g.topic===topic),missing=new Set(gaps.map(g=>g.skill));
+  // Show the selected destination's full prerequisite path, then highlight the
+  // exact steps this learner's evidence says are ready or waiting.
+  const included=new Set<Skill>(base.planned),addPrerequisites=(skill:Skill)=>{for(const dependency of skillDependencies(skill,topic)){if(dependency==='goal'||included.has(dependency))continue;included.add(dependency);addPrerequisites(dependency);}};
+  for(const gap of gaps)addPrerequisites(gap.skill);
+  const all:Skill[]=[...ORDER.filter(skill=>skill!=='goal'&&included.has(skill)),'goal'];
+  const active:Skill=gaps.find(g=>!g.blockedBy.length)?.skill??all[0]??'goal';
+  const passed:Skill[]=[];
+  const suspected=all.filter(skill=>missing.has(skill));
+  const synthetic:Recovery={...base,planned:all,active,passed,suspected,phase:'setup',goalTitle:RECOVERY_TOPICS[topic].label};
+  return synthetic;
+ },[map]);
  return <>
   <PageBand title="Find my missing skill" lead={`${lead} A BACKTRACK repair leaves this list after two fresh answers on your own.`}>
    <nav aria-label="Which skills" className="mt-4"><ul className="inline-flex flex-wrap gap-1 rounded-lg bg-white p-1 shadow-sheet">{VIEWS.map(([id,name,href])=><li key={id}><Link href={href} aria-current={view===id?'page':undefined} className={cx('inline-flex min-h-10 items-center rounded-md px-3.5 text-[14px] font-semibold focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy',view===id?'bg-navy text-white':'text-navy hover:bg-sky')}><Headline>{name}</Headline></Link></li>)}</ul></nav>
@@ -55,12 +74,14 @@ export function MissingSkills({view:requestedView}:{view?:GapView}){
   </PageBand>
   <div className={cx(pageBody,'grid gap-5')}>
    {!map?<Sheet><p role="status" className="text-ink-soft">Looking at your answers…</p></Sheet>:<>
-    {map.ready.length>0&&<section aria-labelledby="gaps-now"><h2 id="gaps-now" className="mb-3 text-lg font-extrabold"><Headline>Start here</Headline></h2>
-     <ol className="grid gap-3">{map.ready.map((g,i)=><li key={g.key}><GapCard gap={g} first={i===0} context={where(view,g,field)} onFix={()=>fix(g.topic,g.skill,g.reasons[0].text)}/></li>)}</ol>
+    {route&&(map.ready.length>0||map.later.length>0)&&<section aria-labelledby="gaps-now" className="start-route-section">
+     <div className="start-route-heading"><div><h2 id="gaps-now"><Headline>Start here</Headline></h2><p>Follow the steps back to your goal.</p></div>
+      {map.ready[0]&&<button type="button" className={btn.primary} onClick={()=>fix(map.ready[0].topic,map.ready[0].skill,map.ready[0].reasons[0].text)}><Headline>Fix {map.ready[0].label.toLowerCase()}</Headline></button>}
+     </div>
+     <div className="start-route-map" aria-label="Your recommended BACKTRACK route"><div className="start-route-goal"><span>The destination stays.</span><strong><Headline>{RECOVERY_TOPICS[route.topic].label}</Headline></strong><span className="start-route-example">{plainText(RECOVERY_TOPICS[route.topic].example)}</span></div><RouteCanvas state={route}/></div>
+     <details className="start-route-details"><summary>See why these steps are on your route</summary><ol className="grid gap-3">{[...map.ready,...map.later].map((g,i)=><li key={g.key}><GapCard gap={g} first={i===0} context={where(view,g,field)} onFix={()=>fix(g.topic,g.skill,g.reasons[0].text)}/></li>)}</ol></details>
     </section>}
-    {map.later.length>0&&<Sheet as="section" aria-labelledby="gaps-later"><h2 id="gaps-later" className="text-lg font-extrabold"><Headline>After that</Headline></h2><p className="mt-1 text-[15px] text-ink-soft">These open up once the skill underneath is fixed.</p>
-     <ul className="mt-3 divide-y divide-line">{map.later.map(g=><li key={g.key} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"><span><span className="block font-bold">{g.label}</span><span className="text-sm text-ink-soft">{where(view,g,field)}</span></span><span className="text-sm font-semibold text-ink-soft">After {g.blockedBy.map(s=>LABELS[s]).join(', ')}</span></li>)}</ul>
-    </Sheet>}
+    {!route&&map.ready.length>0&&<section aria-labelledby="gaps-now"><h2 id="gaps-now" className="mb-3 text-lg font-extrabold"><Headline>Start here</Headline></h2><ol className="grid gap-3">{map.ready.map((g,i)=><li key={g.key}><GapCard gap={g} first={i===0} context={where(view,g,field)} onFix={()=>fix(g.topic,g.skill,g.reasons[0].text)}/></li>)}</ol></section>}
     {map.topics.length>0&&<Sheet as="section" aria-labelledby="review-topics">
      <h2 id="review-topics" className="text-xl font-extrabold"><Headline>Topics to revisit</Headline></h2>
      <p className="mt-1 text-[15px] text-ink-soft">Your latest answers on these topics suggest another look. Open the lesson to review the idea; these answers do not identify a specific missing prerequisite.</p>
