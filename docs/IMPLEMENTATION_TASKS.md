@@ -235,6 +235,16 @@ User clarification after planning: no backend or accounts are required for this 
 
 The plan was delivered and the user explicitly asked to continue implementation. Begin with the shared-state/migration contract and test harness, then follow the complete sequence; do not finish one feature and lose the remaining product areas.
 
+## Retired Study Tools — 9 October 2026
+
+Latest owner steering removes Khan Academy activities and Daily Recall throughout the site and authorizes pushing the verified removal to main. This supersedes earlier requirements for the standalone activity picker and Daily Recall queue. Details: `STUDY_TOOL_REMOVAL_2026_10_09.md`.
+
+- [x] Remove both features from Study, Home, setup, search, guides and legacy study entry points.
+- [x] Remove the activity picker, recall queue UI/scheduler and recall queue writes; keep old learner records readable.
+- [x] Preserve contextual Khan lesson resources, chapter cards, note cards, practice and BACKTRACK review.
+- [x] Keep old `/khan` bookmarks useful by opening the current Study page.
+- [x] Verify the isolated change for the authorized main push: 226 unit passes/one existing skip, clean typecheck, 690-page export, 96 browser journeys across the full run and targeted reruns, plus two welcome/resume checks. Preserve the parallel agent's checkout.
+
 ## Topic Lesson Pass — 7 October 2026
 
 Current owner steering: site/resources only, on Codex-Reworks. Details: TOPIC_LESSONS_2026_10_07.md.

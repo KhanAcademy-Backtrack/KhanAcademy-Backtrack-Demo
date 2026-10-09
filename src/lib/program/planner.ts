@@ -101,13 +101,11 @@ export function buildSchedule(s:ProgramState,today:string):CalEvent[]{
  return out;
 }
 
-/** Today's three-step mission: quick recall, a Khan block, a fresh exit check. */
+/** Today's mission: a learning block and a fresh exit check. */
 export function mission(s:ProgramState,today:string){
  const top=personalFocus(s)[0]??focusRanking(s)[0];
  const done=s.missions[today]??{};
- const dueRecall=Object.values(s.recall).filter(r=>r.due<=parseDay(today).getTime()+DAY_MS).length;
  return {concept:top.concept,steps:[
-  {id:'recall' as const,done:!!done.recall,title:'Quick recall',detail:dueRecall?`${dueRecall} card${dueRecall===1?'':'s'} due`:'Five minutes of mixed review'},
   {id:'khan' as const,done:!!done.khan,title:top.concept.khan.length?'Learn it on Khan Academy':'Read the summary',detail:top.concept.title},
   {id:'exit' as const,done:!!done.exit,title:'Fresh exit check',detail:`${top.concept.title}, new questions`}
  ]};

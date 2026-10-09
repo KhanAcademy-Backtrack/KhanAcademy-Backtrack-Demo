@@ -13,13 +13,6 @@ import {freshCheckKey} from '@/lib/program/attempts';
 
 export function KhanRelationship(){return <p className="text-sm font-semibold text-navy"><Headline>Your Study Companion for Khan Academy</Headline></p>;}
 
-/** A compact introduction, with an optional entrance for existing Khan learners. */
-export function KhanStartCard(){return <Sheet className="p-4 sm:p-5" data-khan-start>
- <KhanRelationship/><h2 className="mt-2 text-xl font-extrabold"><Headline>Bring Your Lesson, Find Your Next Step</Headline></h2>
- <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">Start with a reviewed Khan Academy activity. Khanpanion connects it to an explanation, independent practice and your next review.</p>
- <Link href="/khan" className={cx(btn.primary,'mt-4')}><Headline>Start from a Khan Academy Activity</Headline></Link>
-</Sheet>;}
-
 /** Preserve the task when external practice opens, without replacing an active session
  * or treating the open/report as an independently checked answer. */
 export function LessonKhanPractice({lesson}:{lesson:TopicLesson}){

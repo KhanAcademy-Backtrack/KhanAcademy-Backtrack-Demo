@@ -98,8 +98,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
    update(s=>{
     const concepts={...s.concepts};
     if(kind==='topic'||kind==='exit'){const c=itemById(ids[0])!.concept;const prev=concepts[c]??{checks:[]};concepts[c]={...prev,checks:[...prev.checks,{at,correct:ids.length-misses.length,total:ids.length}].slice(-20)};}
-    const recall={...s.recall};for(const i of misses)recall[`item:${i}`]={due:at+86400000,stage:0,last:at};
-    return {...s,attempts:s.attempts.map(y=>y.id===done.id?done:y),activeAttempt:undefined,concepts,recall,studyDays:[...s.studyDays,today],
+    return {...s,attempts:s.attempts.map(y=>y.id===done.id?done:y),activeAttempt:undefined,concepts,studyDays:[...s.studyDays,today],
      missions:kind==='exit'?{...s.missions,[today]:{...s.missions[today],exit:at}}:s.missions,
      notebook:[...s.notebook,...misses.map(i=>{const it=itemById(i)!;const ch=x.answers[i]??null;return {itemId:i,at,formKey:x.formKey,chosen:ch,idk:x.idk.includes(i),triage:triage[i],misconception:ch!==null?it.misconceptions[ch]??undefined:undefined,concept:it.concept};})]};
    });

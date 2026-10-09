@@ -23,24 +23,22 @@ export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string
 type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[];bar?:Sub[]};
 
 /** Study tools in the section bar, CET practice first. */
-type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates'|'khan';
+type ToolKey='start'|'notebook'|'packs'|'explore'|'dates';
 export const STUDY_TOOLS:Sub[]=[
  {key:'mocks',href:'/mock',label:'page.mocks',icon:'mocks',blurb:'Full CET-style sets, timed or untimed, with an answer key.',match:p=>p.startsWith('/mock')},
- {key:'recall',href:'/review',label:'page.recall',icon:'recall',blurb:'A quick look at the ideas that are due today.',match:p=>p==='/review'},
  {key:'packs',href:'/packs',label:'page.packs',icon:'packs',blurb:'Topic packs that start short BACKTRACK rounds.',match:p=>p.startsWith('/packs')||p.startsWith('/create')},
- {key:'khan',href:'/khan',label:'page.khan',icon:'khan',blurb:'Bring a reviewed Khan lesson or practice activity into your session.',match:p=>p==='/khan'}
 ];
 /** The section's pages stay in its page-level navigation; the global menu stays flat. */
 const FIX:Sub={key:'fix',href:'/start',label:'page.fix',icon:'start',match:p=>p==='/start'||p.startsWith('/start/')||p==='/route'||p.startsWith('/try/')};
 /** The mistake notebook and explore ideas left the menus on 4 October at the owner's request.
  *  Their addresses still work, are found by search and still belong to Study. */
-const OFF_MENU_STUDY=(p:string)=>p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
+const OFF_MENU_STUDY=(p:string)=>p==='/review'||p.startsWith('/study')||p.startsWith('/notebook')||p.startsWith('/explore');
 const IN_REVIEWER=(p:string)=>p.startsWith('/reviewer')||p.startsWith('/learn/'),IN_COURSES=(p:string)=>p.startsWith('/bridge');
 const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:IN_REVIEWER};
 /** College foundations: each field's first-year courses and the math and science they build on. */
 const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:IN_COURSES};
 /** Home shortcuts reuse the same destinations, labels and icons as the Study navigation. */
-export const HOME_SHORTCUTS:Sub[]=[COURSES,REVIEWER,...STUDY_TOOLS.filter(x=>x.key==='mocks'||x.key==='recall')];
+export const HOME_SHORTCUTS:Sub[]=[COURSES,REVIEWER,...STUDY_TOOLS.filter(x=>x.key==='mocks')];
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
 /** Four sections, in this order: Home, Study, Plan, Group. Plan opens exam dates
@@ -61,10 +59,9 @@ export function NavIcon({k,small=false}:{k:IconKey;small?:boolean}){
   k==='today'?<><path d="M3 11 12 4l9 7M5 10v10h14V10" {...stroke}/><ellipse cx="12" cy="15" rx="2.5" ry="2" fill="currentColor"/></>:k==='calendar'?<><rect x="4" y="5" width="16" height="15" rx="2.5" {...stroke}/><path d="M8 3v4M16 3v4M4 10h16" {...stroke}/><ellipse cx="12" cy="15" rx="2.6" ry="1.9" fill="currentColor"/></>:
   k==='plan'?<path d="M5 19V5M5 7h11l-2 3 2 3H5" {...stroke}/>:
   k==='mocks'?<><rect x="5" y="3" width="14" height="18" rx="2" {...stroke}/><ellipse cx="9.5" cy="9" rx="1.8" ry="1.3" fill="currentColor"/><ellipse cx="9.5" cy="14" rx="1.8" ry="1.3" {...stroke}/><path d="M13 9h3M13 14h3" {...stroke}/></>:
-  k==='reviewer'||k==='study'||k==='khan'?<path d="M4 5.5C7 4 9.5 4.5 12 6c2.5-1.5 5-2 8-.5V19c-3-1.5-5.5-1-8 .5-2.5-1.5-5-2-8-.5ZM12 6v13.5" {...stroke}/>:
+  k==='reviewer'||k==='study'?<path d="M4 5.5C7 4 9.5 4.5 12 6c2.5-1.5 5-2 8-.5V19c-3-1.5-5.5-1-8 .5-2.5-1.5-5-2-8-.5ZM12 6v13.5" {...stroke}/>:
   k==='group'?<><circle cx="8" cy="9" r="3" {...stroke}/><circle cx="16.5" cy="10" r="2.5" {...stroke}/><path d="M3 19c.8-3 2.8-4.5 5-4.5s4.2 1.5 5 4.5M14 18.5c.5-2 1.8-3 3.3-3s2.7 1 3.2 3" {...stroke}/></>:
   k==='start'?<><path d="M9 14 4 9l5-5" {...stroke}/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" {...stroke}/></>:
-  k==='recall'?<><path d="M20 12a8 8 0 1 1-2.4-5.7" {...stroke}/><path d="M20 4v5h-5" {...stroke}/></>:
   k==='notebook'?<><rect x="5" y="3" width="14" height="18" rx="2" {...stroke}/><path d="M9 3v18M12.5 8h3M12.5 12h3" {...stroke}/></>:
   k==='packs'?<><path d="m12 3 9 5-9 5-9-5 9-5Z" {...stroke}/><path d="m3 13 9 5 9-5" {...stroke}/></>:
   k==='explore'?<><circle cx="12" cy="12" r="9" {...stroke}/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" {...stroke}/></>:

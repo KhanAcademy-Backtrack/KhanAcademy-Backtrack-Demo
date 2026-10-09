@@ -71,7 +71,7 @@ test('focus ranking moves weak concepts up after a mock', ()=>{
  assert.equal(statusOf(rank[0]),'focus here');
  const ready=readiness(s);assert.equal(ready.find(r=>r.subtest==='math').percent,0);
  assert.ok(ready.find(r=>r.subtest==='science').percent>=90);
- const m=mission(s,today);assert.equal(m.steps.length,3);assert.equal(m.concept.subtest,'math');
+ const m=mission(s,today);assert.deepEqual(m.steps.map(x=>x.id),['khan','exit']);assert.equal(m.concept.subtest,'math');
 });
 
 test('weeks and shields never punish, only cover', ()=>{

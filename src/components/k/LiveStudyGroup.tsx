@@ -49,7 +49,7 @@ export function LiveStudyGroup(){
  }
  const g=snapshot?.group,me=snapshot?.members.find(m=>m.isMe),week=snapshot?.weekStart??today,end=addDays(week,6);
  const days=state.studyDays.filter(d=>d>=week&&d<=end).length;
- const missions=Object.entries(state.missions).filter(([d,v])=>d>=week&&d<=end&&v.recall&&v.khan&&v.exit).length;
+ const missions=Object.entries(state.missions).filter(([d,v])=>d>=week&&d<=end&&v.khan&&v.exit).length;
  const latest=state.attempts.filter(a=>a.submittedAt&&['full','section','fixed'].includes(formFromKey(a.formKey)?.kind??'')).sort((a,b)=>b.submittedAt!-a.submittedAt!)[0],form=latest?formFromKey(latest.formKey):null;
  const mock=latest&&form?scoreAttempt(form,latest).total:undefined;
  const link=g&&typeof window!=='undefined'?`${location.origin}/group?join=${g.code}`:'';

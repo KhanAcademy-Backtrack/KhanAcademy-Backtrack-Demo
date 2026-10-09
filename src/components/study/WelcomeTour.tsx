@@ -6,7 +6,6 @@ import {useStudy} from './StudyProvider';
 const STEPS=[
  {selector:'.intent-choices a[href="/explore"]',title:'Explore something new.',body:'Open short interactive ideas and Khan Academy clips. Move a model, save an interest or follow the idea into practice. Explore has its own Quick tour.'},
  {selector:'a[href="/study"]',title:'Go straight to your study goal.',body:'Study lets you learn, practise or take a challenge. Choose your topics and a manageable session. Saved work stays ready to resume.'},
- {selector:'a[href="/khan"]',title:'Bring a Khan activity.',body:'Choose a supported Khan lesson or paste a recognised activity link. Khanpanion connects it to useful support, practice and a saved return.'},
  {selector:'a[href="/packs"]',title:'Keep your topics in a pack.',body:'My packs keeps topics, quiz dates and source notes together. You can also share the learning scope with someone else.'},
  {selector:'a[href="/review"]',title:'Come back for a fresh question.',body:'Review keeps useful steps for another look. Saved discoveries are also on Today and in Explore. A missed day does not erase your work.'}
 ];

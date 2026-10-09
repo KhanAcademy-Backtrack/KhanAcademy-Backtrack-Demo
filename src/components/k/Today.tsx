@@ -1,6 +1,7 @@
 'use client';
 import {Headline} from './Headline';
 import Link from 'next/link';
+import {useRouter} from 'next/navigation';
 import {ChangeGoalButton} from './ProgramTourProvider';
 
 import {useProgram} from './ProgramProvider';
@@ -19,12 +20,12 @@ import {StudyActivity} from './HomeDashboard';
 const longDate=(d:string)=>parseDay(d).toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric'});
 
 export function Today(){
- const {state:s,update,today}=useProgram();const lang=s.lang;
+ const {state:s,update,today}=useProgram();const lang=s.lang,router=useRouter();
  const bridgeOnly=s.sides.bridge&&(!s.sides.admission||s.activeSide==='bridge');
  const m=mission(s,today),w=weeks(s,today),focus=focusRanking(s,bridgeOnly?['math','science']:undefined).slice(0,4);
  const mock=calendarItems(s,today).find(i=>i.kind==='mock'&&i.date>=today);
  const left=s.pledge?daysBetween(today,s.pledge.examDate):undefined;
- const markStudied=(step:'recall'|'khan'|'exit')=>update(p=>({...p,missions:{...p.missions,[today]:{...p.missions[today],[step]:Date.now()}},studyDays:[...p.studyDays,today]}));
+ const markStudied=(step:'khan'|'exit')=>update(p=>({...p,missions:{...p.missions,[today]:{...p.missions[today],[step]:Date.now()}},studyDays:[...p.studyDays,today]}));
  const conceptKhan=m.concept.khan[0],khanProgress=s.concepts[m.concept.id];
  const awaitingKhan=khanProgress?.khanOpened&&(!khanProgress.khanDone||khanProgress.khanDone<khanProgress.khanOpened)&&Date.now()-khanProgress.khanOpened<3*86400000;
  const allDone=m.steps.every(x=>x.done);
@@ -50,12 +51,11 @@ export function Today(){
    <div className="contents lg:grid lg:content-start lg:gap-5">
     <Sheet className="order-1 lg:order-none">
      <div className="flex items-start gap-4"><Companion size={64} pose={allDone?'aha':'encourage'}/><div><h1 className="text-[1.7rem] font-extrabold leading-tight tracking-[-.03em]"><Headline>{allDone?t(lang,'today.allDone'):t(lang,'today.mission')}</Headline></h1><p className="mt-1 text-ink-soft">{longDate(today)} · {m.concept.title}</p></div></div>
-     {awaitingKhan&&conceptKhan&&<div className="mt-5 rounded-2xl bg-mint p-4"><p className="font-bold">Back from Khan Academy? How did it go?</p><p className="text-sm text-ink-soft">This is your own note. It never counts as a score.</p><div className="mt-3 flex flex-wrap gap-2">{[['done','I finished it'],['hard','Still hard']].map(([k,l])=><button key={k} className={btn.ghost} onClick={()=>update(p=>({...p,concepts:{...p.concepts,[m.concept.id]:{...(p.concepts[m.concept.id]??{checks:[]}),khanDone:Date.now()}},...(k==='hard'?{recall:{...p.recall,[`concept:${m.concept.id}`]:{due:Date.now(),stage:0,last:Date.now()}}}:{})}))}><Headline>{l}</Headline></button>)}</div></div>}
+     {awaitingKhan&&conceptKhan&&<div className="mt-5 rounded-2xl bg-mint p-4"><p className="font-bold">Back from Khan Academy? How did it go?</p><p className="text-sm text-ink-soft">This is your own note. It never counts as a score.</p><div className="mt-3 flex flex-wrap gap-2">{[['done','I finished it'],['hard','Still hard']].map(([k,l])=><button key={k} className={btn.ghost} onClick={()=>{update(p=>({...p,concepts:{...p.concepts,[m.concept.id]:{...(p.concepts[m.concept.id]??{checks:[]}),khanDone:Date.now()}}}));if(k==='hard')router.push('/learn/'+m.concept.id);}}><Headline>{l}</Headline></button>)}</div></div>}
      <ol className="mt-6 grid gap-3">
       {m.steps.map((step,i)=><li key={step.id} className={cx('flex flex-wrap items-center gap-4 rounded-2xl border-2 p-4',step.done?'border-green bg-mint':'border-line bg-white')}>
        <Oval filled={step.done} label={String(i+1)} size={40}/>
        <div className="min-w-0 flex-1"><p className="font-bold">{t(lang,`mission.${step.id}`)}</p><p className="text-sm text-ink-soft">{step.detail}</p></div>
-       {step.id==='recall'&&<Link href="/review" onClick={()=>markStudied('recall')} className={step.done?btn.ghost:btn.dark}><Headline>{step.done?'Review more':t(lang,'mission.start')}</Headline></Link>}
        {step.id==='khan'&&(conceptKhan?<a href={khanUrl(conceptKhan)} target="_blank" rel="noopener noreferrer" onClick={()=>{markStudied('khan');update(p=>({...p,concepts:{...p.concepts,[m.concept.id]:{...(p.concepts[m.concept.id]??{checks:[]}),khanOpened:Date.now()}}}));}} className={step.done?btn.ghost:btn.dark}><Headline>Open Khan Academy <span aria-hidden="true">↗</span></Headline></a>
         :<Link href={`/learn/${m.concept.id}`} onClick={()=>markStudied('khan')} className={step.done?btn.ghost:btn.dark}><Headline>Read</Headline></Link>)}
        {step.id==='exit'&&<Link href={`/mock/take?f=exit~${m.concept.id}|${today.replace(/-/g,'')}&mode=practice`} className={step.done?btn.ghost:btn.primary}><Headline>{step.done?'Try again':t(lang,'mission.start')}</Headline></Link>}

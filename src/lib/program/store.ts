@@ -36,6 +36,7 @@ export type ProgramState={
  events:CalEvent[];
  notebook:NoteEntry[];
  bookmarks:string[];
+ /** Retained for compatibility with saved data from the retired recall queue. */
  recall:Record<string,RecallCard>;
  daily:Record<string,{correct:number;total:number}>;
  group?:{code:string;goal:number;joinedAt:number};

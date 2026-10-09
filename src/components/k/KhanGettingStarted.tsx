@@ -34,7 +34,6 @@ export function KhanGettingStarted({concept,exam,reason}:{concept?:string;exam?:
      <p className="text-sm leading-relaxed">No matching Khan Academy video has been verified for this topic. Start with Khanpanion’s written explanation.</p>
      <Link href={'/learn/'+topic.id} className={cx(btn.ghost,'mt-3')}><Headline>Read this topic</Headline></Link>
     </div>:<p className="mt-5 rounded-xl bg-mint p-4 text-sm leading-relaxed">Pick a topic above to find your first video. You can change it any time.</p>}
-    <Link href="/khan" className={cx(btn.text,'mt-3 text-sm')}><Headline>Already learning on Khan Academy? <span aria-hidden="true">→</span></Headline></Link>
    </div>
    {video?<div className="min-w-0 self-start rounded-xl bg-sky p-3 sm:p-4"><VideoPanel key={video.id} video={video} id={id+'-video'}/></div>:<div className="hidden items-center justify-center rounded-xl bg-mint p-8 lg:flex"><img src="/khan-academy.svg" alt="Khan Academy" width="220" height="48" className="h-auto w-full max-w-56"/></div>}
   </div>

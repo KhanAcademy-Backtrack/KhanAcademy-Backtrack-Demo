@@ -13,6 +13,7 @@ import {homeJourneys} from './test-home-browser.mjs';
 import {profileJourneys} from './test-profile-browser.mjs';
 import {routeMapJourneys} from './test-route-map.mjs';
 import {lessonQuizJourneys} from './test-lesson-quizzes.mjs';
+import {retiredStudyToolJourneys} from './test-retired-study-tools.mjs';
 import {khanStartJourneys} from './test-khan-start-browser.mjs';
 import {problemFor} from '../src/lib/recovery.ts';
 import {speakText} from '../src/lib/notation.ts';
@@ -81,9 +82,9 @@ try{
    await page.goto(origin+'/create');await page.locator('input[type=file]').setInputFiles(path.join(root,'tests/fixtures/notes.pdf'));await page.getByText('Draft cards added.',{exact:false}).waitFor();
    const text=await page.locator('.creator-cards').innerText();assert.match(text,/Page 1/);assert.match(text,/notes\.pdf/);assert.ok(await page.getByRole('textbox',{name:'Your explanation',exact:true}).count()>0);await overflow(page);
  });
- await scenario('supported Khan activity clip and preserved return',async page=>{
+ await scenario('pack Khan explanation clip and preserved return',async page=>{
    await page.route('https://www.youtube-nocookie.com/**',route=>route.fulfill({contentType:'text/html',body:'<title>Player parameter check</title>'}));
-   await page.goto(origin+'/khan');await page.getByRole('button',{name:/^Learn It First$/i}).first().click();await page.getByRole('button',{name:/Khan explanation/i}).click();assert.equal(await page.locator('.khan-player-cover').count(),0,'The video shows straight away, with no cover to press');
+   await page.goto(origin+'/packs');await page.getByRole('textbox',{name:'Pack name',exact:true}).fill('Factoring practice');await page.getByRole('button',{name:'Save my pack',exact:true}).click();await page.locator('.pack-library>article').filter({has:page.getByRole('heading',{name:'Factoring practice',exact:true})}).getByRole('button',{name:'Learn this pack',exact:true}).click();await page.getByRole('button',{name:/Khan explanation/i}).click();assert.equal(await page.locator('.khan-player-cover').count(),0,'The video shows straight away, with no cover to press');
    const frame=page.locator('.khan-player iframe');await frame.waitFor();let url=new URL(await frame.getAttribute('src'));assert.equal(url.searchParams.get('autoplay'),'0','Paused until play');assert.equal(url.searchParams.get('start'),'142');assert.equal(url.searchParams.get('end'),'236');
    await page.getByRole('button',{name:/^Continue Watching$/i}).click();url=new URL(await frame.getAttribute('src'));assert.equal(url.searchParams.get('start'),'236');assert.equal(url.searchParams.has('end'),false);
    const practice=page.locator('.khan-practice-stop a[target=_blank]').first();assert.match(await practice.getAttribute('href'),/khanacademy.org/);
@@ -195,6 +196,7 @@ try{
  await routeMapJourneys({scenario,origin});
  await lessonQuizJourneys({scenario,origin});
  await khanStartJourneys({scenario,origin,root});
+ await retiredStudyToolJourneys({scenario,origin,root});
 }finally{
  await browser.close();server.kill();await fs.writeFile(path.join(root,'.refs/browser-acceptance.json'),JSON.stringify({at:new Date().toISOString(),results:report},null,2));
 }

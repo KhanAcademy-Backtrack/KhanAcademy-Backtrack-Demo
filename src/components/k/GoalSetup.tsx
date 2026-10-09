@@ -1,6 +1,5 @@
 'use client';
 import {Headline} from './Headline';
-import Link from 'next/link';
 import {useMemo,useRef,useState,useEffect} from 'react';
 import {useProgram} from './ProgramProvider';
 import {Sheet,Wordmark,btn,cx} from './ui';
@@ -26,7 +25,7 @@ const tile='rounded-xl border-2 border-line-strong bg-white text-navy shadow-[0_
 const cta='min-h-12 whitespace-nowrap border-b-4 border-green-deep text-base active:translate-y-[2px] active:border-b-2 max-[359px]:px-3 motion-reduce:active:translate-y-0';
 const hours=(m:number)=>m<60?`${m} min`:`${Math.floor(m/60)} h${m%60?` ${m%60} min`:''}`;
 
-export function GoalSetup({onSaved,onCancel,onBrowse,onKhan,entry=false,modal=false}:{onSaved:()=>void;onCancel?:()=>void;onBrowse?:()=>void;onKhan?:()=>void;entry?:boolean;modal?:boolean}){
+export function GoalSetup({onSaved,onCancel,onBrowse,entry=false,modal=false}:{onSaved:()=>void;onCancel?:()=>void;onBrowse?:()=>void;entry?:boolean;modal?:boolean}){
  const {state:s,update,today,profileName,setProfileName}=useProgram();
  const askName=!s.setup,totalSteps=askName?4:3;
  const [name,setName]=useState(profileName===DEFAULT_PROFILE_NAME?'':profileName);
@@ -84,7 +83,6 @@ export function GoalSetup({onSaved,onCancel,onBrowse,onKhan,entry=false,modal=fa
     <label className="grid gap-2 font-bold">Usual study time<input ref={timeInput} type="time" className={cx(field,'font-normal')} value={time} onChange={e=>setTime(e.target.value)} onInput={e=>setTime(e.currentTarget.value)} onBlur={e=>setTime(e.currentTarget.value)}/></label>
     <div className="min-w-0 rounded-xl border-2 border-line p-3 sm:p-4"><div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"><h3 className="text-lg font-bold"><Headline>Your first study week</Headline></h3><p aria-live="polite" className="rounded-lg bg-mint px-2.5 py-1 text-sm font-bold text-navy">{days.length} {days.length===1?'session':'sessions'} · {hours(days.length*minutes)} a week</p></div><p className="mt-1 mb-2 text-sm text-ink-soft">Tap a day to see the sessions your choices create.</p><StudyWeek items={items} today={today} preview/></div>
    </div>:<form className="mt-6" onSubmit={e=>{e.preventDefault();save();}}><ProfileNameField value={name} onChange={setName}/></form>}
-  {step===0&&<Link href="/khan" onClick={onKhan} className={cx(btn.text,'mt-3 w-full justify-center text-sm')}><Headline>Already Learning on Khan Academy? <span aria-hidden="true">→</span></Headline></Link>}
   {error&&<p role="alert" className="mt-4 font-semibold text-navy">{error}</p>}
  </>;
  const actions=step===0?onBrowse&&<button aria-label="I’m just browsing" onClick={onBrowse} className={cx(tile,'flex min-h-12 w-full items-center justify-center gap-2 px-4 py-2 text-center')}><span className="font-bold"><Headline>I’m just browsing</Headline></span><span className="hidden text-sm text-ink-soft min-[360px]:inline">Show me around. No setup needed.</span></button>

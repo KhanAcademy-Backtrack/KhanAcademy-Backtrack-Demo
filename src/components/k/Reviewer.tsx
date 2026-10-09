@@ -31,7 +31,7 @@ const EXTRA_SUBJECT:Record<string,Subtest>={x_formulas_math:'math',x_formulas_sc
 type Group={key:string;label:string;match:(subtest:Subtest,fil:boolean)=>boolean;empty?:boolean};
 const row='flex min-h-14 items-center gap-3 px-4 py-3';
 
-/** Study: practice exams and daily recall first, then the reviewer library. The library lists the chosen exam's
+/** Study: practice exams and study packs first, then the reviewer library. The library lists the chosen exam's
  *  sections, closed until one is opened; each opens to its topics (the exam's outline where there is one, else its
  *  summaries). A search shows matching summaries from the whole exam. Full chapters open from each topic's page.
  *  Offline caching is scheduled for Phase B. */
@@ -66,7 +66,7 @@ export function ReviewerLibrary(){
  const saved:Line[]=state.bookmarks.flatMap<Line>(k=>{const o=OUTLINE_BY_KEY.get(k),c=CONCEPT_BY_ID[k],ch=CHAPTER_BY_ID[k];
   return o?[{key:k,title:o.topic.title,href:lessonHref(outlineLessonId(o.exam,o.topic.title)),note:`${EXAMS[o.exam].name} · ${o.section}`}]:c?[{key:k,title:c.title,href:`/learn/${c.id}`,note:`Summary · ${c.area}`}]:ch?[{key:k,title:ch.title,href:`/reviewer/${ch.id}`,note:'Full chapter'}]:[];});
  return <>
-  <PageBand title="Study" lead="Practice exams, daily recall and the full CET reviewer in one place."/>
+  <PageBand title="Study" lead="Practice exams, study packs and the full CET reviewer in one place."/>
   <div className={pageBody}>
    <StudyTools/>
    <Sheet className="mt-8">
@@ -135,9 +135,8 @@ export function ChapterPage({id}:{id:string}){
    <Sheet className="mt-5 print:break-before-page"><h2 className="text-2xl font-extrabold"><Headline>6. Practice set</Headline></h2><p className="mt-1 text-ink-soft">{practice.length} questions, fresh each day for math and science. Check each answer and open its full solution.</p>
     <ol className="mt-5 grid gap-8">{practice.map((it,n)=>it&&<li key={it.id} className="border-b border-mint-line pb-6 last:border-0"><Question item={it} number={n+1} mode="practice" chosen={answers[it.id]??null} idk={idk.includes(it.id)} revealed={shown.includes(it.id)} onChoose={i=>setAnswers(a=>({...a,[it.id]:i}))} onIdk={()=>setIdk(x=>x.includes(it.id)?x.filter(y=>y!==it.id):[...x,it.id])} onReveal={()=>setShown(s=>[...s,it.id])} lang={state.lang}/></li>)}</ol>
    </Sheet>
-   <Sheet className="mt-5"><h2 className="text-2xl font-extrabold"><Headline>7. Recall cards</Headline></h2><p className="mt-1 text-ink-soft">Say the answer before you flip. Cards you save come back in your daily recall.</p>
+   <Sheet className="mt-5"><h2 className="text-2xl font-extrabold"><Headline>7. Recall cards</Headline></h2><p className="mt-1 text-ink-soft">Say the answer before you flip. Use these cards to check the main ideas in this chapter.</p>
     <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{c.recall.map((r,i)=><li key={i}><button aria-pressed={flip.includes(i)} onClick={()=>setFlip(f=>f.includes(i)?f.filter(x=>x!==i):[...f,i])} className={cx('min-h-32 w-full rounded-2xl p-4 text-left  text-navy',flip.includes(i)?'bg-navy text-white':'bg-mint')}><span className="block text-sm font-bold opacity-70">{flip.includes(i)?'Answer':'Question'}</span><span className="mt-1 block font-serif text-lg leading-snug"><Rich>{flip.includes(i)?r.back:r.front}</Rich></span></button></li>)}</ul>
-    <button className={cx(btn.ghost,'mt-4')} onClick={()=>update(s=>{const recall={...s.recall};c.recall.forEach((_,i)=>{recall[`card:${c.id}:${i}`]=recall[`card:${c.id}:${i}`]??{due:Date.now()+86400000,stage:0,last:Date.now()};});return {...s,recall};})}><Headline>Add these cards to my daily recall</Headline></button>
    </Sheet>
    <Sheet className="mt-5 bg-mint"><h2 className="text-2xl font-extrabold"><Headline>8. If this felt hard, start here</Headline></h2><p className="mt-2 max-w-2xl text-[17px]"><Rich>{c.hard.text}</Rich></p><div className="mt-4 flex flex-wrap gap-2">{c.hard.engine&&<button className={btn.dark} onClick={()=>fix(c.hard.engine!.topic,c.hard.engine!.skill,`Starting point for ${c.title}`)}><Headline>Find my missing skill</Headline></button>}{c.hard.concepts.map(x=><Link key={x} className={btn.ghost} href={`/learn/${x}`}><Headline>{CONCEPT_BY_ID[x].title}</Headline></Link>)}</div></Sheet>
   </div>
