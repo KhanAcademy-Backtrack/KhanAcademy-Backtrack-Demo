@@ -22,7 +22,7 @@ type IconKey=Key|ToolKey|'calendar'|'mocks'|'reviewer'|'courses'|'folder'|'plus'
 export type Sub={key:string;href:string;label:TextKey;icon:IconKey;blurb?:string;match:(p:string)=>boolean};
 type Tab={href:string;key:Key;match:(p:string)=>boolean;subs:Sub[];bar?:Sub[]};
 
-/** Study tools in the section bar and the home shortcuts, CET practice first. */
+/** Study tools in the section bar, CET practice first. */
 type ToolKey='start'|'recall'|'notebook'|'packs'|'explore'|'dates';
 export const STUDY_TOOLS:Sub[]=[
  {key:'mocks',href:'/mock',label:'page.mocks',icon:'mocks',blurb:'Full CET-style sets, timed or untimed, with an answer key.',match:p=>p.startsWith('/mock')},
@@ -38,6 +38,8 @@ const IN_REVIEWER=(p:string)=>p.startsWith('/reviewer')||p.startsWith('/learn/')
 const REVIEWER:Sub={key:'reviewer',href:'/reviewer',label:'page.reviewer',icon:'reviewer',match:IN_REVIEWER};
 /** College foundations: each field's first-year courses and the math and science they build on. */
 const COURSES:Sub={key:'courses',href:'/bridge',label:'page.courses',icon:'courses',match:IN_COURSES};
+/** Home shortcuts reuse the same destinations, labels and icons as the Study navigation. */
+export const HOME_SHORTCUTS:Sub[]=[COURSES,REVIEWER,...STUDY_TOOLS.filter(x=>x.key==='mocks'||x.key==='recall')];
 export const EXAM_DATES_LINK:Sub={key:'dates',href:'/admissions',label:'page.dates',icon:'dates',match:p=>p.startsWith('/admissions')};
 
 /** Four sections, in this order: Home, Study, Plan, Group. Plan opens exam dates
