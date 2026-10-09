@@ -44,14 +44,33 @@ export function TopicArt(){
  </svg>;
 }
 
-/** BACKTRACK: one step back along the route, a repair, then on to the goal. */
+/** A schematic of the current prerequisite map: the goal stays above its earlier
+ *  skills, with one useful way back up highlighted. This is not learner progress. */
 export function RouteArt(){
- return <svg viewBox="0 0 240 180" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
-  <path d="M40 132 C 80 132, 90 60, 130 60 S 190 48, 204 44" {...line} strokeDasharray="0" opacity=".25"/>
-  <path d="M40 132 C 80 132, 90 60, 130 60" {...line}/>
-  <path d="M118 92 q -18 22 -46 26" {...line} stroke="#14bf96" strokeDasharray="6 7"/><path d="m80 108-10 10 13 4" {...line} stroke="#14bf96"/>
-  <circle cx="40" cy="132" r="11" fill="#fff" stroke="#0a2a66" strokeWidth="2.5"/><circle cx="130" cy="60" r="11" fill="#fff" stroke="#0a2a66" strokeWidth="2.5"/>
-  <circle cx="204" cy="44" r="14" fill="#14bf96"/><path d="m197 44 5 5 9-10" {...line}/>
+ return <svg viewBox="0 0 240 280" className="h-full w-full" preserveAspectRatio="xMidYMid meet" focusable="false">
+  <g {...line} stroke="#adc9c8" strokeWidth="2">
+   <path d="M120 216C120 177 62 184 62 143M120 216C120 177 178 184 178 143"/>
+   <path d="M62 117C62 88 120 103 120 66M178 117C178 88 120 103 120 66"/>
+  </g>
+  <g {...line} stroke="#14bf96" strokeWidth="4">
+   <path d="M120 210C120 177 62 184 62 148M62 112C62 88 120 103 120 72"/>
+   <path d="m57 154 5-7 5 7m48-75 5-7 5 7" strokeWidth="2.5"/>
+  </g>
+  <circle cx="120" cy="44" r="22" fill="#fff" stroke="#0a2a66" strokeWidth="2.5"/>
+  <path d="M114 54V34m1 1h13l-4 5 4 5h-13" {...line} strokeWidth="2"/>
+  <circle cx="62" cy="130" r="17" fill="#fff" stroke="#14bf96" strokeWidth="3"/>
+  <circle cx="62" cy="130" r="5" fill="#0a2a66"/>
+  <circle cx="178" cy="130" r="17" fill="#fff" stroke="#adc9c8" strokeWidth="2"/>
+  <circle cx="178" cy="130" r="4" fill="#adc9c8"/>
+  <circle cx="120" cy="234" r="28" fill="#14bf96" fillOpacity=".16"/>
+  <circle cx="120" cy="234" r="21" fill="#14bf96"/>
+  <path d="M109 226q5-2 11 1 6-3 11-1v15q-5-2-11 1-6-3-11-1Zm11 1v15" {...line} strokeWidth="1.8"/>
+  <g fill="#0a2a66" fontFamily="var(--font-instrument-sans),Arial" fontSize="14" fontWeight="700" textAnchor="middle">
+   <text x="120" y="15">Your goal</text>
+   <text x="120" y="126" fontSize="13">Earlier</text>
+   <text x="120" y="143" fontSize="13">skills</text>
+   <text x="120" y="274">Learn. Then return.</text>
+  </g>
  </svg>;
 }
 

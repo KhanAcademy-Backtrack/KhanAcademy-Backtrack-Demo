@@ -30,6 +30,10 @@
 .home-dashboard .home-content-aside .home-card-art:not(.home-card-art-strip){display:none}
 .home-card-art-strip{height:76px;margin-top:14px}
 .home-dashboard .home-feature-card{border:1px solid #dfe8ed;box-shadow:0 4px 20px #0a2a6603;padding:24px;border-radius:20px}
+.home-backtrack-card{container-type:inline-size}
+.home-backtrack-card .home-card-art{align-items:center;justify-content:center;padding:16px 8px}
+.home-backtrack-card .home-card-art svg{max-width:240px;height:auto}
+@container(max-width:420px){.home-backtrack-card>div{grid-column:1/-1}.home-backtrack-card .home-card-art{grid-row:1;padding:14px}.home-backtrack-card .home-card-art svg{width:auto;height:252px}}
 .home-dashboard .home-section-label{font-size:.75rem;letter-spacing:.03em;color:#475e7c;font-weight:600;margin:0 0 10px 2px}
 .home-dashboard [data-daily-practice]{border:1px solid #dfe8ed;box-shadow:0 4px 20px #0a2a6603;border-radius:20px}
 .home-dashboard .home-personalize{border:1px solid #dfe8ed;box-shadow:none;border-radius:20px}

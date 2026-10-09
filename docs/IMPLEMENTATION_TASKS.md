@@ -1,5 +1,12 @@
 # Complete study-companion implementation checklist
 
+## Home BACKTRACK graphic — 9 October 2026
+
+- [x] Replace the old curved-route illustration with a prerequisite map: the goal above earlier skills, a focused learning step and a highlighted return path.
+- [x] Align the browsing Home card and action with “Find my missing skill”, retaining `/start` and the existing recovery behavior.
+- [x] Keep the entire illustration visible on phones and narrow cards, with no cropped nodes or unreadably scaled labels. The graphic is illustrative and writes no learner evidence.
+- [x] Verify 320, 390, 640, 820 and 1440 px layouts, contained labels, no horizontal overflow, keyboard navigation to the missing-skills page and no browser errors. Type checking, the 690-page production build and the existing browsing-Home regression against that export pass.
+
 ## UPCAT topic sweep — 7 October 2026
 
 - [x] Check public reviewer/topic sources and record access and coverage limits.
