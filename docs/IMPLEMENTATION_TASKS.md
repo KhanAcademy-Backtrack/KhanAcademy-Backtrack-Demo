@@ -17,9 +17,13 @@ Owner scope: current main, preference-based Khan video recommendations on Home, 
 
 ## Automatic GitHub Pages publication — 9 October 2026
 
+- [x] Diagnose the missed update: scheduled polling did not subscribe to pushes in the application repository; manually publish the friend's `6bb2cb7` update.
+- [x] Add a direct application-main push trigger using the owner's publishing-repository-only `PAGES_DISPATCH_TOKEN`, with no application checkout or default token permissions in the trigger job.
+- [x] Wait through the Actions API compatible with fine-grained tokens, then check the public source revision; document token renewal and visible failures.
+- [ ] Verify an actual source-main push triggers the downstream tested build and updates the public release, without a manual dispatch.
 - [x] Replace the pinned source release with scheduled checks of application `main`, skipping unchanged commits.
 - [x] Gate publication on tests, type checking and static build; keep write tokens out of the application build job.
-- [x] Respect the repository's disabled-deploy-key policy; remove the unused push workflow and empty environment, using only GitHub's short-lived workflow tokens.
+- [x] Respect the repository's disabled-deploy-key policy; remove the unused deploy-key workflow and empty environment. The publisher uses GitHub's short-lived workflow tokens; the new direct trigger uses the narrowly scoped Actions token described above.
 - [x] Verify new-revision publication and unchanged-revision skipping in actual workflow runs, including the public release receipt, four public routes and referenced CSS/JavaScript.
 
 Implementation, GitHub scheduling limits and recovery: `GITHUB_PAGES_DEPLOYMENT.md`.
