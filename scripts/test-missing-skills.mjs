@@ -5,6 +5,8 @@ import {PROGRAM_KEY,initialProgram,newAttempt} from '../src/lib/program/store.ts
 import {PROGRAMS,PROGRAM_BY_ID} from '../src/lib/program/bridge.ts';
 import {formFromKey,formItems,itemById} from '../src/lib/mock/forms.ts';
 import {misconception} from '../src/lib/mock/misconceptions.ts';
+import {EXAM_IDS} from '../src/lib/program/admissions.ts';
+import {reviewerSections} from '../src/lib/mock/reviewer-scope.ts';
 
 export async function missingSkillsJourneys({scenario,origin,root}){
  const data=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)),PROGRAM_KEY);
@@ -15,6 +17,52 @@ export async function missingSkillsJourneys({scenario,origin,root}){
  const dir=path.join(root,'.refs/missing-skills');await fs.mkdir(dir,{recursive:true});
  for(const width of [375,1280]){
   const viewport={width,height:850};
+  await scenario(`program missing skills result heading across all formats ${width}`,async(page,context)=>{
+   await seed(page,initialProgram());await page.goto(origin+'/start/cet');
+   await page.getByRole('heading',{name:'Nothing to go on yet',exact:true}).waitFor();
+   const other=await context.newPage();await other.goto(origin+'/robots.txt');
+   let at=Date.now();
+   const replace=async(attempt,field)=>{
+    const s={...initialProgram(),updatedAt:++at,attempts:attempt?[attempt]:[],...(field?{bridgeProgram:field,sides:{admission:false,bridge:true},activeSide:'bridge'}:{})};
+    await other.evaluate(({k,s})=>localStorage.setItem(k,JSON.stringify(s)),{k:PROGRAM_KEY,s});
+   };
+   const keys=['sprint~heading','section~language|heading','full~heading','topic~percent_fractions|heading','exit~percent_fractions|heading','daily~20261009','daily2~20261009','fixed~A'];
+   for(const exam of EXAM_IDS){
+    const section=reviewerSections(exam).find(s=>s.reviewer.length&&formFromKey(`section2~${exam}-${s.id}|heading`));
+    const topic=reviewerSections(exam).flatMap(s=>s.concepts).find(c=>formFromKey(`topic2~${exam}-${c.id}|heading`));
+    assert.ok(section&&topic,exam);
+    keys.push(`full2~${exam}|heading`,`section2~${exam}-${section.id}|heading`,`topic2~${exam}-${topic.id}|heading`);
+   }
+   const cases=[...keys.map(key=>({key})),...PROGRAMS.map(p=>({key:`placement~${p.id}|heading`,field:p.id}))];
+   for(const {key,field} of cases){
+    const form=formFromKey(key);assert.ok(form&&formItems(form).length,key);
+    const a={...newAttempt(key,false,++at),submittedAt:++at};
+    await replace(a,field);await page.goto(origin+(field?'/start/college':'/start/cet'));
+    await page.getByRole('heading',{name:'Your result is ready',exact:true}).waitFor();
+    assert.equal(await page.getByRole('heading',{name:'Nothing to go on yet',exact:true}).count(),0,key);
+    await page.getByText(/Your result is saved below/).waitFor();
+    await page.getByText(`${formItems(form).length} unanswered. Unanswered questions do not identify a missing skill.`,{exact:true}).waitFor();
+    assert.equal(await page.getByRole('heading',{name:'Start here',exact:true}).count(),0,'Blanks do not diagnose a skill');
+    assert.equal(await page.getByRole('heading',{name:'Topics to revisit',exact:true}).count(),0);
+    assert.equal(await page.getByRole('link',{name:'Review this result',exact:true}).getAttribute('href'),`/mock/result?a=${a.id}`);
+    assert.deepEqual((await data(page)).attempts,[a],'Displaying the result does not change it');
+   }
+   const blank={...newAttempt('sprint~heading',false,++at),submittedAt:++at};
+   await replace(blank);await page.goto(origin+'/start');await page.getByRole('heading',{name:'Your result is ready',exact:true}).waitFor();
+   await page.reload();await page.getByRole('heading',{name:'Your result is ready',exact:true}).waitFor();
+   await page.screenshot({path:path.join(dir,`submitted-blank-${width}.png`),fullPage:false});await overflow(page);
+   for(const mode of ['unknown','incorrect','correct']){
+    const a={...newAttempt('sprint~heading',false,++at),submittedAt:++at};
+    for(const id of formItems(formFromKey(a.formKey))){const item=itemById(id);if(mode==='unknown')a.idk.push(id);else a.answers[id]=mode==='correct'?item.answerIndex:(item.answerIndex+1)%item.choices.length;}
+    await replace(a);
+    await page.getByRole('heading',{name:mode==='correct'?'No repairs suggested by your answers':'Keep checking your skills',exact:true}).waitFor();
+    assert.deepEqual((await data(page)).attempts,[a]);
+   }
+   await replace(newAttempt('sprint~heading',false,++at));await page.getByRole('heading',{name:'Nothing to go on yet',exact:true}).waitFor();
+   assert.equal(await page.getByRole('link',{name:'Review this result',exact:true}).count(),0,'An unfinished attempt is not a result');
+   await replace();await page.getByRole('heading',{name:'Nothing to go on yet',exact:true}).waitFor();
+   await other.close();
+  },viewport);
   await scenario(`program missing skills CET entry and explicit tabs ${width}`,async page=>{
    const s={...initialProgram(),sides:{admission:true,bridge:false},bridgeProgram:'cs_it',reviewerExam:'dcat'};await seed(page,s);
    await page.goto(origin+'/start/cet');await page.getByRole('heading',{name:'Nothing to go on yet',exact:true}).waitFor();

@@ -70,8 +70,10 @@ export function MissingSkills({view:requestedView}:{view?:GapView}){
      </li>)}</ul>
     </Sheet>}
     <Sheet as="section" aria-labelledby="assessment-heading">
-     <h2 id="assessment-heading" className="text-xl font-extrabold"><Headline>{any?'Keep checking your skills':map.hasEvidence?'No repairs suggested by your answers':'Nothing to go on yet'}</Headline></h2>
-     <p className="mt-2 max-w-2xl text-ink-soft">{college
+     <h2 id="assessment-heading" className="text-xl font-extrabold"><Headline>{any?'Keep checking your skills':map.hasEvidence?'No repairs suggested by your answers':map.assessment?'Your result is ready':'Nothing to go on yet'}</Headline></h2>
+     <p className="mt-2 max-w-2xl text-ink-soft">{map.assessment&&!map.hasEvidence
+      ?`Your result is saved below. Answer a few questions in another ${college?'placement check':'practice set'} to get suggestions on what to revisit.`
+      :college
       ?field?`Open ${field.title} to take its placement check. Your results update the skills and topics to revisit here.`:'Choose your college field, then take its placement check. Your results update the skills and topics to revisit here.'
       :'Choose a practice exam, section or short set. Your results update the skills and topics to revisit here.'}</p>
      {map.assessment&&<div className="mt-4 rounded-lg bg-sky p-4">
