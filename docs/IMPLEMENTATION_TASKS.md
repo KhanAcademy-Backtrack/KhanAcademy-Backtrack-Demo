@@ -1,5 +1,10 @@
 # Complete study-companion implementation checklist
 
+## CET reviewer card cleanup — 9 October 2026
+
+- [x] Remove the Study Packs card from the CET reviewer and update its introduction and guide copy; let the remaining Practice Exams card fill the row.
+- [x] Verify type checking, the 690-page production export, both existing phone/desktop reviewer journeys and targeted card-layout/navigation checks. Incorporate concurrent main changes through `4070777`; publish under the owner's automatic-push authorization.
+
 ## Missing-skill answer feedback — 9 October 2026
 
 - [x] Show checked incorrect answers in red in the question navigator and selected answer, with an × and accessible status; keep correct answers green.

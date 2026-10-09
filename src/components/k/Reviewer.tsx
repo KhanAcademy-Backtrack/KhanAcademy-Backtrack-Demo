@@ -31,7 +31,7 @@ const EXTRA_SUBJECT:Record<string,Subtest>={x_formulas_math:'math',x_formulas_sc
 type Group={key:string;label:string;match:(subtest:Subtest,fil:boolean)=>boolean;empty?:boolean};
 const row='flex min-h-14 items-center gap-3 px-4 py-3';
 
-/** Study: practice exams and study packs first, then the reviewer library. The library lists the chosen exam's
+/** Study: practice exams first, then the reviewer library. The library lists the chosen exam's
  *  sections, closed until one is opened; each opens to its topics (the exam's outline where there is one, else its
  *  summaries). A search shows matching summaries from the whole exam. Full chapters open from each topic's page.
  *  Offline caching is scheduled for Phase B. */
@@ -66,7 +66,7 @@ export function ReviewerLibrary(){
  const saved:Line[]=state.bookmarks.flatMap<Line>(k=>{const o=OUTLINE_BY_KEY.get(k),c=CONCEPT_BY_ID[k],ch=CHAPTER_BY_ID[k];
   return o?[{key:k,title:o.topic.title,href:lessonHref(outlineLessonId(o.exam,o.topic.title)),note:`${EXAMS[o.exam].name} · ${o.section}`}]:c?[{key:k,title:c.title,href:`/learn/${c.id}`,note:`Summary · ${c.area}`}]:ch?[{key:k,title:ch.title,href:`/reviewer/${ch.id}`,note:'Full chapter'}]:[];});
  return <>
-  <PageBand title="Study" lead="Practice exams, study packs and the full CET reviewer in one place."/>
+  <PageBand title="Study" lead="Practice exams and the full CET reviewer in one place."/>
   <div className={pageBody}>
    <StudyTools/>
    <Sheet className="mt-8">
