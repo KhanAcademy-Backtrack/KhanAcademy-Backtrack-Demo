@@ -172,7 +172,7 @@ try{
    await page.getByRole('heading',{name:'Counting in chemistry',exact:true}).waitFor();
    await page.getByRole('heading',{name:'Motion and forces',exact:true}).waitFor();
    const rows=await page.locator('.pack-library>article').evaluateAll(cards=>cards.map(c=>c.children.length));
-   assert.deepEqual([...new Set(rows)],[8],'a pack card must keep its eight children for the desktop subgrid');
+   assert.deepEqual([...new Set(rows)],[7],'a pack card must keep its seven children for the desktop subgrid');
    await page.goto(origin+'/schools');
    assert.deepEqual(await page.getByLabel('Current class goal').locator('optgroup').evaluateAll(g=>g.map(x=>x.label)),['Mathematics','Chemistry','Physics']);
    // Balancing has no hand-verified Khan exercise on either of its steps, and says so.

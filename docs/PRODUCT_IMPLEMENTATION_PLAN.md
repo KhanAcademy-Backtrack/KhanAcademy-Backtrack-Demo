@@ -1,5 +1,7 @@
 # Study companion: complete product and implementation plan
 
+Pack-date update: 9 October 2026. The owner removed optional pack test dates. Legacy saved values remain readable for compatibility but are neither shown nor used to prioritize sessions.
+
 Planning revision: 10 September 2026. Authoritative brief: `Study_Companion_Expansion_Addendum_for_Codex (1).md`. The user explicitly requested a thorough plan before further implementation. Existing work is preserved; this document does not claim the expanded product is already finished or deployed.
 
 Latest design steering: the user selected green **#14BF96**, white **#FFFFFF**, and navy **#0A2A66** from the supplied Khan Academy palette reference. This supersedes earlier palette directions. Use navy for readable text and green for the companion, actions, progress and emphasis; use related tints for surfaces. Apply the palette across the website and the existing 15-slide Canva deck, keeping official logos unchanged.
@@ -42,7 +44,7 @@ These are problem hypotheses to make concrete through learner and teacher walkth
 
 Design and test one connected story before polishing isolated screens.
 
-- A learner receives a “Friday algebra quiz” pack containing brackets, factors, and quadratic solutions. They can correct its scope and date.
+- A learner receives a “Friday algebra quiz” pack containing brackets, factors, and quadratic solutions. They can correct its scope.
 - On Monday they choose ten minutes. Today suggests a small session with a reason for each round. Learning mode is available immediately.
 - They make a factor-pair error. BACKTRACK asks a fresh follow-up question. An interactive replay then shows why a matching product can still produce the wrong middle term.
 - They choose a visual explanation, another example, or the relevant Khan explanation. They open the matched Khan exercise and return to the same place.
@@ -61,7 +63,7 @@ This story supplies the product demonstration, the slide narrative, the acceptan
 
 Today answers one question: **“What is the next useful thing I can do?”**
 
-Show one primary session, its reason, selected pack, optional test date, and the available-time control. The main actions are Start my session, Make it smaller, and Choose something else. Put a saved session near this action when one exists. Show a concise weekly commitment and reviewer summary below, using actual activity.
+Show one primary session, its reason, selected pack, and the available-time control. The main actions are Start my session, Make it smaller, and Choose something else. Put a saved session near this action when one exists. Show a concise weekly commitment and reviewer summary below, using actual activity.
 
 For a new learner, provide pack selection and a one-question entry. Do not require account creation or a lengthy profile first. For a returning learner, open their workspace rather than repeat a marketing pitch.
 
@@ -75,7 +77,7 @@ Review contains automatically collected difficult steps, maintenance review from
 
 ### My packs
 
-Packs hold topics, a purpose, an optional assessment date, mapped Khan resources, and progress. Support curated packs, user-assembled scope, teacher links, and shared classmate packs. Make joining or saving a shared pack clear. Sharing must show exactly what travels with the link.
+Packs hold topics, a purpose, mapped Khan resources, and progress. Support curated packs, user-assembled scope, teacher links, and shared classmate packs. Make joining or saving a shared pack clear. Sharing must show exactly what travels with the link.
 
 Circles and shared challenges belong beside their packs. Settings, cosmetics, sound, quiet mode, exports, and shared-device controls belong in the personal study-space menu. The teacher workspace is a separate facilitator surface reached from a clear link, rather than a competing learner dashboard.
 
@@ -85,7 +87,7 @@ Circles and shared challenges belong beside their packs. Settings, cosmetics, so
 
 Each pack contains a stable identifier, title and purpose, topics/current goals, skill relationships, concept cards, question families, accepted answer rules, official Khan resources, and authorship/review provenance. Personal progress is stored separately from the shareable pack definition.
 
-Offer curated packs for the supported sample areas — five in mathematics, one in chemistry, one in physics — and allow combinations such as the Friday quiz pack. Test dates are optional and editable. The UI shows coverage and next actions rather than an invented exam-readiness percentage.
+Offer curated packs for the supported sample areas — five in mathematics, one in chemistry, one in physics — and allow combinations such as the Friday quiz pack. The UI shows coverage and next actions rather than an invented exam-readiness percentage.
 
 ### The subject dimension
 
@@ -106,11 +108,11 @@ Manual authoring and matching to known topics should work without paid inference
 
 ## 6. A session planner that changes the workload
 
-Inputs are explicit: active pack, corrected topic priorities, optional test date, chosen time and mode, actual evidence, scheduled review, and an unfinished session. Do not infer unseen school grades or deadlines.
+Inputs are explicit: active pack, corrected topic priorities, chosen time and mode, actual evidence, scheduled review, and an unfinished session. Do not infer unseen school grades or deadlines.
 
 The planner builds a finite queue. Prefer a relevant due step, progress toward the current goal, and an application that connects them. Avoid duplicate review of the same skill across overlapping packs. Explain why each selected round is present.
 
-Make it smaller reduces the queue while keeping deferred work in the pack/reviewer. Difficulty that introduces a deeper repair reallocates room within the current session and defers a lower-priority later round. Demonstrated knowledge removes unnecessary review and can replace it with a relevant application. A changed test date or goal rebuilds priorities.
+Make it smaller reduces the queue while keeping deferred work in the pack/reviewer. Difficulty that introduces a deeper repair reallocates room within the current session and defers a lower-priority later round. Demonstrated knowledge removes unnecessary review and can replace it with a relevant application. A changed goal rebuilds priorities.
 
 Time is an estimate. Ending the time allowance does not claim the learner has finished learning. Save a specific next action and make stopping easy.
 

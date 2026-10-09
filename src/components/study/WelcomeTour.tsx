@@ -6,7 +6,7 @@ import {useStudy} from './StudyProvider';
 const STEPS=[
  {selector:'.intent-choices a[href="/explore"]',title:'Explore something new.',body:'Open short interactive ideas and Khan Academy clips. Move a model, save an interest or follow the idea into practice. Explore has its own Quick tour.'},
  {selector:'a[href="/study"]',title:'Go straight to your study goal.',body:'Study lets you learn, practise or take a challenge. Choose your topics and a manageable session. Saved work stays ready to resume.'},
- {selector:'a[href="/packs"]',title:'Keep your topics in a pack.',body:'My packs keeps topics, quiz dates and source notes together. You can also share the learning scope with someone else.'},
+ {selector:'a[href="/packs"]',title:'Keep your topics in a pack.',body:'My packs keeps topics and source notes together. You can also share the learning scope with someone else.'},
  {selector:'a[href="/review"]',title:'Come back for a fresh question.',body:'Review keeps useful steps for another look. Saved discoveries are also on Today and in Explore. A missed day does not erase your work.'}
 ];
 export function WelcomeTour(){const {ready,state,update}=useStudy();const [step,setStep]=useState(-2),[rect,setRect]=useState<{x:number;y:number;w:number;h:number}>(),[size,setSize]=useState({w:typeof window==='undefined'?390:window.innerWidth,h:typeof window==='undefined'?844:window.innerHeight}),[tipHeight,setTipHeight]=useState(350);const dialog=useRef<HTMLDivElement>(null),target=useRef<HTMLElement|null>(null),previous=useRef<HTMLElement|null>(null);

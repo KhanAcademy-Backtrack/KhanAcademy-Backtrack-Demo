@@ -71,7 +71,7 @@ export async function programJourneys({scenario,origin,root}){
   },viewport);
   await scenario(`program every new route layout ${width}`,async page=>{
    const routes=['/mock','/notebook','/admissions','/about','/group','/coach','/me','/bridge',...CONCEPTS.map(c=>`/learn/${c.id}`),...CHAPTERS.map(c=>`/reviewer/${c.id}`),...EXTRAS.map(c=>`/reviewer/${c.id}`),...PROGRAMS.map(p=>`/bridge/${p.id}`),'/mock/print?f=daily~20260930','/packs','/explore'];
-   for(const route of routes){const response=await page.goto(origin+route);assert.equal(response.status(),200,route);await page.locator('h1').first().waitFor();await shot(page,route.replace(/[^\w]/g,'-'),width);if(route==='/packs')assert.ok((await page.locator('.pack-library > article').evaluateAll(cards=>cards.map(c=>c.children.length))).every(n=>n===8),'Every pack keeps eight direct children');}
+   for(const route of routes){const response=await page.goto(origin+route);assert.equal(response.status(),200,route);await page.locator('h1').first().waitFor();await shot(page,route.replace(/[^\w]/g,'-'),width);if(route==='/packs')assert.ok((await page.locator('.pack-library > article').evaluateAll(cards=>cards.map(c=>c.children.length))).every(n=>n===7),'Every pack keeps seven direct children');}
   },viewport);
   await scenario(`program practice video after check ${width}`,async page=>{
    // The matched Khan video is embedded, paused, only once an answer is checked, once per page, and writes nothing.

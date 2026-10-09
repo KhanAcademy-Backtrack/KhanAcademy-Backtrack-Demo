@@ -7,6 +7,7 @@ import {isLessonReturnPath} from './khan-return-path.ts';
 
 export const STUDY_KEY='backtrack.study.v1';
 export const DAY=86400000;
+// testDate is retained only for compatibility with older saved packs; it no longer affects sessions.
 export type Pack={id:string;name:string;description:string;topics:Topic[];testDate?:string;custom?:boolean;khanId?:string;cards?:StudyCard[];scope?:ScopeEntry[];curriculum?:string};
 export const PACKS:Pack[]=[
   {id:'algebra-quiz',name:'This week’s algebra',description:'Brackets, factors, and quadratic solutions. Learn the steps or prepare for a quiz.',topics:['brackets','quadratics']},
@@ -68,9 +69,6 @@ export function planSession(s:StudyState,pack:Pack,minutes:number,mode:RoundMode
   const add=(topic:Topic,skill:Skill,m:RoundMode,reason:string)=>{const k=skillKey(topic,skill);if(keys.has(k))return;keys.add(k);const prior=s.review[k];if(prior?.khanFeedback&&(prior.khanFeedbackAt??0)>(prior.independentAt??0)){m=prior.khanFeedback==='completed'?'challenge':'learn';reason=prior.khanFeedback==='completed'?'You reported Khan practice. Check what you can apply now.':prior.khanFeedback==='difficulty'?'You asked for another explanation after Khan practice.':'You reported an access problem. Start with a text explanation here.';}tasks.push({id:`${now}-${tasks.length}-${k}`,topic,skill,mode:m,reason,khanId:pack.khanId});};
   const lastWork=(topic:Topic)=>Math.max(0,...(s.routes[topic]?.evidence.map(e=>e.at)??[]));
   const topics=[...pack.topics].sort((a,b)=>lastWork(a)-lastWork(b));
-  const testAt=pack.testDate?new Date(pack.testDate+'T23:59:59').getTime():NaN;
-  const preparing=Number.isFinite(testAt)&&testAt>=now&&testAt-now<=3*DAY;
-  if(preparing&&mode!=='learn')add(topics[0],origin?.skill??'goal','challenge','A fresh application from your upcoming quiz scope.');
   if(mode==='review'&&due[0])add(due[0].topic,due[0].skill,'review','A scheduled fresh look at an earlier step.');
   const bridge:Partial<Record<Skill,string>>={expand:'Distributing to every term will help with equations in this pack.',factor:'A matching factor pair helps you find the roots of a quadratic.',zero:'Connect each factor to the value that makes it zero.',equivalent:'Equal-sized units will let you add these fractions.',coordinates:'Read the axes before connecting a point to its rule.',unit_rate:'Finding the amount for one makes it possible to scale the quantity.'};
   for(const topic of topics){const skill=origin?.skill??(mode==='challenge'?'goal':TOPICS[topic].path.find(x=>(s.review[skillKey(topic,x)]?.streak??0)<2)??'goal');add(topic,skill,mode,mode==='learn'?`${bridge[skill]??'A useful starting point for this pack.'} Start with an example.`:mode==='challenge'?'Apply the idea on a fresh problem.':bridge[skill]??'A useful starting point for this pack.');}

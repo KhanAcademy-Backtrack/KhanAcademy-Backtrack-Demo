@@ -1,5 +1,13 @@
 # Complete study-companion implementation checklist
 
+## Remove optional pack test dates — 9 October 2026
+
+- [x] Remove test-date inputs from every pack card and the pack editor, along with the Today date display and tour copy.
+- [x] Stop legacy pack dates from changing session priorities; preserve existing packs, notes, progress and review scheduling.
+- [x] Adjust the desktop card subgrid and its existing browser checks from eight rows to seven.
+- [x] Verify type checking, 241 passing unit tests (one existing content skip), the 690-page production export, four existing pack/notes/rehearsal browser journeys and targeted 390/1280 px checks for date removal, aligned actions, editing, reload and saved-note preservation.
+- The owner authorized publication of these verified changes to main on 9 October 2026.
+
 ## CET reviewer card cleanup — 9 October 2026
 
 - [x] Remove the Study Packs card from the CET reviewer and update its introduction and guide copy; let the remaining Practice Exams card fill the row.
@@ -138,7 +146,7 @@ Built since the planning scaffold: supported Khan entry/URL recognition, two-way
 ## B. Packs, preparation, and authoring
 
 - [x] Finish curated packs using all five supported mathematics areas, plus the two science packs added on 11 September 2026.
-- [ ] Finish custom topic combinations, editable names, optional test dates, and changing priorities.
+- [ ] Finish custom topic combinations, editable names, and changing priorities. Optional pack test dates were removed at the owner’s request on 9 October 2026.
 - [ ] Keep curated pack overrides, shared-pack identity, and imported titles stable and safe.
 - [ ] Implement Learn, Review, and mixed Challenge from the same pack/history.
 - [ ] Add quiz rehearsal with fresh item families and a useful next-session plan.

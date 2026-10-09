@@ -17,11 +17,12 @@ test('a fresh learner can learn before any failure, and a smaller plan preserves
  assert.equal(plan.tasks.length,2);const route=prepareRound(s,plan.tasks[0],now);assert.equal(route.phase,'learn');assert.equal(route.evidence.length,0);
  const small=smallerSession(plan);assert.equal(small.tasks.length,1);assert.equal(small.deferred,1);assert.equal(plan.tasks.length,2);
 });
-test('the same pack gives different sessions from actual history and a selected test date',()=>{
+test('sessions follow actual history and ignore legacy pack test dates',()=>{
  const base=initialStudy();const key=skillKey('brackets','expand');const older={...base,review:{[key]:{key,topic:'brackets',skill:'expand',dueAt:now-DAY,stage:0,streak:0,lastAt:now-DAY,manual:false,paused:false}}};
  const reviewed=planSession(older,PACKS[0],10,'review',now);assert.equal(reviewed.tasks[0].reason,'A scheduled fresh look at an earlier step.');
- const quiz=planSession(older,{...PACKS[0],testDate:new Date(now+DAY).toISOString().slice(0,10)},10,'review',now);assert.equal(quiz.tasks[0].skill,'goal');assert.match(quiz.tasks[0].reason,/quiz/);
- const chosen=allPacks({...base,packs:[{...PACKS[0],testDate:'2026-09-12'}]});assert.equal(chosen[0].testDate,'2026-09-12');
+ const saved={...older,packs:[{...PACKS[0],testDate:new Date(now+DAY).toISOString().slice(0,10)}]};
+ const loaded=loadStudy(memory([[STUDY_KEY,JSON.stringify(saved)]]),now).state;assert.ok(validStudy(loaded));
+ for(const mode of ['learn','review','challenge'])assert.deepEqual(planSession(loaded,allPacks(loaded)[0],10,mode,now),planSession(older,PACKS[0],10,mode,now));
 });
 test('real attempts update review once and reload does not inflate the reviewer',()=>{
  let r=act(initialRecovery(),{type:'start',budget:60,mode:'self'});r=act(r,{type:'submit',answers:['2','6'],confidence:'unsure'});
