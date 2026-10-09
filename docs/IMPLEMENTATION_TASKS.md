@@ -1,5 +1,11 @@
 # Complete study-companion implementation checklist
 
+## Results page cleanup — 9 October 2026
+
+- [x] Remove the “Why the misses happened” section and Time map from mock exam and topic-check results, as requested by the owner.
+- [x] Remove the unused time-map helper; preserve scores, next-step recommendations, answer review, mistake notebook and saved attempt data.
+- [x] Verify clean TypeScript, 241 passing unit tests (one existing skip), the 690-page production export and all four existing mobile/desktop exam-results and full-simulation browser journeys, including saved answers, answer visibility, recovery and result sharing. Build in a separate temporary directory to avoid the running local preview’s build cache.
+
 ## Home topic video and empty-space fix — 9 October 2026
 
 - [x] Remove the desktop rule that stretched the topic card to the height of both neighboring cards, leaving a large empty area above its actions.

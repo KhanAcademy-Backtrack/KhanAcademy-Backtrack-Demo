@@ -1,11 +1,6 @@
 import type {Attempt,Triage} from './scoring.ts';
 import {itemById} from './forms.ts';
 
-/** Seconds per item in form order, for the results time map. */
-export function timeMap(itemIds:string[],attempt:Attempt){
- return itemIds.map((id,i)=>{const item=itemById(id);return {id,n:i+1,seconds:attempt.seconds[id]??0,correct:item?attempt.answers[id]===item.answerIndex:false,blank:attempt.answers[id]==null,flagged:attempt.flags.includes(id)};});
-}
-
 /** A first guess at why each miss happened, which the learner can change. Blanks
  *  late in a timed section suggest time ran out; a fast miss marked "sure" suggests a
  *  careless slip; everything else starts as "didn't know yet". */

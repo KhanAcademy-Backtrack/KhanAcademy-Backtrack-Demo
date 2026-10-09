@@ -14,7 +14,6 @@ import {Companion} from '@/components/study/Companion';
 import {useFix} from './useFix';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
 import {scoreAttempt,scoreGroups,paceCheck,missGroups,type Triage} from '@/lib/mock/scoring';
-import {timeMap} from '@/lib/mock/analysis';
 import {misconception} from '@/lib/mock/misconceptions';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
@@ -27,7 +26,6 @@ import {Rich} from '@/components/math/Math';
 
 const LETTERS=['A','B','C','D'];
 const TRIAGE:Record<Triage,string>={didnt_know:'Didn’t know yet',careless:'Careless slip',out_of_time:'Ran out of time'};
-const mins=(s:number)=>s<90?`${Math.round(s)} s`:`${Math.round(s/60)} min`;
 
 export function Results(){
  const params=useSearchParams(),{state,ready,update}=useProgram(),reduced=useQuietMotion(),fix=useFix(),lang=state.lang;
@@ -40,9 +38,9 @@ export function Results(){
  const previous=state.attempts.filter(a=>a.submittedAt&&a.id!==attempt.id&&a.formKey.split('~')[0]===attempt.formKey.split('~')[0]&&a.submittedAt<attempt.submittedAt!&&(!form.exam||formFromKey(a.formKey)?.exam===form.exam)).sort((a,b)=>b.submittedAt!-a.submittedAt!)[0];
  const prevResult=previous?(()=>{const f=formFromKey(previous.formKey);return f?scoreAttempt(f,previous):undefined;})():undefined;
  const growth=prevResult?result.total.percent-prevResult.total.percent:undefined;
- const groups=missGroups(result.misses),top=groups[0];
+ const top=missGroups(result.misses)[0];
  const topM=top&&misconception(top.id),topConcept=top?CONCEPT_BY_ID[top.items[0].item.concept]:undefined;
- const ids=formItems(form),map=timeMap(ids,attempt);
+ const ids=formItems(form);
  const setTriage=(id:string,v:Triage)=>update(s=>({...s,attempts:s.attempts.map(a=>a.id===attempt.id?{...a,triage:{...a.triage,[id]:v}}:a),notebook:s.notebook.map(n=>n.itemId===id&&n.formKey===attempt.formKey?{...n,triage:v}:n)}));
  const praise=result.total.percent>=80?'Strong work.':result.total.percent>=60?'Solid. The misses below are very fixable.':result.total.percent>=40?'You have the base. Now for the traps.':'Every miss here is a map of what to learn next.';
  async function share(){try{const {shareCardPng,shareOrDownload}=await import('@/lib/share-card');const blob=await shareCardPng({title:`${result!.total.correct} of ${result!.total.total} on a ${form!.title.toLowerCase()}`,subtitle:growth!==undefined&&growth>0?`Up ${growth} points from last time.`:'Practising for college entrance exams.',lines:scoreGroups(form!,result!).map(s=>({label:s.label,value:`${s.correct}/${s.total}`,fill:s.total?s.correct/s.total:0})),footer:'khanpanion.vercel.app · free exam review'});setShared(await shareOrDownload(blob,'khanpanion-result.png','My practice result on Khanpanion'));}catch{setShared('error');}}
@@ -75,14 +73,6 @@ export function Results(){
       :<p className="mt-1 text-[17px]">Nothing missed. Try a harder format: a timed section or a full simulation.</p>}
     </div></div>
     {topConcept&&<div className="mt-5"><TldrCard tldr={topConcept.tldr} title={`${topConcept.title}: what you need to know`} compact/></div>}
-   </Sheet>
-   {!!groups.length&&<Sheet className="mt-5"><h2 className="text-xl font-extrabold"><Headline>Why the misses happened</Headline></h2><p className="mt-1 text-ink-soft">Grouped by the idea behind each wrong answer. Every miss is in your mistake notebook and comes back in review.</p>
-    <ul className="mt-4 grid gap-3">{groups.map(g=>{const m=misconception(g.id),c=CONCEPT_BY_ID[g.items[0].item.concept];return <li key={g.id} className="rounded-2xl border-2 border-mint-line p-4"><div className="flex flex-wrap items-baseline justify-between gap-2"><p className="font-bold">{m?m.label:`Left blank or “I don’t know yet”: ${c?.title??'this topic'}`}</p><Pill>{g.count}×</Pill></div>{m&&<p className="mt-1 text-[15px] text-ink-soft">{m.why}</p>}</li>;})}</ul>
-   </Sheet>}
-   <Sheet className="mt-5">
-    <h2 className="text-xl font-extrabold"><Headline>Time map</Headline></h2><p className="mt-1 text-ink-soft">Each bar is one question. Taller took longer; green was right.</p>
-    <div className="mt-4 flex h-28 items-end gap-[3px] overflow-x-auto" role="img" aria-label="Time spent on each question">{map.map(x=>{const maxS=Math.max(30,...map.map(y=>y.seconds));return <a key={x.id} href={`#q-${x.n}`} title={`Question ${x.n}: ${mins(x.seconds)}`} className={cx('min-w-[6px] flex-1 rounded-t',x.correct?'bg-green':x.blank?'bg-sky':'bg-navy')} style={{height:`${Math.max(6,x.seconds/maxS*100)}%`}}/>;})}</div>
-    <p className="mt-2 text-sm text-ink-soft">Total time {mins(result.seconds)}.</p>
    </Sheet>
    <Sheet className="mt-5" id="key">
     <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-extrabold"><Headline>{t(lang,'result.key')}</Headline></h2><button className={btn.dark} aria-pressed={showKey} onClick={()=>{setShowKey(!showKey);setOpen([]);}}><Headline>{showKey?t(lang,'result.hideAnswers'):t(lang,'result.showAnswers')}</Headline></button></div>
