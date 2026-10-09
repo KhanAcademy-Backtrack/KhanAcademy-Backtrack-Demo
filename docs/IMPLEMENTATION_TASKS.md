@@ -1,5 +1,11 @@
 # Complete study-companion implementation checklist
 
+## Missing-skill answer feedback — 9 October 2026
+
+- [x] Show checked incorrect answers in red in the question navigator and selected answer, with an × and accessible status; keep correct answers green.
+- [x] Keep unchecked practice answers and “I don’t know yet” neutral, and preserve exam-mode answer hiding.
+- [x] Verify the missing-skills entry, wrong/correct/unknown responses, saved feedback after reload, exam mode and contained layouts at 375 and 1280 px. Type checking, the 690-page production export and existing practice-video browser journeys pass.
+
 ## CET full simulations and simpler Practice Exams — 9 October 2026
 
 - [x] Make Full Simulation and its printable booklet follow the selected CET, including available section order, language, question totals, practice timing and unavailable-section notices.

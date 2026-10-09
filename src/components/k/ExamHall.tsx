@@ -137,9 +137,13 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     <aside className={cx('rounded-2xl bg-white p-4 text-navy shadow-sheet lg:sticky lg:top-24 lg:block lg:max-h-[calc(100dvh-11rem)] lg:overflow-y-auto lg:self-start',nav?'fixed inset-x-3 bottom-24 z-40 max-h-[60vh] overflow-y-auto shadow-lift':'hidden')}>
      <div className="mb-3 flex items-center justify-between lg:hidden"><h2 className="font-bold"><Headline>Question navigator</Headline></h2><button className="min-h-11 rounded-lg px-3 font-bold text-navy hover:bg-sky" onClick={()=>setNav(false)}>Close</button></div>
      {form.sections.map((sec,si)=><div key={si} className="mb-4 last:mb-0"><p className="mb-2 text-sm font-semibold text-ink-soft">{sectionLabel(sec)}</p>
-      <div className="grid grid-cols-6 gap-1.5 lg:grid-cols-5">{sec.itemIds.map((x,xi)=>{const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
-       className={cx('relative grid h-11 place-items-center rounded-lg border-2 text-xs font-bold text-navy',answered?'border-green bg-green':'border-line bg-white hover:border-line-strong',cur&&'ring-2 ring-navy ring-offset-2 ring-offset-white')}>{xi+1}{a.flags.includes(x)&&<span className="absolute right-1 top-1 h-1.5 w-1.5 bg-navy"/>}</button>;})}</div></div>)}
-     <p className="mt-3 text-xs text-ink-soft">Green is answered. A dark corner mark is flagged.</p>
+      <div className="grid grid-cols-6 gap-1.5 lg:grid-cols-5">{sec.itemIds.map((x,xi)=>{
+       const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);
+       const checked=practice&&revealed.includes(x),unknown=a.idk.includes(x)||a.answers[x]==null;
+       const result=checked?(unknown?'unknown':a.answers[x]===itemById(x)?.answerIndex?'correct':'incorrect'):undefined;
+       return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${result?result==='unknown'?', I don’t know yet':`, ${result}`:''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
+       className={cx('relative grid h-11 place-items-center rounded-lg border-2 text-xs font-bold',result==='incorrect'?'border-red-700 bg-red-700 text-white':result==='correct'||(!practice&&answered)?'border-green bg-green text-navy':answered?'border-line-strong bg-sky text-navy':'border-line bg-white text-navy hover:border-line-strong',cur&&'ring-2 ring-navy ring-offset-2 ring-offset-white')}>{xi+1}{result&&<span aria-hidden="true" className="absolute bottom-0.5 right-1 text-[10px]">{result==='correct'?'✓':result==='incorrect'?'×':'?'}</span>}{a.flags.includes(x)&&<span className="absolute right-1 top-1 h-1.5 w-1.5 bg-navy"/>}</button>;})}</div></div>)}
+     <p className="mt-3 text-xs text-ink-soft">{practice?'Green ✓ is correct. Red × is incorrect. Blue is not checked or “I don’t know yet”.':'Green is answered.'} A dark corner mark is flagged.</p>
      {shown&&wide&&<section aria-labelledby="work-on-this" className="hidden border-t border-line bg-white pb-1 pt-4 lg:sticky lg:bottom-0 lg:mt-4 lg:block">{work('work-on-this',true)}</section>}
     </aside>
    </div>

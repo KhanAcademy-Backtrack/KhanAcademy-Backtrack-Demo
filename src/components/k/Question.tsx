@@ -88,7 +88,7 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
  return <div className="text-navy">
   {showPassage&&item.passageId&&<div className="mb-5"><PassageView id={item.passageId}/></div>}
   <div className={cx(spacious&&'flex min-h-24 items-center py-2 sm:min-h-28')}><p className={cx('font-serif leading-[1.5]',spacious?'max-w-3xl text-[24px] sm:text-[28px]':'text-[21px] sm:text-[23px]')}>{number!==undefined&&<span className="mr-2 font-sans text-base font-bold text-ink-soft">{number}.</span>}<Rich>{item.stem}</Rich></p></div>
-  <p aria-live="polite" className={cx('mb-3 mt-5 text-sm font-semibold',feedback?(right?'text-green-deep':'text-navy'):'text-ink-soft')}>{feedback??<>Choose an answer{keys&&<span className="hidden font-normal sm:inline"> · or press 1–{item.choices.length}</span>}</>}</p>
+  <p aria-live="polite" className={cx('mb-3 mt-5 text-sm font-semibold',feedback?(right?'text-green-deep':idk?'text-navy':'text-red-700'):'text-ink-soft')}>{feedback??<>Choose an answer{keys&&<span className="hidden font-normal sm:inline"> · or press 1–{item.choices.length}</span>}</>}</p>
   <div role="radiogroup" aria-label="Choices" className={cx('grid gap-3',spacious&&'sm:grid-cols-2')}>
    {item.choices.map((c,i)=>{
     const picked=chosen===i,isKey=i===item.answerIndex;
@@ -96,11 +96,11 @@ export function Question({item,number,chosen,idk,onChoose,onIdk,mode,revealed=fa
     return <motion.button key={i} role="radio" aria-label={speakText(c)} aria-checked={picked} aria-keyshortcuts={keys?`${i+1} ${LETTERS[i]}`:undefined} disabled={locked} onClick={()=>onChoose(i)} style={{scale:i===item.answerIndex?settle:1}}
      animate={{opacity:state==='dim'?.5:1}} transition={reduced?{duration:0}:{duration:DUR.base}}
      className={cx('group flex w-full items-center gap-4 rounded-lg border-2 px-4 py-3 text-left text-navy focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-green',spacious?'min-h-16 sm:min-h-20':'min-h-14',
-      state==='picked'?'border-navy bg-mint':state==='key'?'border-green bg-mint':state==='wrong'?'border-dashed border-navy bg-white':'border-line bg-white hover:border-line-strong')}>
-     <span aria-hidden="true" className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',state==='picked'||state==='key'?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span>
+      state==='picked'?'border-navy bg-mint':state==='key'?'border-green bg-mint':state==='wrong'?'border-red-700 bg-red-50':'border-line bg-white hover:border-line-strong')}>
+     <span aria-hidden="true" className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-md font-sans text-sm font-bold',state==='wrong'?'bg-red-700 text-white':state==='picked'||state==='key'?'bg-navy text-white':'bg-sky text-ink-soft')}>{LETTERS[i]}</span>
      <span className="flex-1 font-serif text-[19px] leading-snug"><Rich>{c}</Rich></span>
      {state==='key'&&<svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0 text-green-deep" aria-label="Correct answer"><motion.path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" initial={reduced||!right?false:{pathLength:0}} animate={{pathLength:1}} transition={reduced?{duration:0}:{duration:DUR.base}}/></svg>}
-     {state==='wrong'&&<svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-navy" aria-label="Your answer"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"/></svg>}
+     {state==='wrong'&&<svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-red-700" aria-label="Your incorrect answer"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"/></svg>}
     </motion.button>;})}
   </div>
   <div className="mt-4 flex flex-wrap items-center gap-3">
