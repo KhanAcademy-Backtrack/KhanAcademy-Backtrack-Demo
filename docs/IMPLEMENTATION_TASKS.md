@@ -1,5 +1,13 @@
 # Complete study-companion implementation checklist
 
+## School network access — 9 October 2026
+
+- [x] Diagnose the initial Vercel URL failure as DNS NXDOMAIN, with production still READY.
+- [x] Recheck the original QR address after the school DNS answer changed: HTTP 200 and rendered entry in fresh Chrome on the current Wi-Fi.
+- [x] Verify the separately published free GitHub Pages fallback at phone and desktop widths, including navigation, practice resume, backups and group-origin access.
+- [x] Add only the fallback's exact origin to the existing group backend; preserve device authentication and reject unrelated origins.
+- [x] Record deployment provenance, cache recovery and progress-transfer limitations in `NETWORK_ACCESS_2026_10_09.md`.
+
 ## UPCAT topic sweep — 7 October 2026
 
 - [x] Check public reviewer/topic sources and record access and coverage limits.
