@@ -4,6 +4,11 @@ The original public address remains https://khanpanion.vercel.app/. Existing sli
 codes and the legacy https://dunlo.vercel.app/ address are preserved. Do not redirect
 the original site automatically: each origin has its own saved learner progress.
 
+**Latest status, 11:12 Manila: unresolved across the school network.** The school
+resolver reverted to authoritative NXDOMAIN after the successful fresh-browser
+check. Clearing one device's cache is therefore not a durable fix. Keep the existing
+QR, and have the school network administrator correct resolution for its hostname.
+
 ## Findings
 
 The initial failure occurred before HTTP. The current school network's DNS answered
@@ -24,17 +29,50 @@ Different browser/device caches or network resolver paths can explain mixed resu
 on the same Wi-Fi. The exact cause and time of the school's DNS change are unknown.
 Do not promise that the same result covers every access point or device.
 
+At 10:57 Manila, direct queries to the network resolver returned NOERROR with valid
+IPv4 addresses. At 11:02, the same resolver (`10.128.128.128`) returned authoritative
+NXDOMAIN for A, AAAA and HTTPS/TYPE65 queries. Its authority was
+`delta.manila.dlsu.edu.ph` for the `vercel.app` zone, with a 3600-second negative-cache
+value. In the same comparison, Cloudflare and Google returned valid A records and
+the public Vercel DNS authority. Some individual public queries timed out; successful
+public responses did not claim the hostname was nonexistent. The evidence proves
+inconsistent network resolution over the sampled interval, not the exact internal
+filter or DNS-server configuration responsible.
+
+A repeat at 11:12 Manila confirmed the failure: the school resolver returned the
+same authoritative NXDOMAIN, while both Cloudflare (`1.1.1.1`) and Google
+(`8.8.8.8`) returned valid A records. Vercel still reported production READY with
+the original alias attached and no alias error.
+
 ## Access with the existing QR
 
 Keep the Vercel URL. On an affected device, fully quit and reopen the browser,
 reconnect to Wi-Fi and retry. If the error remains, try another browser or restart
-the device. Clear DNS caches only; do not clear website storage or cookies as a
+the device. These are temporary recovery steps, not the venue-wide fix. Clear DNS caches only; do not clear website storage or cookies as a
 blanket troubleshooting step, because learner progress is device-local.
 
 For persistent NXDOMAIN, school IT must inspect the resolver or filter and clear
 the affected negative caches. A site-code change or redirect cannot act until the
 device resolves and connects to the hostname. No paid Vercel upgrade is indicated
 by the observed failure.
+
+### Required network-wide correction
+
+The school administrator must allow the exact `khanpanion.vercel.app` hostname in
+all relevant DNS/filter policies and ensure it resolves through the public DNS
+chain instead of the local `vercel.app` override. Apply the correction across all
+resolvers and student/guest network segments used in the venue, not just one device.
+Use a hostname policy/forwarding exception, not permanently pinned Vercel IPs.
+Then clear negative caches on the affected resolvers; previously affected clients
+may need a one-time DNS-cache refresh or to wait for their negative entry to expire.
+
+Acceptance requires repeated successful hostname resolution and original-QR loads
+on previously failing and newly connected phones and computers, across the venue's
+network segments. Recheck after cached successful answers expire. The observed
+network-side negative answer permits a cache lifetime of up to one hour. No Vercel
+deployment setting can make these school-controlled changes, and this task has no
+administrative access to the school's DNS infrastructure. Do not mark the incident
+resolved until the network change and these checks are complete.
 
 ## Free fallback
 

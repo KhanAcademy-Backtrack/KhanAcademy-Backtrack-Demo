@@ -7,6 +7,7 @@
 - [x] Verify the separately published free GitHub Pages fallback at phone and desktop widths, including navigation, practice resume, backups and group-origin access.
 - [x] Add only the fallback's exact origin to the existing group backend; preserve device authentication and reject unrelated origins.
 - [x] Record deployment provenance, cache recovery and progress-transfer limitations in `NETWORK_ACCESS_2026_10_09.md`.
+- [ ] Resolve the intermittent original-QR failure network-wide: school DNS reverted to authoritative NXDOMAIN at 11:02 Manila. Requires the school's administrator to correct the hostname policy/override across venue resolvers and verify previously failing and new devices; a cache flush or successful single load is insufficient.
 
 ## UPCAT topic sweep — 7 October 2026
 
