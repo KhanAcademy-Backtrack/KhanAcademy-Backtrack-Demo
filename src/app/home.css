@@ -24,7 +24,6 @@
 .home-content-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
 .home-content-primary,.home-content-aside{display:grid;gap:24px;min-width:0}
 .home-actions-grid{display:grid;gap:24px;min-width:0}
-@media(min-width:761px){.home-next-actions{align-items:stretch}.home-next-actions .home-content-primary>div{display:flex;flex-direction:column}.home-next-actions .home-topic-feature{flex:1}}
 .home-topic-picker{border:1px solid #dfe8ed;box-shadow:none;border-radius:20px}
 .home-dashboard .home-content-aside .home-feature-card{grid-template-columns:1fr}
 .home-dashboard .home-content-aside .home-card-art:not(.home-card-art-strip){display:none}

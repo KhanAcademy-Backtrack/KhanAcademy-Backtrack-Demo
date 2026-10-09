@@ -9,12 +9,13 @@ export async function homeJourneys({scenario,origin,root}){
  const dir=path.join(root,'.refs/home-review');await fs.mkdir(dir,{recursive:true});
  const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Manila'});
  const setup={goal:'exam',cet:{general:true,targets:[]},weekdays:[1,3,5],minutes:20,time:'18:30',createdAt:1};
- const seed=async(page,{activity=false,browse=false,goal='exam'}={})=>{
-  const state=initialProgram();state.setup={...setup,goal,...(goal==='topic'?{concept:'percent_fractions'}:{})};
+ const seed=async(page,{activity=false,browse=false,goal='exam',concept='percent_fractions',misses=0}={})=>{
+  const state=initialProgram();state.setup={...setup,goal,...(goal==='topic'?{concept}:{})};
   if(goal==='college')state.bridgeProgram='cs_it';
+  if(misses){const formKey=`topic~${concept}|home-video`;state.notebook=formItems(formFromKey(formKey)).slice(0,misses).map(itemId=>({itemId,at:1,formKey,chosen:(itemById(itemId).answerIndex+1)%4,idk:false,concept}));assert.equal(state.notebook.length,misses);}
   if(activity)for(let n=0;n<90;n++)if(n%7<3||n%13===0){const day=addDays(today,-n);state.studyDays.push(day);state.daily[day]={correct:n%4,total:3};}
   await page.addInitScript(({key,state,browse})=>{const next=sessionStorage.getItem('home-next-fixture');if(next){localStorage.setItem(key,next);sessionStorage.removeItem('home-next-fixture');}else if(!sessionStorage.getItem('home-seeded')){localStorage.setItem(key,JSON.stringify(state));sessionStorage.setItem('home-seeded','1');}sessionStorage.setItem('backtrack.entry.choice',browse?'browse':'study');},{key:PROGRAM_KEY,state,browse});
-  await page.goto(origin);await page.locator('[data-study-activity]').waitFor();
+  await page.goto(origin);await page.locator('[data-study-activity]').waitFor();return state;
  };
  const overflow=async page=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No horizontal page overflow');
  for(const width of [390,1100,1440]){
@@ -61,8 +62,8 @@ export async function homeJourneys({scenario,origin,root}){
    await page.getByRole('button',{name:'Choose a different topic',exact:true}).click();
    if(width>=1100)assert.ok(await page.evaluate(()=>{
     const topic=document.querySelector('[data-program-tour-content="today"]').getBoundingClientRect(),personalize=document.querySelector('.home-personalize').getBoundingClientRect(),picker=document.querySelector('.home-topic-picker').getBoundingClientRect(),week=document.querySelector('[data-program-tour-content="calendar"]').getBoundingClientRect();
-    return Math.abs(personalize.bottom-topic.bottom)<220&&picker.width>topic.width*1.5&&picker.top>Math.max(topic.bottom,personalize.bottom)&&week.top>picker.bottom;
-   }),'Topic picker expands across both columns beneath a balanced first row');
+    return picker.width>topic.width*1.5&&picker.top>Math.max(topic.bottom,personalize.bottom)&&week.top>picker.bottom;
+   }),'Topic picker expands across both columns beneath both cards');
    await overflow(page);await page.locator('.home-actions-grid').screenshot({path:path.join(dir,`home-expanded-${width}.png`)});
    await page.getByRole('button',{name:'Close topic picker',exact:true}).click();
    assert.equal(await page.getByRole('button',{name:'Choose a different topic',exact:true}).getAttribute('aria-expanded'),'false');
@@ -72,9 +73,9 @@ export async function homeJourneys({scenario,origin,root}){
     await page.reload();await page.locator('[data-study-activity]').waitFor();
     assert.deepEqual(await page.locator('.home-stats dd').allTextContents(),['0','0','0']);
     assert.ok(await page.evaluate(()=>{
-     const topic=document.querySelector('[data-program-tour-content="today"]').getBoundingClientRect(),daily=document.querySelector('[data-daily-practice]').getBoundingClientRect(),personalize=document.querySelector('.home-personalize').getBoundingClientRect();
-     return Math.abs(topic.bottom-personalize.bottom)<1&&Math.abs(topic.width-daily.width)<1;
-    }),'Home columns have equal widths and aligned bottom edges');
+     const topic=document.querySelector('[data-program-tour-content="today"]').getBoundingClientRect(),daily=document.querySelector('[data-daily-practice]').getBoundingClientRect();
+     return Math.abs(topic.top-daily.top)<1&&Math.abs(topic.width-daily.width)<1;
+    }),'Home columns have equal widths and aligned top edges without stretching the topic');
     await page.locator('.home-actions-grid').screenshot({path:path.join(dir,`home-idle-${width}.png`)});
     await page.getByRole('button',{name:'Choose a different topic',exact:true}).click();
     assert.equal(await page.locator('.home-topic-picker input[type="search"]').evaluate(el=>el===document.activeElement),true);
@@ -84,6 +85,47 @@ export async function homeJourneys({scenario,origin,root}){
    }
   },{width,height:950});
  }
+ for(const width of [390,1100,1440])await scenario(`program home energy topic has a useful paused video ${width}`,async page=>{
+  const initial=await seed(page,{concept:'energy_heat',misses:3}),card=page.locator('.home-topic-feature');
+  await card.getByRole('heading',{name:/^Work, energy, power and heat$/i}).waitFor();
+  await card.getByText('Your mistake notebook has 3 unresolved questions on this topic.',{exact:true}).waitFor();
+  const player=card.locator('iframe');await player.waitFor();
+  const source=new URL(await player.getAttribute('src'));
+  assert.equal(source.hostname,'www.youtube-nocookie.com');assert.equal(source.pathname,'/embed/ewfMcg3wRaQ');
+  assert.equal(source.searchParams.get('autoplay'),'0','The topic video waits for the learner to press play');
+  assert.equal(source.searchParams.has('end'),false,'The topic introduction is a full video');
+  assert.equal(await player.getAttribute('title'),'Khan Academy: Intro to work');
+  assert.equal(await player.getAttribute('loading'),'lazy');
+  assert.equal(await player.evaluate(el=>!!el.closest('[aria-hidden="true"]')),false,'The video is accessible content, not decorative art');
+  assert.equal(await card.getByRole('link',{name:/Open on Khan Academy/}).getAttribute('href'),'https://www.khanacademy.org/science/strengthened-shs-physics-1/x5eb5cea12d2cf683:kinematics/x5eb5cea12d2cf683:work-and-power/v/intro-to-work-work-energy-physics-khan-academy');
+  assert.equal(await card.getByRole('link',{name:'Learn This Topic',exact:true}).getAttribute('href'),'/learn/energy_heat');
+  const check=new URL(await card.getByRole('link',{name:'Try a Fresh Check',exact:true}).getAttribute('href'),origin);
+  assert.equal(check.pathname,'/mock/take');assert.match(check.searchParams.get('f'),/^topic~energy_heat\|/);assert.equal(check.searchParams.get('mode'),'practice');
+  assert.ok(await card.evaluate(el=>{
+   const body=el.querySelector(':scope > div > p').getBoundingClientRect(),video=el.querySelector('.khan-player').getBoundingClientRect(),action=el.querySelector('a[href="/learn/energy_heat"]').getBoundingClientRect();
+   return video.top-body.bottom>=0&&video.top-body.bottom<=40&&action.top-video.bottom>=0&&action.top-video.bottom<=40;
+  }),'The topic description, video and actions stay together without an empty stretch');
+  await overflow(page);await card.screenshot({path:path.join(dir,`home-energy-video-${width}.png`)});
+  const picker=card.getByRole('button',{name:'Choose a different topic',exact:true});await picker.click();
+  assert.equal(await page.locator('.home-topic-picker input[type="search"]').evaluate(el=>el===document.activeElement),true);
+  await page.locator('.home-topic-picker input[type="search"]').press('Escape');
+  assert.equal(await picker.getAttribute('aria-expanded'),'false');assert.equal(await picker.evaluate(el=>el===document.activeElement),true);
+  const after=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);
+  for(const key of ['concepts','recall','attempts','studyDays','missions','notebook','daily'])assert.deepEqual(after[key],initial[key],`${key} is unchanged by the topic video and picker`);
+ },{width,height:950});
+ for(const width of [390,1440])await scenario(`program home unmatched topic stays compact ${width}`,async page=>{
+  const initial=await seed(page,{concept:'filipino_gramatika',misses:3}),card=page.locator('.home-topic-feature');
+  await card.getByRole('heading',{name:'Gramatikang Filipino',exact:true}).waitFor();
+  assert.equal(await card.locator('iframe').count(),0,'A Filipino topic does not borrow an unrelated video');
+  assert.equal(await card.getByRole('link',{name:'Learn This Topic',exact:true}).getAttribute('href'),'/learn/filipino_gramatika');
+  assert.ok(await card.evaluate(el=>{
+   const body=el.querySelector(':scope > div > p').getBoundingClientRect(),action=el.querySelector('a[href="/learn/filipino_gramatika"]').getBoundingClientRect();
+   return action.top-body.bottom>=0&&action.top-body.bottom<=40;
+  }),'A topic without media keeps its action beside its explanation');
+  const after=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);
+  for(const key of ['concepts','recall','attempts','studyDays','missions','notebook','daily'])assert.deepEqual(after[key],initial[key]);
+  await overflow(page);await card.screenshot({path:path.join(dir,`home-unmatched-topic-${width}.png`)});
+ },{width,height:950});
  await scenario('program home empty activity updates after real Daily 3',async page=>{
   // Seed only on the first load; let the completed answers survive the reload.
   const state=initialProgram();state.setup=setup;

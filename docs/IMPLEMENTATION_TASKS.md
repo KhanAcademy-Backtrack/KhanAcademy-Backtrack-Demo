@@ -1,5 +1,15 @@
 # Complete study-companion implementation checklist
 
+## Home topic video and empty-space fix — 9 October 2026
+
+- [x] Remove the desktop rule that stretched the topic card to the height of both neighboring cards, leaving a large empty area above its actions.
+- [x] Put the reviewed Khan video directly between the current topic description and lesson/check buttons; reuse the existing exam-aware recommendation and visible source link. For Work, energy, power and heat, the starting video is “Intro to work” (`ewfMcg3wRaQ`). Other parts remain available through Learn This Topic.
+- [x] Preserve topic selection, existing lesson/check links, saved results and evidence rules. Unmatched topics retain a compact written-lesson card without an unrelated video.
+- [x] Verify 241 passing unit tests (one existing skip), clean TypeScript and the 690-page production export. All 31 affected Home, Plan and Khan-guide browser scenarios pass across the initial run and corrected heading-selector rerun, including the three-mistake energy card at 390/1100/1440 px and unmatched Filipino topics. Visually inspect the actual external video preview on desktop, plus phone and unmatched-card layouts; full external playback remains untested.
+- [x] Prepare the verified change for the owner's explicitly requested main push, preserving the newer missing-skill summary change from main.
+
+The source page, embedded ID and captions were reviewed previously in `THIRD_PARTY_MATERIALS.md`. On 9 October, the official YouTube oEmbed endpoint reconfirmed the video title, Khan Academy India - English uploader and embed metadata; this is not a fresh playback or caption review.
+
 ## Missing-skill tabs — 9 October 2026
 
 - [x] Remove Everything and rename College Prep to College Courses, including the page title and matching navigation labels.

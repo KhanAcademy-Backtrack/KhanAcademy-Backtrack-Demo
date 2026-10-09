@@ -9,7 +9,7 @@ export function Section({label,children,className}:{label:string;children:ReactN
 
 /** One thing to do: an icon, a title, a line of context and one full-width action,
  *  with a quiet illustration beside it on wider screens. */
-export function FeatureCard({icon,title,body,action,art,artLayout='side',children,className,...rest}:{icon?:ReactNode;title:ReactNode;body?:ReactNode;action?:ReactNode;art?:ReactNode;artLayout?:'side'|'strip';children?:ReactNode;className?:string}&Record<`data-${string}`,string>){
+export function FeatureCard({icon,title,body,media,action,art,artLayout='side',children,className,...rest}:{icon?:ReactNode;title:ReactNode;body?:ReactNode;media?:ReactNode;action?:ReactNode;art?:ReactNode;artLayout?:'side'|'strip';children?:ReactNode;className?:string}&Record<`data-${string}`,string>){
  return <Sheet {...rest} className={cx('home-feature-card grid min-w-0 gap-5 p-4 sm:p-5',!!art&&artLayout==='side'&&'sm:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)]',className)}>
   <div className="flex min-w-0 flex-col sm:p-1">
    <div className={artLayout==='strip'?'flex items-center gap-3':undefined}>
@@ -17,6 +17,7 @@ export function FeatureCard({icon,title,body,action,art,artLayout='side',childre
    <h2 className={cx('text-xl font-extrabold leading-tight tracking-[-.015em]',!!icon&&artLayout==='side'&&'mt-3')}><Headline>{title}</Headline></h2>
    </div>
    {body&&<p className={cx('mt-1.5 leading-relaxed text-ink-soft',artLayout==='strip'&&'text-sm')}>{body}</p>}
+   {media&&<div className="mt-5 min-w-0">{media}</div>}
    {art&&artLayout==='strip'&&<div aria-hidden="true" className="home-card-art home-card-art-strip overflow-hidden rounded-xl bg-mint">{art}</div>}
    {action&&<div className="mt-auto flex flex-wrap gap-2 pt-5 [&>*]:flex-1">{action}</div>}
    {children}
