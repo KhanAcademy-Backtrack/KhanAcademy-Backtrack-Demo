@@ -83,10 +83,14 @@ The successful initial workflow is
 https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/37876481709
 and its `/release.json` identifies source `fc9b3d93f0accb80793415bf8d19b0e806a93f8a`.
 
-The fallback is an explicitly reviewed release, not an automatic mirror of source
-`main`. Its repository README describes **Publish Khanpanion → Run workflow** with
-a reviewed full source SHA for later releases. Keep the original source repository
-as the source of truth. No new domain purchase or paid service was used.
+The first fallback release was pinned to that reviewed commit. The owner subsequently
+authorized automatic releases from application `main`. The new
+`.github/workflows/github-pages.yml` runs tests, type checking and a static production
+build on each main push. A separate job publishes the checked output into the delivery
+repository's `site/` directory, triggering its GitHub Pages deployment. Keep the
+application repository as the source of truth; do not edit generated delivery files.
+See `GITHUB_PAGES_DEPLOYMENT.md` for verification and recovery details.
+No new domain purchase or paid service was used.
 
 Live study groups use the existing backend. Its `study-groups` function was updated
 from version 2 to version 3 to add only the exact GitHub Pages origin to the CORS

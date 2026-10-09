@@ -1,5 +1,13 @@
 # Complete study-companion implementation checklist
 
+## Automatic GitHub Pages publication — 9 October 2026
+
+- [x] Replace the pinned source release with a workflow triggered by application `main` pushes.
+- [x] Gate publishing on tests, type checking and static build; separate credentials from application/dependency execution.
+- [ ] Configure the repository-scoped deployment credential and main-only environment; verify the complete push-to-Pages path and public release receipt.
+
+Implementation and recovery: `GITHUB_PAGES_DEPLOYMENT.md`.
+
 ## School network access — 9 October 2026
 
 - [x] Diagnose the initial Vercel URL failure as DNS NXDOMAIN, with production still READY.
