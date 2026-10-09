@@ -1,5 +1,14 @@
 # Complete study-companion implementation checklist
 
+## CET full simulations and simpler Practice Exams — 9 October 2026
+
+- [x] Make Full Simulation and its printable booklet follow the selected CET, including available section order, language, question totals, practice timing and unavailable-section notices.
+- [x] Keep combined English language/reading blocks in one logical section with no extra break, while retaining separate subject scores and distinct Filipino labels.
+- [x] Preserve all old full simulation keys; new `full2` links pin the selected CET so switching reviewers cannot rewrite an attempt.
+- [x] Use the new run's actual practice counts/timing in results and compare improvement only against the same CET; group downloaded result cards by the CET's named sections.
+- [x] Remove the Topic Checks block from Practice Exams at the owner's request. Existing lesson checks, topic links and saved attempts remain available.
+- [x] Verify 236 passing domain tests (one existing content skip), clean type checking, the 690-page production export and 12 affected browser journeys. Inspect desktop/phone layouts and the downloaded PLMAT result card. Publication to main remains covered by the owner's automatic-push instruction.
+
 ## Reviewer-based practice — 9 October 2026
 
 - [x] Share the selected reviewer between the CET reviewer and Practice exams, with persistence, named-exam defaults and explicit exam links.

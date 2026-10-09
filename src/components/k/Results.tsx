@@ -13,11 +13,12 @@ import {PageBand,Sheet,btn,cx,pageBody,Pill} from './ui';
 import {Companion} from '@/components/study/Companion';
 import {useFix} from './useFix';
 import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
-import {scoreAttempt,paceCheck,missGroups,type Triage} from '@/lib/mock/scoring';
+import {scoreAttempt,scoreGroups,paceCheck,missGroups,type Triage} from '@/lib/mock/scoring';
 import {timeMap} from '@/lib/mock/analysis';
 import {misconception} from '@/lib/mock/misconceptions';
 import {SUBTEST_LABEL} from '@/lib/mock/types';
 import {CONCEPT_BY_ID} from '@/lib/program/concepts';
+import {listNames} from '@/lib/program/exam-coverage';
 import {chapterHref} from '@/lib/program/links';
 
 import {DUR,EASE} from '@/lib/motion-tokens';
@@ -36,7 +37,7 @@ export function Results(){
  const [showKey,setShowKey]=useState(true),[open,setOpen]=useState<string[]>([]),[shared,setShared]=useState('');
  if(!ready)return <div className="min-h-screen"/>;
  if(!attempt||!form||!result||!attempt.submittedAt)return <><PageBand title="No results here yet" lead="Results appear after you submit a mock exam or topic check on this phone."/><div className={pageBody}><Sheet><Link href="/mock" className={btn.primary}><Headline>Choose a mock exam</Headline></Link></Sheet></div></>;
- const previous=state.attempts.filter(a=>a.submittedAt&&a.id!==attempt.id&&a.formKey.split('~')[0]===attempt.formKey.split('~')[0]&&a.submittedAt<attempt.submittedAt!).sort((a,b)=>b.submittedAt!-a.submittedAt!)[0];
+ const previous=state.attempts.filter(a=>a.submittedAt&&a.id!==attempt.id&&a.formKey.split('~')[0]===attempt.formKey.split('~')[0]&&a.submittedAt<attempt.submittedAt!&&(!form.exam||formFromKey(a.formKey)?.exam===form.exam)).sort((a,b)=>b.submittedAt!-a.submittedAt!)[0];
  const prevResult=previous?(()=>{const f=formFromKey(previous.formKey);return f?scoreAttempt(f,previous):undefined;})():undefined;
  const growth=prevResult?result.total.percent-prevResult.total.percent:undefined;
  const groups=missGroups(result.misses),top=groups[0];
@@ -44,23 +45,24 @@ export function Results(){
  const ids=formItems(form),map=timeMap(ids,attempt);
  const setTriage=(id:string,v:Triage)=>update(s=>({...s,attempts:s.attempts.map(a=>a.id===attempt.id?{...a,triage:{...a.triage,[id]:v}}:a),notebook:s.notebook.map(n=>n.itemId===id&&n.formKey===attempt.formKey?{...n,triage:v}:n)}));
  const praise=result.total.percent>=80?'Strong work.':result.total.percent>=60?'Solid. The misses below are very fixable.':result.total.percent>=40?'You have the base. Now for the traps.':'Every miss here is a map of what to learn next.';
- async function share(){try{const {shareCardPng,shareOrDownload}=await import('@/lib/share-card');const blob=await shareCardPng({title:`${result!.total.correct} of ${result!.total.total} on a ${form!.title.toLowerCase()}`,subtitle:growth!==undefined&&growth>0?`Up ${growth} points from last time.`:'Practising for college entrance exams.',lines:result!.subtests.map(s=>({label:SUBTEST_LABEL[s.subtest],value:`${s.correct}/${s.total}`,fill:s.total?s.correct/s.total:0})),footer:'khanpanion.vercel.app · free exam review'});setShared(await shareOrDownload(blob,'khanpanion-result.png','My practice result on Khanpanion'));}catch{setShared('error');}}
+ async function share(){try{const {shareCardPng,shareOrDownload}=await import('@/lib/share-card');const blob=await shareCardPng({title:`${result!.total.correct} of ${result!.total.total} on a ${form!.title.toLowerCase()}`,subtitle:growth!==undefined&&growth>0?`Up ${growth} points from last time.`:'Practising for college entrance exams.',lines:scoreGroups(form!,result!).map(s=>({label:s.label,value:`${s.correct}/${s.total}`,fill:s.total?s.correct/s.total:0})),footer:'khanpanion.vercel.app · free exam review'});setShared(await shareOrDownload(blob,'khanpanion-result.png','My practice result on Khanpanion'));}catch{setShared('error');}}
  return <>
   <div className="text-navy">
    <div className="mx-auto grid max-w-6xl gap-8 px-5 pb-8 pt-9 sm:px-8 lg:grid-cols-[1fr_1fr] lg:pt-12">
     <div>
      <p className="text-sm font-semibold text-ink-soft">{form.title} · {t(lang,'result.title').toLowerCase()}</p>
      <h1 className="mt-2 text-4xl font-extrabold tracking-[-.03em] sm:text-5xl">{result.total.correct} of {result.total.total}</h1>
+     {!!form.missingSections?.length&&<p className="mt-2 text-sm text-ink-soft">Not included yet: {listNames(form.missingSections)}.</p>}
      <p className="mt-3 text-lg text-ink-soft">{praise}{growth!==undefined&&growth>0&&` Up ${growth} points from your last one.`}</p>
      {result.sureButWrong>0&&<p className="mt-3 max-w-lg text-ink-soft">{result.sureButWrong} answer{result.sureButWrong===1?' was':'s were'} marked “sure” but wrong. Those are the most useful misses to study: they are ideas that feel right and are not.</p>}
      <div className="mt-6 flex flex-wrap gap-3"><a href="#key" className={btn.primary}><Headline>{t(lang,'result.key')}</Headline></a><button className={btn.ghost} onClick={share}><Headline>Share my result</Headline></button></div>
      {shared&&<p role="status" className="mt-2 text-sm text-ink-soft">{shared==='downloaded'?'Image saved to your downloads.':shared==='shared'?'Shared.':shared==='error'?'This browser could not make the image.':''}</p>}
     </div>
-    <div className="grid content-start gap-3">{result.subtests.map((s,i)=>{const pace=paceCheck(s);return <motion.div key={s.subtest} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.base,delay:reduced?0:DUR.fast+i*DUR.fast}} className="rounded-2xl bg-white p-4 shadow-sheet">
-     <div className="flex items-baseline justify-between"><p className="font-bold">{SUBTEST_LABEL[s.subtest]}</p><p className="text-2xl font-extrabold">{s.correct}<span className="text-base font-semibold text-ink-soft">/{s.total}</span></p></div>
+    <div className="grid content-start gap-3">{result.subtests.map((s,i)=>{const pace=paceCheck(s);return <motion.div key={s.label??s.subtest} initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:DUR.base,delay:reduced?0:DUR.fast+i*DUR.fast}} className="rounded-2xl bg-white p-4 shadow-sheet">
+     <div className="flex items-baseline justify-between"><p className="font-bold">{s.label??SUBTEST_LABEL[s.subtest]}</p><p className="text-2xl font-extrabold">{s.correct}<span className="text-base font-semibold text-ink-soft">/{s.total}</span></p></div>
      <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-line"><motion.div className="h-full w-full origin-left rounded-full bg-green" initial={reduced?false:{scaleX:0}} animate={{scaleX:s.total?s.correct/s.total:0}} transition={{duration:DUR.fast,delay:reduced?0:DUR.fast+i*DUR.fast,ease:EASE as unknown as [number,number,number,number]}}/></div>
      <p className="mt-2 text-sm text-ink-soft"><span className="font-bold text-navy">{s.band.label}.</span> {s.band.note}</p>
-     {pace&&<p className="mt-1 text-sm text-ink-soft">{t(lang,'result.pace')}: {pace.onPace?`on pace, about ${pace.perItem} s a question.`:`about ${pace.perItem} s a question. At that pace the real ${s.total<pace.items?'section':'exam'} would reach about ${pace.reach} of ${pace.items} questions. One timed section a week closes that gap.`}</p>}
+     {pace&&<p className="mt-1 text-sm text-ink-soft">{t(lang,'result.pace')}: {pace.onPace?`on pace, about ${pace.perItem} s a question.`:`about ${pace.perItem} s a question. At that pace ${s.practice?'this practice set':`the real ${s.total<pace.items?'section':'exam'}`} would reach about ${pace.reach} of ${pace.items} questions. One timed section a week closes that gap.`}</p>}
     </motion.div>;})}</div>
    </div>
   </div>

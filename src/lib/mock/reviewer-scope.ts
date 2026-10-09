@@ -12,3 +12,4 @@ export function reviewerSections(exam:ExamId){
 }
 export const reviewerSectionKey=(exam:ExamId,section:string,seed:string)=>`section2~${exam}-${section}|${seed}`;
 export const reviewerTopicKey=(exam:ExamId,concept:string,seed:string)=>`topic2~${exam}-${concept}|${seed}`;
+export const reviewerFullKey=(exam:ExamId,seed:string)=>`full2~${exam}|${seed}`;

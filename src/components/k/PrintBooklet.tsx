@@ -5,9 +5,9 @@ import {useRouter,useSearchParams} from 'next/navigation';
 import {useProgram} from './ProgramProvider';
 import {PassageView} from './Question';
 import {btn,Oval,cx,Wordmark} from './ui';
-import {formFromKey,formItems,itemById} from '@/lib/mock/forms';
+import {formFromKey,formItems,itemById,sectionLabel} from '@/lib/mock/forms';
 import {newAttempt} from '@/lib/program/store';
-import {SUBTEST_LABEL} from '@/lib/mock/types';
+import {listNames} from '@/lib/program/exam-coverage';
 import {Rich} from '@/components/math/Math';
 
 const LETTERS=['A','B','C','D'];
@@ -26,8 +26,8 @@ export function PrintBooklet(){
   <div className="mx-auto max-w-[8.5in] px-5 py-8 print:px-0 print:py-0">
    <div className="flex flex-wrap items-center justify-between gap-3 print:hidden"><Wordmark small/><div className="flex flex-wrap gap-2"><button className={btn.dark} onClick={()=>window.print()}><Headline>Print booklet and answer sheet</Headline></button><button className={btn.ghost} aria-pressed={entry} onClick={()=>setEntry(!entry)}><Headline>{entry?'Back to the booklet':'Enter answers from paper'}</Headline></button></div></div>
    {!entry?<>
-    <header className="mt-6 border-b-2 border-navy pb-3 print:mt-0"><h1 className="text-2xl font-extrabold"><Headline>{form.title}</Headline></h1><p className="text-sm">Khanpanion practice booklet · {ids.length} questions · khanpanion.vercel.app</p></header>
-    {form.sections.map((sec,si)=><section key={si} className="mt-6 break-inside-avoid-page"><h2 className="text-xl font-bold"><Headline>{SUBTEST_LABEL[sec.subtest]} · {sec.minutes} minutes</Headline></h2>
+    <header className="mt-6 border-b-2 border-navy pb-3 print:mt-0"><h1 className="text-2xl font-extrabold"><Headline>{form.title}</Headline></h1><p className="text-sm">Khanpanion practice booklet · {ids.length} questions · khanpanion.vercel.app</p>{!!form.missingSections?.length&&<p className="mt-2 text-sm">Not included yet: {listNames(form.missingSections)}.</p>}</header>
+    {form.sections.map((sec,si)=><section key={si} className="mt-6 break-inside-avoid-page"><h2 className="text-xl font-bold"><Headline>{sectionLabel(sec)} · {sec.minutes} minutes</Headline></h2>
      <ol className="mt-3 grid gap-5">{sec.itemIds.map((id,xi)=>{const it=itemById(id)!;n++;const showPassage=it.passageId&&(xi===0||itemById(sec.itemIds[xi-1])?.passageId!==it.passageId);return <li key={id} className="break-inside-avoid">{showPassage&&<div className="mb-3"><PassageView id={it.passageId!}/></div>}<p className="font-serif text-[16px] leading-snug print:text-[11pt]"><b className="font-sans">{n}.</b> <Rich>{it.stem}</Rich></p><ol className="mt-1 grid gap-0.5 pl-6 font-serif text-[15px] print:text-[10.5pt] sm:grid-cols-2">{it.choices.map((c,i)=><li key={i}>{LETTERS[i]}. <Rich>{c}</Rich></li>)}</ol></li>;})}</ol></section>)}
     <section className="mt-10 break-before-page"><h2 className="text-xl font-bold"><Headline>Answer sheet</Headline></h2><p className="text-sm">Shade one oval per question.</p><div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-4 print:grid-cols-4">{ids.map((id,i)=><div key={id} className="flex items-center gap-1"><span className="w-7 text-right text-sm font-bold">{i+1}</span>{LETTERS.map(l=><Oval key={l} label={l} size={24}/>)}</div>)}</div></section>
     <section className="mt-10 break-before-page"><h2 className="text-xl font-bold"><Headline>Answer key</Headline></h2><p className="text-sm">Cut this page off before handing out the booklet.</p><div className="mt-3 grid grid-cols-5 gap-1 text-sm sm:grid-cols-10">{ids.map((id,i)=><span key={id}>{i+1}. {LETTERS[itemById(id)!.answerIndex]}</span>)}</div></section>

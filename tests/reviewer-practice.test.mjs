@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {EXAM_IDS} from '../src/lib/program/admissions.ts';
 import {reviewerSections,reviewerSectionKey,reviewerTopicKey} from '../src/lib/mock/reviewer-scope.ts';
-import {formFromKey,formItems,itemById} from '../src/lib/mock/forms.ts';
+import {formFromKey,formItems,itemById,formMinutes,formGroups,continuesSection} from '../src/lib/mock/forms.ts';
 import {initialProgram,validProgram,tidy,loadProgram,PROGRAM_KEY,newAttempt} from '../src/lib/program/store.ts';
-import {scoreAttempt} from '../src/lib/mock/scoring.ts';
+import {scoreAttempt,scoreGroups,paceCheck} from '../src/lib/mock/scoring.ts';
 
 test('each reviewer opens only its own available sections and topics',()=>{
  for(const exam of EXAM_IDS)for(const section of reviewerSections(exam)){
@@ -88,4 +88,65 @@ test('legacy saved form keys keep their original questions, order, timing and ti
   'sprint~saved':'b766d4d08984132bcf610cb99696a413f03a722bce40e266c30467bf2e1984c8'
  };
  for(const [key,hash] of Object.entries(hashes))assert.equal(createHash('sha256').update(JSON.stringify(formFromKey(key))).digest('hex'),hash,key);
+});
+
+test('full simulations follow all nine reviewers with their own available section order',()=>{
+ const expected={
+  upcat:['Language Proficiency','Reading Comprehension','Mathematics','Science'],
+  dcat:['Mathematics','Science','English'],
+  dostsei:['Language and Literature','Science','Mathematics'],
+  pupcet:['Mathematics','English','Science'],
+  ustet:['English','Mathematics','Science'],
+  acet:['Mathematics','English'],
+  plmat:['English','Filipino','Mathematics','Science'],
+  tupstat:['English','Mathematics','Science'],
+  msusase:['English','Mathematics','Science']
+ };
+ for(const [exam,names] of Object.entries(expected)){
+  const key=`full2~${exam}|full-check`,form=formFromKey(key);
+  assert.equal(form.exam,exam);assert.equal(form.kind,'full');
+  assert.deepEqual(formGroups(form).map(g=>g.name),names,exam);
+  assert.deepEqual(formFromKey(key),form,'a saved full run rebuilds deterministically');
+  assert.equal(new Set(formItems(form)).size,formItems(form).length,'no repeated items');
+  for(const section of form.sections)for(const id of section.itemIds){
+   const item=itemById(id);assert.equal(item.subtest,section.subtest,'scoring retains the real subject');
+   if(exam!=='upcat')assert.equal(item.lang,section.group==='Filipino'?'fil':'en',exam+' '+id);
+  }
+ }
+ assert.ok(formItems(formFromKey('full2~acet|scope')).every(id=>itemById(id).subtest!=='science'));
+});
+
+test('full simulation time counts breaks between CET sections, never inside English',()=>{
+ const dcat=formFromKey('full2~dcat|scope'),acet=formFromKey('full2~acet|scope'),plmat=formFromKey('full2~plmat|scope');
+ assert.equal(formItems(dcat).length,160);assert.equal(formMinutes(dcat),232);
+ assert.deepEqual(formGroups(dcat).map(g=>g.minutes),[70,60,82]);
+ assert.equal(continuesSection(dcat,2),true);
+ assert.equal(continuesSection(dcat,1),false);
+ assert.equal(continuesSection(dcat,3),false);
+ assert.equal(formItems(acet).length,110);assert.equal(formMinutes(acet),162);
+ assert.equal(formItems(plmat).length,174);assert.equal(formMinutes(plmat),258);
+ assert.equal(formMinutes(formFromKey('full2~upcat|scope')),255);
+ assert.deepEqual(dcat.missingSections,['Mental Ability']);
+ assert.deepEqual(acet.missingSections,['General Knowledge','Abstract Reasoning','Essay']);
+});
+
+test('full simulation results keep English and Filipino labels distinct and use actual practice timing',()=>{
+ const key='full2~plmat|score',form=formFromKey(key),attempt=newAttempt(key,true,1);
+ form.sections.forEach((s,i)=>{
+  for(const id of s.itemIds)attempt.answers[id]=itemById(id).answerIndex;
+  attempt.elapsedMs[i]=s.minutes*60000;
+ });
+ const result=scoreAttempt(form,attempt);
+ assert.equal(result.total.correct,174);assert.equal(result.total.percent,100);
+ assert.deepEqual(result.subtests.map(s=>s.label),['English · Language','English · Reading','Filipino','Mathematics','Science']);
+ assert.deepEqual(scoreGroups(form,result),[{label:'English',correct:60,total:60},{label:'Filipino',correct:14,total:14},{label:'Mathematics',correct:50,total:50},{label:'Science',correct:50,total:50}]);
+ for(const score of result.subtests){
+  const pace=paceCheck(score);
+  assert.equal(pace.items,score.total);assert.equal(pace.reach,score.total);
+  assert.equal(pace.target,Math.round(score.minutes*60/score.total));
+ }
+});
+
+test('invalid full simulation keys cannot silently open UPCAT',()=>{
+ for(const key of ['full2~unknown|scope','full2~dcat','full2~dcat|','full2~dcat|scope|extra'])assert.equal(formFromKey(key),undefined,key);
 });

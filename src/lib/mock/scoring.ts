@@ -1,7 +1,7 @@
 import {itemById,formItems,type Form} from './forms.ts';
 import {bandFor,SCORING,UPCAT_BLUEPRINT} from './blueprint.ts';
 import {misconception} from './misconceptions.ts';
-import type {MockItem,Subtest} from './types.ts';
+import {SUBTEST_LABEL,type MockItem,type Subtest} from './types.ts';
 
 export type Triage='didnt_know'|'careless'|'out_of_time';
 export type Sure='sure'|'unsure';
@@ -11,7 +11,7 @@ export type Sure='sure'|'unsure';
 export type Attempt={id:string;formKey:string;startedAt:number;updatedAt:number;submittedAt?:number;timed:boolean;answers:Record<string,number|null>;flags:string[];idk:string[];sure:Record<string,Sure>;seconds:Record<string,number>;triage:Record<string,Triage>;section:number;index:number;pausedMs:number;elapsedMs:Record<number,number>;manual?:boolean;revealed?:string[]};
 
 export type Miss={item:MockItem;chosen:number|null;idk:boolean;misconceptionId?:string;seconds:number;sure?:Sure};
-export type SubtestScore={subtest:Subtest;correct:number;total:number;blank:number;idk:number;percent:number;band:ReturnType<typeof bandFor>;seconds:number;minutes:number};
+export type SubtestScore={subtest:Subtest;correct:number;total:number;blank:number;idk:number;percent:number;band:ReturnType<typeof bandFor>;seconds:number;minutes:number;label?:string;practice?:boolean};
 export type Result={total:{correct:number;total:number;percent:number};subtests:SubtestScore[];concepts:{concept:string;subtest:Subtest;correct:number;total:number}[];misses:Miss[];sureButWrong:number;seconds:number};
 
 export function scoreAttempt(form:Form,attempt:Attempt):Result{
@@ -29,16 +29,27 @@ export function scoreAttempt(form:Form,attempt:Attempt):Result{
   }
   const elapsed=Math.round((attempt.elapsedMs[si]??sec*1000)/1000);
   const percent=t?Math.round(c/t*100):0;
-  subtests.push({subtest:section.subtest,correct:c*SCORING.correct,total:t,blank,idk,percent,band:bandFor(percent),seconds:Math.max(elapsed,sec),minutes:section.minutes});
+  subtests.push({subtest:section.subtest,correct:c*SCORING.correct,total:t,blank,idk,percent,band:bandFor(percent),seconds:Math.max(elapsed,sec),minutes:section.minutes,...(section.label?{label:section.label}:{}),...(form.exam?{practice:true}:{})});
   correct+=c;total+=t;seconds+=Math.max(elapsed,sec);
  });
  return {total:{correct,total,percent:total?Math.round(correct/total*100):0},subtests,concepts:[...concepts.values()],misses,sureButWrong,seconds};
 }
 
+/** Compact shared results follow the CET's sections; subject scores stay separate. */
+export function scoreGroups(form:Form,result:Result){
+ const groups=new Map<string,{label:string;correct:number;total:number}>();
+ result.subtests.forEach((score,i)=>{
+  const label=form.sections[i].group??score.label??SUBTEST_LABEL[score.subtest];
+  const group=groups.get(label)??{label,correct:0,total:0};
+  group.correct+=score.correct;group.total+=score.total;groups.set(label,group);
+ });
+ return [...groups.values()];
+}
+
 /** A gentle, honest pace check: how far a learner would have got in the exam's time
  *  at the pace they actually worked. Never a predicted score. */
 export function paceCheck(score:SubtestScore){
- const blueprint=UPCAT_BLUEPRINT[score.subtest];
+ const blueprint=score.practice?{items:score.total,minutes:score.minutes}:UPCAT_BLUEPRINT[score.subtest];
  if(!score.total||!score.seconds)return undefined;
  const perItem=score.seconds/score.total,limit=blueprint.minutes*60;
  const reach=Math.min(blueprint.items,Math.floor(limit/perItem));

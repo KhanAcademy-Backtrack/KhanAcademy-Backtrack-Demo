@@ -10,10 +10,10 @@ import {Question,PassageView,FixLinks} from './Question';
 import {RelatedVideo} from './RelatedVideo';
 import {btn,cx,Wordmark} from './ui';
 import {Companion} from '@/components/study/Companion';
-import {formFromKey,formItems,itemById,formMinutes,type Form} from '@/lib/mock/forms';
+import {formFromKey,formItems,itemById,formMinutes,formGroups,sectionLabel,continuesSection,type Form} from '@/lib/mock/forms';
 import {newAttempt,type Attempt} from '@/lib/program/store';
 import {suggestTriage} from '@/lib/mock/analysis';
-import {SUBTEST_LABEL} from '@/lib/mock/types';
+import {listNames} from '@/lib/program/exam-coverage';
 import {DUR,EASE,tween} from '@/lib/motion-tokens';
 import {t} from '@/lib/i18n';
 
@@ -33,14 +33,15 @@ export function ExamHall(){
 function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(timed:boolean)=>void}){
   const {state}=useProgram(),lang=state.lang;
   const [timed,setTimed]=useState(form.kind==='full'||form.kind==='section'||form.kind==='fixed');
-  const total=formItems(form).length,minutes=formMinutes(form);
+  const total=formItems(form).length,minutes=formMinutes(form),groups=formGroups(form);
   return <div className="min-h-screen bg-canvas text-navy">
    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-8 sm:py-10">
     <div className="flex items-center justify-between"><Link href="/mock" aria-label="Back to mock exams"><Wordmark small/></Link><Link href="/mock" className="flex min-h-11 items-center rounded-lg px-3 font-semibold text-ink-soft hover:bg-white hover:text-navy">Not now</Link></div>
     <div className="mt-6 rounded-2xl bg-white p-5 shadow-sheet sm:p-8">
     <h1 className="text-3xl font-extrabold tracking-[-.025em]"><Headline>{form.title}</Headline></h1>
-    <p className="mt-2 text-ink-soft">{total} questions{form.sections.length>1?` in ${form.sections.length} sections`:''}. About {minutes} minutes at exam pace.</p>
-    <ul className="mt-5 divide-y divide-line border-y border-line">{form.sections.map((s,i)=><li key={i} className="flex items-center justify-between gap-3 py-3"><span className="font-semibold">{SUBTEST_LABEL[s.subtest]}</span><span className="text-sm text-ink-soft">{s.itemIds.length} questions · {s.minutes} min</span></li>)}</ul>
+    <p className="mt-2 text-ink-soft">{total} questions{groups.length>1?` in ${groups.length} sections`:''}. About {minutes} minutes{form.exam?' using Khanpanion practice timing':' at exam pace'}.</p>
+    <ul className="mt-5 divide-y divide-line border-y border-line">{groups.map((s,i)=><li key={i} className="flex items-center justify-between gap-3 py-3"><span className="font-semibold">{s.name}</span><span className="text-sm text-ink-soft">{s.items} questions · {s.minutes} min</span></li>)}</ul>
+    {!!form.missingSections?.length&&<p className="mt-4 text-sm text-ink-soft">Not included yet: {listNames(form.missingSections)}.</p>}
     <fieldset className="mt-6"><legend className="text-sm font-semibold text-ink-soft">Timer</legend>
      <div className="mt-3 grid gap-2 sm:grid-cols-2">{[[true,t(lang,'mock.timed'),'Counts down each section. You can pause or hide it any time.'],[false,t(lang,'mock.untimed'),'Take your time. Results still show how long you took.']].map(([v,l,d])=><button key={String(v)} aria-pressed={timed===v} onClick={()=>setTimed(v as boolean)} className="rounded-xl border-2 border-line p-4 text-left text-navy hover:border-line-strong aria-pressed:border-navy aria-pressed:bg-mint"><span className="flex items-center gap-2 font-bold"><span aria-hidden="true" className={cx('grid h-5 w-5 place-items-center rounded border-2 border-line-strong text-sm',timed===v&&'border-green bg-green text-navy')}>{timed===v?'✓':' '}</span>{l as string}</span><span className="mt-1 block text-sm text-ink-soft">{d as string}</span></button>)}</div>
     </fieldset>
@@ -71,9 +72,9 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
   const flag=()=>save({...a,flags:a.flags.includes(id)?a.flags.filter(x=>x!==id):[...a.flags,id]});
   const sure=()=>save({...a,sure:{...a.sure,[id]:a.sure[id]==='sure'?'unsure':'sure'}});
   const lastInSection=a.index===section.itemIds.length-1,lastSection=a.section===form.sections.length-1;
-  const next=()=>{if(!lastInSection)return go(a.section,a.index+1);if(!lastSection){stopClock();setBreakFor(a.section+1);return;}setConfirm(true);};
+  const next=()=>{if(!lastInSection)return go(a.section,a.index+1);if(!lastSection){if(continuesSection(form,a.section))return go(a.section+1,0);stopClock();setBreakFor(a.section+1);return;}setConfirm(true);};
   const first=a.index===0&&a.section===0,back=()=>a.index>0?go(a.section,a.index-1):go(a.section-1,form.sections[a.section-1].itemIds.length-1);
-  const nextLabel=lastInSection?(lastSection?t(lang,'mock.submit'):'Finish section'):t(lang,'mock.next');
+  const nextLabel=lastInSection?(lastSection?t(lang,'mock.submit'):continuesSection(form,a.section)?t(lang,'mock.next'):'Finish section'):t(lang,'mock.next');
   // Back and Next live in the question card, at the end of its answer row (beside Show
   // explanation once a practice answer is checked). Once checked, right or wrong, the
   // Work on this panel (the matched Khan video, plus the fix links after a miss) sits in
@@ -104,11 +105,11 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
    });
    router.push(`/mock/result?a=${done.id}`);
   }
-  if(breakFor!==null)return <div className="grid min-h-screen place-items-center bg-canvas px-4 text-center text-navy"><div className="max-w-md rounded-2xl bg-white p-6 shadow-sheet sm:p-8"><Companion size={72} pose="encourage"/><h1 className="mt-4 text-2xl font-extrabold"><Headline>Section done. Take a breath.</Headline></h1><p className="mt-3 text-ink-soft">In a full simulation this is a {form.breakMinutes}-minute break. Stand up, drink water, look away from the screen.</p><p className="mt-2 text-ink-soft">Next: {SUBTEST_LABEL[form.sections[breakFor].subtest]}, {form.sections[breakFor].itemIds.length} questions.</p><button className={cx(btn.primary,'mt-8')} onClick={()=>{const target=breakFor;go(target,0);startClock();setBreakFor(null);}}><Headline>Start the next section</Headline></button></div></div>;
+  if(breakFor!==null)return <div className="grid min-h-screen place-items-center bg-canvas px-4 text-center text-navy"><div className="max-w-md rounded-2xl bg-white p-6 shadow-sheet sm:p-8"><Companion size={72} pose="encourage"/><h1 className="mt-4 text-2xl font-extrabold"><Headline>Section done. Take a breath.</Headline></h1><p className="mt-3 text-ink-soft">In a full simulation this is a {form.breakMinutes}-minute break. Stand up, drink water, look away from the screen.</p><p className="mt-2 text-ink-soft">Next: {sectionLabel(form.sections[breakFor])}, {form.sections[breakFor].itemIds.length} questions.</p><button className={cx(btn.primary,'mt-8')} onClick={()=>{const target=breakFor;go(target,0);startClock();setBreakFor(null);}}><Headline>Start the next section</Headline></button></div></div>;
   return <motion.div className="min-h-screen bg-canvas text-navy" initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={{duration:DUR.slow}}>
    <header className="sticky top-0 z-30 border-b border-line bg-white">
     <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center gap-2 px-3 py-2 sm:gap-3 sm:px-8">
-     <div className="min-w-0 basis-full sm:basis-auto sm:flex-1"><p className="truncate text-sm text-ink-soft"><Headline>{form.title}</Headline></p><p className="truncate font-bold">{SUBTEST_LABEL[section.subtest]} · {a.index+1} of {section.itemIds.length}</p></div>
+     <div className="min-w-0 basis-full sm:basis-auto sm:flex-1"><p className="truncate text-sm text-ink-soft"><Headline>{form.title}</Headline></p><p className="truncate font-bold">{sectionLabel(section)} · {a.index+1} of {section.itemIds.length}</p></div>
      {a.timed&&<div className="flex items-center gap-2">
       {!hideTimer&&<motion.span initial={reduced?false:{opacity:0}} animate={{opacity:1}} transition={{duration:DUR.fast,delay:DUR.slow}} className={cx('rounded-lg px-3 py-1 font-sans text-lg font-bold tabular-nums',remaining<0?'bg-navy text-white':'bg-sky text-navy')} aria-label={remaining<0?'Over time':'Time left'}>{remaining<0?'+':''}{clock(Math.abs(remaining))}{remaining<0?' over':''}</motion.span>}
       <button className="min-h-11 rounded-lg px-3 text-sm font-semibold text-ink-soft hover:bg-sky hover:text-navy" onClick={()=>setHideTimer(!hideTimer)}>{hideTimer?t(lang,'mock.showTimer'):t(lang,'mock.hideTimer')}</button>
@@ -135,7 +136,7 @@ function Start({form,practice,onStart}:{form:Form;practice:boolean;onStart:(time
     </motion.div>
     <aside className={cx('rounded-2xl bg-white p-4 text-navy shadow-sheet lg:sticky lg:top-24 lg:block lg:max-h-[calc(100dvh-11rem)] lg:overflow-y-auto lg:self-start',nav?'fixed inset-x-3 bottom-24 z-40 max-h-[60vh] overflow-y-auto shadow-lift':'hidden')}>
      <div className="mb-3 flex items-center justify-between lg:hidden"><h2 className="font-bold"><Headline>Question navigator</Headline></h2><button className="min-h-11 rounded-lg px-3 font-bold text-navy hover:bg-sky" onClick={()=>setNav(false)}>Close</button></div>
-     {form.sections.map((sec,si)=><div key={si} className="mb-4 last:mb-0"><p className="mb-2 text-sm font-semibold text-ink-soft">{SUBTEST_LABEL[sec.subtest]}</p>
+     {form.sections.map((sec,si)=><div key={si} className="mb-4 last:mb-0"><p className="mb-2 text-sm font-semibold text-ink-soft">{sectionLabel(sec)}</p>
       <div className="grid grid-cols-6 gap-1.5 lg:grid-cols-5">{sec.itemIds.map((x,xi)=>{const cur=si===a.section&&xi===a.index,answered=a.answers[x]!=null||a.idk.includes(x);return <button key={x} onClick={()=>go(si,xi)} aria-label={`Question ${xi+1}${answered?', answered':''}${a.flags.includes(x)?', flagged':''}`} aria-current={cur?'step':undefined}
        className={cx('relative grid h-11 place-items-center rounded-lg border-2 text-xs font-bold text-navy',answered?'border-green bg-green':'border-line bg-white hover:border-line-strong',cur&&'ring-2 ring-navy ring-offset-2 ring-offset-white')}>{xi+1}{a.flags.includes(x)&&<span className="absolute right-1 top-1 h-1.5 w-1.5 bg-navy"/>}</button>;})}</div></div>)}
      <p className="mt-3 text-xs text-ink-soft">Green is answered. A dark corner mark is flagged.</p>

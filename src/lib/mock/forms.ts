@@ -5,13 +5,13 @@ import {READING_ITEMS,PASSAGES} from '../../content/mock/reading.ts';
 import {SCIENCE_ITEMS} from '../../content/mock/science.ts';
 import {PROGRAM_BY_ID,RETIRED_PROGRAMS} from '../program/bridge.ts';
 import {UPCAT_BLUEPRINT,SECTION_ORDER,SPRINT,TOPIC_CHECK,BREAK_MINUTES} from './blueprint.ts';
-import type {MockItem,Subtest} from './types.ts';
+import {SUBTEST_LABEL,SUBTEST_SHORT,type MockItem,type Subtest} from './types.ts';
 import {EXAMS,EXAM_IDS,type ExamId} from '../program/admissions.ts';
 import {reviewerSections} from './reviewer-scope.ts';
 
 export type FormKind='sprint'|'section'|'full'|'topic'|'exit'|'daily'|'fixed'|'placement';
-export type FormSection={subtest:Subtest;minutes:number;itemIds:string[]};
-export type Form={id:string;kind:FormKind;title:string;seed:string;sections:FormSection[];breakMinutes:number;official:boolean};
+export type FormSection={subtest:Subtest;minutes:number;itemIds:string[];group?:string;label?:string};
+export type Form={id:string;kind:FormKind;title:string;seed:string;sections:FormSection[];breakMinutes:number;official:boolean;exam?:ExamId;missingSections?:string[]};
 
 const AUTHORED:MockItem[]=[...LANGUAGE_ITEMS,...READING_ITEMS,...SCIENCE_ITEMS];
 /** Share of a science section drawn from the conceptual (biology, Earth) bank. */
@@ -166,7 +166,31 @@ export function placementForm(programId:string,seed:string):Form|undefined{
 }
 
 export const formItems=(form:Form)=>form.sections.flatMap(s=>s.itemIds);
-export const formMinutes=(form:Form)=>form.sections.reduce((t,s)=>t+s.minutes,0)+(form.sections.length>1?form.breakMinutes*(form.sections.length-1):0);
+export const sectionLabel=(section:FormSection)=>section.label??SUBTEST_LABEL[section.subtest];
+/** English may contain language and reading blocks, with no break between them. */
+export const continuesSection=(form:Form,index:number)=>!!form.sections[index]?.group&&form.sections[index].group===form.sections[index+1]?.group;
+export const formMinutes=(form:Form)=>form.sections.reduce((t,s,i)=>t+s.minutes+(i>0&&!continuesSection(form,i-1)?form.breakMinutes:0),0);
+export function formGroups(form:Form){
+ const groups:{name:string;minutes:number;items:number}[]=[];
+ form.sections.forEach((s,i)=>{
+  if(i>0&&continuesSection(form,i-1)){const last=groups[groups.length-1];last.minutes+=s.minutes;last.items+=s.itemIds.length;}
+  else groups.push({name:s.group??sectionLabel(s),minutes:s.minutes,items:s.itemIds.length});
+ });
+ return groups;
+}
+
+/** The full run follows the selected reviewer's available sections and language.
+ * Separate scoring blocks preserve subject evidence inside combined verbal sections.
+ * The full2 key leaves every earlier full~ attempt unchanged. */
+export function reviewerFullForm(exam:ExamId,seed:string):Form{
+ const sections:FormSection[]=[],missingSections:string[]=[];
+ for(const section of reviewerSections(exam)){
+  const practice=reviewerSectionForm(exam,section.id,seed);
+  if(!practice){missingSections.push(section.name);continue;}
+  for(const block of practice.sections)sections.push({...block,group:section.name,label:practice.sections.length>1?`${section.name} · ${SUBTEST_SHORT[block.subtest]}`:section.name});
+ }
+ return {id:`full2-${exam}-${seed}`,kind:'full',title:`${EXAMS[exam].name}: Full simulation`,seed,official:false,breakMinutes:BREAK_MINUTES,exam,missingSections,sections};
+}
 
 /** New keys pin the selected reviewer to the attempt. Legacy forms above stay unchanged.
  * Combined verbal sections retain their language/reading blocks for honest scoring. */
@@ -201,6 +225,10 @@ export function reviewerTopicForm(exam:ExamId,concept:string,seed:string):Form|u
 export function formFromKey(key:string):Form|undefined{
  if(!/^[a-z][a-z0-9]*~[\w-]+(?:\|[\w-]+)?$/.test(key))return undefined;
  const [kind,...rest]=key.split('~');const arg=rest.join('~');
+ if(kind==='full2'){
+  const [exam,seed]=arg.split('|');
+  return seed&&EXAM_IDS.includes(exam as ExamId)?reviewerFullForm(exam as ExamId,seed):undefined;
+ }
  if(kind==='section2'||kind==='topic2'){
   const [scope,seed]=arg.split('|'),cut=scope.indexOf('-'),exam=scope.slice(0,cut) as ExamId,target=scope.slice(cut+1);
   if(!seed||!EXAM_IDS.includes(exam))return undefined;
