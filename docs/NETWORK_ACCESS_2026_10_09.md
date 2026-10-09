@@ -84,12 +84,11 @@ https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions
 and its `/release.json` identifies source `fc9b3d93f0accb80793415bf8d19b0e806a93f8a`.
 
 The first fallback release was pinned to that reviewed commit. The owner subsequently
-authorized automatic releases from application `main`. The new
-`.github/workflows/github-pages.yml` runs tests, type checking and a static production
-build on each main push. A separate job publishes the checked output into the delivery
-repository's `site/` directory, triggering its GitHub Pages deployment. Keep the
-application repository as the source of truth; do not edit generated delivery files.
-See `GITHUB_PAGES_DEPLOYMENT.md` for verification and recovery details.
+authorized automatic releases from application `main`. The publishing repository's
+workflow now checks main every five minutes, skips unchanged commits and runs tests,
+type checking and the static build before deploying a new revision. GitHub can delay
+scheduled runs. Keep the application repository as the source of truth; no manual
+copy is required. See `GITHUB_PAGES_DEPLOYMENT.md` for verification and recovery.
 No new domain purchase or paid service was used.
 
 Live study groups use the existing backend. Its `study-groups` function was updated

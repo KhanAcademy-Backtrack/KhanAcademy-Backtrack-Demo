@@ -2,11 +2,12 @@
 
 ## Automatic GitHub Pages publication — 9 October 2026
 
-- [x] Replace the pinned source release with a workflow triggered by application `main` pushes.
-- [x] Gate publishing on tests, type checking and static build; separate credentials from application/dependency execution.
-- [ ] Configure the repository-scoped deployment credential and main-only environment; verify the complete push-to-Pages path and public release receipt.
+- [x] Replace the pinned source release with scheduled checks of application `main`, skipping unchanged commits.
+- [x] Gate publication on tests, type checking and static build; keep write tokens out of the application build job.
+- [x] Respect the repository's disabled-deploy-key policy; remove the unused push workflow and empty environment, using only GitHub's short-lived workflow tokens.
+- [ ] Verify new-revision publication and unchanged-revision skipping in actual workflow runs, including the public release receipt.
 
-Implementation and recovery: `GITHUB_PAGES_DEPLOYMENT.md`.
+Implementation, GitHub scheduling limits and recovery: `GITHUB_PAGES_DEPLOYMENT.md`.
 
 ## School network access — 9 October 2026
 
