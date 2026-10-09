@@ -16,6 +16,7 @@ import {lessonQuizFor,verifiedLessonSegment,type LessonQuiz as Quiz} from '@/con
 import {activeLessonCheck} from '@/lib/program/lesson-checks';
 import {readingsFor,readingLabel} from '@/lib/program/lesson-readings';
 import {clipTime} from '@/lib/video-clips';
+import {LessonKhanPractice} from './KhanStudyPath';
 const LessonQuiz=dynamic(()=>import('./LessonQuiz').then(m=>m.LessonQuiz));
 const LessonPrediction=dynamic(()=>import('./LessonQuiz').then(m=>m.LessonPrediction));
 
@@ -47,8 +48,8 @@ export function LessonMaterial({lesson,nextHref,onNext}:{lesson:TopicLesson;next
   </section>)}</div>:<p className="rounded-lg bg-mint px-4 py-3 text-sm text-ink-soft">No matching Khan Academy video has been verified for this topic.</p>}
   {quiz&&<LessonQuiz lesson={lesson} quiz={quiz} nextHref={nextHref} onNext={onNext} workedExampleId={workedExampleId} onRewatch={segment?()=>setRewatch(r=>r+1):undefined}/>}
   {g?<section aria-label="Focused Explanation" className="grid gap-4">
-   <div><h3 className="text-lg font-extrabold"><Headline>The Idea</Headline></h3><p className="mt-2 max-w-3xl leading-relaxed"><Rich>{g.idea}</Rich></p></div>
-   <div id={workedExampleId} className="scroll-mt-28 rounded-xl bg-sky p-4"><h3 className="font-bold"><Headline>Worked Example</Headline></h3><p className="mt-2 font-serif text-lg leading-relaxed"><Rich>{g.example}</Rich></p></div>
+   <div><p className="mb-2 text-xs font-bold text-ink-soft"><Headline>Khanpanion Written Lesson</Headline></p><h3 className="text-lg font-extrabold"><Headline>The Idea</Headline></h3><p className="mt-2 max-w-3xl leading-relaxed"><Rich>{g.idea}</Rich></p></div>
+   <div id={workedExampleId} className="scroll-mt-28 rounded-xl bg-sky p-4"><h3 className="font-bold"><Headline>Khanpanion Worked Example</Headline></h3><p className="mt-2 font-serif text-lg leading-relaxed"><Rich>{g.example}</Rich></p></div>
    <div className="rounded-xl bg-mint p-4"><h3 className="font-bold"><Headline>Explain It Yourself</Headline></h3><p className="mt-2 leading-relaxed"><Rich>{g.question}</Rich></p>
     <button type="button" className={cx(btn.text,'mt-2')} aria-expanded={revealed} aria-controls={lesson.id+'-answer'} onClick={()=>setRevealed(r=>!r)}><Headline>{revealed?'Hide Explanation':'Show Explanation'}</Headline></button>
     {revealed&&<p id={lesson.id+'-answer'} className="mt-2 leading-relaxed"><Rich>{g.answer}</Rich></p>}
@@ -92,7 +93,7 @@ export function TopicLessonPage({lesson}:{lesson:TopicLesson}){
    <Link href={parent} className={btn.quiet}><Headline>← {lesson.exam?'Back to the Reviewer':'Back to '+lesson.section}</Headline></Link>
    {lesson.saveKey&&<button type="button" className={btn.chip} aria-pressed={saved} onClick={()=>update(s=>({...s,bookmarks:s.bookmarks.includes(lesson.saveKey!)?s.bookmarks.filter(k=>k!==lesson.saveKey):[...s.bookmarks,lesson.saveKey!]}))}><Headline>{saved?'Saved':'Save Lesson'}</Headline></button>}
   </div>
-   <Sheet><LessonMaterial key={lesson.id} lesson={lesson} nextHref={next?href(next.id):undefined}/></Sheet>
+   <Sheet><LessonMaterial key={lesson.id} lesson={lesson} nextHref={next?href(next.id):undefined}/>{!lessonQuizFor(lesson.id)&&<LessonKhanPractice key={lesson.id+'-practice'} lesson={lesson}/>}</Sheet>
    {(lesson.concepts.length>0||subject?.buildsOn.length)&&<Sheet className="mt-5"><h2 className="text-lg font-extrabold"><Headline>{subject?'Useful Foundations':'Continue With Practice'}</Headline></h2>
     {lesson.concepts.length>0&&<p className="mt-1 text-sm text-ink-soft">These broader topic checks include this idea and related skills.</p>}
     <div className="mt-3 flex flex-wrap gap-2">{(subject?.buildsOn??lesson.concepts).map(c=>CONCEPT_BY_ID[c]&&<Link key={c} href={'/learn/'+c+'#practice'} className={btn.ghost}><Headline>{CONCEPT_BY_ID[c].title}</Headline></Link>)}</div>

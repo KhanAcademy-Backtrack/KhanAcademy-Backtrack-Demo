@@ -1,5 +1,6 @@
 'use client';
 import {Headline} from './Headline';
+import Link from 'next/link';
 import {useMemo,useRef,useState,useEffect} from 'react';
 import {useProgram} from './ProgramProvider';
 import {Sheet,Wordmark,btn,cx} from './ui';
@@ -25,7 +26,7 @@ const tile='rounded-xl border-2 border-line-strong bg-white text-navy shadow-[0_
 const cta='min-h-12 whitespace-nowrap border-b-4 border-green-deep text-base active:translate-y-[2px] active:border-b-2 max-[359px]:px-3 motion-reduce:active:translate-y-0';
 const hours=(m:number)=>m<60?`${m} min`:`${Math.floor(m/60)} h${m%60?` ${m%60} min`:''}`;
 
-export function GoalSetup({onSaved,onCancel,onBrowse,entry=false,modal=false}:{onSaved:()=>void;onCancel?:()=>void;onBrowse?:()=>void;entry?:boolean;modal?:boolean}){
+export function GoalSetup({onSaved,onCancel,onBrowse,onKhan,entry=false,modal=false}:{onSaved:()=>void;onCancel?:()=>void;onBrowse?:()=>void;onKhan?:()=>void;entry?:boolean;modal?:boolean}){
  const {state:s,update,today,profileName,setProfileName}=useProgram();
  const askName=!s.setup,totalSteps=askName?4:3;
  const [name,setName]=useState(profileName===DEFAULT_PROFILE_NAME?'':profileName);
@@ -67,8 +68,9 @@ export function GoalSetup({onSaved,onCancel,onBrowse,entry=false,modal=false}:{o
  const close=onCancel&&<button aria-label="Close personalization" onClick={onCancel} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-0 text-navy hover:bg-sky focus-visible:outline-2 focus-visible:outline-navy"><svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>;
  const intro=<>
   <div className="flex items-center gap-3"><span className="shrink-0"><Companion size={modal?64:48} pose={step===0?'wave':step===1?'curious':'encourage'}/></span><p className="relative min-w-0 rounded-xl border-2 border-line bg-white px-3.5 py-2.5 text-[15px] font-semibold leading-snug text-navy before:absolute before:-left-[9px] before:top-1/2 before:h-4 before:w-4 before:-translate-y-1/2 before:rotate-45 before:border-b-2 before:border-l-2 before:border-line before:bg-white">{note}</p></div>
-  <p className="mt-6 text-sm font-semibold text-ink-soft">{kicker}</p>
+  <p className="mt-6 text-sm font-semibold text-ink-soft"><Headline>{step===0?'Your Study Companion for Khan Academy':kicker}</Headline></p>
   <Title ref={heading} id={modal?'goal-dialog-title':'goal-page-title'} tabIndex={-1} className={cx('mt-1 font-extrabold leading-tight tracking-[-.03em] focus:outline-none',modal?'text-[1.75rem] sm:text-4xl':'text-2xl')}>{title}</Title>
+  {step===0&&<p className="mt-2 text-sm leading-relaxed text-ink-soft">Khan Academy lessons, focused Khanpanion explanations and fresh checks, connected to your goal.</p>}
  </>;
  const body=<>
   {step===0?<div className="mt-6 grid gap-3">{GOALS.map(g=><button key={g.id} aria-label={g.title} aria-pressed={goal===g.id} onClick={()=>{if(entry&&s.setup?.goal===g.id){onSaved();return;}setGoal(g.id);setStep(1);}} className={cx(tile,'flex min-h-[4.75rem] w-full items-center gap-4 px-4 py-3 text-left')}><span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-mint text-navy"><GoalIcon goal={g.id}/></span><span className="min-w-0 flex-1"><span className="block text-[17px] font-bold"><Headline>{g.label}</Headline></span><span className="mt-0.5 block text-sm leading-snug text-ink-soft">{entry&&s.setup?.goal===g.id?'Continue with your saved goal and routine.':g.detail}</span></span><span aria-hidden="true" className="text-2xl text-navy/45">›</span></button>)}</div>
@@ -82,6 +84,7 @@ export function GoalSetup({onSaved,onCancel,onBrowse,entry=false,modal=false}:{o
     <label className="grid gap-2 font-bold">Usual study time<input ref={timeInput} type="time" className={cx(field,'font-normal')} value={time} onChange={e=>setTime(e.target.value)} onInput={e=>setTime(e.currentTarget.value)} onBlur={e=>setTime(e.currentTarget.value)}/></label>
     <div className="min-w-0 rounded-xl border-2 border-line p-3 sm:p-4"><div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"><h3 className="text-lg font-bold"><Headline>Your first study week</Headline></h3><p aria-live="polite" className="rounded-lg bg-mint px-2.5 py-1 text-sm font-bold text-navy">{days.length} {days.length===1?'session':'sessions'} · {hours(days.length*minutes)} a week</p></div><p className="mt-1 mb-2 text-sm text-ink-soft">Tap a day to see the sessions your choices create.</p><StudyWeek items={items} today={today} preview/></div>
    </div>:<form className="mt-6" onSubmit={e=>{e.preventDefault();save();}}><ProfileNameField value={name} onChange={setName}/></form>}
+  {step===0&&<Link href="/khan" onClick={onKhan} className={cx(btn.text,'mt-3 w-full justify-center text-sm')}><Headline>Already Learning on Khan Academy? <span aria-hidden="true">→</span></Headline></Link>}
   {error&&<p role="alert" className="mt-4 font-semibold text-navy">{error}</p>}
  </>;
  const actions=step===0?onBrowse&&<button aria-label="I’m just browsing" onClick={onBrowse} className={cx(tile,'flex min-h-12 w-full items-center justify-center gap-2 px-4 py-2 text-center')}><span className="font-bold"><Headline>I’m just browsing</Headline></span><span className="hidden text-sm text-ink-soft min-[360px]:inline">Show me around. No setup needed.</span></button>

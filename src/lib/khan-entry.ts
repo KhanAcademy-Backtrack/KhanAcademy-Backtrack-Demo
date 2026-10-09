@@ -17,5 +17,6 @@ const focusedLearning:Partial<Record<Topic,{title:string;url:string}>>={
 export const KHAN_ENTRIES:KhanEntry[]=specs.map(s=>{const material=khanMaterial({...initialRecovery(s.topic),active:s.skill}),practice=material.resources.find(r=>r.kind==='exercise')!;return {...s,learning:focusedLearning[s.topic]??{title:material.title,url:material.source},practice:{title:practice.title,url:practice.url}};});
 export const khanEntry=(id?:string)=>KHAN_ENTRIES.find(e=>e.id===id);
 function canonical(raw:string){try{const u=new URL(raw.trim());if(u.protocol!=='https:'||!['www.khanacademy.org','khanacademy.org'].includes(u.hostname)||u.username||u.password||u.port)return;return decodeURIComponent(u.pathname).replace(/\/+$/,'');}catch{return;}}
+export {canonical as canonicalKhanPath};
 export function resolveKhanUrl(raw:string){const path=canonical(raw);if(!path)return;return KHAN_ENTRIES.find(e=>[e.learning.url,e.practice.url,...khanMaterial({...initialRecovery(e.topic),active:e.skill}).resources.map(r=>r.url)].some(u=>canonical(u)===path));}
 export function entrySkills(entry:KhanEntry){const ids=new Set<Skill>();const walk=(skill:Skill)=>{if(ids.has(skill))return;ids.add(skill);for(const parent of skillDependencies(skill,entry.topic))walk(parent);};walk(entry.skill);return ORDER.filter(s=>ids.has(s));}

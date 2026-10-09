@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import {validDay,type CalEvent} from '@/lib/program/store';
 import {learnerGoal} from '@/lib/program/personalization';
-import {CalendarGuide,ChangeGoalButton} from './ProgramTourProvider';
+import {ChangeGoalButton} from './ProgramTourProvider';
 import {useEffect,useMemo,useState} from 'react';
 import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
@@ -41,7 +41,6 @@ export function CalendarView(){
  return <>
   <PageBand title="Calendar" lead="Keep your study sessions and exam dates together. Move a session when your week changes." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}><Headline>Download calendar</Headline></button><ChangeGoalButton className={btn.quiet} label="Change my study routine"/></div>}/>
   <div className={pageBody}>
-   <CalendarGuide/>
    {undo&&<div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-mint p-4 text-navy"><p>Removed from your calendar.</p><button className={btn.text} onClick={()=>{update(p=>({...p,events:[...p.events.filter(e=>e.id!==undo.item.id),...(undo.previous?[undo.previous]:[])]}));setUndo(undefined);}}><Headline>Undo</Headline></button></div>}
    <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
     <Sheet className="p-3 sm:p-6">

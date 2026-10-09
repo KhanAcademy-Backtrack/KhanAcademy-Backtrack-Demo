@@ -51,7 +51,7 @@ export async function profileJourneys({scenario,origin,root}){
   assert.deepEqual((await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY)).setup,before.setup);
  },{width,height:884});
  await scenario('program first-entry optional profile name phone back and skip',async page=>{
-  await page.goto(origin);await page.getByRole('button',{name:'Prepare for an entrance exam',exact:true}).click();await page.getByRole('button',{name:'Continue',exact:true}).click();
+  await page.goto(origin);const entry=page.getByRole('dialog');await entry.getByRole('heading',{name:'What would you like to work on?',exact:true}).waitFor();await entry.getByRole('button',{name:'Prepare for an entrance exam',exact:true}).click();await entry.getByRole('button',{name:'Continue',exact:true}).click();
   await page.getByRole('button',{name:'45 min',exact:true}).click();await page.getByLabel('Usual study time',{exact:true}).fill('20:30');await page.getByRole('button',{name:'Continue',exact:true}).click();
   await page.getByRole('heading',{name:'What should we call you?',exact:true}).waitFor();assert.equal(await page.getByRole('progressbar').getAttribute('aria-valuetext'),'Step 4 of 4');
   await page.getByLabel('Your name (optional)',{exact:true}).fill('Draft name');await overflow(page);await page.screenshot({path:path.join(dir,'optional-name-short-phone.png'),fullPage:false});

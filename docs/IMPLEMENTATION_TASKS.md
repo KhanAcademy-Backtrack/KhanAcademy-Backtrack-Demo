@@ -1,5 +1,20 @@
 # Complete study-companion implementation checklist
 
+## Khan Academy start on Home — 9 October 2026
+
+Owner scope: current main, preference-based Khan video recommendations on Home, and return Home after the guide. Preview reviewed; owner approved the main commit after the copy and border refinements. Details: KHAN_HOME_START_2026_10_09.md.
+
+- [x] Fetch and incorporate `origin/main` at `66b4941`, preserving existing local work and resolving overlapping edits.
+- [x] Add “Let’s get you started” with a paused reviewed Khan video, actual source/title, full lesson action and topic selection.
+- [x] Follow saved class-topic, college-foundation and named-exam preferences; show a written fallback for unmatched topics.
+- [x] Return to Home after finishing the guide, including when opened from Calendar or Exam dates under Plan.
+- [x] Apply guide feedback: use Next at the calendar step and keep the guide running without a calendar detour.
+- [x] Apply preview feedback: Khan start first, then heatmap and momentum, then shortcuts and study cards.
+- [x] Pass 259 unit tests, TypeScript and the 690-page production export; initial 12 Home/guide browser checks pass.
+- [x] Finish regression checks and all 32 affected Home/guide browser journeys, then refresh and open the local preview for owner review.
+- [x] Obtain owner approval of the preview and authorization to commit to main; keep the older paused audit work uncommitted.
+- [x] Validate the isolated approved commit without the paused audit: 228 unit tests, TypeScript, 690 static pages and all 32 affected Home/guide browser journeys pass.
+
 ## Automatic GitHub Pages publication — 9 October 2026
 
 - [x] Replace the pinned source release with scheduled checks of application `main`, skipping unchanged commits.

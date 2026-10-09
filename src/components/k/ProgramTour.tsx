@@ -16,7 +16,7 @@ function tourSteps(state:ReturnType<typeof useProgram>['state'],browsing:boolean
  if(browsing)return [
  {tab:'today',title:'Look around first.',body:'You can browse without setting a routine or answering questions. Choose a subject, read a topic or explore an interactive idea.',preview:['Browse by subject','Read an explanation','Try an idea if you want'],href:'/',action:'Open the topic browser'},
  {tab:'study',title:'Find something useful.',body:'Study holds the CET reviewers, college courses and every practice tool. Search for a topic, or save one with the circle beside it. Practice is there when you want it; it is not required to browse.',preview:['Search a topic','Save a topic for later','Read at your own pace'],href:'/reviewer',action:'Open Study'},
- {tab:'calendar',title:'Keep your own dates here.',body:'The calendar lives under Plan, with exam dates, and you can use it without a study plan. Add a date from your week, edit it or just look around. You can continue the guide without adding anything.',preview:['Pick a day','Add an event if you want','Continue whenever you are ready'],href:'/calendar',action:'Open the calendar'},
+ {tab:'calendar',title:'Keep your own dates here.',body:'The calendar lives under Plan, with exam dates, and you can use it without a study plan. Add a date from your week whenever you like. For now, choose Next to keep going through the guide.',preview:['Your own dates','Optional study sessions','Edit or move events later'],href:'/calendar',action:'Open the calendar'},
  {tab:'today',title:'Choose a goal whenever you want.',body:'The home page keeps your subject browser close. Use Choose my goal when you want a personalized routine. Guide stays in the header if you need another look.',preview:['Keep browsing','Choose a goal later','Your existing work stays saved'],href:'/',action:'Return to browsing'}
  ];
  const goal=learnerGoal(state),label=goalLabel(state),setup=state.setup,topic=setup?.concept,program=PROGRAM_BY_ID[state.bridgeProgram??''];
@@ -27,16 +27,16 @@ function tourSteps(state:ReturnType<typeof useProgram>['state'],browsing:boolean
   :{title:'Your CET reviewer is in Study.',body:'Study opens on the reviewer for your exam. Each section lists its topics, and each topic opens to its own lesson. Practice exams and daily recall sit beside it.',preview:['Your exam’s sections','A lesson for each topic','Practice exams'],href:'/reviewer',action:'Open the CET reviewer'};
  const fix=goal==='exam'?'/start/cet':goal==='college'?'/start/college':'/start';
  return [
-  {tab:'today',title:'This space is yours.',body:'You chose '+label+'. Home brings your next topic, your study rhythm and your week together.',preview:[label,(setup?.weekdays.length??3)+' study days a week',(setup?.minutes??30)+' minutes per session'],href:'/',action:'Open my home page'},
+  {tab:'today',title:'This space is yours.',body:'You chose '+label+'. Home suggests a Khan Academy video for your starting topic and keeps your study rhythm and week close by.',preview:[label,'A Khan Academy video to start with',(setup?.weekdays.length??3)+' study days a week'],href:'/',action:'Open my home page'},
   {tab:'study',...focus},
-  {tab:'calendar',title:'Use your real study calendar.',body:'Plan holds your calendar and your exam dates. Your chosen days already have sessions. Pick a date, edit a session or add something from your own week. Let’s try the calendar itself.',preview:['Pick a day','Edit or add a session','Move it when plans change'],href:'/calendar',action:'Open my calendar'},
+  {tab:'calendar',title:'Use your real study calendar.',body:'Plan holds your calendar and your exam dates. Your chosen days already have sessions. You can edit a session or add something from your own week later. Choose Next to keep going through the guide.',preview:['Your study sessions','Edit or add a session later','Move it when plans change'],href:'/calendar',action:'Open my calendar'},
   {tab:'study',title:'Come back when you need help.',body:'When something does not click, open Find my missing skill in Study. BACKTRACK checks the earlier skills your answers point to, explains the step that needs support, then brings you back with fresh questions.',preview:['Find my missing skill','Practice exams and daily recall','Study packs'],href:fix,action:'Find my missing skill'}
  ];
 }
 type Rect={x:number;y:number;w:number;h:number};
 
 /** The real navigation is highlighted; the page stays inert while the tour is open. */
-export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:()=>void;step:number;onStep:(step:number)=>void;onCalendar:()=>void;browsing:boolean}){
+export function ProgramTour({onClose,onFinish,step,onStep,browsing}:{onClose:()=>void;onFinish:()=>void;step:number;onStep:(step:number)=>void;browsing:boolean}){
  const [rect,setRect]=useState<Rect>(),[position,setPosition]=useState({top:90,left:14});
  const dialog=useRef<HTMLDivElement>(null),heading=useRef<HTMLHeadingElement>(null),{off}=useMotionPolicy(),{state}=useProgram();
  const STEPS=tourSteps(state,browsing),current=STEPS[Math.min(step,STEPS.length-1)],href=current.href;
@@ -72,8 +72,8 @@ export function ProgramTour({onClose,step,onStep,onCalendar,browsing}:{onClose:(
     <div className="mt-4 rounded-xl bg-sky p-4"><p className="text-xs font-semibold text-ink-soft">On this page</p><ul aria-label="What you can do" className="mt-3 grid gap-2">{current.preview.map(line=><li key={line} className="flex items-start gap-3 text-sm font-semibold"><span aria-hidden="true" className="mt-1.5 h-1 w-1 shrink-0 bg-navy/40"/>{line}</li>)}</ul></div>
     {current.tab!=='calendar'&&<Link href={href} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy focus-visible:outline-2 focus-visible:outline-navy" onClick={onClose}><span className="border-b-2 border-green pb-0.5">{current.action} <span aria-hidden="true">→</span></span></Link>}
    </motion.div>
-   <div className="sticky bottom-0 z-10 mt-3 flex items-center gap-2 border-t border-navy/10 bg-white pb-2 pt-4">{step>0&&<button className={btn.ghost} onClick={()=>onStep(step-1)}><Headline>Back</Headline></button>}<button className={cx(btn.primary,'ml-auto')} onClick={()=>current.tab==='calendar'?onCalendar():step===STEPS.length-1?onClose():onStep(step+1)}><Headline>{current.tab==='calendar'?'Try my calendar':step===STEPS.length-1?'Finish guide':'Next'}</Headline></button></div>
-   <p className="mt-3 text-right text-xs leading-relaxed text-ink-soft">Open Guide any time from the header.</p>
+   <div className="sticky bottom-0 z-10 mt-3 flex items-center gap-2 border-t border-navy/10 bg-white pb-2 pt-4">{step>0&&<button className={btn.ghost} onClick={()=>onStep(step-1)}><Headline>Back</Headline></button>}<button className={cx(btn.primary,'ml-auto')} onClick={()=>step===STEPS.length-1?onFinish():onStep(step+1)}><Headline>{step===STEPS.length-1?'Finish guide':'Next'}</Headline></button></div>
+   <p className="mt-3 text-right text-xs leading-relaxed text-ink-soft">{step===STEPS.length-1?'Finish to return Home. ':''}Open Guide any time from the header.</p>
   </div>
  </div>,document.body);
 }

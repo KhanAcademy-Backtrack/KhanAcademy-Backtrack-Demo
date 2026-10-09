@@ -1,7 +1,7 @@
 'use client';
 import {Headline} from './Headline';
 import Link from 'next/link';
-import {useEffect,useId,useRef,useState} from 'react';
+import {useEffect,useId,useMemo,useRef,useState} from 'react';
 import {useProgram} from './ProgramProvider';
 import {ChangeGoalButton} from './ProgramTourProvider';
 import {Sheet,btn,cx} from './ui';
@@ -10,13 +10,16 @@ import {DailyPractice} from './DailyPractice';
 import {ReviewTopics} from './ReviewTopics';
 import {HomeShortcuts} from './StudyTools';
 import {FeatureCard,Section,WeekArt,glyph} from './HomeCards';
-import {examTargets,firstExam,goalLabel,learnerGoal,targetDay} from '@/lib/program/personalization';
-import {personalFocus,daysBetween,parseDay} from '@/lib/program/planner';
+import {examTargets,firstExam,goalLabel,learnerGoal} from '@/lib/program/personalization';
+import {personalFocus} from '@/lib/program/planner';
 import {calendarItems} from '@/lib/program/calendar';
 import {PROGRAM_BY_ID} from '@/lib/program/bridge';
 import {TOPICS} from '@/lib/recovery';
 import {Rich} from '@/components/math/Math';
 import {HomeWelcome,StudyActivity} from './HomeDashboard';
+import {freshCheckKey} from '@/lib/program/attempts';
+import {KhanPracticeResume} from './KhanStudyPath';
+import {KhanGettingStarted} from './KhanGettingStarted';
 
 /** The learner's recorded study rhythm, then a useful personal next step. */
 export function PersonalHome(){
@@ -25,7 +28,8 @@ export function PersonalHome(){
  const pickerButton=useRef<HTMLButtonElement>(null);
  useEffect(()=>{if(topicPickerOpen){const input=document.getElementById(topicPickerId)?.querySelector('input');input?.focus({preventScroll:true});input?.scrollIntoView({block:'nearest'});}},[topicPickerOpen,topicPickerId]);
  const closePicker=()=>{setTopicPickerOpen(false);pickerButton.current?.focus();};
- const focus=personalFocus(s)[0],concept=focus?.concept,label=goalLabel(s),target=targetDay(s),seed=today.replace(/-/g,'');
+ const focus=personalFocus(s)[0],concept=focus?.concept,label=goalLabel(s),seed=today.replace(/-/g,'');
+ const checkKey=useMemo(()=>concept?freshCheckKey({attempts:s.attempts},'topic',concept.id,today):undefined,[s.attempts,concept?.id,today]);
  const items=calendarItems(s,today,false),program=PROGRAM_BY_ID[s.bridgeProgram??''],targets=examTargets(s);
  if(!concept)return <div className="mx-auto max-w-3xl p-5 text-navy"><h1 className="text-2xl font-extrabold"><Headline>Choose your next topic</Headline></h1><ChangeGoalButton className={cx(btn.ghost,'mt-5')}/></div>;
  const engine=concept.engine;
@@ -38,16 +42,17 @@ export function PersonalHome(){
  return <div className="home-dashboard">
   <HomeWelcome title={label}>
    <p>{setup.weekdays.length} study days a week · {setup.minutes} minutes a session · Around {setup.time}</p>
-   {target&&<p>{target>today?`${daysBetween(today,target)} days to your planning target`:'Your planning target has arrived'} · {parseDay(target).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'})}</p>}
   </HomeWelcome>
-  <HomeShortcuts className="home-shortcuts"/>
+  <KhanGettingStarted key={concept.id+'-'+(firstExam(s)??'general')} concept={concept.id} exam={firstExam(s)} reason={goal==='topic'?'You chose '+concept.title.toLowerCase()+'. Here’s a Khan Academy video to begin with.':goal==='college'?'Start with a foundation for '+label+'. This suggestion follows your chosen field.':'Here’s a starting topic for '+label+'. Choose another topic whenever you like.'}/>
   <StudyActivity/>
+  <KhanPracticeResume/>
+  <HomeShortcuts className="home-shortcuts"/>
   <div className="home-actions-grid">
   <div className="home-content-grid home-next-actions">
   <div className="home-content-primary">
   <Section label={goal==='topic'?'Your chosen topic':goal==='exam'?'Your next topic':'A foundation to start with'}>
    <FeatureCard className="home-topic-feature" data-program-tour-content="today" icon={glyph.book} title={concept.title} body={<Rich>{concept.blurb}</Rich>}
-    action={<><Link href={`/learn/${concept.id}`} className={btn.primary}><Headline>Learn this topic</Headline></Link>{goal==='topic'&&<Link href={`/mock/take?f=topic~${concept.id}|${seed}&mode=practice`} className={btn.ghost}><Headline>Try a topic check</Headline></Link>}</>}>
+    action={<><Link href={`/learn/${concept.id}`} className={btn.primary}><Headline>Learn This Topic</Headline></Link><Link href={`/mock/take?f=${checkKey}&mode=practice`} className={btn.ghost}><Headline>Try a Fresh Check</Headline></Link></>}>
     <p className="mt-3 text-sm text-ink-soft">{goal==='topic'?'This is the topic you chose.':focus.misses>0?`Your mistake notebook has ${focus.misses} unresolved ${focus.misses===1?'question':'questions'} on this topic.`:focus.accuracy!==undefined?`Your recorded answers on this topic were ${focus.accuracy}% correct. This is one place to revisit.`:'This is an unstarted foundation for your goal. A check can help you decide whether it needs more time.'}</p>
     {goal!=='topic'&&<div className="mt-4 border-t border-line pt-2"><button ref={pickerButton} type="button" aria-expanded={topicPickerOpen} aria-controls={topicPickerId} className="min-h-11 py-2 text-left text-sm font-semibold" onClick={()=>setTopicPickerOpen(open=>!open)}><span aria-hidden="true">{topicPickerOpen?'▾':'▸'} </span>Choose a different topic</button></div>}
     <Link href="/reviewer" className={cx(btn.text,'mt-1 self-start text-sm')}><Headline>{goal==='exam'?'Open the full CET reviewer':'Browse the reviewer'}</Headline></Link>

@@ -9,14 +9,18 @@ import {HomeShortcuts} from './StudyTools';
 import {FeatureCard,IdeaArt,RouteArt,Section,glyph} from './HomeCards';
 import {CONCEPTS} from '@/lib/program/concepts';
 import {HomeWelcome,StudyActivity} from './HomeDashboard';
+import {KhanPracticeResume} from './KhanStudyPath';
+import {KhanGettingStarted} from './KhanGettingStarted';
 const topics=CONCEPTS.map(c=>({id:c.id,label:c.title,category:c.subtest==='science'?c.area:c.subtest==='math'?'Math':c.subtest==='language'?'Language':'Reading',search:c.area}));
 
 /** Browsing home: no goal needed. A topic finder first, then two ways to try something. */
 export function BrowseHome(){const router=useRouter();return <div className="home-dashboard">
  <HomeWelcome title="Explore at your own pace"><p>Follow a question, try an idea, or find your next topic. There’s room to take your time.</p></HomeWelcome>
+ <KhanGettingStarted/>
+ <StudyActivity/>
+ <KhanPracticeResume/>
  <HomeShortcuts className="home-shortcuts"/>
  <Section label="Find a topic"><Sheet className="p-4 sm:p-6"><h2 className="text-xl font-extrabold"><Headline>What are you curious about?</Headline></h2><TopicPicker items={topics} onChoose={id=>{if(id)router.push('/learn/'+id);}}/></Sheet></Section>
- <StudyActivity/>
  <div className="home-content-grid">
  <Section label="Try an idea"><FeatureCard icon={glyph.idea} title="Try an idea you can move" body="Explore graphs, mixtures and other interactive explanations." art={<IdeaArt/>} action={<Link href="/explore" className={btn.primary}><Headline>Explore an idea</Headline></Link>}/></Section>
  <Section label="Stuck on something?"><FeatureCard icon={glyph.route} title="Find and fix a gap" body="BACKTRACK checks the earlier step that might be missing, repairs it, then brings you back to your goal with fresh questions." art={<RouteArt/>} action={<Link href="/start" className={btn.ghost}><Headline>Choose a route</Headline></Link>}/></Section>

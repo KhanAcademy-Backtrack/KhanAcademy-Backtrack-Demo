@@ -7,6 +7,8 @@ import {plainText} from './notation.ts';
 import {PROGRAMS} from './program/bridge.ts';
 import {SUBJECTS,KIND_LABEL} from './program/college-courses.ts';
 import {TOPIC_LESSONS,lessonHref} from './program/topic-lessons.ts';
+import {resolveKhanUrl} from './khan-entry.ts';
+import {resolveKhanLessonUrl} from './program/khan-integration.ts';
 
 /** One place a learner can go from the header search. Everything here is a real,
  *  statically exported route; nothing is fetched, so search works offline. */
@@ -25,6 +27,7 @@ const PAGES:[string,string,string,string][]=[
  ['Explore ideas','Interactive explanations you can move','/explore','explore interactive ideas'],
  ['Courses','College subjects for each field, with Khan Academy videos and units','/bridge','courses college first year subjects foundations program degree field bridge'],
  ['Study','Practice exams, BACKTRACK, study tools and the reviewer','/reviewer','study reviewer chapters handbook print tools'],
+ ['Start from a Khan Academy activity','Choose a reviewed lesson or practice activity, or paste its Khan link','/khan','khan academy lesson lessons video videos practice activity activities link url'],
 ];
 
 export const SEARCH_INDEX:SearchEntry[]=[
@@ -41,6 +44,10 @@ export const SEARCH_INDEX:SearchEntry[]=[
 /** Every word of the query must appear. Title matches rank first, then title
  *  prefixes, then matches found only in the description. */
 export function searchSite(query:string,limit=8):SearchEntry[]{
+ const entry=resolveKhanUrl(query);
+ if(entry)return [{kind:'Page',title:entry.title,detail:'Matched Khan Academy activity · Build your session',href:'/khan?url='+encodeURIComponent(query.trim()),words:query}];
+ const lesson=resolveKhanLessonUrl(query);
+ if(lesson)return [{kind:'Topic',title:lesson.title,detail:'Matched Khan Academy video · Open its topic lesson',href:'/khan?url='+encodeURIComponent(query.trim()),words:query}];
  const words=query.toLowerCase().split(/\s+/).filter(Boolean);
  if(!words.length)return [];
  const scored:{e:SearchEntry;score:number;i:number}[]=[];
