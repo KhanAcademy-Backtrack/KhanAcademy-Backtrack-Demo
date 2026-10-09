@@ -20,7 +20,7 @@ export async function homeJourneys({scenario,origin,root}){
  for(const width of [390,1100,1440]){
   await scenario(`program home activity and keyboard ${width}`,async page=>{
    await seed(page,{activity:true});await page.getByRole('heading',{name:'General CET review',exact:true}).waitFor();
-   assert.ok(await page.evaluate(()=>document.querySelector('[data-study-activity]').getBoundingClientRect().bottom<document.querySelector('[data-program-tour-content="today"]').getBoundingClientRect().top),'Heatmap and momentum precede the next topic');
+   assert.ok(await page.evaluate(()=>{const start=document.querySelector('[data-khan-getting-started]').getBoundingClientRect(),activity=document.querySelector('[data-study-activity]').getBoundingClientRect(),today=document.querySelector('[data-program-tour-content="today"]').getBoundingClientRect();return start.bottom<=activity.top&&activity.bottom<=today.top;}),'Khan starts Home, followed by activity before the other study cards');
    assert.ok(await page.locator('.home-heatmap button[data-level="1"]').count()>0);
    assert.equal(await page.locator('.home-heatmap button[tabindex="0"]').count(),1);
    const cell=page.locator('.home-heatmap button[data-today="true"]');await cell.focus();await cell.press('ArrowLeft');

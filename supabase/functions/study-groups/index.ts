@@ -1,6 +1,6 @@
 // Runtime dependencies: platform fetch, Web Crypto and Deno only.
 declare const Deno:{env:{get:(name:string)=>string|undefined};serve:(handler:(request:Request)=>Promise<Response>)=>void};
-const allowed=new Set(['https://khanpanion.vercel.app','https://dunlo.vercel.app','https://backtrack-learning.vercel.app','https://backtrack-harrydaks.vercel.app','http://127.0.0.1:3050','http://127.0.0.1:3063','http://localhost:3047']);
+const allowed=new Set(['https://khanacademy-backtrack.github.io','https://khanpanion.vercel.app','https://dunlo.vercel.app','https://backtrack-learning.vercel.app','https://backtrack-harrydaks.vercel.app','http://127.0.0.1:3050','http://127.0.0.1:3063','http://localhost:3047']);
 const hex=(bytes:Uint8Array)=>[...bytes].map(b=>b.toString(16).padStart(2,'0')).join('');
 const hash=async(value:string)=>hex(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))));
 const code=(bytes=crypto.getRandomValues(new Uint8Array(6)))=>{const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return [...bytes].slice(0,6).map(b=>chars[b%chars.length]).join('');};

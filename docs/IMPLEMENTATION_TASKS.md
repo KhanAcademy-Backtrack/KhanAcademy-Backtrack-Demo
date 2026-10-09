@@ -6,6 +6,44 @@
 - [x] Align the browsing Home card and action with “Find my missing skill”, retaining `/start` and the existing recovery behavior.
 - [x] Keep the entire illustration visible on phones and narrow cards, with no cropped nodes or unreadably scaled labels. The graphic is illustrative and writes no learner evidence.
 - [x] Verify 320, 390, 640, 820 and 1440 px layouts, contained labels, no horizontal overflow, keyboard navigation to the missing-skills page and no browser errors. Type checking, the 690-page production build and the existing browsing-Home regression against that export pass.
+- [x] Integrate the approved graphic and four Home shortcuts with current main, preserving its Khan start section and publishing workflows. The merged version passes 228 unit tests (one existing content skip), type checking, the 690-page build, 35 affected Home/guide browser checks and two additional phone/desktop card and shortcut checks.
+
+## Khan Academy start on Home — 9 October 2026
+
+Owner scope: current main, preference-based Khan video recommendations on Home, and return Home after the guide. Preview reviewed; owner approved the main commit after the copy and border refinements. Details: KHAN_HOME_START_2026_10_09.md.
+
+- [x] Fetch and incorporate `origin/main` at `66b4941`, preserving existing local work and resolving overlapping edits.
+- [x] Add “Let’s get you started” with a paused reviewed Khan video, actual source/title, full lesson action and topic selection.
+- [x] Follow saved class-topic, college-foundation and named-exam preferences; show a written fallback for unmatched topics.
+- [x] Return to Home after finishing the guide, including when opened from Calendar or Exam dates under Plan.
+- [x] Apply guide feedback: use Next at the calendar step and keep the guide running without a calendar detour.
+- [x] Apply preview feedback: Khan start first, then heatmap and momentum, then shortcuts and study cards.
+- [x] Pass 259 unit tests, TypeScript and the 690-page production export; initial 12 Home/guide browser checks pass.
+- [x] Finish regression checks and all 32 affected Home/guide browser journeys, then refresh and open the local preview for owner review.
+- [x] Obtain owner approval of the preview and authorization to commit to main; keep the older paused audit work uncommitted.
+- [x] Validate the isolated approved commit without the paused audit: 228 unit tests, TypeScript, 690 static pages and all 32 affected Home/guide browser journeys pass.
+
+## Automatic GitHub Pages publication — 9 October 2026
+
+- [x] Diagnose the missed update: scheduled polling did not subscribe to pushes in the application repository; manually publish the friend's `6bb2cb7` update.
+- [x] Add a direct application-main push trigger using the owner's publishing-repository-only `PAGES_DISPATCH_TOKEN`, with no application checkout or default token permissions in the trigger job.
+- [x] Wait through the Actions API compatible with fine-grained tokens, then check the public source revision; document token renewal and visible failures.
+- [x] Verify an actual source-main push triggers the downstream tested build and updates the public release, without a manual dispatch: source run `37893904796` requested publisher run `37893912221`, and both succeeded with public commit `0f263666aed40de3d85ac85c9efd4fe7126eb0d6`.
+- [x] Replace the pinned source release with scheduled checks of application `main`, skipping unchanged commits.
+- [x] Gate publication on tests, type checking and static build; keep write tokens out of the application build job.
+- [x] Respect the repository's disabled-deploy-key policy; remove the unused deploy-key workflow and empty environment. The publisher uses GitHub's short-lived workflow tokens; the new direct trigger uses the narrowly scoped Actions token described above.
+- [x] Verify new-revision publication and unchanged-revision skipping in actual workflow runs, including the public release receipt, four public routes and referenced CSS/JavaScript.
+
+Implementation, GitHub scheduling limits and recovery: `GITHUB_PAGES_DEPLOYMENT.md`.
+
+## School network access — 9 October 2026
+
+- [x] Diagnose the initial Vercel URL failure as DNS NXDOMAIN, with production still READY.
+- [x] Recheck the original QR address after the school DNS answer changed: HTTP 200 and rendered entry in fresh Chrome on the current Wi-Fi.
+- [x] Verify the separately published free GitHub Pages fallback at phone and desktop widths, including navigation, practice resume, backups and group-origin access.
+- [x] Add only the fallback's exact origin to the existing group backend; preserve device authentication and reject unrelated origins.
+- [x] Record deployment provenance, cache recovery and progress-transfer limitations in `NETWORK_ACCESS_2026_10_09.md`.
+- [ ] Resolve the intermittent original-QR failure network-wide: school DNS reverted to authoritative NXDOMAIN at 11:02 Manila. Requires the school's administrator to correct the hostname policy/override across venue resolvers and verify previously failing and new devices; a cache flush or successful single load is insufficient.
 
 ## UPCAT topic sweep — 7 October 2026
 

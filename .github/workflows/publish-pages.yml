@@ -1,0 +1,90 @@
+name: Publish GitHub Pages after main changes
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: request-github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      # This job never checks out or executes application code. The publisher
+      # independently reads main and tests it with a separate read-only token.
+      - name: Start the publishing repository's verified release workflow
+        id: dispatch
+        env:
+          GH_TOKEN: ${{ secrets.PAGES_DISPATCH_TOKEN }}
+        run: |
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo '::error::Add PAGES_DISPATCH_TOKEN in this repository. Use a fine-grained token for KhanAcademy-Backtrack/khanacademy-backtrack.github.io only, with Actions: read and write.'
+            exit 1
+          fi
+          if ! response=$(gh api --method POST \
+            -H 'X-GitHub-Api-Version: 2026-03-10' \
+            repos/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/workflows/publish.yml/dispatches \
+            -f ref=main); then
+            echo '::error::Could not start the publishing workflow. For HTTP 403, verify PAGES_DISPATCH_TOKEN selects KhanAcademy-Backtrack/khanacademy-backtrack.github.io, has Actions read/write, and has organization approval. Replace the secret if the token was regenerated or expired.'
+            echo 'Dispatch failed. The existing site remains available. Check the API error above and [token configuration](https://github.com/settings/personal-access-tokens); update [PAGES_DISPATCH_TOKEN](https://github.com/KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo/settings/secrets/actions) if needed, then rerun this workflow.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          run_id=$(jq -er '.workflow_run_id | numbers' <<< "$response")
+          [[ "$run_id" =~ ^[0-9]+$ ]]
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          echo "Publishing run: https://github.com/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/$run_id" >> "$GITHUB_STEP_SUMMARY"
+      - name: Wait for the tested deployment
+        env:
+          GH_TOKEN: ${{ secrets.PAGES_DISPATCH_TOKEN }}
+          PUBLISH_RUN_ID: ${{ steps.dispatch.outputs.run_id }}
+        run: |
+          # gh run watch requires extra Checks access that fine-grained tokens
+          # cannot provide. The Actions run endpoint needs only Actions: read.
+          previous_status=''
+          for attempt in $(seq 1 88); do
+            result=$(gh api \
+              "repos/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/runs/$PUBLISH_RUN_ID")
+            status=$(jq -er '.status' <<< "$result")
+            if [[ "$status" != "$previous_status" ]]; then
+              echo "Publishing workflow: $status"
+              previous_status="$status"
+            fi
+            if [[ "$status" == 'completed' ]]; then
+              conclusion=$(jq -er '.conclusion' <<< "$result")
+              if [[ "$conclusion" == 'success' ]]; then
+                exit 0
+              fi
+              echo "::error::Publishing workflow finished with $conclusion. See the publishing run linked in this run's summary."
+              exit 1
+            fi
+            sleep 15
+          done
+          echo '::error::Publishing did not finish within 22 minutes. Inspect the linked publishing run before retrying.'
+          exit 1
+      - name: Confirm this revision is publicly available or superseded
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'VERIFY'
+          import json, os, subprocess, urllib.request
+          expected = os.environ['SOURCE_SHA']
+          latest = subprocess.check_output(['git', 'ls-remote', 'https://github.com/KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo.git', 'refs/heads/main'], text=True).split()[0]
+          with urllib.request.urlopen('https://khanacademy-backtrack.github.io/release.json?revision=' + expected, timeout=30) as response:
+              release = json.load(response)
+          if release.get('repository') == 'KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo' and release.get('commit') == expected:
+              result = f'Verified public release: `{expected}`.'
+          elif latest != expected:
+              result = f'This push was superseded by `{latest}`; its separate push run requests the newer release.'
+          else:
+              raise RuntimeError('Publishing finished but the public release is not application main. Inspect the linked publishing run.')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write(result + '\n')
+          print(result)
+          VERIFY
