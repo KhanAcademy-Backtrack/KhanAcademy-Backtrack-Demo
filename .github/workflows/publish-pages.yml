@@ -28,10 +28,14 @@ jobs:
             echo '::error::Add PAGES_DISPATCH_TOKEN in this repository. Use a fine-grained token for KhanAcademy-Backtrack/khanacademy-backtrack.github.io only, with Actions: read and write.'
             exit 1
           fi
-          response=$(gh api --method POST \
+          if ! response=$(gh api --method POST \
             -H 'X-GitHub-Api-Version: 2026-03-10' \
             repos/KhanAcademy-Backtrack/khanacademy-backtrack.github.io/actions/workflows/publish.yml/dispatches \
-            -f ref=main)
+            -f ref=main); then
+            echo '::error::Could not start the publishing workflow. For HTTP 403, verify PAGES_DISPATCH_TOKEN selects KhanAcademy-Backtrack/khanacademy-backtrack.github.io, has Actions read/write, and has organization approval. Replace the secret if the token was regenerated or expired.'
+            echo 'Dispatch failed. The existing site remains available. Check the API error above and [token configuration](https://github.com/settings/personal-access-tokens); update [PAGES_DISPATCH_TOKEN](https://github.com/KhanAcademy-Backtrack/KhanAcademy-Backtrack-Demo/settings/secrets/actions) if needed, then rerun this workflow.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
           run_id=$(jq -er '.workflow_run_id | numbers' <<< "$response")
           [[ "$run_id" =~ ^[0-9]+$ ]]
           echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
