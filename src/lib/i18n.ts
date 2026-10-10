@@ -4,7 +4,7 @@
 export type Lang='en'|'fil';
 const EN={
  'nav.today':'Home','nav.plan':'Plan','nav.study':'Study','nav.plan.bridge':'College','nav.mocks':'Mocks','nav.reviewer':'Reviewer','nav.calendar':'Calendar','nav.group':'Group','nav.me':'Me','nav.side':'Study goal',
- 'nav.main':'Main','nav.all':'All pages','nav.sectionPages':'{section} pages','nav.home':'Khanpanion, Home','nav.guide':'Guide','nav.search':'Search','nav.create':'Create a study pack','nav.changeGoalRoutine':'Change goal or routine',
+ 'nav.main':'Main','nav.all':'All pages','nav.sectionPages':'{section} pages','nav.home':'Khanpanion, Home','nav.guide':'Guide','nav.search':'Search','nav.create':'Create a study pack','nav.changeGoalRoutine':'Change goal',
  'nav.openMenu':'Open menu','nav.closeMenu':'Close menu','nav.menu':'Menu','nav.expand':'Expand sidebar','nav.collapse':'Collapse sidebar','nav.shortcuts':'Shortcuts','nav.studyTools':'Study tools',
  'nav.yourExams':'Your exams','nav.yourProgram':'Your program','nav.yourTopic':'Your topic','nav.yourGoal':'Your goal','nav.generalCet':'General CET review','nav.moreInPlan':'{n} more in Exam dates','nav.editExams':'Add or edit exams','nav.changeGoal':'Change my goal','nav.setGoal':'Set a study goal',
  'page.college':'College map','page.topic':'My topic','page.plan':'My plan','page.calendar':'Calendar','page.dates':'Exam dates','page.reviewer':'CET Reviewers','page.courses':'Courses','page.mocks':'Practice exams','page.packs':'Study packs','page.fix':'Find my missing skill','page.reviewerTopics':'Reviewer topics','page.coursesAll':'All courses','nav.forCet':' for CET review','nav.forCollege':' for college courses',

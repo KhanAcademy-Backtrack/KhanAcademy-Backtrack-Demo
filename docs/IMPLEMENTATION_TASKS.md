@@ -1,12 +1,19 @@
 # Complete study-companion implementation checklist
 
-## Shorter first-time intro — 10 October 2026
+## Setup subtext cleanup — 10 October 2026
 
-- [x] Remove the “Choose your study week” screen from first-time personalization. All three goals now continue from focus selection to the optional name, with a three-step progress bar.
-- [x] Retain the existing initial routine for calendar planning and keep routine editing available from Home, Calendar and Me after setup. Preserve saved goals, exam dates, names and learning records.
-- [x] Update the existing browser helpers and acceptance checks for direct name entry, Back/Skip, default routine values and native-clock changes in the saved-routine editor.
-- [x] Verify clean TypeScript, 241 passing unit tests (one existing content skip), the 690-page production export and 27 affected browser journeys at phone and desktop widths. Build the tracked release in an isolated directory to preserve the running local preview and unrelated offline-copy work.
-- The owner explicitly requested pushing this verified change to main.
+- [x] Remove “Your existing work stays saved.” and “Show me around. No setup needed.” from both setup layouts; retain the centered “I’m Just Browsing” action.
+- [x] Independently review the three text-node removals and preserve the browsing handler, accessible label, setup flow and existing learner data.
+- [x] Verify the 690-page production build and type checks, eight existing setup unit tests, five existing browsing/guide journeys and four targeted popup/page checks at 375/1280 px. Browsing, short-phone access, reloads, saved-progress preservation and contained layouts pass.
+
+## Separate study-routine page — 10 October 2026
+
+- [x] Remove routine planning from the intro and goal setup. First-time setup has goal, focus and optional name; changing an existing goal saves after focus selection while preserving the current routine.
+- [x] Move the day, duration and time controls, companion and live weekly preview to `/calendar/routine`, opened by Plan → Calendar → Change My Study Routine. Direct page entry stays outside the automatic intro.
+- [x] Save the routine back to the existing setup and legacy exam pledge, return to Calendar, and keep Cancel, native time input and day validation. Preserve goals, exam targets, profile names, custom events and learning records.
+- [x] Preserve main’s concurrent browsing-text cleanup and prevent the inline browsing action from covering the last goal choice on a phone.
+- [x] Verify clean TypeScript, 241 passing unit tests (one existing content skip), the 691-page production export, all 34 affected intro, goal-edit, profile, Calendar and Plan browser journeys, and four direct-entry/legacy-pledge checks at 320/1280 px. Inspect the phone and desktop routine layouts. Publish under the owner’s explicit main-push authorization.
+
 
 ## Results page cleanup — 9 October 2026
 

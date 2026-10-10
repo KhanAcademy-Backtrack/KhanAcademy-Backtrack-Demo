@@ -33,7 +33,7 @@ export function ProgramTourProvider({children}:{children:ReactNode}){
   // A saved routine already answers the entry question. New tabs resume it without setup.
   if(!intent&&state.setup){intent='study';rememberChoice(intent);}
   choice.current=!!intent;setBrowsing(intent==='browse');
-  const url=new URL(location.href),requested=url.searchParams.get('guide')==='1',focused=path.startsWith('/learn/')||path.startsWith('/reviewer/')||path.startsWith('/mock/take')||path.startsWith('/mock/print')||(path==='/demo'&&url.searchParams.get('tour')==='1')||(path==='/group'&&(url.searchParams.has('join')||state.group)&&!requested);
+  const url=new URL(location.href),requested=url.searchParams.get('guide')==='1',focused=path.startsWith('/learn/')||path.startsWith('/reviewer/')||path.startsWith('/mock/take')||path.startsWith('/mock/print')||(path==='/calendar/routine'&&!requested)||(path==='/demo'&&url.searchParams.get('tour')==='1')||(path==='/group'&&(url.searchParams.has('join')||state.group)&&!requested);
   if(!focused&&(!intent||requested)){setStep(0);setEntry(!intent);setMode(!intent||(!state.setup&&intent!=='browse')?'setup':'tour');}
   if(requested){url.searchParams.delete('guide');history.replaceState(history.state,'',url.href);}
  },[]);
@@ -53,4 +53,4 @@ export function ProgramTourProvider({children}:{children:ReactNode}){
 export function useProgramGuide(){const api=useContext(Context);if(!api)throw Error('ProgramTourProvider is required');return api;}
 export function useProgramTour(){return useProgramGuide().start;}
 export function ProgramTourButton({className,label='Show me around'}:{className?:string;label?:string}){const open=useProgramTour();return <button type="button" className={className??btn.ghost} onClick={()=>open()}><Headline>{label}</Headline></button>;}
-export function ChangeGoalButton({className,label='Change my goal or routine'}:{className?:string;label?:string}){const api=useProgramGuide();return <button type="button" className={className??btn.ghost} onClick={()=>api.configure()}><Headline>{label}</Headline></button>;}
+export function ChangeGoalButton({className,label='Change my study goal'}:{className?:string;label?:string}){const api=useProgramGuide();return <button type="button" className={className??btn.ghost} onClick={()=>api.configure()}><Headline>{label}</Headline></button>;}

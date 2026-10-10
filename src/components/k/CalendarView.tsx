@@ -4,7 +4,6 @@ import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import {validDay,type CalEvent} from '@/lib/program/store';
 import {learnerGoal} from '@/lib/program/personalization';
-import {ChangeGoalButton} from './ProgramTourProvider';
 import {useEffect,useMemo,useState} from 'react';
 import {motion} from 'motion/react';
 import {useQuietMotion} from './useQuietMotion';
@@ -39,7 +38,7 @@ export function CalendarView(){
  const agenda=items.filter(i=>(i.end??i.date)>=today).slice(0,60);
  const byDay=new Map<string,CalItem[]>();for(const i of agenda){const k=i.date<today?today:i.date;byDay.set(k,[...(byDay.get(k)??[]),i]);}
  return <>
-  <PageBand title="Calendar" lead="Keep your study sessions and exam dates together. Move a session when your week changes." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}><Headline>Download calendar</Headline></button><ChangeGoalButton className={btn.quiet} label="Change my study routine"/></div>}/>
+  <PageBand title="Calendar" lead="Keep your study sessions and exam dates together. Move a session when your week changes." aside={<div className="flex flex-wrap gap-2"><button className={btn.primary} onClick={exportIcs}><Headline>Download calendar</Headline></button><Link className={btn.quiet} href="/calendar/routine"><Headline>Change my study routine</Headline></Link></div>}/>
   <div className={pageBody}>
    {undo&&<div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-mint p-4 text-navy"><p>Removed from your calendar.</p><button className={btn.text} onClick={()=>{update(p=>({...p,events:[...p.events.filter(e=>e.id!==undo.item.id),...(undo.previous?[undo.previous]:[])]}));setUndo(undefined);}}><Headline>Undo</Headline></button></div>}
    <div className="grid gap-5 lg:grid-cols-[1fr_360px]">

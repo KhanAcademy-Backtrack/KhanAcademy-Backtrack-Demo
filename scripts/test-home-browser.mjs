@@ -170,7 +170,7 @@ export async function homeJourneys({scenario,origin,root}){
   if(goal==='college')assert.equal(await page.getByRole('link',{name:'Open my program map',exact:true}).getAttribute('href'),'/bridge/cs_it');
   await page.screenshot({path:path.join(dir,`home-${goal}.png`),fullPage:true});
   if(goal==='college'){
-   await page.getByRole('button',{name:'Change goal or routine',exact:true}).click();await page.locator('[data-goal-setup]').waitFor();
+   await page.getByRole('button',{name:'Change goal',exact:true}).click();await page.locator('[data-goal-setup]').waitFor();
    for(const name of ['Prepare for an entrance exam','Get ready for college classes','Work on a class topic']){
     const button=page.getByRole('button',{name,exact:true});assert.equal(await button.locator('.headline').evaluate(el=>getComputedStyle(el).textTransform),'capitalize');
    }

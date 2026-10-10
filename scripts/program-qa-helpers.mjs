@@ -12,6 +12,8 @@ export async function chooseGoal(page,origin,goal='exam',options={}){
  await finishGoal(page,options.name);await page.getByRole('heading',{name:'This space is yours.'}).waitFor();
 }
 export async function finishGoal(page,name){
+ await page.getByRole('heading',{name:/^(What should we call you\?|This space is yours\.)$/}).waitFor();
+ if(await page.getByRole('heading',{name:'This space is yours.',exact:true}).isVisible())return;
  const finish=page.getByRole('button',{name:'Show my study space',exact:true});
  if(await page.getByRole('heading',{name:'What should we call you?',exact:true}).isVisible()){
   if(name===undefined){await page.getByRole('button',{name:'Skip',exact:true}).click();return;}
