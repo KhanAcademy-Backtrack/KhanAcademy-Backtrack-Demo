@@ -14,6 +14,15 @@
 - [x] Preserve main’s concurrent browsing-text cleanup and prevent the inline browsing action from covering the last goal choice on a phone.
 - [x] Verify clean TypeScript, 241 passing unit tests (one existing content skip), the 691-page production export, all 34 affected intro, goal-edit, profile, Calendar and Plan browser journeys, and four direct-entry/legacy-pledge checks at 320/1280 px. Inspect the phone and desktop routine layouts. Publish under the owner’s explicit main-push authorization.
 
+## Offline localhost copy — 9 October 2026
+
+- [x] Add `npm run offline:prepare` to build a separate snapshot in an isolated cache, including local fonts, PDF worker and existing site routes; keep the running development server's cache intact.
+- [x] Save 437 of 445 reviewed video thumbnails (about 10 MB) in the ignored local export. Eight videos return 404 for both metadata/poster access; retain their titles/source links with an explicit unavailable-preview fallback. Record provenance and missing images in the export's `offline-manifest.json`.
+- [x] Show saved previews only in the offline build; preserve immediate paused players in normal builds. Displaying a preview does not call the video-open callback or award evidence. Full video files are not downloaded.
+- [x] Add `npm run offline` on `127.0.0.1:3000` using only Node built-ins, with no install or build required at startup. Keep the same origin for existing learner saves.
+- [x] Verify TypeScript, 241 passing unit tests (one existing content skip), the complete production export, all 87 referenced local script/style/font assets across 688 exported HTML files, and every saved JPEG. Eight representative page/image requests return 200.
+- [x] Verify rendered lessons, a 480×360 saved thumbnail, local fonts, zero video iframes, answer submission/reload, lesson bookmarking/reload, unavailable-thumbnail fallback and BACKTRACK draft restoration with external subresources blocked by a test-server CSP. No browser errors observed in those journeys. This is a blocked-external-resource check; system Wi-Fi was not disabled.
+- [ ] Full video playback and live group activity remain internet-dependent. This local-copy work does not implement offline caching for the public URL.
 
 ## Results page cleanup — 9 October 2026
 

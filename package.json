@@ -7,6 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "node scripts/serve-static.mjs",
+    "offline:prepare": "node scripts/prepare-offline.mjs",
+    "offline": "node scripts/serve-static.mjs --offline",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",

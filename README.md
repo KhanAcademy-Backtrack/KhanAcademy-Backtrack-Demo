@@ -35,6 +35,16 @@ Use Node 24 or later for the built-in TypeScript test runner.
 - npm run build (static export into out)
 - npm start (production preview at http://127.0.0.1:3047)
 
+### Run without Wi-Fi on this computer
+
+While connected, run `npm run offline:prepare` once. This creates `output/offline-site/`, a separate complete static build with local fonts, original lessons, practice, and saved preview images for the reviewed Khan video catalog. Preparation uses an isolated build cache, so it does not disturb a running development server. Downloaded previews and build files are ignored by Git. `offline-manifest.json` inside the output lists every saved preview and any unavailable image; it does not contain learner data.
+
+Stop any existing server on port 3000, then run `npm run offline`. Open [http://127.0.0.1:3000/](http://127.0.0.1:3000/). Wi-Fi can be off, including when starting or restarting this saved copy. Keep the terminal running. Use this same address and browser to retain existing local progress; `localhost`, other ports and the public website have separate browser storage.
+
+The offline copy displays downloaded video previews rather than loading external players. Full videos, external Khan resources and live groups still need internet; the source links remain available. Preview display does not record a video open or learning evidence. The public build retains its immediate paused players. Run preparation again while online when you want newer site content; `npm run offline` itself never installs dependencies or rebuilds the site. Node.js and this repository's installed dependencies must already be present for preparation; the saved-copy server uses only Node.js built-ins.
+
+For verification without changing system Wi-Fi, `BACKTRACK_BLOCK_EXTERNAL=1 BACKTRACK_PORT=3048 npm run offline` serves a test copy whose Content Security Policy blocks nonlocal scripts, images, frames and connections. This checks external-resource independence, not actual airplane-mode behavior of the operating system. No service worker or offline support for the public URL is implied.
+
 ## Getting started
 
 The first visit asks for a goal: entrance exam preparation, first-year college foundations or a class topic. I’m just browsing opens the guide and subject browser without requiring questions or a routine. Exam review supports General CET review, several named targets and custom CET names, each with an optional planning date. All use the shared reviewer and practice bank; adding a target does not reproduce that exam’s exact format. College selection explains the degree groups and offers I’m not sure yet. The saved choices drive the home page and a real study calendar. Guide stays in the header; /?guide=1 opens it directly. Choose my goal on the browsing home or Me → Change my study goal reopens goal selection. The intro ends with an optional profile name. Routine planning opens separately at Plan → Calendar → Change My Study Routine, with study days, session length, study time and a weekly preview. Saving returns to Calendar and preserves the chosen goal and learning records. The earlier study-space tour remains in Me. Configuration and calendar check-ins stay separate from learning results.
