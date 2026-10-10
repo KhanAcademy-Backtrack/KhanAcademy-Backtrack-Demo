@@ -1,5 +1,11 @@
 # Complete study-companion implementation checklist
 
+## Setup subtext cleanup — 10 October 2026
+
+- [x] Remove “Your existing work stays saved.” and “Show me around. No setup needed.” from both setup layouts; retain the centered “I’m Just Browsing” action.
+- [x] Independently review the three text-node removals and preserve the browsing handler, accessible label, setup flow and existing learner data.
+- [x] Verify the 690-page production build and type checks, eight existing setup unit tests, five existing browsing/guide journeys and four targeted popup/page checks at 375/1280 px. Browsing, short-phone access, reloads, saved-progress preservation and contained layouts pass.
+
 ## Results page cleanup — 9 October 2026
 
 - [x] Remove the “Why the misses happened” section and Time map from mock exam and topic-check results, as requested by the owner.

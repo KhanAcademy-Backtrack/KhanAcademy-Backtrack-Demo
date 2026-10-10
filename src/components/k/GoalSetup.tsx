@@ -85,18 +85,17 @@ export function GoalSetup({onSaved,onCancel,onBrowse,entry=false,modal=false}:{o
    </div>:<form className="mt-6" onSubmit={e=>{e.preventDefault();save();}}><ProfileNameField value={name} onChange={setName}/></form>}
   {error&&<p role="alert" className="mt-4 font-semibold text-navy">{error}</p>}
  </>;
- const actions=step===0?onBrowse&&<button aria-label="I’m just browsing" onClick={onBrowse} className={cx(tile,'flex min-h-12 w-full items-center justify-center gap-2 px-4 py-2 text-center')}><span className="font-bold"><Headline>I’m just browsing</Headline></span><span className="hidden text-sm text-ink-soft min-[360px]:inline">Show me around. No setup needed.</span></button>
+ const actions=step===0?onBrowse&&<button aria-label="I’m just browsing" onClick={onBrowse} className={cx(tile,'flex min-h-12 w-full items-center justify-center gap-2 px-4 py-2 text-center')}><span className="font-bold"><Headline>I’m just browsing</Headline></span></button>
   :<><button className={cx(btn.ghost,'min-h-12')} onClick={()=>setStep(x=>x-1)}><Headline>Back</Headline></button>{step===3&&<button type="button" className={cx(btn.quiet,'min-h-12 max-[359px]:px-2')} onClick={()=>save(true)}>Skip</button>}<button className={cx(btn.primary,cta,'flex-1 sm:ml-auto sm:min-w-56 sm:flex-none',step===3&&'basis-full sm:basis-auto')} onClick={step===2?finishRoutine:step===3?()=>save():advance}><Headline>{step===3||step===2&&!askName?'Show my study space':'Continue'}</Headline></button></>;
  /** As the first-visit picker it fills the screen in white, so nothing behind it competes for attention. */
  if(modal)return <div data-goal-setup className="flex h-full min-h-0 flex-col bg-white text-navy">
   <div className="shrink-0 border-b border-line"><div className="mx-auto flex h-16 max-w-2xl items-center gap-3 px-3 sm:gap-5 sm:px-6"><span className="shrink-0"><Wordmark small compact/></span>{progress}{close}</div></div>
-  <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto overscroll-contain"><div className="mx-auto w-full max-w-xl px-5 pb-8 pt-6 sm:pt-12">{intro}{body}<p className="mt-6 text-center text-xs leading-relaxed text-ink-soft">Your existing work stays saved.</p></div></div>
+  <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto overscroll-contain"><div className="mx-auto w-full max-w-xl px-5 pb-8 pt-6 sm:pt-12">{intro}{body}</div></div>
   {actions&&<div className="shrink-0 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]"><div className="mx-auto flex w-full max-w-xl flex-wrap gap-2 px-5 py-3">{actions}</div></div>}
  </div>;
  return <Sheet as="div" data-goal-setup className="min-w-0 scroll-mt-20 overflow-hidden bg-white p-0 sm:p-0">
   <div className="flex items-center gap-3 border-b border-line px-5 py-3 sm:px-7">{progress}{close}</div>
   <div className="px-5 pb-4 pt-5 sm:px-7 sm:pt-6">{intro}{body}</div>
   {actions&&<div className="sticky bottom-[calc(5rem+env(safe-area-inset-bottom))] z-20 flex flex-wrap gap-2 border-t border-line bg-white px-5 py-3 sm:px-7 lg:bottom-0">{actions}</div>}
-  <p className="px-5 pb-4 text-center text-xs leading-relaxed text-ink-soft">Your existing work stays saved.</p>
  </Sheet>;
 }
