@@ -1,5 +1,13 @@
 # Complete study-companion implementation checklist
 
+## Shorter first-time intro — 10 October 2026
+
+- [x] Remove the “Choose your study week” screen from first-time personalization. All three goals now continue from focus selection to the optional name, with a three-step progress bar.
+- [x] Retain the existing initial routine for calendar planning and keep routine editing available from Home, Calendar and Me after setup. Preserve saved goals, exam dates, names and learning records.
+- [x] Update the existing browser helpers and acceptance checks for direct name entry, Back/Skip, default routine values and native-clock changes in the saved-routine editor.
+- [x] Verify clean TypeScript, 241 passing unit tests (one existing content skip), the 690-page production export and 27 affected browser journeys at phone and desktop widths. Build the tracked release in an isolated directory to preserve the running local preview and unrelated offline-copy work.
+- The owner explicitly requested pushing this verified change to main.
+
 ## Results page cleanup — 9 October 2026
 
 - [x] Remove the “Why the misses happened” section and Time map from mock exam and topic-check results, as requested by the owner.

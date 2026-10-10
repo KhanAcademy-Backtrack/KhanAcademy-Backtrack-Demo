@@ -40,25 +40,24 @@ export async function profileJourneys({scenario,origin,root}){
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),PROGRAM_KEY),before);
  },{width,height:884});
  for(const width of [390,1440])for(const goal of ['exam','college','topic'])await scenario(`program profile optional name after ${goal} setup ${width}`,async page=>{
-  await chooseGoal(page,origin,goal,{name:goal==='college'?'harry de la Cruz':goal==='topic'?'':undefined,nativeClock:goal==='topic'});await closeGuide(page);
+  await chooseGoal(page,origin,goal,{name:goal==='college'?'harry de la Cruz':goal==='topic'?'':undefined});await closeGuide(page);
   const expected=goal==='college'?'harry de la Cruz':'Khanpanion';await page.getByRole('heading',{level:1,name:expected,exact:true}).waitFor();
-  const before=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);assert.equal(before.setup.goal,goal);assert.equal(before.setup.time,'18:30');await overflow(page);
+  const before=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);assert.equal(before.setup.goal,goal);assert.equal(before.setup.time,'19:00');await overflow(page);
   await page.reload();await page.getByRole('heading',{level:1,name:expected,exact:true}).waitFor();
   await page.getByRole('button',{name:'Change goal or routine',exact:true}).click();await page.getByRole('button',{name:goal==='exam'?'Prepare for an entrance exam':goal==='college'?'Get ready for college classes':'Work on a class topic',exact:true}).click();
-  await page.getByRole('button',{name:'Continue',exact:true}).click();await page.getByRole('button',{name:'Show my study space',exact:true}).click();
+  await page.getByRole('button',{name:'Continue',exact:true}).click();await page.getByRole('heading',{name:'Choose your study week',exact:true}).waitFor();await page.getByRole('button',{name:'20 min',exact:true}).click();if(goal==='topic')await page.getByLabel('Usual study time').evaluate(el=>{el.value='18:30';});else await page.getByLabel('Usual study time').fill('18:30');await page.getByRole('button',{name:'Show my study space',exact:true}).click();
   await page.getByRole('heading',{name:'This space is yours.',exact:true}).waitFor();await closeGuide(page);await page.getByRole('heading',{level:1,name:expected,exact:true}).waitFor();
   assert.equal(await page.getByRole('heading',{name:'What should we call you?',exact:true}).count(),0,'Routine edits skip the name step');
-  assert.deepEqual((await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY)).setup,before.setup);
+  assert.deepEqual((await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY)).setup,{...before.setup,minutes:20,time:'18:30'});
  },{width,height:884});
  await scenario('program first-entry optional profile name phone back and skip',async page=>{
   await page.goto(origin);const entry=page.getByRole('dialog');await entry.getByRole('heading',{name:'What would you like to work on?',exact:true}).waitFor();await entry.getByRole('button',{name:'Prepare for an entrance exam',exact:true}).click();await entry.getByRole('button',{name:'Continue',exact:true}).click();
-  await page.getByRole('button',{name:'45 min',exact:true}).click();await page.getByLabel('Usual study time',{exact:true}).fill('20:30');await page.getByRole('button',{name:'Continue',exact:true}).click();
-  await page.getByRole('heading',{name:'What should we call you?',exact:true}).waitFor();assert.equal(await page.getByRole('progressbar').getAttribute('aria-valuetext'),'Step 4 of 4');
+  await page.getByRole('heading',{name:'What should we call you?',exact:true}).waitFor();assert.equal(await page.getByRole('progressbar').getAttribute('aria-valuetext'),'Step 3 of 3');assert.equal(await page.getByRole('heading',{name:'Choose your study week',exact:true}).count(),0);assert.equal(await page.getByLabel('Usual study time',{exact:true}).count(),0);
   await page.getByLabel('Your name (optional)',{exact:true}).fill('Draft name');await overflow(page);await page.screenshot({path:path.join(dir,'optional-name-short-phone.png'),fullPage:false});
   for(const name of ['Back','Skip','Show my study space'])assert.ok(await page.getByRole('button',{name,exact:true}).evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;}),'Name-step actions stay visible on a short phone');
-  await page.getByRole('button',{name:'Back',exact:true}).click();await page.getByRole('heading',{name:'Choose your study week',exact:true}).waitFor();assert.equal(await page.getByLabel('Usual study time',{exact:true}).inputValue(),'20:30');
+  await page.getByRole('button',{name:'Back',exact:true}).click();await page.getByRole('heading',{name:'Which exams are on your list?',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'General CET review',exact:true}).getAttribute('aria-pressed'),'true');
   await page.getByRole('button',{name:'Continue',exact:true}).click();assert.equal(await page.getByLabel('Your name (optional)',{exact:true}).inputValue(),'Draft name');
   await page.getByRole('button',{name:'Skip',exact:true}).click();await page.getByRole('heading',{name:'This space is yours.',exact:true}).waitFor();await closeGuide(page);await page.getByRole('heading',{level:1,name:'Khanpanion',exact:true}).waitFor();
-  const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);assert.equal(saved.setup.minutes,45);assert.equal(saved.setup.time,'20:30');await overflow(page);
+  const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),PROGRAM_KEY);assert.equal(saved.setup.minutes,30);assert.equal(saved.setup.time,'19:00');assert.deepEqual(saved.setup.weekdays,[1,3,5,6]);await overflow(page);
  },{width:320,height:568});
 }

@@ -33,7 +33,7 @@ export async function programTourJourneys({scenario,origin,root}){
   },{width,height:850});
 
   for(const goal of ['exam','college','topic'])await scenario(`program personalized ${goal} setup guide and calendar ${width}`,async page=>{
-   await chooseGoal(page,origin,goal,{nativeClock:goal==='topic'});const before=await data(page);assert.equal(before.setup.goal,goal);assert.equal(before.setup.minutes,20);assert.equal(before.setup.time,'18:30');assert.equal(before.attempts.length,0);
+   await chooseGoal(page,origin,goal);const before=await data(page);assert.equal(before.setup.goal,goal);assert.equal(before.setup.minutes,30);assert.equal(before.setup.time,'19:00');assert.equal(before.attempts.length,0);
    await shot(page,`goal-${goal}-guide`,width);
    await page.getByRole('button',{name:'Next',exact:true}).click();assert.equal(await page.locator('[data-tour-highlight]').getAttribute('data-tour-highlight'),'study','Each goal’s own material lives under Study');assert.equal(await page.getByRole('dialog').getByRole('link').getAttribute('href'),{exam:'/reviewer',college:'/bridge/cs_it',topic:'/learn/percent_fractions'}[goal]);await page.getByRole('button',{name:'Next',exact:true}).click();await page.getByRole('heading',{name:'Use your real study calendar.'}).waitFor();assert.equal(await page.locator('[data-tour-highlight]').getAttribute('data-tour-highlight'),'plan');
    assert.equal(await page.getByRole('dialog').count(),1);assert.equal(new URL(page.url()).pathname,'/');assert.equal(await page.getByRole('button',{name:'Try my calendar',exact:true}).count(),0);
